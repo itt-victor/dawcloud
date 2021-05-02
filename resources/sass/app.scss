@@ -1,0 +1,28 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+
+/*
+.play-button {
+    height:20px;
+    width: 40px;
+}*/
+
+#tracks{
+    width: 1000px;
+}
+
+
+.track {
+    background-color: aquamarine;
+}
+
+.timeline {
+    background-color: grey;
+}
