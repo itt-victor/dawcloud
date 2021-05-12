@@ -1,7 +1,7 @@
-import {record} from './app_core';
+/*import {record} from './app_core';
 import {play} from './app_core';
 import {stop} from './app_core';
-import {startCursor} from './canvas';
+import {startCursor} from './canvas';*/
 
 
 var audioBuffer = null;

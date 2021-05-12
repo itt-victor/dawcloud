@@ -1,7 +1,6 @@
 import { stop } from './app_core'
-//import {timeLayout} from './app_core'
 import { timeSpace } from './app_core'
-export var trackNumber = 4;
+//export var trackNumber = 4;
 
 var cursor = document.getElementById("cursor");
 
@@ -30,11 +29,11 @@ var drawCursor = function (trackNumber) {
     cursorCtx.globalAlpha = 0.8
     cursorCtx.fillRect(0, 0, 3, 660); //80 por pista de height +20 del time layer
 };
-drawCursor(trackNumber);
+drawCursor(tracks.howMany);
 
 //var newWidth = 610 //según zoom o cosas varía
 //export var pxAtPause = 0;
-export function startCursor() {
+function startCursor() {
     var interval = setInterval(function () {
         timeSpace.pxAtPause++;
         timeSpace.newWidth++
@@ -45,13 +44,13 @@ export function startCursor() {
     })
 }
 
-export function moveCursor(px) {
+function moveCursor(px) {
     cursor.style.left = px + 'px';
     timeSpace.newWidth = timeSpace.pointedWidth;
 }
 
 //var actualTime = 0;
-export function drawTrack(audioBuffer, track, actualTime) {
+function drawTrack(audioBuffer, track, actualTime) {
     var x = actualTime * 1000 / 200;
     var canvasCtx = track.getContext('2d');
     track.width = 1000;
@@ -63,7 +62,7 @@ export function drawTrack(audioBuffer, track, actualTime) {
     audioBuffer = null;
 }
 
-export function drawTrackWhileRecording(actualTime) {
+function drawTrackWhileRecording(actualTime) {
     var width = 0;
     //var x = actualTime * 1000 / 200;
     var x = actualTime * 5;

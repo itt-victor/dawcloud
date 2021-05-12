@@ -1,16 +1,20 @@
 require('./bootstrap');
 require('./app_ui');
 
-import { audioCtx } from './soundcontroller';
+import {tracks} from './components/tracks';
+import {cursor} from './components/cursor';
+
 import SoundController from './soundcontroller';
+
+
+import { audioCtx } from './soundcontroller';
 import Record from './record';
-import { drawTrack } from './canvas';
+/*import { drawTrack } from './canvas';
 import { startCursor } from './canvas';
 import { moveCursor } from './canvas';
-import { drawTrackWhileRecording } from './canvas';
+import { drawTrackWhileRecording } from './canvas';*/
 
 import WaveSurfer from 'wavesurfer.js';
-
 
 export const play = document.querySelector('#play-button'),
     record = document.querySelector('#record-button'),
@@ -30,7 +34,6 @@ jQuery(".track:first").attr("data-selected", '');
 stop.disabled = true;
 
 ///////////////////////////////////////
-
 var soundcontroller = new SoundController(audioCtx);
 //buffer vacío para conextualizar la escala de tiempo
 var loopguide = soundcontroller.loopGuide()
@@ -39,13 +42,13 @@ var audioBufferArray = soundcontroller.getAudioBufferArray();
 
 ///////////////////////////////////
 //cargo temas para desarrollo
-soundcontroller.loadSound("storage/sound/z1.mp3");
-soundcontroller.loadSound("storage/sound/zdgnjadgn.mp3")
+/*soundcontroller.loadSound("storage/sound/z1.mp3");
+soundcontroller.loadSound("storage/sound/zdgnjadgn.mp3")*/
 
 //Se rellenan las pistas según hayan archivos (REVISAR EN EL FUTURO, eso no debe hacerse así)
 ///////ESTO ES IMPORTANTÍSIMO, PARA HACERLO BIEN HAY QUE HACER //
 ///////QUE CADA SONIDO SEA UN OBJETO Y PASARLO BIEN POR AQUI////
-setTimeout(function () {
+/*setTimeout(function () {
     var actTime = 0;//?????
     var track;
     var trackId;
@@ -54,7 +57,9 @@ setTimeout(function () {
         track = document.getElementById(trackId)
         drawTrack(audioBufferArray[i], track, actTime);
     }
-}, 500);
+}, 500);*/
+cursor.draw();
+console.log(cursor.ctx);
 
 /////////////////////////////////////
 ///////////recordSound//////////////
