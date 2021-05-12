@@ -1,28 +1,22 @@
 require('./bootstrap');
 require('./app_ui');
 
-import {tracks} from './components/tracks';
+import {trackGrid} from './components/trackGrid';
 import {cursor} from './components/cursor';
 
-import SoundController from './soundcontroller';
+import  ui_recording  from './ui/ui_recording';
 
+import SoundController from './audio/soundcontroller';
+import { audioCtx } from './audio/soundcontroller';
 
-import { audioCtx } from './soundcontroller';
-import Record from './record';
-/*import { drawTrack } from './canvas';
-import { startCursor } from './canvas';
-import { moveCursor } from './canvas';
-import { drawTrackWhileRecording } from './canvas';*/
-
-import WaveSurfer from 'wavesurfer.js';
+import recording from './components/recording';
 
 export const play = document.querySelector('#play-button'),
     record = document.querySelector('#record-button'),
     stop = document.querySelector('#stop-button'),
     timeLayout = document.querySelector('#time-layout');
 const addTrack = document.querySelector('#add-track'),
-    removeTrack = document.querySelector('#remove-track'),
-    audioctxbutton = document.querySelector('#audioctx');
+    removeTrack = document.querySelector('#remove-track');
 
 export var timeSpace = { pointedWidth: 610, newWidth: 610, pxAtPause: 0, timeAtPause: 0 };
 var soundStatuses = { isPlaying: false, hasStopped: true }
@@ -42,13 +36,13 @@ var audioBufferArray = soundcontroller.getAudioBufferArray();
 
 ///////////////////////////////////
 //cargo temas para desarrollo
-/*soundcontroller.loadSound("storage/sound/z1.mp3");
-soundcontroller.loadSound("storage/sound/zdgnjadgn.mp3")*/
+soundcontroller.loadSound("storage/sound/z1.mp3");
+soundcontroller.loadSound("storage/sound/zdgnjadgn.mp3")
 
 //Se rellenan las pistas según hayan archivos (REVISAR EN EL FUTURO, eso no debe hacerse así)
 ///////ESTO ES IMPORTANTÍSIMO, PARA HACERLO BIEN HAY QUE HACER //
 ///////QUE CADA SONIDO SEA UN OBJETO Y PASARLO BIEN POR AQUI////
-/*setTimeout(function () {
+setTimeout(function () {
     var actTime = 0;//?????
     var track;
     var trackId;
@@ -57,7 +51,7 @@ soundcontroller.loadSound("storage/sound/zdgnjadgn.mp3")*/
         track = document.getElementById(trackId)
         drawTrack(audioBufferArray[i], track, actTime);
     }
-}, 500);*/
+}, 500);
 cursor.draw();
 console.log(cursor.ctx);
 
@@ -65,7 +59,7 @@ console.log(cursor.ctx);
 ///////////recordSound//////////////
 ////////////////////////////////////
 
-function recordSound() {
+function startApp() {
     if (navigator.mediaDevices.getUserMedia) {
         const constraints = { audio: true };
         let chunks = [];
@@ -119,30 +113,8 @@ function recordSound() {
             })*/
 
             ///////////////////THIS
-            mediaRecorder.onstop = function () {
-                const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
-                chunks = [];
-                const audioURL = window.URL.createObjectURL(blob);
-                drawTrackWhileRecording()
-                var arrayBuffer;
-                var loaded;
-                var pist;
-                blob.arrayBuffer().then(arrayBuffer => {
-                    audioCtx.decodeAudioData(arrayBuffer, (audioBuffer) => {
-                        loaded = audioBuffer
-                        var tracks = document.getElementsByClassName('track');
-                        for (var i = 0; i < tracks.length; i++) {
-                            if (tracks[i].hasAttribute("data-selected")) {
-                                pist = tracks[i].children[0]
-                            }
-                        }
-                        audioBufferArray.push(loaded);
-                        drawTrack(loaded, pist, timeSpace.timeAtPause/*audioCtx.currentTime*/);
-                        //timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
-                    });
-                })
-                return arrayBuffer;
-            }
+            mediaRecorder.onstop = recordSound(chunks);
+
         }
         let onError = function (err) {
             console.log('The following error occured: ' + err);
@@ -155,7 +127,7 @@ function recordSound() {
 
 
 function ePlay() {
-    startCursor();
+    cursor.play();
     for (var i = 0; i < audioBufferArray.length; i++) {
         source.push(soundcontroller.playSound(audioBufferArray[i], 0, timeSpace.timeAtPause));
     }
@@ -181,7 +153,31 @@ window.addEventListener('keyup', function (e) {
     }
 });
 
-recordSound();
+function recordSound(chunks) {
+
+    const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
+    chunks = [];
+    const audioURL = window.URL.createObjectURL(blob);
+    drawTrackWhileRecording()
+    var arrayBuffer;
+    var aB;
+    var trck;
+    blob.arrayBuffer().then(arrayBuffer => {
+        audioCtx.decodeAudioData(arrayBuffer, (audioBuffer) => {
+            aB = audioBuffer;
+            var tracks = document.getElementsByClassName('track');
+            for (var i = 0; i < tracks.length; i++) {
+                if (tracks[i].hasAttribute("data-selected")) {
+                    trck = tracks[i].children[0]
+                }
+            }
+            audioBufferArray.push(loaded);//esto se va claro, se une en los objetos
+            // recording = new Recording(aB, etc)
+            drawTrack(aB, trck, timeSpace.timeAtPause);//esto se va y se hace desde la ui a partir del objeto recording
+            //timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
+        });
+    })
+}
 
 //Interacción con el layout de tiempo
 timeLayout.addEventListener('click', function (event) {
@@ -197,6 +193,10 @@ timeLayout.addEventListener('click', function (event) {
         ePlay();
     }
 });
+
+/////////////
+startApp();
+////////////
 
 window.onresize = function () {
 

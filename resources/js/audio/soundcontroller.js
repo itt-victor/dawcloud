@@ -12,11 +12,12 @@ export const audioCtx = new (window.AudioContext ||
 
 export default class SoundController {
 
-    constructor(audioCtx){
+    constructor(audioCtx) {
         this.audioCtx = audioCtx;
+        this.chunks = [];
     }
 
-    getAudioBufferArray(){
+    getAudioBufferArray() {
         return audioBufferArray;
     }
 
@@ -25,17 +26,17 @@ export default class SoundController {
     }*/
 
 
-    loopGuide(){
+    loopGuide() {
         const buffer = audioCtx.createBuffer(2, audioCtx.sampleRate * 6000, audioCtx.sampleRate);
         audioBufferArray.push(buffer);
     }
 
 
-    loadSound(url){
+    loadSound(url) {
         const request = new XMLHttpRequest();
         request.open("GET", url, true);
         request.responseType = "arraybuffer";
-        request.onload = function() {
+        request.onload = function () {
             let undecodedAudio = request.response;
             console.log(undecodedAudio)
             audioCtx.decodeAudioData(undecodedAudio, (data) => {
@@ -59,4 +60,7 @@ export default class SoundController {
     stopSound(source) {
         source.stop();
     }
+
+
+
 }
