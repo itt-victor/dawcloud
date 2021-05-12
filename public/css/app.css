@@ -10007,14 +10007,77 @@ h3 {
     height:20px;
     width: 40px;
 }*/
+.buttonpad {
+  margin-bottom: 10px;
+}
+
+.soundclips {
+  position: relative;
+}
+
+#time-layout {
+  left: 150px;
+  width: 1000px;
+  height: 20px;
+  margin: auto;
+  position: relative;
+}
+
+#cursor {
+  position: absolute;
+  /*width: 1000px;
+  height: 420px;*/
+}
+
+.track-name {
+  height: 80px;
+  width: 150px;
+  background-color: grey;
+  border: solid 1.3px #7a2332;
+}
+
+.track-names {
+  height: 320px;
+  width: 150px;
+  position: absolute;
+  left: 460px;
+  top: 182px;
+}
+
 #tracks {
   width: 1000px;
+  height: 320px;
+  left: 150px;
+  position: relative;
+  margin: auto;
+  text-align: left;
+  vertical-align: middle;
+  background-color: darkgray;
 }
 
 .track {
+  width: 1000px;
+  height: 80px;
+  z-index: 3;
   background-color: aquamarine;
+  position: relative;
+  border: solid 1.3px #7a2332;
 }
 
-.timeline {
-  background-color: grey;
+div [data-selected] {
+  background-color: #dd67a8;
+  opacity: 0.9;
+}
+
+.input {
+  width: 120px;
+  margin-left: 5px;
+  border-radius: 5px;
+  display: none;
+  visibility: hidden;
+}
+
+.select {
+  color: red;
+  font-size: 15px;
 }

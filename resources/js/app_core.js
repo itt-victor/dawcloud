@@ -1,180 +1,200 @@
 require('./bootstrap');
+require('./app_ui');
 
-import Wad from 'web-audio-daw';
+import { audioCtx } from './soundcontroller';
+import SoundController from './soundcontroller';
+import Record from './record';
+import { drawTrack } from './canvas';
+import { startCursor } from './canvas';
+import { moveCursor } from './canvas';
+import { drawTrackWhileRecording } from './canvas';
+
 import WaveSurfer from 'wavesurfer.js';
-import TimeLine from 'wavesurfer.js/dist/plugin/wavesurfer.timeline.min';
 
 
+export const play = document.querySelector('#play-button'),
+    record = document.querySelector('#record-button'),
+    stop = document.querySelector('#stop-button'),
+    timeLayout = document.querySelector('#time-layout');
+const addTrack = document.querySelector('#add-track'),
+    removeTrack = document.querySelector('#remove-track'),
+    audioctxbutton = document.querySelector('#audioctx');
 
+export var timeSpace = { pointedWidth: 610, newWidth: 610, pxAtPause: 0, timeAtPause: 0 };
+var soundStatuses = { isPlaying: false, hasStopped: true }
+var startRecordingOffset = 0;
+var source = [];
 
-
-const play = document.querySelector('#play-button');
-const record = document.querySelector('#record-button');
-const stop = document.querySelector('#stop-button');
-const soundClips = document.querySelector('.sound-clips');
-const mainSection = document.querySelector('#buttonpad');
-const audioCtx = new AudioContext();
-let wavesurfer;
-let waveforms = [];
-let digit = 0;
-let audioURLs = [];
-let durations = [];
-
-
-// disable stop button while not recording
-
+//default la 1a pista, botón stop apagado by default
+jQuery(".track:first").attr("data-selected", '');
 stop.disabled = true;
 
+///////////////////////////////////////
 
-//main block for doing the audio recording
+var soundcontroller = new SoundController(audioCtx);
+//buffer vacío para conextualizar la escala de tiempo
+var loopguide = soundcontroller.loopGuide()
+//se carga array de audioBuffers
+var audioBufferArray = soundcontroller.getAudioBufferArray();
 
-if (navigator.mediaDevices.getUserMedia) {
+///////////////////////////////////
+//cargo temas para desarrollo
+soundcontroller.loadSound("storage/sound/z1.mp3");
+soundcontroller.loadSound("storage/sound/zdgnjadgn.mp3")
 
-  const constraints = { audio: true };
-  let chunks = [];
-
-  let onSuccess = function(stream) {
-    const mediaRecorder = new MediaRecorder(stream);
-
-    //visualize(stream);
-
-    record.onclick = function() {
-        mediaRecorder.start();
-        console.log(mediaRecorder.state);
-        record.style.background = "red";
-
-        stop.disabled = false;
-        record.disabled = true;
-        play.disabled = true;
-
-        var trackContainer = document.createElement('div')
-        digit++
-        trackContainer.setAttribute("id", digit)
-        trackContainer.className = 'trackContainer'
-        tracks.appendChild(trackContainer)
-
-        var track = document.createElement('div')
-        track.setAttribute("id", digit)
-        track.className = 'track'
-        trackContainer.appendChild(track)
-
-        var timeline = document.createElement('div')
-        timeline.setAttribute("id", digit)
-        timeline.className = 'timeline'
-        trackContainer.appendChild(timeline)
-
-        wavesurfer = WaveSurfer.create({
-            container: $(".track:last")[0],
-            waveColor: 'green',
-            progressColor: 'green',
-            audioContext: audioCtx,
-            drawingContextAttributes: {desynchronized: true},
-            //fillParent: false,
-            mediaControls: true,
-            plugins: [
-                TimeLine.create({
-                    container: $(".timeline:last")[0]
-                })
-            ],
-        });
-        wavesurfer.empty()
+//Se rellenan las pistas según hayan archivos (REVISAR EN EL FUTURO, eso no debe hacerse así)
+///////ESTO ES IMPORTANTÍSIMO, PARA HACERLO BIEN HAY QUE HACER //
+///////QUE CADA SONIDO SEA UN OBJETO Y PASARLO BIEN POR AQUI////
+setTimeout(function () {
+    var actTime = 0;//?????
+    var track;
+    var trackId;
+    for (var i = 1; i < audioBufferArray.length; i++) {
+        trackId = 'track-' + [i];
+        track = document.getElementById(trackId)
+        drawTrack(audioBufferArray[i], track, actTime);
     }
+}, 500);
 
-    stop.onclick = function() {
-        if (mediaRecorder.state == 'recording'){
-            mediaRecorder.stop();
+/////////////////////////////////////
+///////////recordSound//////////////
+////////////////////////////////////
 
-            console.log(mediaRecorder.state);
-            record.style.background = "";
-            record.style.color = "";
-            // mediaRecorder.requestData();
+function recordSound() {
+    if (navigator.mediaDevices.getUserMedia) {
+        const constraints = { audio: true };
+        let chunks = [];
 
-            stop.disabled = true;
-            record.disabled = false;
-            play.disabled = false;
+        let onSuccess = function (stream) {
+            const mediaRecorder = new MediaRecorder(stream);
 
-
-        }
-        else /*if(stop.disabled == true)*/ {
-            for (var i in waveforms) {
-                waveforms[i].stop();  //pause??
-                stop.disabled = true;
-                play.disabled = false;
-            }
-        }
-    }
-
-    mediaRecorder.onstop = function(e) {
-
-        const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
-        chunks = [];
-        const audioURL = window.URL.createObjectURL(blob);
-
-
-
-        wavesurfer.on('ready', function () {
-            play.onclick = function(){
-
-                for (var i in waveforms){
-                    waveforms[i].play();
-                }
+            record.onclick = function () {
+                mediaRecorder.ondataavailable = event => chunks.push(event.data);
+                mediaRecorder.start();
+                startCursor();
+                drawTrackWhileRecording(timeSpace.timeAtPause);
+                console.log(mediaRecorder.state);
+                record.style.background = "red";
                 stop.disabled = false;
+                record.disabled = true;
                 play.disabled = true;
             }
-            /*stop.onclick = function () {
-                for (var i in waveforms){
-                    waveforms[i].pause();
+
+
+            function eStop() {
+                if (mediaRecorder.state == 'recording') {
+                    mediaRecorder.stop();
+                    console.log(mediaRecorder.state);
+                    record.style.background = "";
+                    record.style.color = "";
                     stop.disabled = true;
+                    record.disabled = false;
                     play.disabled = false;
+                    soundStatuses.hasStopped = true;
+                    soundStatuses.isPlaying = false;
                 }
-            }*/
+                else {
+                    timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
+                    for (var i = 0; i < audioBufferArray.length; i++) {
+                        soundcontroller.stopSound(source[i]);
+                    }
+                    play.disabled = false;
+                    stop.disabled = true;
+                    soundStatuses.hasStopped = true;
+                    soundStatuses.isPlaying = false;
+                    source = [];
+                }
+            }
+            stop.addEventListener('click', eStop);
+            /*window.addEventListener('keyup', function(e){
+                if (e.keyCode === 32) {
+                    e.preventDefault();
+                    eStop();
+                }
+            })*/
 
-        });
-
-        audioURLs.push(audioURL);
-
-        wavesurfer.load(audioURL);
-
-
-        waveforms.push(wavesurfer)
+            ///////////////////THIS
+            mediaRecorder.onstop = function () {
+                const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
+                chunks = [];
+                const audioURL = window.URL.createObjectURL(blob);
+                drawTrackWhileRecording()
+                var arrayBuffer;
+                var loaded;
+                var pist;
+                blob.arrayBuffer().then(arrayBuffer => {
+                    audioCtx.decodeAudioData(arrayBuffer, (audioBuffer) => {
+                        loaded = audioBuffer
+                        var tracks = document.getElementsByClassName('track');
+                        for (var i = 0; i < tracks.length; i++) {
+                            if (tracks[i].hasAttribute("data-selected")) {
+                                pist = tracks[i].children[0]
+                            }
+                        }
+                        audioBufferArray.push(loaded);
+                        drawTrack(loaded, pist, timeSpace.timeAtPause/*audioCtx.currentTime*/);
+                        //timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
+                    });
+                })
+                return arrayBuffer;
+            }
+        }
+        let onError = function (err) {
+            console.log('The following error occured: ' + err);
+        }
+        navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError);
+    } else {
+        alert('getUserMedia not supported on your browser!');
     }
+}
 
 
-    mediaRecorder.ondataavailable = function(e) {
-      chunks.push(e.data);
-    }
-  }
-
-  /*play.onclick = function(){
-    for (var i in waveforms){
-        waveforms[i].play();
+function ePlay() {
+    startCursor();
+    for (var i = 0; i < audioBufferArray.length; i++) {
+        source.push(soundcontroller.playSound(audioBufferArray[i], 0, timeSpace.timeAtPause));
     }
     stop.disabled = false;
     play.disabled = true;
-}*/
-
-/*stop.onclick = function () {
-    for (var i in waveforms){
-        waveforms[i].pause();
-        stop.disabled = true;
+    soundStatuses.isPlaying = true;
+    soundStatuses.hasStopped = false;
+    source.onended = function () {
         play.disabled = false;
+        stop.disabled = true;
+        soundStatuses.isPlaying = false;
+        soundStatuses.hasStopped = true;
+        source = [];
     }
-}*/
-
-  let onError = function(err) {
-    console.log('The following error occured: ' + err);
-  }
-
-  navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError);
-
-} else {
-   alert('getUserMedia not supported on your browser!');
+    return true;
 }
 
+play.addEventListener('click', ePlay);
+window.addEventListener('keyup', function (e) {
+    if (e.keyCode === 32) {
+        e.preventDefault();
+        ePlay();
+    }
+});
 
-window.onresize = function() {
-  //track.width = mainSection.offsetWidth;
+recordSound();
+
+//Interacción con el layout de tiempo
+timeLayout.addEventListener('click', function (event) {
+    timeSpace.pointedWidth = event.clientX;
+    timeSpace.pxAtPause = event.clientX - 610;
+    timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
+    moveCursor(timeSpace.pointedWidth);
+    if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
+        for (var i = 0; i < audioBufferArray.length; i++) {
+            soundcontroller.stopSound(source[i]);
+            console.log(source[i])
+        }
+        ePlay();
+    }
+});
+
+window.onresize = function () {
+
 }
 
 window.onresize();
-

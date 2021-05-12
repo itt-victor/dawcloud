@@ -16,21 +16,45 @@
     <h1 id="page-title" class="h1 center">daw Cloud</h1>
 
 
-<div id="buttonpad" class="buttonpad">
-    <button id="play-button" class="play-button"><img width="30px" height="30px" src="storage/icons/play-icon.jpg" alt="play-button"/></button>
-    <button id="stop-button" class="stop-button"><img width="30px" height="30px" src="storage/icons/stop-icon.png" alt="stop-button"/></button>
-    <button id="record-button" class="record-button"><img width="30px" height="30px" src="storage/icons/record-icon.png" alt="record-button"/></button>
+    <div id="buttonpad" class="buttonpad">
+        <button id="play-button" class="play-button btn btn-outline-info"><img width="30px" height="30px" src="storage/icons/play-icon.jpg" alt="play-button"/></button>
+        <button id="stop-button" class="stop-button btn btn-outline-info"><img width="30px" height="30px" src="storage/icons/stop-icon.png" alt="stop-button"/></button>
+        <button id="record-button" class="record-button btn btn-outline-info"><img width="30px" height="30px" src="storage/icons/record-icon.png" alt="record-button"/></button>
+        <button id="add-track" class="add-track btn btn-outline-info">Add Track</button>
+        <button id="remove-track" class="remove-track btn btn-outline-info">Remove Track</button>
+        <button id="audioctx" class="btn btn-outline-info">Audio Context</button>
+
+    </div>
+
+    <section id="mixer" class="mixer">
+
+    </section>
+
+    <section class="sound-clips">
+        <div class="track-names">
+            @include('layouts.track', ['number'=> '1'])
+            @include('layouts.track', ['number'=> '2'])
+            @include('layouts.track', ['number'=> '3'])
+            @include('layouts.track', ['number'=> '4'])
+       {{-- @include('layouts.track', ['number'=> '5'])
+            @include('layouts.track', ['number'=> '6'])
+            @include('layouts.track', ['number'=> '7'])
+            @include('layouts.track', ['number'=> '8']) --}}
+        </div>
+        <canvas id="cursor" ></canvas>
+        <div id="time-layout" height="10px" width="100%" style="background-color: grey;"><canvas id="pointer"></canvas></div>
+        <div id="tracks" class="tracks">
+            @include('layouts.track_canvas', ['number'=>'1'])
+            @include('layouts.track_canvas', ['number'=>'2'])
+            @include('layouts.track_canvas', ['number'=>'3'])
+            @include('layouts.track_canvas', ['number'=>'4'])
+    {{--    @include('layouts.track_canvas', ['number'=>'5'])
+            @include('layouts.track_canvas', ['number'=>'6'])
+            @include('layouts.track_canvas', ['number'=>'7'])
+            @include('layouts.track_canvas', ['number'=>'8']) --}}
+        </div>
+    </section>
 
 </div>
-
-<section id="mixer" class="mixer">
-
-</section>
-
-<section class="sound-clips">
-
-<div id="tracks" class="tracks"></div>
-
-</section>
 
 @endsection
