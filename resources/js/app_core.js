@@ -157,7 +157,6 @@ function recordSound(chunks) {
     const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
     chunks = [];
     const audioURL = window.URL.createObjectURL(blob);
-    //ui_recording.drawTrackWhileRecording()
     //var arrayBuffer;
     var aB;
     var trck;
@@ -172,7 +171,7 @@ function recordSound(chunks) {
             }
             audioBufferArray.push(loaded);//esto se va claro, se une en los objetos
             // recording = new Recording(aB, etc)
-            drawTrack(aB, trck, timeSpace.timeAtPause);//esto se va y se hace desde la ui a partir del objeto recording
+           // drawTrack(aB, trck, timeSpace.timeAtPause);//esto se va y se hace desde la ui a partir del objeto recording
             //timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
         });
     })
