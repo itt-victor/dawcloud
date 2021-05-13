@@ -1,15 +1,16 @@
 require('./bootstrap');
 require('./app_ui');
 
+
 import { trackGrid } from './components/trackGrid';
+import Recording from './components/recording';
 import { cursor } from './components/cursor';
-
 import { ui_recording } from './ui/ui_recording';
-
-import SoundController from './audio/soundcontroller';
 import { audioCtx } from './audio/soundcontroller';
+import SoundController from './audio/soundcontroller';
+import { audioBuffers, audioBufferSources } from './audio/soundcontroller';
 
-import recording from './components/recording';
+import { generateTrackNumbers } from './utils';
 
 export const play = document.querySelector('#play-button'),
     record = document.querySelector('#record-button'),
@@ -20,8 +21,7 @@ const addTrack = document.querySelector('#add-track'),
 
 export var timeSpace = { pointedWidth: 610, newWidth: 610, pxAtPause: 0, timeAtPause: 0 };
 var soundStatuses = { isPlaying: false, hasStopped: true }
-var startRecordingOffset = 0;
-var source = [];
+
 
 //default la 1a pista, botón stop apagado by default
 jQuery(".track:first").attr("data-selected", '');
@@ -31,27 +31,27 @@ stop.disabled = true;
 var soundcontroller = new SoundController(audioCtx);
 //buffer vacío para conextualizar la escala de tiempo
 var loopguide = soundcontroller.loopGuide()
-//se carga array de audioBuffers
-var audioBufferArray = soundcontroller.getAudioBufferArray();
-
 ///////////////////////////////////
 //cargo temas para desarrollo
-soundcontroller.loadSound("storage/sound/z1.mp3");
-soundcontroller.loadSound("storage/sound/zdgnjadgn.mp3")
+
+//HAY QUE DEJAR TIEMPO ENTRE CARGAS O EL QUE MENOS PESO TIENE ENTRA PRIMERO, ROMPIENDO EL ORDEN DEL ARRAY
+setTimeout(function(){ soundcontroller.loadSound("storage/sound/z1.mp3")},0);
+setTimeout(function(){ soundcontroller.loadSound("storage/sound/2.mp3")},300);
+//setTimeout(function(){ soundcontroller.loadSound("storage/sound/3.mp3")},600);
 
 //Se rellenan las pistas según hayan archivos (REVISAR EN EL FUTURO, eso no debe hacerse así)
 ///////ESTO ES IMPORTANTÍSIMO, PARA HACERLO BIEN HAY QUE HACER //
 ///////QUE CADA SONIDO SEA UN OBJETO Y PASARLO BIEN POR AQUI////
-setTimeout(function () {
+setTimeout(function dibuja() {
     var actTime = 0;//?????
     var track;
     var trackId;
-    for (var i = 1; i < audioBufferArray.length; i++) {
+    for (var i = 1; i < audioBuffers.length; i++) {
         trackId = 'track-' + [i];
         track = document.getElementById(trackId)
-        ui_recording.drawTrack(audioBufferArray[i], track, actTime);
+        ui_recording.drawTrack(audioBuffers[i], track, actTime);
     }
-}, 500);
+}, 1000);
 cursor.draw();
 
 /////////////////////////////////////
@@ -62,6 +62,7 @@ function startApp() {
     if (navigator.mediaDevices.getUserMedia) {
         const constraints = { audio: true };
         let chunks = [];
+        let startTime;
 
         let onSuccess = function (stream) {
             const mediaRecorder = new MediaRecorder(stream);
@@ -70,6 +71,7 @@ function startApp() {
                 mediaRecorder.ondataavailable = event => chunks.push(event.data);
                 mediaRecorder.start();
                 cursor.play();
+                startTime = timeSpace.timeAtPause
                 ui_recording.drawTrackWhileRecording(timeSpace.timeAtPause);
                 console.log(mediaRecorder.state);
                 record.style.background = "red";
@@ -93,14 +95,11 @@ function startApp() {
                 }
                 else {
                     timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
-                    for (var i = 0; i < audioBufferArray.length; i++) {
-                        soundcontroller.stopSound(source[i]);
-                    }
+                    soundcontroller.stopSound(audioBufferSources);
                     play.disabled = false;
                     stop.disabled = true;
                     soundStatuses.hasStopped = true;
                     soundStatuses.isPlaying = false;
-                    source = [];
                 }
             }
             stop.addEventListener('click', eStop);
@@ -125,22 +124,13 @@ function startApp() {
 }
 
 
-function ePlay() {
+function ePlay() {//hay que pencar en esto, que cada objeto de record sea un parametro
     cursor.play();
-    for (var i = 0; i < audioBufferArray.length; i++) {
-        source.push(soundcontroller.playSound(audioBufferArray[i], 0, timeSpace.timeAtPause));
-    }
+    soundcontroller.playSound(audioBuffers, 0, timeSpace.timeAtPause)
     stop.disabled = false;
     play.disabled = true;
     soundStatuses.isPlaying = true;
     soundStatuses.hasStopped = false;
-    source.onended = function () {
-        play.disabled = false;
-        stop.disabled = true;
-        soundStatuses.isPlaying = false;
-        soundStatuses.hasStopped = true;
-        source = [];
-    }
     return true;
 }
 
@@ -160,6 +150,7 @@ function recordSound(chunks) {
     //var arrayBuffer;
     var aB;
     var trck;
+    var trckName;
     blob.arrayBuffer().then(arrayBuffer => {
         audioCtx.decodeAudioData(arrayBuffer, (audioBuffer) => {
             aB = audioBuffer;
@@ -169,13 +160,15 @@ function recordSound(chunks) {
                     trck = tracks[i].children[0]
                 }
             }
-            audioBufferArray.push(loaded);//esto se va claro, se une en los objetos
-            // recording = new Recording(aB, etc)
+            trckName = generateTrackNumbers();
+            window[trckName] = new Recording(aB, startTime, timeSpace.timeAtPause);
+            //audioBuffers.add(aB);//esto se va claro, se une en los objetos
            // drawTrack(aB, trck, timeSpace.timeAtPause);//esto se va y se hace desde la ui a partir del objeto recording
             //timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
         });
     })
 }
+
 
 //Interacción con el layout de tiempo
 timeLayout.addEventListener('click', function (event) {
@@ -184,7 +177,7 @@ timeLayout.addEventListener('click', function (event) {
     timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
     moveCursor(timeSpace.pointedWidth);
     if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
-        for (var i = 0; i < audioBufferArray.length; i++) {
+        for (var i = 0; i < audioBuffers.length; i++) {
             soundcontroller.stopSound(source[i]);
             console.log(source[i])
         }

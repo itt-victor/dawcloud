@@ -3,6 +3,7 @@ import { stop } from '../app_core';
 
 export var ui_recording = {
     //var actualTime = 0;  ESTO DEBE IRSE A RECORDING Y A TRACK, SEPARANDO EL CANVAS DEL DIBUJADO
+    //esto dibuja con un buffer ya cargado, claro
     drawTrack(audioBuffer, track, actualTime) {
         var x = actualTime * 1000 / 200;
         var canvasCtx = track.getContext('2d');
