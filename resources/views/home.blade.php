@@ -31,27 +31,27 @@
     </section>
 
     <section class="sound-clips">
-        <div class="track-names">
-            @include('layouts.track', ['number'=> '1'])
-            @include('layouts.track', ['number'=> '2'])
-            @include('layouts.track', ['number'=> '3'])
-            @include('layouts.track', ['number'=> '4'])
-       {{-- @include('layouts.track', ['number'=> '5'])
-            @include('layouts.track', ['number'=> '6'])
-            @include('layouts.track', ['number'=> '7'])
-            @include('layouts.track', ['number'=> '8']) --}}
+        <div class="track_names">
+            @include('layouts.track_name', ['number'=> '1'])
+            @include('layouts.track_name', ['number'=> '2'])
+            @include('layouts.track_name', ['number'=> '3'])
+            @include('layouts.track_name', ['number'=> '4'])
+       {{-- @include('layouts.track_name', ['number'=> '5'])
+            @include('layouts.track_name', ['number'=> '6'])
+            @include('layouts.track_name', ['number'=> '7'])
+            @include('layouts.track_name', ['number'=> '8']) --}}
         </div>
         <canvas id="cursor" ></canvas>
         <div id="time-layout" height="10px" width="100%" style="background-color: grey;"><canvas id="pointer"></canvas></div>
         <div id="tracks" class="tracks">
+            @include('layouts.track_canvas', ['number'=>'0'])
             @include('layouts.track_canvas', ['number'=>'1'])
             @include('layouts.track_canvas', ['number'=>'2'])
             @include('layouts.track_canvas', ['number'=>'3'])
-            @include('layouts.track_canvas', ['number'=>'4'])
-    {{--    @include('layouts.track_canvas', ['number'=>'5'])
+    {{--    @include('layouts.track_canvas', ['number'=>'4'])
+            @include('layouts.track_canvas', ['number'=>'5'])
             @include('layouts.track_canvas', ['number'=>'6'])
-            @include('layouts.track_canvas', ['number'=>'7'])
-            @include('layouts.track_canvas', ['number'=>'8']) --}}
+            @include('layouts.track_canvas', ['number'=>'7']) --}}
         </div>
     </section>
 

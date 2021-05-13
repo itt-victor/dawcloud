@@ -3,18 +3,12 @@ import {play} from './app_core';
 import {stop} from './app_core';
 import {startCursor} from './canvas';*/
 
-
-//var audioBuffer;
-export var audioBuffers = [];/*{
-    length: 0,
-    add: function add(elem){
-        [].push.call(this, elem);
-    }
-};*/
+import { timeSpace } from '../timeSpace';
+import { grid } from '../components/generalgrid';
 
 export var audioBufferSources = {
     length: 0,
-    add: function add(elem){
+    add: function add(elem) {
         [].push.call(this, elem);
     }
 };
@@ -38,11 +32,12 @@ export default class SoundController {
 
     loopGuide() {
         const buffer = audioCtx.createBuffer(2, audioCtx.sampleRate * 6000, audioCtx.sampleRate);
-        audioBuffers.push(buffer);
-        console.log(audioBuffers)
+        //audioBuffers.add(buffer);
     }
 
-    loadSound(url) {
+    loadSound(url, trcknr) {
+        //let trcknr = document.querySelector('[data-selected] > canvas').id;
+
         const request = new XMLHttpRequest();
         request.open("GET", url, true);
         request.responseType = "arraybuffer";
@@ -50,29 +45,36 @@ export default class SoundController {
             let undecodedAudio = request.response;
             audioCtx.decodeAudioData(undecodedAudio, (data) => {
                 var audioBuffer = data;
-                audioBuffersKeys++;
-                audioBuffers.push(audioBuffer);
+                //audioBuffers.add(audioBuffer);
+                grid.tracks[trcknr].addRecord(0, 0, audioBuffer);//creo recording
             });
         };
         request.send();
     }
 
-    playSound(audioBuffers, time, offset) {//debería de sacarse un array de records que esté en el objeto de track o trackgrid, de donse se saca estos 3 parametros
-      for (var i = 0; i < audioBuffers.length; i++) {
-          const source = audioCtx.createBufferSource();
-          source.buffer = audioBuffer[i];
-          source.connect(audioCtx.destination);
-          const latency = time + 0.05;
-          source.start(latency, offset);
-          audioBufferSources.add(source);
-      }
+    playSound(tracks, offset) {
+        audioCtx.resume();
+        for (var i = 0; i < tracks.length; i++) {
+            let recordings = tracks[i].recordings;
+            for (var h = 0; h < recordings.length; h++) {
+                const source = audioCtx.createBufferSource();
+                source.buffer = recordings[h].audioBuffer;
+                source.connect(audioCtx.destination);
+                const latency = recordings[h].timeToStart + 0.03;
+                source.start(latency, offset);
+                audioBufferSources.add(source);
+                console.log(recordings[h].audioBuffer);
+            }
+        }
     }
 
+
     stopSound(sources) {
-        for (var i = 0; i < sources.length; i++){
+        for (var i = 0; i < sources.length; i++) {
             sources[i].stop();
         }
         //audioBufferSources = [];   vaciarlo??????
+        audioCtx.suspend();
     }
 
 

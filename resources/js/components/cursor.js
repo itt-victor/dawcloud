@@ -1,12 +1,12 @@
 import { stop } from '../app_core';
-import { trackGrid } from './trackGrid';
-import { timeSpace } from '../app_core';
+import { grid } from './generalgrid';
+import { timeSpace } from '../timeSpace';
 
 export var cursor = {
     canvas: document.getElementById("cursor"),
     draw: function () {
         this.canvas.width = 10;
-        this.canvas.height = 80 * trackGrid.howMany + 20;  //80 por pista + 20 de time layout
+        this.canvas.height = 80 * grid.howMany + 20;  //80 por pista + 20 de time layout
         this.canvas.style.left = '610px';
         this.canvas.style.zIndex = '10';
         this.ctx = this.canvas.getContext('2d');
@@ -26,15 +26,13 @@ export var cursor = {
         stop.addEventListener('click', function () {
             clearInterval(interval);
         })
-    }
-    /*
-
-        function moveCursor(px) {
-        this.cursor.style.left = px + 'px';
+    },
+        moveCursor: function(px) {
+        this.canvas.style.left = px + 'px';
         timeSpace.newWidth = timeSpace.pointedWidth;
     }
 
 
-    */
+
     //LA FUNCIÓN DE MOVERSE DEBERÍA SER SOLO
 }

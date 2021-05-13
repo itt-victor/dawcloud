@@ -1,8 +1,15 @@
 
 
 //genera números de grabación en incremento
-var number = 0;
+var tracknumber = 0;
+var recordnumber = 0;
+
 export function generateTrackNumbers(){
-    number++;
-    return 'record_' + number;
+    tracknumber++;
+    return 'track_' + tracknumber;
+}
+
+export function generateRecordingNumbers(){
+    recordnumber++;
+    return 'recording_' + recordnumber;
 }

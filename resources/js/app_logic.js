@@ -1,5 +1,3 @@
-import trackNumber from './canvas';
-
 
 //Seleccionar pista
 function selectTrack() {

@@ -1,58 +1,50 @@
 require('./bootstrap');
-require('./app_ui');
+require('./app_logic');
+require('./components/timeLayout');
 
-
-import { trackGrid } from './components/trackGrid';
+import { grid } from './components/generalgrid';
 import Recording from './components/recording';
 import { cursor } from './components/cursor';
 import { ui_recording } from './ui/ui_recording';
 import { audioCtx } from './audio/soundcontroller';
 import SoundController from './audio/soundcontroller';
+import { timeSpace } from './timeSpace';
+import timeLayout from './components/timeLayout';
+
 import { audioBuffers, audioBufferSources } from './audio/soundcontroller';
 
-import { generateTrackNumbers } from './utils';
+import { generateTrackNumbers, generateRecordingNumbers } from './utils';
 
 export const play = document.querySelector('#play-button'),
     record = document.querySelector('#record-button'),
-    stop = document.querySelector('#stop-button'),
-    timeLayout = document.querySelector('#time-layout');
+    stop = document.querySelector('#stop-button');
+
 const addTrack = document.querySelector('#add-track'),
     removeTrack = document.querySelector('#remove-track');
 
-export var timeSpace = { pointedWidth: 610, newWidth: 610, pxAtPause: 0, timeAtPause: 0 };
-var soundStatuses = { isPlaying: false, hasStopped: true }
+export var soundStatuses = { isPlaying: false, hasStopped: true }
 
 
 //default la 1a pista, botón stop apagado by default
 jQuery(".track:first").attr("data-selected", '');
 stop.disabled = true;
 
+setInterval(function(){console.log(audioCtx.currentTime)}, 400)
 ///////////////////////////////////////
-var soundcontroller = new SoundController(audioCtx);
+
+export var soundcontroller = new SoundController(audioCtx);
 //buffer vacío para conextualizar la escala de tiempo
-var loopguide = soundcontroller.loopGuide()
-///////////////////////////////////
-//cargo temas para desarrollo
-
-//HAY QUE DEJAR TIEMPO ENTRE CARGAS O EL QUE MENOS PESO TIENE ENTRA PRIMERO, ROMPIENDO EL ORDEN DEL ARRAY
-setTimeout(function(){ soundcontroller.loadSound("storage/sound/z1.mp3")},0);
-setTimeout(function(){ soundcontroller.loadSound("storage/sound/2.mp3")},300);
-//setTimeout(function(){ soundcontroller.loadSound("storage/sound/3.mp3")},600);
-
-//Se rellenan las pistas según hayan archivos (REVISAR EN EL FUTURO, eso no debe hacerse así)
-///////ESTO ES IMPORTANTÍSIMO, PARA HACERLO BIEN HAY QUE HACER //
-///////QUE CADA SONIDO SEA UN OBJETO Y PASARLO BIEN POR AQUI////
-setTimeout(function dibuja() {
-    var actTime = 0;//?????
-    var track;
-    var trackId;
-    for (var i = 1; i < audioBuffers.length; i++) {
-        trackId = 'track-' + [i];
-        track = document.getElementById(trackId)
-        ui_recording.drawTrack(audioBuffers[i], track, actTime);
-    }
-}, 1000);
+soundcontroller.loopGuide()
+//dibuja cursor inicial
 cursor.draw();
+
+///////////////////////////////////
+
+//cargo temas para desarrollo
+//esto no será necesario, ya que se cargará cada una por separado
+setTimeout(function () { soundcontroller.loadSound("storage/sound/1.mp3", 0) }, 0);
+setTimeout(function () { soundcontroller.loadSound("storage/sound/2.mp3", 1) }, 400);
+
 
 /////////////////////////////////////
 ///////////recordSound//////////////
@@ -80,7 +72,6 @@ function startApp() {
                 play.disabled = true;
             }
 
-
             function eStop() {
                 if (mediaRecorder.state == 'recording') {
                     mediaRecorder.stop();
@@ -92,6 +83,7 @@ function startApp() {
                     play.disabled = false;
                     soundStatuses.hasStopped = true;
                     soundStatuses.isPlaying = false;
+                    timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
                 }
                 else {
                     timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
@@ -110,8 +102,30 @@ function startApp() {
                 }
             })*/
 
-            ///////////////////THIS
-            mediaRecorder.onstop = recordSound(chunks);
+            mediaRecorder.onstop = function recordSound() {
+
+                const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
+                chunks = [];
+                const audioURL = window.URL.createObjectURL(blob);
+                let aB;
+                blob.arrayBuffer().then(arrayBuffer => {
+                    audioCtx.decodeAudioData(arrayBuffer, (audioBuffer) => {
+                        aB = audioBuffer;
+                        /*var tracks = document.getElementsByClassName('track');
+                        for (var i = 0; i < tracks.length; i++) {
+                            if (tracks[i].hasAttribute("data-selected")) {
+                                trck = tracks[i].children[0]
+                            }
+                        }*/
+
+                        console.log(timeSpace.timeAtPause)
+
+                        var track = document.querySelector('[data-selected] > canvas').id;
+                        console.log(startTime)
+                        grid.tracks[track].addRecord(startTime, 0, aB);
+                    });
+                })
+            }//recordSound(chunks);
 
         }
         let onError = function (err) {
@@ -123,10 +137,9 @@ function startApp() {
     }
 }
 
-
-function ePlay() {//hay que pencar en esto, que cada objeto de record sea un parametro
+function ePlay() {
     cursor.play();
-    soundcontroller.playSound(audioBuffers, 0, timeSpace.timeAtPause)
+    soundcontroller.playSound(grid.tracks, timeSpace.timeAtPause)
     stop.disabled = false;
     play.disabled = true;
     soundStatuses.isPlaying = true;
@@ -141,49 +154,32 @@ window.addEventListener('keyup', function (e) {
         ePlay();
     }
 });
-
+/*
 function recordSound(chunks) {
 
     const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
     chunks = [];
     const audioURL = window.URL.createObjectURL(blob);
-    //var arrayBuffer;
-    var aB;
-    var trck;
-    var trckName;
+    let aB;
     blob.arrayBuffer().then(arrayBuffer => {
         audioCtx.decodeAudioData(arrayBuffer, (audioBuffer) => {
             aB = audioBuffer;
-            var tracks = document.getElementsByClassName('track');
+            /*var tracks = document.getElementsByClassName('track');
             for (var i = 0; i < tracks.length; i++) {
                 if (tracks[i].hasAttribute("data-selected")) {
                     trck = tracks[i].children[0]
                 }
             }
-            trckName = generateTrackNumbers();
-            window[trckName] = new Recording(aB, startTime, timeSpace.timeAtPause);
-            //audioBuffers.add(aB);//esto se va claro, se une en los objetos
-           // drawTrack(aB, trck, timeSpace.timeAtPause);//esto se va y se hace desde la ui a partir del objeto recording
-            //timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
+            console.log(aB)
+            console.log(track)
+            console.log(timeSpace.timeAtPause)
+
+            var track = document.querySelector('[data-selected] > canvas').id;
+            grid.tracks[track].addRecord(timeSpace.timeAtPause, 0, aB);
         });
     })
-}
+}*/
 
-
-//Interacción con el layout de tiempo
-timeLayout.addEventListener('click', function (event) {
-    timeSpace.pointedWidth = event.clientX;
-    timeSpace.pxAtPause = event.clientX - 610;
-    timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
-    moveCursor(timeSpace.pointedWidth);
-    if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
-        for (var i = 0; i < audioBuffers.length; i++) {
-            soundcontroller.stopSound(source[i]);
-            console.log(source[i])
-        }
-        ePlay();
-    }
-});
 
 /////////////
 startApp();
