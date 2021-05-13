@@ -16,6 +16,6 @@ timeLayout.addEventListener('click', function (event) {
     cursor.moveCursor(timeSpace.pointedWidth);
     if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
         soundcontroller.stopSound(audioBufferSources);
-        soundcontroller.playSound(grid.tracks, timeSpace.timeAtPause);
+        soundcontroller.playSound(grid.tracks);
     }
 });

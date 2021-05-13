@@ -52,7 +52,7 @@ export default class SoundController {
         request.send();
     }
 
-    playSound(tracks, offset) {
+    playSound(tracks) {
         audioCtx.resume();
         for (var i = 0; i < tracks.length; i++) {
             let recordings = tracks[i].recordings;
@@ -60,10 +60,20 @@ export default class SoundController {
                 const source = audioCtx.createBufferSource();
                 source.buffer = recordings[h].audioBuffer;
                 source.connect(audioCtx.destination);
-                const latency = recordings[h].timeToStart + 0.03;
-                source.start(latency, offset);
+                let start = recordings[h].timeToStart - timeSpace.timeAtPause;
+                let offset = timeSpace.timeAtPause - recordings[h].timeToStart;
+                if (start < 0) {
+                    start = 0;
+                }
+                if (offset < 0) {
+                    offset = 0;
+                } /*else if (offset < 0 && start <= 0){
+                    offset = timeSpace.timeAtPause;
+                }*/
+                console.log(start, offset);
+                source.start(start, offset);
                 audioBufferSources.add(source);
-                console.log(recordings[h].audioBuffer);
+
             }
         }
     }
@@ -73,7 +83,12 @@ export default class SoundController {
         for (var i = 0; i < sources.length; i++) {
             sources[i].stop();
         }
-        //audioBufferSources = [];   vaciarlo??????
+        audioBufferSources = {
+            length: 0,
+            add: function add(elem) {
+                [].push.call(this, elem);
+            }
+        };   //vaciarlo??????
         audioCtx.suspend();
     }
 

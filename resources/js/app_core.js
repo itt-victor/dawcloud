@@ -29,7 +29,6 @@ export var soundStatuses = { isPlaying: false, hasStopped: true }
 jQuery(".track:first").attr("data-selected", '');
 stop.disabled = true;
 
-setInterval(function(){console.log(audioCtx.currentTime)}, 400)
 ///////////////////////////////////////
 
 export var soundcontroller = new SoundController(audioCtx);
@@ -111,21 +110,11 @@ function startApp() {
                 blob.arrayBuffer().then(arrayBuffer => {
                     audioCtx.decodeAudioData(arrayBuffer, (audioBuffer) => {
                         aB = audioBuffer;
-                        /*var tracks = document.getElementsByClassName('track');
-                        for (var i = 0; i < tracks.length; i++) {
-                            if (tracks[i].hasAttribute("data-selected")) {
-                                trck = tracks[i].children[0]
-                            }
-                        }*/
-
-                        console.log(timeSpace.timeAtPause)
-
                         var track = document.querySelector('[data-selected] > canvas').id;
-                        console.log(startTime)
                         grid.tracks[track].addRecord(startTime, 0, aB);
                     });
                 })
-            }//recordSound(chunks);
+            }
 
         }
         let onError = function (err) {
@@ -139,7 +128,7 @@ function startApp() {
 
 function ePlay() {
     cursor.play();
-    soundcontroller.playSound(grid.tracks, timeSpace.timeAtPause)
+    soundcontroller.playSound(grid.tracks)
     stop.disabled = false;
     play.disabled = true;
     soundStatuses.isPlaying = true;
