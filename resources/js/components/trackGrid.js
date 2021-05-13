@@ -13,7 +13,7 @@ export var trackGrid = {
      */
     set addSoundBuffers(trackBuffers) { this.soundBuffers.push(...trackBuffers) },
 
-    interval: setInterval(update)
+    //interval: setInterval(update)
 };
 //incluye aquí el interval que sea general para todos los componentes
 

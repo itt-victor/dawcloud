@@ -1,8 +1,9 @@
+import { stop } from '../app_core';
+//export * from '../app_core';
 
-
-export default function ui_recording() {
-    //var actualTime = 0;
-    function drawTrack(audioBuffer, track, actualTime) {
+export var ui_recording = {
+    //var actualTime = 0;  ESTO DEBE IRSE A RECORDING Y A TRACK, SEPARANDO EL CANVAS DEL DIBUJADO
+    drawTrack(audioBuffer, track, actualTime) {
         var x = actualTime * 1000 / 200;
         var canvasCtx = track.getContext('2d');
         track.width = 1000;
@@ -13,9 +14,9 @@ export default function ui_recording() {
         canvasCtx.fillStyle = '#380166';
         canvasCtx.fillRect(x, 0, width, 77);
         audioBuffer = null;
-    }
+    },
 
-    function drawTrackWhileRecording(actualTime) {
+    drawTrackWhileRecording(actualTime) {
         var width = 0;
         //var x = actualTime * 1000 / 200;
         var x = actualTime * 5;

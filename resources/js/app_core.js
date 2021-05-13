@@ -4,7 +4,7 @@ require('./app_ui');
 import { trackGrid } from './components/trackGrid';
 import { cursor } from './components/cursor';
 
-import ui_recording from './ui/ui_recording';
+import { ui_recording } from './ui/ui_recording';
 
 import SoundController from './audio/soundcontroller';
 import { audioCtx } from './audio/soundcontroller';
@@ -49,11 +49,10 @@ setTimeout(function () {
     for (var i = 1; i < audioBufferArray.length; i++) {
         trackId = 'track-' + [i];
         track = document.getElementById(trackId)
-        drawTrack(audioBufferArray[i], track, actTime);
+        ui_recording.drawTrack(audioBufferArray[i], track, actTime);
     }
 }, 500);
 cursor.draw();
-console.log(cursor.ctx);
 
 /////////////////////////////////////
 ///////////recordSound//////////////
@@ -70,8 +69,8 @@ function startApp() {
             record.onclick = function () {
                 mediaRecorder.ondataavailable = event => chunks.push(event.data);
                 mediaRecorder.start();
-                startCursor();
-                drawTrackWhileRecording(timeSpace.timeAtPause);
+                cursor.play();
+                ui_recording.drawTrackWhileRecording(timeSpace.timeAtPause);
                 console.log(mediaRecorder.state);
                 record.style.background = "red";
                 stop.disabled = false;
@@ -158,8 +157,8 @@ function recordSound(chunks) {
     const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
     chunks = [];
     const audioURL = window.URL.createObjectURL(blob);
-    drawTrackWhileRecording()
-    var arrayBuffer;
+    //ui_recording.drawTrackWhileRecording()
+    //var arrayBuffer;
     var aB;
     var trck;
     blob.arrayBuffer().then(arrayBuffer => {

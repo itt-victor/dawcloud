@@ -1,4 +1,6 @@
+import { stop } from '../app_core';
 import { trackGrid } from './trackGrid';
+import { timeSpace } from '../app_core';
 
 export var cursor = {
     canvas: document.getElementById("cursor"),
@@ -17,9 +19,9 @@ export var cursor = {
     //hay que sacar el intervalo de aquí
     play: function () {
         var interval = setInterval(function () {
-            //timeSpace.pxAtPause++;
-            //timeSpace.newWidth++
-            cursor.style.left = timeSpace.newWidth + 'px';//Esto debería de venir de otro objeto y solo dejar esta linea
+            timeSpace.pxAtPause++;//estos dos fuera de aquí
+            timeSpace.newWidth++
+            this.cursor.style.left = timeSpace.newWidth + 'px';//Esto debería de venir de otro objeto y solo dejar esta linea
         }, 200)
         stop.addEventListener('click', function () {
             clearInterval(interval);
@@ -28,7 +30,7 @@ export var cursor = {
     /*
 
         function moveCursor(px) {
-        cursor.style.left = px + 'px';
+        this.cursor.style.left = px + 'px';
         timeSpace.newWidth = timeSpace.pointedWidth;
     }
 
