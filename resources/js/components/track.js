@@ -1,6 +1,6 @@
 
 export var track = {
-    trackBuffers : [],
+    trackBuffers: [],
 
 
 
@@ -8,6 +8,6 @@ export var track = {
     /**
      * @param {any} soundBuffer
      */
-    set addtrackBuffers(soundBuffer){ this.trackBuffers.push(soundBuffer)},
+    set addtrackBuffers(soundBuffer) { this.trackBuffers.push(soundBuffer) },
 
 }

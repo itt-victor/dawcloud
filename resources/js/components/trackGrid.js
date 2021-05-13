@@ -1,9 +1,9 @@
-import {cursor} from './cursor';
+import { cursor } from './cursor';
 
 export var trackGrid = {
-    howMany : 4,
-    cursor : cursor,
-    soundBuffers : [],
+    howMany: 4,
+    cursor: cursor,
+    soundBuffers: [],
 
 
 
@@ -11,9 +11,9 @@ export var trackGrid = {
     /**
      * @param {any} trackBuffers
      */
-    set addSoundBuffers(trackBuffers){this.soundBuffers.push(...trackBuffers)},
+    set addSoundBuffers(trackBuffers) { this.soundBuffers.push(...trackBuffers) },
 
-    interval : setInterval(update)
+    interval: setInterval(update)
 };
 //incluye aquí el interval que sea general para todos los componentes
 

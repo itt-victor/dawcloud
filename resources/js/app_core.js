@@ -1,10 +1,10 @@
 require('./bootstrap');
 require('./app_ui');
 
-import {trackGrid} from './components/trackGrid';
-import {cursor} from './components/cursor';
+import { trackGrid } from './components/trackGrid';
+import { cursor } from './components/cursor';
 
-import  ui_recording  from './ui/ui_recording';
+import ui_recording from './ui/ui_recording';
 
 import SoundController from './audio/soundcontroller';
 import { audioCtx } from './audio/soundcontroller';
