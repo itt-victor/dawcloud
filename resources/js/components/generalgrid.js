@@ -8,7 +8,7 @@ export var grid = {
     howMany: document.getElementsByClassName('track').length,
     cursor: cursor,
     tracks: { length: 0, add: function add(elem) { [].push.call(this, elem) } },
-    //audioBuffers: { length: 0, add: function add(elem) { [].push.call(this, elem) } },
+    //audioBuffers: [],
 
 
     addTracks(howMany) {
@@ -16,10 +16,12 @@ export var grid = {
             trackName = generateTrackNumbers();
             window[trackName] = new Track(i);
             grid.tracks.add(window[trackName]);
+            //grid.audioBuffers.push(...window[trackName].audioBuffers);
             /*for (var i= 0; i < window[trackName].recordings.length; i++){
                 grid.audioBuffers.add(window[trackName].recordings[i]);
             }*/
         }
+
     }
 
     //interval: setInterval(update)
