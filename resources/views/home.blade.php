@@ -32,6 +32,7 @@
 
     <section class="sound-clips">
         <div class="track_names">
+            <div class="dummy-block"></div>
             @include('layouts.track_name', ['number'=> '1'])
             @include('layouts.track_name', ['number'=> '2'])
             @include('layouts.track_name', ['number'=> '3'])
