@@ -27,7 +27,7 @@ export var cursor = {
             clearInterval(interval);
         })
     },
-        moveCursor: function(px) {
+    moveAtClick: function(px) {
         this.canvas.style.left = px + 'px';
         timeSpace.newWidth = timeSpace.pointedWidth;
     }

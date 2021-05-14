@@ -6,14 +6,13 @@ import {startCursor} from './canvas';*/
 import { timeSpace } from '../timeSpace';
 import { grid } from '../components/generalgrid';
 
+//Esto aquí mismo ya que se se pierden en cada play
 export var audioBufferSources = {
     length: 0,
     add: function add(elem) {
         [].push.call(this, elem);
     }
 };
-
-var audioBuffersKeys = 0;
 
 export const audioCtx = new (window.AudioContext ||
     window.webkitAudioContext);
@@ -30,14 +29,14 @@ export default class SoundController {
         return audioBuffers;
     }
 
-    loopGuide() {
+    /*loopGuide() {   //HACE FALTA????
         const buffer = audioCtx.createBuffer(2, audioCtx.sampleRate * 6000, audioCtx.sampleRate);
         //audioBuffers.add(buffer);
-    }
+    }*/
 
     loadSound(url, trcknr) {
         //let trcknr = document.querySelector('[data-selected] > canvas').id;
-
+        //esto para cuando no cargues audio a lo feo, de momento pasa por parámetro, o igual en la funcion a crear.
         const request = new XMLHttpRequest();
         request.open("GET", url, true);
         request.responseType = "arraybuffer";
@@ -45,7 +44,6 @@ export default class SoundController {
             let undecodedAudio = request.response;
             audioCtx.decodeAudioData(undecodedAudio, (data) => {
                 var audioBuffer = data;
-                //audioBuffers.add(audioBuffer);
                 grid.tracks[trcknr].addRecord(0, 0, audioBuffer);//creo recording
             });
         };
@@ -70,14 +68,12 @@ export default class SoundController {
                 } /*else if (offset < 0 && start <= 0){
                     offset = timeSpace.timeAtPause;
                 }*/
-                console.log(start, offset);
                 source.start(start, offset);
                 audioBufferSources.add(source);
 
             }
         }
     }
-
 
     stopSound(sources) {
         for (var i = 0; i < sources.length; i++) {
@@ -91,7 +87,5 @@ export default class SoundController {
         };   //vaciarlo??????
         audioCtx.suspend();
     }
-
-
 
 }

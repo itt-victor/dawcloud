@@ -1,11 +1,12 @@
 require('./bootstrap');
 require('./app_logic');
 require('./components/timeLayout');
+require('./ui/ui_dragRecordings');
 
 import { grid } from './components/generalgrid';
 import Recording from './components/recording';
 import { cursor } from './components/cursor';
-import { ui_recording } from './ui/ui_recording';
+import { ui_draw } from './ui/ui_draw';
 import { audioCtx } from './audio/soundcontroller';
 import SoundController from './audio/soundcontroller';
 import { timeSpace } from './timeSpace';
@@ -32,8 +33,9 @@ stop.disabled = true;
 ///////////////////////////////////////
 
 export var soundcontroller = new SoundController(audioCtx);
-//buffer vacío para conextualizar la escala de tiempo
-soundcontroller.loopGuide()
+//buffer vacío para conextualizar la escala de tiempo HACE FALTA???
+//soundcontroller.loopGuide()
+
 //dibuja cursor inicial
 cursor.draw();
 
@@ -43,6 +45,10 @@ cursor.draw();
 //esto no será necesario, ya que se cargará cada una por separado
 setTimeout(function () { soundcontroller.loadSound("storage/sound/1.mp3", 0) }, 0);
 setTimeout(function () { soundcontroller.loadSound("storage/sound/2.mp3", 1) }, 400);
+setTimeout(function () { soundcontroller.loadSound("storage/sound/3.mp3", 2) }, 800);
+
+
+
 
 
 /////////////////////////////////////
@@ -63,7 +69,7 @@ function startApp() {
                 mediaRecorder.start();
                 cursor.play();
                 startTime = timeSpace.timeAtPause
-                ui_recording.drawTrackWhileRecording(timeSpace.timeAtPause);
+                ui_draw.drawTrackWhileRecording(timeSpace.timeAtPause);
                 console.log(mediaRecorder.state);
                 record.style.background = "red";
                 stop.disabled = false;
@@ -94,12 +100,12 @@ function startApp() {
                 }
             }
             stop.addEventListener('click', eStop);
-            /*window.addEventListener('keyup', function(e){
+            window.addEventListener('keyup', function(e){
                 if (e.keyCode === 32) {
                     e.preventDefault();
                     eStop();
                 }
-            })*/
+            });
 
             mediaRecorder.onstop = function recordSound() {
 
@@ -143,31 +149,6 @@ window.addEventListener('keyup', function (e) {
         ePlay();
     }
 });
-/*
-function recordSound(chunks) {
-
-    const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
-    chunks = [];
-    const audioURL = window.URL.createObjectURL(blob);
-    let aB;
-    blob.arrayBuffer().then(arrayBuffer => {
-        audioCtx.decodeAudioData(arrayBuffer, (audioBuffer) => {
-            aB = audioBuffer;
-            /*var tracks = document.getElementsByClassName('track');
-            for (var i = 0; i < tracks.length; i++) {
-                if (tracks[i].hasAttribute("data-selected")) {
-                    trck = tracks[i].children[0]
-                }
-            }
-            console.log(aB)
-            console.log(track)
-            console.log(timeSpace.timeAtPause)
-
-            var track = document.querySelector('[data-selected] > canvas').id;
-            grid.tracks[track].addRecord(timeSpace.timeAtPause, 0, aB);
-        });
-    })
-}*/
 
 
 /////////////

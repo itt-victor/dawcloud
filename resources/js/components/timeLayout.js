@@ -13,7 +13,7 @@ timeLayout.addEventListener('click', function (event) {
     timeSpace.pointedWidth = event.clientX;
     timeSpace.pxAtPause = event.clientX - 610;
     timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
-    cursor.moveCursor(timeSpace.pointedWidth);
+    cursor.moveAtClick(timeSpace.pointedWidth);
     if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
         soundcontroller.stopSound(audioBufferSources);
         soundcontroller.playSound(grid.tracks);

@@ -45,12 +45,18 @@
 }
 
 .track_names {
-    height: 320px;
+    /*height: 320px;*/
     width: 150px;
     position: absolute;
     left: 460px;
-    top: 182px;
+    /*top: 182px;*/
 }
+
+.dummy-block {
+  height: 20px;
+  width: 150px;
+}
+
 #tracks{
     width: 1000px;
     height: 320px;
@@ -88,6 +94,3 @@ div [data-selected] {
     color: red;
     font-size: 15px;
 }
-
-
-
