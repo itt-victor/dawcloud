@@ -1,3 +1,3 @@
-<div class="track">
-    <canvas id="{{$number}}" class="track_canvas"></canvas>
+<div class="track" id="{{$number}}">
+    <!--<canvas id="{{$number}}" class="track_canvas"></canvas>-->
 </div>

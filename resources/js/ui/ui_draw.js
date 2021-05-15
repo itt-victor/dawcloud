@@ -1,15 +1,17 @@
 import { stop } from '../app_core';
 import { audioCtx } from '../audio/soundcontroller';
+import { grid } from '../components/generalgrid';
 
 export var ui_draw = {
     drawTrackWhileRecording(actualTime) {
         var width = 0;
-        //var x = actualTime * 1000 / 200;
         var x = actualTime * 5;
-        var track = document.querySelector('[data-selected] > canvas');
-        var canvasCtx = track.getContext('2d');
-        track.width = 1000;
-        track.height = 70;
+        var track = document.querySelector('[data-selected]');
+        var canvas = document.createElement('canvas')
+        track.appendChild(canvas)
+        var canvasCtx = canvas.getContext('2d');
+        canvas.width = 1000;
+        canvas.height = 70;
         var interval = setInterval(function () {
             width++;
             canvasCtx.fillStyle = '#380166';
@@ -17,27 +19,30 @@ export var ui_draw = {
         }, 200)
         stop.addEventListener('click', function () {
             clearInterval(interval);
+            canvas.remove();
         });
     },
-    drawRecording(recording, canvasCtx) {
+
+    drawRecording(recording) {
+        var canvas = recording.canvas;
+        canvas.setAttribute("class", "recording");
         var x = recording.timeToStart * 5;
-        var width = recording.audioBuffer.duration * 5;                 //1000px son iguales a 200s, o 3min 20s -
-        canvasCtx.fillStyle = '#8254a7';                               //Por lo que en cada segundo se mueven 5px.
+        var width = recording.audioBuffer.duration * 5;
+        var height = 67;
+        canvas.style.left = x + 'px';
+        canvas.width = width;
+        canvas.height = height;
+        var canvasCtx = canvas.getContext('2d');
+        canvasCtx.fillStyle = '#8254a7';
         canvasCtx.beginPath();
-        canvasCtx.moveTo(x, 0);
-        canvasCtx.lineTo(width + x, 0);
-        canvasCtx.lineTo(width + x, 67);
-        canvasCtx.lineTo(x, 67);
+        canvasCtx.moveTo(0, 0);
+        canvasCtx.lineTo(width, 0);
+        canvasCtx.lineTo(width, 67);
+        canvasCtx.lineTo(0, 67);
         canvasCtx.fill();
         canvasCtx.closePath()
         canvasCtx.strokeStyle = '#380166';
-        canvasCtx.strokeRect(x, 0, width, 67);
-    },
-
-    drawWaveform(recording, canvasCtx) {
-        var x = recording.timeToStart * 5;
-        var height = 67;
-        var width = recording.audioBuffer.duration * 5;
+        canvasCtx.strokeRect(0, 0, width, 67);
         var data = recording.audioBuffer.getChannelData(0);
         var step = Math.ceil(data.length / width);
         var amp = height / 2;
@@ -52,7 +57,7 @@ export var ui_draw = {
                     max = datum;
             }
             canvasCtx.fillStyle = '#022100';
-            canvasCtx.fillRect(i +x, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
+            canvasCtx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
         }
-    }
+    },
 }

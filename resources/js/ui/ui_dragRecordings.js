@@ -4,66 +4,13 @@ import { soundcontroller } from '../app_core';
 import { soundStatuses } from '../app_core';
 
 export function dragRecording() {
-    var trackCanvas;
     var ctx;
-    var recordings;
     var recording;
     var drag = false;
     var delta = new Object();
     var X;
     var Y;
-
-    function updateRecording(x, y, recording, ctx) {
-        var width = recording.audioBuffer.duration * 5;                 //1000px son iguales a 200s, o 3min 20s -
-        var height = 67;
-        ctx.fillStyle = '#8254a7';                                      //Por lo que en cada segundo se mueven 5px.
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(width + x, 0);
-        ctx.lineTo(width + x, height);
-        ctx.lineTo(x, height);
-        ctx.fill();
-        ctx.closePath()
-        ctx.strokeStyle = '#380166';
-        ctx.strokeRect(x, 0, width, height);
-        var data = recording.audioBuffer.getChannelData(0);
-        var step = Math.ceil(data.length / width);
-        var amp = height / 2;
-        for (var i = 0; i < width; i+= 2) {
-            var min = 1.0;
-            var max = -1.0;
-            for (var j = 0; j < step; j++ ) {
-                var datum = data[(i * step) + j];
-                if (datum < min)
-                    min = datum;
-                if (datum > max)
-                    max = datum;
-            }
-            ctx.fillStyle = '#00643e';
-            ctx.fillRect(i+ x, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
-        }
-    }
-
-    function draggedWaveform(recording, canvasCtx, x) {
-        var height = 67;
-        var width = recording.audioBuffer.duration * 5;
-        var data = recording.audioBuffer.getChannelData(0);
-        var step = Math.ceil(data.length / width);
-        var amp = height / 2;
-        for (var i = 0; i < width; i++) {
-            var min = 1.0;
-            var max = -1.0;
-            for (var j = 0; j < step; j++) {
-                var datum = data[(i * step) + j];
-                if (datum < min)
-                    min = datum;
-                if (datum > max)
-                    max = datum;
-            }
-            canvasCtx.fillStyle = '#022100';
-            canvasCtx.fillRect(i +x, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
-        }
-    }
+    var widths;
 
     function onMousePos(canvas, evt) {
         var rect = canvas.getBoundingClientRect();
@@ -73,54 +20,57 @@ export function dragRecording() {
         };
     }
 
-    for (var i = 0; i < grid.tracks.length; i++) {
-        trackCanvas = grid.tracks[i].canvas;
-        ctx = grid.tracks[i].canvasCtx;
-        recordings = grid.tracks[i].recordings;
+    for (var i = 0; i < grid.recordings.length; i++) {
 
-        if (grid.tracks[i].recordings.length != 0) {
-            recording = recordings[0];
+        grid.recordings[i].canvas.addEventListener("mousedown", function (evt) {
+            ctx = this.parent.canvasCtx;
+            recording = this.parent;
             X = recording.timeToStart * 5;
             Y = 0;
+            widths = selectTrackWidth(recording.tracknumber);
+            var mousePos = onMousePos(grid.canvas, evt);
+            /*if (mousePos.x < widths.maxWidth &&
+                mousePos.x > widths.minWidth &&
+                mousePos.y < widths.maxHeight &&
+                mousePos.y > widths.minHeight){*/
+            drag = true;
+            delta.x = X - mousePos.x;
+            delta.y = Y - mousePos.y;
+           // }
+        }, false);
 
-            trackCanvas.addEventListener("mousedown", function (evt) {
-                ctx = this.parent.canvasCtx;
-                recording = this.parent.recordings[0];
-                var mousePos = onMousePos(this, evt);
-                if (ctx.isPointInPath(mousePos.x, mousePos.y)) {
-                    drag = true;
-                    delta.x = X - mousePos.x;
-                    delta.y = Y - mousePos.y;
+        grid.recordings[i].canvas.addEventListener("mousemove", function a(evt) {
+            ctx = this.parent.canvasCtx;
+            recording = this.parent;
+            X = recording.timeToStart * 5;
+            Y = 0;
+            var mousePos = onMousePos(grid.canvas, evt);
+            if (drag) {
+                X = mousePos.x + delta.x, Y = mousePos.y + delta.y
+                if (X < 0) { X = 0 };
+                this.style.left = X + 'px';
+                recording.timeToStart = X / 5;
+                if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
+                    soundcontroller.playWhileDragging(recording);
                 }
-            }, false);
+            }
+        }, false);
 
-            trackCanvas.addEventListener("mousemove", function (evt) {
-                ctx = this.parent.canvasCtx;
-                recording = this.parent.recordings[0];
-                var mousePos = onMousePos(this, evt);
-                if (drag) {
-                    ctx.clearRect(0, 0, this.width, this.height);
-                    X = mousePos.x + delta.x, Y = mousePos.y + delta.y
-                    if (X < 0) { X = 0 };
-                    updateRecording(X, Y, recording, ctx);
-                    recording.timeToStart = X / 5;
-                    if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
-                        soundcontroller.playWhileDragging(recording);
-                    }
-                }
-            }, false);
-
-            trackCanvas.addEventListener("mouseup", function (evt) {
-                ctx = this.parent.canvasCtx;
-                recording = this.parent.recordings[0];
-                var width = recording.audioBuffer.duration * 5;
-                ctx.clearRect(0, 0, this.width, this.height);
-                updateRecording(X, Y, recording, ctx);
-                draggedWaveform(recording, ctx, X)
-                drag = false;
-            }, false);
-        }
+        grid.recordings[i].canvas.addEventListener("mouseup", function (evt) {
+            drag = false;
+        }, false);
     }
 }
 
-setTimeout(dragRecording, 1000);
+function selectTrackWidth(tracknumber) {
+    var incremento = 70 * tracknumber;
+    let widths = {
+        minHeight: (-560 + incremento),
+        maxHeight: -500 + incremento,
+        minWidth: 1.5,
+        maxWidth: 1001.5
+    }
+    return widths;
+}
+
+setTimeout(dragRecording, 1250);

@@ -6,5 +6,6 @@ export var timeSpace = {
 };
 
 //los añado a posteriori ya que los canvases tardan unos ms en cargar
-setTimeout(function () { timeSpace.pointedWidth = grid.tracks[0].canvas.getBoundingClientRect().x}, 0);
-setTimeout(function () { timeSpace.newWidth = grid.tracks[0].canvas.getBoundingClientRect().x}, 0);
+setTimeout(function () { timeSpace.pointedWidth = grid.canvas.getBoundingClientRect().x}, 0);
+setTimeout(function () { timeSpace.newWidth = grid.canvas.getBoundingClientRect().x}, 0);
+

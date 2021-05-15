@@ -17,13 +17,7 @@ export default class SoundController {
         return audioBuffers;
     }
 
-    /*loopGuide() {   //HACE FALTA????
-        const buffer = audioCtx.createBuffer(2, audioCtx.sampleRate * 6000, audioCtx.sampleRate);
-        //audioBuffers.push(buffer);
-        return buffer;
-    }*/
-
-    loadSound(url, trcknr) {
+    loadSound(url, trcknr, startTime) {
         //let trcknr = document.querySelector('[data-selected] > canvas').id;
         //esto para cuando no cargues audio a lo feo, de momento pasa por parámetro, o igual en la funcion a crear.
         const request = new XMLHttpRequest();
@@ -33,31 +27,28 @@ export default class SoundController {
             let undecodedAudio = request.response;
             audioCtx.decodeAudioData(undecodedAudio, (data) => {
                 var audioBuffer = data;
-                grid.tracks[trcknr].addRecord(0, 0, audioBuffer);//creo recording
+                grid.tracks[trcknr].addRecord(startTime, audioBuffer, trcknr);//creo recording
             });
         };
         request.send();
     }
 
-    playSound(tracks) {
-        for (var i = 0; i < tracks.length; i++) {
-            let recordings = tracks[i].recordings;
-            for (var h = 0; h < recordings.length; h++) {
-                const source = audioCtx.createBufferSource();
-                source.buffer = recordings[h].audioBuffer;
-                source.connect(audioCtx.destination);
-                var start = recordings[h].timeToStart - timeSpace.timeAtPause + audioCtx.currentTime;
-                var offset = timeSpace.timeAtPause - recordings[h].timeToStart;
-                if (start <= 0) {
-                    start = 0;
-                }
-                if (offset <= 0) {
-                    offset = 0;
-                }
-                source.start(start, offset );
-                audioBufferSources.push(source);
-                recordings[h].audioBufferSource = source;
+    playSound() {
+        for (var h = 0; h < grid.recordings.length; h++) {
+            const source = audioCtx.createBufferSource();
+            source.buffer = grid.recordings[h].audioBuffer;
+            source.connect(audioCtx.destination);
+            var start = grid.recordings[h].timeToStart - timeSpace.timeAtPause + audioCtx.currentTime;
+            var offset = timeSpace.timeAtPause - grid.recordings[h].timeToStart;
+            if (start <= 0) {
+                start = 0;
             }
+            if (offset <= 0) {
+                offset = 0;
+            }
+            source.start(start, offset);
+            audioBufferSources.push(source);
+            grid.recordings[h].audioBufferSource = source;
         }
     }
 
@@ -82,7 +73,7 @@ export default class SoundController {
         if (offset <= 0) {
             offset = 0;
         }
-        source.start(start, offset );
+        source.start(start, offset);
         recording.audioBufferSource = source;
         audioBufferSources.push(source);
     }

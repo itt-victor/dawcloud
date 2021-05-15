@@ -3,14 +3,14 @@ import {timeSpace}  from '../timeSpace';
 import grid from './generalgrid';*/
 
 export default class Recording {
-    constructor(timeToStart, offSet, audioBuffer) {
-
+    constructor(timeToStart, audioBuffer, tracknumber) {
+        this.tracknumber = tracknumber;
         this.timeToStart = timeToStart;
-        this.offSet = offSet;
         this.audioBuffer = audioBuffer;
         this.audioBufferSource;
-
+        this.canvas = document.createElement('canvas');
+        this.canvasCtx = this.canvas.getContext('2d');
+        this.canvas.parent = this;
     }
-
 }
 

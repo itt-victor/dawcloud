@@ -3,26 +3,37 @@ import Track from './track';
 import { generateTrackNumbers } from '../utils';
 import {timeSpace}  from '../timeSpace';
 var trackName;
+var recordings;
 
 export var grid = {
     howMany: document.getElementsByClassName('track').length,
     cursor: cursor,
-    tracks: [],//{ length: 0, add: function add(elem) { [].push.call(this, elem) } },
-    //audioBuffers: [], o objeto o array?
-
+    canvas: document.createElement('canvas'),
+    tracks: [],
+    recordings: [],
 
     addTracks(howMany) {
         for (var i = 0; i < howMany; i++) {
             trackName = generateTrackNumbers();
             window[trackName] = new Track(i);
             grid.tracks.push(window[trackName]);
-            //grid.audioBuffers.push(...window[trackName].audioBuffers);
-            /*for (var i= 0; i < window[trackName].recordings.length; i++){
-                grid.audioBuffers.add(window[trackName].recordings[i]);
-            }*/
+        }
+    },
+
+    addRecordings() {
+        for (var i = 0; i < this.tracks.length; i++) {
+            recordings= this.tracks[i].recordings;
+            for (var h = 0; h < recordings.length; h++){
+                this.recordings.push(recordings[h]);
+            }
         }
     }
-    //interval: setInterval(update)
 };
 grid.addTracks(grid.howMany);
-//incluye aquí el interval que sea general para todos los componentes
+setTimeout(function(){grid.addRecordings();}, 1000);
+
+var tracks = document.getElementsByClassName('tracks')[0];
+tracks.appendChild(grid.canvas);
+grid.canvas.style.visibility = 'hidden';
+grid.canvas.width = 1000;
+grid.canvas.height = 70 * grid.howMany;

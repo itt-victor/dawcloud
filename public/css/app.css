@@ -10015,6 +10015,8 @@ body {
 }
 
 .buttonpad {
+  position: absolute;
+  margin-top: 10px;
   margin-bottom: 40px;
   margin-left: 60px;
 }
@@ -10024,7 +10026,7 @@ body {
 }
 
 #time-layout {
-  left: 150px;
+  left: 160px;
   width: 1000px;
   height: 30px;
   margin: auto;
@@ -10048,7 +10050,7 @@ body {
   /*height: 320px;*/
   width: 150px;
   position: absolute;
-  left: 460px;
+  left: 470px;
   /*top: 182px;*/
 }
 
@@ -10060,7 +10062,7 @@ body {
 #tracks {
   width: 1000px;
   height: 320px;
-  left: 150px;
+  left: 160px;
   position: relative;
   margin: auto;
   text-align: left;
@@ -10069,12 +10071,16 @@ body {
 }
 
 .track {
-  width: 1000px;
+  /*width: 1000px;*/
   height: 70px;
   z-index: 3;
   background-color: aquamarine;
   position: relative;
   border: solid 1.3px #7a2332;
+}
+
+.recording {
+  position: absolute;
 }
 
 div [data-selected] {

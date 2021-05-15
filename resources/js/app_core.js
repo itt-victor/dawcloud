@@ -32,20 +32,17 @@ stop.disabled = true;
 ///////////////////////////////////////
 
 export var soundcontroller = new SoundController(audioCtx);
-//buffer vacío para conextualizar la escala de tiempo HACE FALTA???
-//soundcontroller.loopGuide()
 
 //dibuja cursor inicial
-cursor.draw();
+setTimeout(function () { cursor.draw() },0);
 
 ///////////////////////////////////
 
 //cargo temas para desarrollo
 //esto no será necesario, ya que se cargará cada una por separado
-setTimeout(function () { soundcontroller.loadSound("storage/sound/1.mp3", 0) }, 0);
-setTimeout(function () { soundcontroller.loadSound("storage/sound/2.mp3", 1) }, 400);
+setTimeout(function () { soundcontroller.loadSound("storage/sound/1.mp3", 0, 0) }, 0);
+setTimeout(function () { soundcontroller.loadSound("storage/sound/2.mp3", 1, 20) }, 400);
 //setTimeout(function () { soundcontroller.loadSound("storage/sound/3.mp3", 2) }, 800);
-
 
 
 
@@ -106,7 +103,6 @@ function startApp() {
             });
 
             mediaRecorder.onstop = function recordSound() {
-
                 const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
                 chunks = [];
                 const audioURL = window.URL.createObjectURL(blob);
@@ -114,9 +110,9 @@ function startApp() {
                 blob.arrayBuffer().then(arrayBuffer => {
                     audioCtx.decodeAudioData(arrayBuffer, (audioBuffer) => {
                         aB = audioBuffer;
-                        var track = document.querySelector('[data-selected] > canvas').id;
-                        grid.tracks[track].addRecord(startTime, 0, aB);
-                        dragRecording();
+                        var track = document.querySelector('[data-selected]').id;
+                        grid.tracks[track].addRecord(startTime, aB);
+                        dragRecording();console.log(grid.recordings);
                     });
                 })
             }
@@ -133,7 +129,7 @@ function startApp() {
 
 function ePlay() {
     cursor.play();
-    soundcontroller.playSound(grid.tracks);
+    soundcontroller.playSound();
     stop.disabled = false;
     play.disabled = true;
     soundStatuses.isPlaying = true;
