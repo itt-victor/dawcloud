@@ -2,6 +2,8 @@ require('./bootstrap');
 require('./app_logic');
 require('./components/timeLayout');
 require('./ui/ui_dragRecordings');
+require('./ui/ui_layout');
+
 
 import { grid } from './components/generalgrid';
 import Recording from './components/recording';
@@ -10,11 +12,8 @@ import { ui_draw } from './ui/ui_draw';
 import { audioCtx } from './audio/soundcontroller';
 import SoundController from './audio/soundcontroller';
 import { timeSpace } from './timeSpace';
-import timeLayout from './components/timeLayout';
-
-import { audioBuffers, audioBufferSources } from './audio/soundcontroller';
-
-import { generateTrackNumbers, generateRecordingNumbers } from './utils';
+import { audioBufferSources } from './audio/soundcontroller';
+import { dragRecording } from './ui/ui_dragRecordings';
 
 export const play = document.querySelector('#play-button'),
     record = document.querySelector('#record-button'),
@@ -45,7 +44,7 @@ cursor.draw();
 //esto no será necesario, ya que se cargará cada una por separado
 setTimeout(function () { soundcontroller.loadSound("storage/sound/1.mp3", 0) }, 0);
 setTimeout(function () { soundcontroller.loadSound("storage/sound/2.mp3", 1) }, 400);
-setTimeout(function () { soundcontroller.loadSound("storage/sound/3.mp3", 2) }, 800);
+//setTimeout(function () { soundcontroller.loadSound("storage/sound/3.mp3", 2) }, 800);
 
 
 
@@ -80,6 +79,7 @@ function startApp() {
             function eStop() {
                 if (mediaRecorder.state == 'recording') {
                     mediaRecorder.stop();
+                    timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
                     console.log(mediaRecorder.state);
                     record.style.background = "";
                     record.style.color = "";
@@ -88,10 +88,8 @@ function startApp() {
                     play.disabled = false;
                     soundStatuses.hasStopped = true;
                     soundStatuses.isPlaying = false;
-                    timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
                 }
                 else {
-                    timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
                     soundcontroller.stopSound(audioBufferSources);
                     play.disabled = false;
                     stop.disabled = true;
@@ -118,6 +116,7 @@ function startApp() {
                         aB = audioBuffer;
                         var track = document.querySelector('[data-selected] > canvas').id;
                         grid.tracks[track].addRecord(startTime, 0, aB);
+                        dragRecording();
                     });
                 })
             }
@@ -134,7 +133,7 @@ function startApp() {
 
 function ePlay() {
     cursor.play();
-    soundcontroller.playSound(grid.tracks)
+    soundcontroller.playSound(grid.tracks);
     stop.disabled = false;
     play.disabled = true;
     soundStatuses.isPlaying = true;

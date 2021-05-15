@@ -11,11 +11,13 @@ const timeLayout = document.querySelector('#time-layout');
 
 timeLayout.addEventListener('click', function (event) {
     timeSpace.pointedWidth = event.clientX;
-    timeSpace.pxAtPause = event.clientX - 610;
+    timeSpace.pxAtPause = event.clientX - 611;
     timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
     cursor.moveAtClick(timeSpace.pointedWidth);
     if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
         soundcontroller.stopSound(audioBufferSources);
-        soundcontroller.playSound(grid.tracks);
+        setTimeout(soundcontroller.playSound(grid.tracks),10);
     }
 });
+
+

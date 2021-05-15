@@ -1,18 +1,8 @@
-/*import {record} from './app_core';
-import {play} from './app_core';
-import {stop} from './app_core';
-import {startCursor} from './canvas';*/
-
 import { timeSpace } from '../timeSpace';
 import { grid } from '../components/generalgrid';
 
 //Esto aquí mismo ya que se se pierden en cada play
-export var audioBufferSources = {
-    length: 0,
-    add: function add(elem) {
-        [].push.call(this, elem);
-    }
-};
+export var audioBufferSources = [];
 
 export const audioCtx = new (window.AudioContext ||
     window.webkitAudioContext);
@@ -21,8 +11,6 @@ export default class SoundController {
 
     constructor(audioCtx) {
         this.audioCtx = audioCtx;
-        this.chunks = [];
-
     }
 
     getAudioBuffers() {
@@ -31,7 +19,8 @@ export default class SoundController {
 
     /*loopGuide() {   //HACE FALTA????
         const buffer = audioCtx.createBuffer(2, audioCtx.sampleRate * 6000, audioCtx.sampleRate);
-        //audioBuffers.add(buffer);
+        //audioBuffers.push(buffer);
+        return buffer;
     }*/
 
     loadSound(url, trcknr) {
@@ -51,41 +40,51 @@ export default class SoundController {
     }
 
     playSound(tracks) {
-        audioCtx.resume();
         for (var i = 0; i < tracks.length; i++) {
             let recordings = tracks[i].recordings;
             for (var h = 0; h < recordings.length; h++) {
                 const source = audioCtx.createBufferSource();
                 source.buffer = recordings[h].audioBuffer;
                 source.connect(audioCtx.destination);
-                let start = recordings[h].timeToStart - timeSpace.timeAtPause;
-                let offset = timeSpace.timeAtPause - recordings[h].timeToStart;
-                if (start < 0) {
+                var start = recordings[h].timeToStart - timeSpace.timeAtPause + audioCtx.currentTime;
+                var offset = timeSpace.timeAtPause - recordings[h].timeToStart;
+                if (start <= 0) {
                     start = 0;
                 }
-                if (offset < 0) {
+                if (offset <= 0) {
                     offset = 0;
-                } /*else if (offset < 0 && start <= 0){
-                    offset = timeSpace.timeAtPause;
-                }*/
-                source.start(start, offset);
-                audioBufferSources.add(source);
-
+                }
+                source.start(start, offset );
+                audioBufferSources.push(source);
+                recordings[h].audioBufferSource = source;
             }
         }
     }
 
     stopSound(sources) {
         for (var i = 0; i < sources.length; i++) {
-            sources[i].stop();
+            sources[i].stop(0);
         }
-        audioBufferSources = {
-            length: 0,
-            add: function add(elem) {
-                [].push.call(this, elem);
-            }
-        };   //vaciarlo??????
-        audioCtx.suspend();
+        timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
+        audioBufferSources = [];
+    }
+
+    playWhileDragging(recording) {
+        recording.audioBufferSource.stop()
+        const source = audioCtx.createBufferSource();
+        source.buffer = recording.audioBuffer;
+        source.connect(audioCtx.destination);
+        var start = recording.timeToStart - timeSpace.timeAtPause + audioCtx.currentTime;
+        var offset = timeSpace.timeAtPause - recording.timeToStart;
+        if (start <= 0) {
+            start = 0;
+        }
+        if (offset <= 0) {
+            offset = 0;
+        }
+        source.start(start, offset );
+        recording.audioBufferSource = source;
+        audioBufferSources.push(source);
     }
 
 }

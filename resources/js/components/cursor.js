@@ -5,8 +5,8 @@ import { timeSpace } from '../timeSpace';
 export var cursor = {
     canvas: document.getElementById("cursor"),
     draw: function () {
-        this.canvas.width = 10;
-        this.canvas.height = 80 * grid.howMany + 20;  //80 por pista + 20 de time layout
+        this.canvas.width = 3;
+        this.canvas.height = 70 * grid.howMany + 30;  //80 por pista + 20 de time layout
         this.canvas.style.left = '610px';
         this.canvas.style.zIndex = '10';
         this.ctx = this.canvas.getContext('2d');

@@ -1,8 +1,6 @@
 import { grid } from './components/generalgrid';
 
 export var timeSpace = {
-    //pointedWidth: grid.tracks[0].canvas.getBoundingClientRect().x,
-    //newWidth: grid.tracks[0].canvas.getBoundingClientRect().x,
     pxAtPause: 0,
     timeAtPause: 0
 };

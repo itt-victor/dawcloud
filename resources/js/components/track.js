@@ -11,19 +11,20 @@ export default class Track {
         this.tracknumber = tracknumber;
         this.canvas = document.getElementsByClassName('track_canvas')[tracknumber];
         this.canvasCtx = this.canvas.getContext('2d');
+        this.canvas.parent = this;
         this.canvas.width = 1000;
-        this.canvas.height = 80;
-        this.recordings = [];//{ length: 0, add: function add(elem) { [].push.call(this, elem) } };
-        this.audioBuffers = [];//{length: 0, add: function add(elem) { [].push.call(this, elem) } };
-        //this.audioBufferSources = { length: 0, add: function add(elem) { [].push.call(this, elem) } }; no hace falta, que esté en controller ya vale, si se pierden a cada play
+        this.canvas.height = 70;
+        this.recordings = [];
+        //this.audioBuffers = [];
         //aquí cosas del canal, volumen, pan...
     }
     addRecord(timeToStart, offset, audioBuffer) {
         rcdName = generateRecordingNumbers();
-        window[rcdName] = new Recording(timeToStart, offset, audioBuffer, this.canvasCtx);
+        window[rcdName] = new Recording(timeToStart, offset, audioBuffer);
         this.recordings.push(window[rcdName]);
-        this.audioBuffers.push(window[rcdName].audioBuffer);
+        //this.audioBuffers.push(window[rcdName].audioBuffer);
         ui_draw.drawRecording(window[rcdName], this.canvasCtx);
+        ui_draw.drawWaveform(window[rcdName], this.canvasCtx)
     };
 
     /*drawTrack() {
@@ -33,8 +34,3 @@ export default class Track {
 
 
 }
-
-
-
-
-//var generateTrackNumbers() = new Recording

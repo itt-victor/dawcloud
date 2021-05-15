@@ -8,7 +8,9 @@ export default class Recording {
         this.timeToStart = timeToStart;
         this.offSet = offSet;
         this.audioBuffer = audioBuffer;
+        this.audioBufferSource;
 
     }
 
 }
+

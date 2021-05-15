@@ -4,7 +4,7 @@ function selectTrack() {
     var tracks = document.getElementsByClassName("track");
     var trackNames = document.getElementsByClassName("track_name");
     for (var i = 0; i < tracks.length; i++) {
-        tracks[i].addEventListener('click', function (e) {
+        tracks[i].addEventListener('mousedown', function (e) {
             for (var i = 0; i < tracks.length; i++) {
                 tracks[i].removeAttribute('data-selected');
             }
@@ -24,35 +24,40 @@ function selectTrack() {
         })
     }*/
 }
-
 selectTrack();
+
 
 function changeTrackName() {
     var tracksNames = document.getElementsByClassName('select');
+    var prr = document.getElementsByClassName('input');
+    for (var i = 0; i < prr.length; i++){
+        prr[i].style.display = 'none';
+        prr[i].style.visibility = 'hidden';
+    }
     for (var i = 0; i < tracksNames.length; i++) {
         tracksNames[i].addEventListener('dblclick', function dbl(e) {
-            var esto = this.nextSibling;
-            var estoOtro = this;
-            estoOtro.style.display = 'none';
-            estoOtro.style.visibility = 'invisible';
-            esto.style.display = 'block';
-            esto.style.visibility = 'visible';
+            var box = this.nextSibling;
+            var text = this;
+            text.style.display = 'none';
+            text.style.visibility = 'hidden';
+            box.style.display = 'block';
+            box.style.visibility = 'visible';
             window.addEventListener('click', function (a) {
                 if (a.target.contains(e.target)) {
-                    esto.style.display = 'none';
-                    esto.style.visibility = 'invisible';
-                    estoOtro.style.display = 'block';
-                    estoOtro.style.visibility = 'visible';
+                    box.style.display = 'none';
+                    box.style.visibility = 'hidden';
+                    text.style.display = 'block';
+                    text.style.visibility = 'visible';
                 }
             });
-            esto.addEventListener('keyup', function (e) {
+            box.addEventListener('keyup', function (e) {
                 if (e.keyCode === 13) {
                     e.preventDefault();
-                    estoOtro.innerHTML = esto.value;
-                    esto.style.display = 'none';
-                    esto.style.visibility = 'invisible';
-                    estoOtro.style.display = 'block';
-                    estoOtro.style.visibility = 'visible';
+                    text.innerHTML = box.value;
+                    box.style.display = 'none';
+                    box.style.visibility = 'hidden';
+                    text.style.display = 'block';
+                    text.style.visibility = 'visible';
                 }
             });
         });

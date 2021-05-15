@@ -10002,13 +10002,21 @@ h3 {
     border-color: #dee2e6;
   }
 }
-/*
-.play-button {
-    height:20px;
-    width: 40px;
-}*/
+body {
+  background-color: #dbf2fd;
+  height: auto;
+}
+
+#page-title {
+  margin-top: 50px;
+  margin-left: 50px;
+  margin-bottom: 40px;
+  font-weight: 700;
+}
+
 .buttonpad {
-  margin-bottom: 10px;
+  margin-bottom: 40px;
+  margin-left: 60px;
 }
 
 .soundclips {
@@ -10018,7 +10026,7 @@ h3 {
 #time-layout {
   left: 150px;
   width: 1000px;
-  height: 20px;
+  height: 30px;
   margin: auto;
   position: relative;
 }
@@ -10030,18 +10038,23 @@ h3 {
 }
 
 .track_name {
-  height: 80px;
+  height: 70px;
   width: 150px;
   background-color: grey;
   border: solid 1.3px #7a2332;
 }
 
 .track_names {
-  height: 320px;
+  /*height: 320px;*/
   width: 150px;
   position: absolute;
   left: 460px;
-  top: 182px;
+  /*top: 182px;*/
+}
+
+.dummy-block {
+  height: 30px;
+  width: 150px;
 }
 
 #tracks {
@@ -10057,7 +10070,7 @@ h3 {
 
 .track {
   width: 1000px;
-  height: 80px;
+  height: 70px;
   z-index: 3;
   background-color: aquamarine;
   position: relative;
@@ -10065,19 +10078,31 @@ h3 {
 }
 
 div [data-selected] {
-  background-color: #dd67a8;
+  background-color: #ff203e7a;
   opacity: 0.9;
 }
 
 .input {
   width: 120px;
+  margin-top: 10px;
   margin-left: 5px;
   border-radius: 5px;
   display: none;
   visibility: hidden;
+  background-color: aquamarine;
 }
 
 .select {
+  position: relative;
+  top: 10px !important;
+  padding-left: 10px !important;
+  color: #7a2332;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.select:hover {
+  text-decoration: none;
+  cursor: context-menu;
   color: red;
-  font-size: 15px;
 }

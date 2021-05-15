@@ -4,7 +4,7 @@
 @section('content')
 <div id="app">
 
-    <div id="user-window">
+    <div id="user-window" style="display: none; visibility: hidden;">
         <form id="user login">
             @csrf
             <input type="email" placeholder="Type your user e-mail">
@@ -37,22 +37,22 @@
             @include('layouts.track_name', ['number'=> '2'])
             @include('layouts.track_name', ['number'=> '3'])
             @include('layouts.track_name', ['number'=> '4'])
-       {{-- @include('layouts.track_name', ['number'=> '5'])
+            @include('layouts.track_name', ['number'=> '5'])
             @include('layouts.track_name', ['number'=> '6'])
             @include('layouts.track_name', ['number'=> '7'])
-            @include('layouts.track_name', ['number'=> '8']) --}}
+            @include('layouts.track_name', ['number'=> '8'])
         </div>
         <canvas id="cursor" ></canvas>
-        <div id="time-layout" height="10px" width="100%" style="background-color: grey;"><canvas id="pointer"></canvas></div>
+        <div id="time-layout" style="background-color: grey;"><canvas id="layout"></canvas></div>
         <div id="tracks" class="tracks">
             @include('layouts.track_canvas', ['number'=>'0'])
             @include('layouts.track_canvas', ['number'=>'1'])
             @include('layouts.track_canvas', ['number'=>'2'])
             @include('layouts.track_canvas', ['number'=>'3'])
-    {{--    @include('layouts.track_canvas', ['number'=>'4'])
+            @include('layouts.track_canvas', ['number'=>'4'])
             @include('layouts.track_canvas', ['number'=>'5'])
             @include('layouts.track_canvas', ['number'=>'6'])
-            @include('layouts.track_canvas', ['number'=>'7']) --}}
+            @include('layouts.track_canvas', ['number'=>'7'])
         </div>
     </section>
 
