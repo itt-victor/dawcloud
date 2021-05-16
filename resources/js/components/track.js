@@ -24,4 +24,3 @@ export default class Track {
         ui_draw.drawRecording(window[rcdName]);
     };
 }
-
