@@ -9,7 +9,15 @@
 
     </head>
     <body class="antialiased">
-
+        <div id="user-window" style="display: none; visibility: hidden;">
+            <form id="user login">
+                @csrf
+                <input type="email" placeholder="Type your user e-mail">
+                <input type="text" placeholder="Password">
+                <button type="submit">Log In!</button>
+            </form>
+            <button id="register">Sign In!</button>
+        </div>
 
     </body>
 </html>

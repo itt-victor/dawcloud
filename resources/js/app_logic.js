@@ -72,3 +72,26 @@ function loadSong() {
         soundcontroller.loadSound(url, trcknr, 0);
     })
 }
+
+
+
+function mute(){
+    let button = document.getElementsByClassName('track_mute');
+    for (let a= 0; a < button.length; a++){
+        button[a].addEventListener('click', function(){
+            this.classList.toggle('track_mute_on');
+            //pon aqui funcion de mutear, ponla en sound controller
+        });
+    }
+}
+mute();
+
+function solo(){
+    let button = document.getElementsByClassName('track_solo');
+    for (let a= 0; a < button.length; a++){
+        button[a].addEventListener('click', function(){
+            this.classList.toggle('track_solo_on');
+        });
+    }
+}
+solo();
