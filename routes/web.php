@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\TonteriaController;
+use App\Http\Controllers\AppController;
 use Illuminate\Http\Request;
 
 
@@ -18,6 +18,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/', HomeController::class)->name('home');
+//Route::get('/', HomeController::class)->name('home');
+
+Route::get('/', AppController::class)->name('app');
 
 

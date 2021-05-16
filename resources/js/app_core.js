@@ -4,12 +4,10 @@ require('./components/timeLayout');
 require('./ui/ui_dragRecordings');
 require('./ui/ui_layout');
 
-
 import { grid } from './components/generalgrid';
-import Recording from './components/recording';
+import drawLayout from './ui/ui_layout'
 import { cursor } from './components/cursor';
 import { ui_draw } from './ui/ui_draw';
-import { audioCtx } from './audio/soundcontroller';
 import SoundController from './audio/soundcontroller';
 import { timeSpace } from './timeSpace';
 import { audioBufferSources } from './audio/soundcontroller';
@@ -18,33 +16,37 @@ import { dragRecording } from './ui/ui_dragRecordings';
 export const play = document.querySelector('#play-button'),
     record = document.querySelector('#record-button'),
     stop = document.querySelector('#stop-button');
+export var soundStatuses = { isPlaying: false, hasStopped: true };
 
 const addTrack = document.querySelector('#add-track'),
     removeTrack = document.querySelector('#remove-track');
 
-export var soundStatuses = { isPlaying: false, hasStopped: true }
 
-
-//default la 1a pista, botón stop apagado by default
-jQuery(".track:first").attr("data-selected", '');
 stop.disabled = true;
+
+//se inicia audio context
+export const audioCtx = new (window.AudioContext ||
+    window.webkitAudioContext);
 
 ///////////////////////////////////////
 
+//llamo al controlador de sonido
 export var soundcontroller = new SoundController(audioCtx);
 
+//prepara el grid
+grid.prepareCanvas();
+grid.addTracks(grid.howMany);
 //dibuja cursor inicial
-setTimeout(function () { cursor.draw() },0);
+cursor.draw();
+//dibuja layout
+drawLayout();
 
 ///////////////////////////////////
 
 //cargo temas para desarrollo
-//esto no será necesario, ya que se cargará cada una por separado
 setTimeout(function () { soundcontroller.loadSound("storage/sound/1.mp3", 0, 0) }, 0);
 setTimeout(function () { soundcontroller.loadSound("storage/sound/2.mp3", 1, 20) }, 400);
 //setTimeout(function () { soundcontroller.loadSound("storage/sound/3.mp3", 2) }, 800);
-
-
 
 
 /////////////////////////////////////
@@ -95,7 +97,7 @@ function startApp() {
                 }
             }
             stop.addEventListener('click', eStop);
-            window.addEventListener('keyup', function(e){
+            window.addEventListener('keyup', function (e) {
                 if (e.keyCode === 32) {
                     e.preventDefault();
                     eStop();
@@ -112,11 +114,10 @@ function startApp() {
                         aB = audioBuffer;
                         var track = document.querySelector('[data-selected]').id;
                         grid.tracks[track].addRecord(startTime, aB);
-                        dragRecording();console.log(grid.recordings);
+                        dragRecording();
                     });
                 })
             }
-
         }
         let onError = function (err) {
             console.log('The following error occured: ' + err);
@@ -150,8 +151,9 @@ window.addEventListener('keyup', function (e) {
 startApp();
 ////////////
 
-window.onresize = function () {
 
+window.onresize = function () {
 }
 
 window.onresize();
+

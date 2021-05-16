@@ -1,10 +1,8 @@
-require('../ui/ui_draw');
 
 import Recording from './recording';
 import { generateRecordingNumbers } from '../utils';
 import { ui_draw } from '../ui/ui_draw';
-import {timeSpace}  from '../timeSpace';
-import { grid } from './generalgrid';
+import { grid } from './/generalgrid';
 var rcdName;
 
 export default class Track {
@@ -13,6 +11,9 @@ export default class Track {
         this.track = document.getElementsByClassName('track')[this.tracknumber];
         this.recordings = [];
         //aquí cosas del canal, volumen, pan...
+        this.soloButton = document.getElementById('solo_'+ this.tracknumber);
+        this.muteButton = document.getElementById('mute_'+ this.tracknumber);
+        this.fader = document.getElementById('fader_'+ this.tracknumber);
     }
     addRecord(timeToStart, audioBuffer) {
         rcdName = generateRecordingNumbers();

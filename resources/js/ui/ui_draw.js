@@ -1,6 +1,4 @@
 import { stop } from '../app_core';
-import { audioCtx } from '../audio/soundcontroller';
-import { grid } from '../components/generalgrid';
 
 export var ui_draw = {
     drawTrackWhileRecording(actualTime) {
@@ -43,21 +41,57 @@ export var ui_draw = {
         canvasCtx.closePath()
         canvasCtx.strokeStyle = '#380166';
         canvasCtx.strokeRect(0, 0, width, 67);
-        var data = recording.audioBuffer.getChannelData(0);
-        var step = Math.ceil(data.length / width);
-        var amp = height / 2;
-        for (var i = 0; i < width; i++) {
-            var min = 1.0;
-            var max = -1.0;
-            for (var j = 0; j < step; j++) {
-                var datum = data[(i * step) + j];
-                if (datum < min)
-                    min = datum;
-                if (datum > max)
-                    max = datum;
+
+        if (recording.audioBuffer.numberOfChannels === 2) {  //si es estereo..
+            var data = recording.audioBuffer.getChannelData(0);
+            var step = Math.ceil(data.length / width);
+            var amp = height / 4;
+            for (var i = 0; i < width; i++) {
+                var min = 1.0;
+                var max = -1.0;
+                for (var j = 0; j < step; j++) {
+                    var datum = data[(i * step) + j];
+                    if (datum < min)
+                        min = datum;
+                    if (datum > max)
+                        max = datum;
+                }
+                canvasCtx.fillStyle = '#022100';
+                canvasCtx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
             }
-            canvasCtx.fillStyle = '#022100';
-            canvasCtx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
+            var data = recording.audioBuffer.getChannelData(1);
+            var step = Math.ceil(data.length / width);
+            var amp = height / 4;
+            for (var i = 0; i < width; i++) {
+                var min = 1.0;
+                var max = -1.0;
+                for (var j = 0; j < step; j++) {
+                    var datum = data[(i * step) + j];
+                    if (datum < min)
+                        min = datum;
+                    if (datum > max)
+                        max = datum;
+                }
+                canvasCtx.fillStyle = '#022100';
+                canvasCtx.fillRect(i, (1 + min) * amp + height / 2, 1, Math.max(1, (max - min) * amp));
+            }
+        } else if (recording.audioBuffer.numberOfChannels === 1) {  // si es mono..
+            var data = recording.audioBuffer.getChannelData(0);
+            var step = Math.ceil(data.length / width);
+            var amp = height / 2;
+            for (var i = 0; i < width; i++) {
+                var min = 1.0;
+                var max = -1.0;
+                for (var j = 0; j < step; j++) {
+                    var datum = data[(i * step) + j];
+                    if (datum < min)
+                        min = datum;
+                    if (datum > max)
+                        max = datum;
+                }
+                canvasCtx.fillStyle = '#022100';
+                canvasCtx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
+            }
         }
-    },
+    }
 }

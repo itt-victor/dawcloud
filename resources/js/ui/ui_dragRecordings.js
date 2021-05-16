@@ -1,4 +1,3 @@
-import { ui_draw } from './ui_draw';
 import { grid } from '../components/generalgrid';
 import { soundcontroller } from '../app_core';
 import { soundStatuses } from '../app_core';
@@ -29,14 +28,12 @@ export function dragRecording() {
             Y = 0;
             widths = selectTrackWidth(recording.tracknumber);
             var mousePos = onMousePos(grid.canvas, evt);
-            /*if (mousePos.x < widths.maxWidth &&
-                mousePos.x > widths.minWidth &&
-                mousePos.y < widths.maxHeight &&
-                mousePos.y > widths.minHeight){*/
+            if (mousePos.y < widths.maxHeight &&
+                mousePos.y > widths.minHeight){
             drag = true;
             delta.x = X - mousePos.x;
             delta.y = Y - mousePos.y;
-           // }
+            }
         }, false);
 
         grid.recordings[i].canvas.addEventListener("mousemove", function a(evt) {
@@ -51,7 +48,7 @@ export function dragRecording() {
                 this.style.left = X + 'px';
                 recording.timeToStart = X / 5;
                 if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
-                    soundcontroller.playWhileDragging(recording);
+                    soundcontroller.playWhileDragging(this.parent);
                 }
             }
         }, false);

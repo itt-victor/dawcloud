@@ -1,11 +1,10 @@
 import { timeSpace } from '../timeSpace';
 import { grid } from '../components/generalgrid';
+import { audioCtx } from '../app_core';
+
 
 //Esto aquí mismo ya que se se pierden en cada play
 export var audioBufferSources = [];
-
-export const audioCtx = new (window.AudioContext ||
-    window.webkitAudioContext);
 
 export default class SoundController {
 
@@ -61,7 +60,8 @@ export default class SoundController {
     }
 
     playWhileDragging(recording) {
-        recording.audioBufferSource.stop()
+        recording.audioBufferSource.stop();
+        timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
         const source = audioCtx.createBufferSource();
         source.buffer = recording.audioBuffer;
         source.connect(audioCtx.destination);

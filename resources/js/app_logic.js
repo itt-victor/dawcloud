@@ -1,8 +1,10 @@
+import { soundcontroller } from './app_core';
 
 //Seleccionar pista
 function selectTrack() {
     var tracks = document.getElementsByClassName("track");
     var trackNames = document.getElementsByClassName("track_name");
+    var index;
     for (var i = 0; i < tracks.length; i++) {
         tracks[i].addEventListener('mousedown', function (e) {
             for (var i = 0; i < tracks.length; i++) {
@@ -10,23 +12,18 @@ function selectTrack() {
             }
             this.setAttribute('data-selected', '');
         })
-    }
-    /*var trck;
-    for (var i = 0; i < trackNames.length; i++) {
         trackNames[i].addEventListener('click', function (e) {
-            for (var i = 0; i < trackNames.length; i++) {
-              trck = trackNames[i].parentNode.parentNode.lastChild.previousSibling//.nextSibling;
-                //trck[i].removeAttribute('data-selected');
-                console.log(trck, trackNames);
+            index = this.id.substr(11, 1);
+            for (var i = 0; i < tracks.length; i++) {
+                tracks[i].removeAttribute('data-selected');
             }
-
-            //trck.setAttribute('data-selected', '');
+            tracks[index].setAttribute('data-selected', '');
         })
-    }*/
+    }
 }
 selectTrack();
 
-
+//Cambiar nombre de pista
 function changeTrackName() {
     var tracksNames = document.getElementsByClassName('select');
     var prr = document.getElementsByClassName('input');
@@ -36,8 +33,9 @@ function changeTrackName() {
     }
     for (var i = 0; i < tracksNames.length; i++) {
         tracksNames[i].addEventListener('dblclick', function dbl(e) {
-            var box = this.nextSibling;
+            var box = this.nextSibling.nextSibling;
             var text = this;
+            console.log(box,text );
             text.style.display = 'none';
             text.style.visibility = 'hidden';
             box.style.display = 'block';
@@ -63,5 +61,14 @@ function changeTrackName() {
         });
     }
 }
-
 changeTrackName();
+
+//Cargar una canción --- desde el pc del usuario o desde una base remote????
+function loadSong() {
+    let button = document.getElementById('load_sound');
+    button.addEventListener('click', function(){
+        let trcknr = document.querySelector('[data-selected] > canvas').id;
+        let url;
+        soundcontroller.loadSound(url, trcknr, 0);
+    })
+}

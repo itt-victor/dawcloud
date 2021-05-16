@@ -1,6 +1,3 @@
-import {timeSpace}  from '../timeSpace';
-/*import Track from './track';
-import grid from './generalgrid';*/
 
 export default class Recording {
     constructor(timeToStart, audioBuffer, tracknumber) {
