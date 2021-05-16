@@ -1,9 +1,10 @@
 import { stop } from '../app_core';
+import { timeSpace } from '../timeSpace';
 
 export var ui_draw = {
     drawTrackWhileRecording(actualTime) {
         var width = 0;
-        var x = actualTime * 5;
+        var x = actualTime / timeSpace.zoom;
         var track = document.querySelector('[data-selected]');
         var canvas = document.createElement('canvas')
         track.appendChild(canvas)
@@ -14,7 +15,7 @@ export var ui_draw = {
             width++;
             canvasCtx.fillStyle = '#380166';
             canvasCtx.fillRect(x, 0, width, 70);
-        }, 200)
+        }, timeSpace.zoom * 1000)
         stop.addEventListener('click', function () {
             clearInterval(interval);
             canvas.remove();
@@ -24,13 +25,14 @@ export var ui_draw = {
     drawRecording(recording) {
         var canvas = recording.canvas;
         canvas.setAttribute("class", "recording");
-        var x = recording.timeToStart * 5;
-        var width = recording.audioBuffer.duration * 5;
+        var x = recording.timeToStart / timeSpace.zoom;
+        var width = recording.audioBuffer.duration / timeSpace.zoom;
         var height = 67;
         canvas.style.left = x + 'px';
         canvas.width = width;
         canvas.height = height;
         var canvasCtx = canvas.getContext('2d');
+        canvasCtx.clearRect(0, 0, width, 67);
         canvasCtx.fillStyle = '#8254a7';
         canvasCtx.beginPath();
         canvasCtx.moveTo(0, 0);

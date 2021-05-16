@@ -24,11 +24,11 @@ body {
 
 .buttonpad {
     position: relative;
-    left: 18%;
+    left: 20%;
     margin-top: 10px;
     margin-bottom: 40px;
     display: flex;
-    width: 900px;
+    width: 1000px;
     justify-content: space-around;
 }
 
@@ -166,7 +166,7 @@ body {
 }
 
 .track {
-    /*width: 1000px;*/
+    width: 1000px;
     height: 70px;
     z-index: 3;
     background-color: aquamarine;
@@ -176,6 +176,7 @@ body {
 
 .recording {
     position: absolute;
+    //overflow: hidden;
 }
 
 div [data-selected] {

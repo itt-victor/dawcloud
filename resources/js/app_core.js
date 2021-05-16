@@ -66,9 +66,14 @@ function startApp() {
             record.onclick = function () {
                 mediaRecorder.ondataavailable = event => chunks.push(event.data);
                 mediaRecorder.start();
-                cursor.play();
-                startTime = timeSpace.timeAtPause
-                ui_draw.drawTrackWhileRecording(timeSpace.timeAtPause);
+                if (soundStatuses.hasStopped === true && soundStatuses.isPlaying === false) {
+                    cursor.play();
+                    soundcontroller.playSound();
+                    startTime = timeSpace.pxIncrement * timeSpace.zoom;
+                } else {
+                    startTime = timeSpace.pxIncrement * timeSpace.zoom;
+                }
+                ui_draw.drawTrackWhileRecording(startTime);
                 console.log(mediaRecorder.state);
                 record.style.background = "red";
                 stop.disabled = false;
@@ -79,8 +84,9 @@ function startApp() {
             function eStop() {
                 if (mediaRecorder.state == 'recording') {
                     mediaRecorder.stop();
-                    timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
                     console.log(mediaRecorder.state);
+                    soundcontroller.stopSound(audioBufferSources);
+                    timeSpace.timeAtPause = timeSpace.pxIncrement * timeSpace.zoom; //es necesario aquí?
                     record.style.background = "";
                     record.style.color = "";
                     stop.disabled = true;

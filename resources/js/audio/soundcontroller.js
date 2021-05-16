@@ -12,9 +12,9 @@ export default class SoundController {
         this.audioCtx = audioCtx;
     }
 
-    getAudioBuffers() {
+    /*getAudioBuffers() {
         return audioBuffers;
-    }
+    }*/
 
     loadSound(url, trcknr, startTime) {
         //let trcknr = document.querySelector('[data-selected] > canvas').id;
@@ -55,13 +55,13 @@ export default class SoundController {
         for (var i = 0; i < sources.length; i++) {
             sources[i].stop(0);
         }
-        timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
+        timeSpace.timeAtPause = timeSpace.pxIncrement * timeSpace.zoom;
         audioBufferSources = [];
     }
 
     playWhileDragging(recording) {
         recording.audioBufferSource.stop();
-        timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
+        timeSpace.timeAtPause = timeSpace.pxIncrement * timeSpace.zoom;
         const source = audioCtx.createBufferSource();
         source.buffer = recording.audioBuffer;
         source.connect(audioCtx.destination);

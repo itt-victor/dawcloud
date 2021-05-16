@@ -1,6 +1,9 @@
 import { stop } from '../app_core';
 import { grid } from './generalgrid';
 import { timeSpace } from '../timeSpace';
+import { times } from 'lodash';
+
+export var interval;
 
 export var cursor = {
     canvas: document.getElementById("cursor"),
@@ -16,19 +19,18 @@ export var cursor = {
         this.ctx.globalAlpha = 0.8
         this.ctx.fillRect(0, 0, 3, this.canvas.height); //70 por pista de height +20 del time layer
     },
-    //hay que sacar el intervalo de aquí
     play: function () {
-        var interval = setInterval(function () {
-            timeSpace.pxAtPause++;//estos dos fuera de aquí
-            timeSpace.newWidth++
-            this.cursor.style.left = timeSpace.newWidth + 'px';
-        }, 200)
+            interval = setInterval(function () {
+            timeSpace.widthAtPause++
+            timeSpace.pxIncrement++
+            this.cursor.style.left = timeSpace.widthAtPause + 'px';
+        }, timeSpace.zoom * 1000)
         stop.addEventListener('click', function () {
             clearInterval(interval);
         })
     },
-    moveAtClick: function(px) {
-        this.canvas.style.left = px + 'px';
-        timeSpace.newWidth = timeSpace.pointedWidth;
+    moveAtClick: function() {
+        this.canvas.style.left = timeSpace.pointedWidth + 'px';
+        timeSpace.widthAtPause = timeSpace.pointedWidth;
     }
 }

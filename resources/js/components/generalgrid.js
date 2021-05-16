@@ -19,6 +19,7 @@ class Grid {
         tracks.appendChild(this.canvas);
         this.canvas.style.visibility = 'hidden';
         this.canvas.width = 1000;
+        this.canvas.style.overflowX = 'scroll';
         this.canvas.height = 70 * this.howMany;
         //default la 1a pista
         jQuery(".track:first").attr("data-selected", '');

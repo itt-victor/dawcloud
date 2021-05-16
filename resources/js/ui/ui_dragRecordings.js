@@ -1,6 +1,7 @@
 import { grid } from '../components/generalgrid';
 import { soundcontroller } from '../app_core';
 import { soundStatuses } from '../app_core';
+import { timeSpace } from '../timeSpace';
 
 export function dragRecording() {
     var ctx;

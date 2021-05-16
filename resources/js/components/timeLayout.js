@@ -11,9 +11,9 @@ const timeLayout = document.querySelector('#time-layout');
 
 timeLayout.addEventListener('click', function (event) {
     timeSpace.pointedWidth = event.clientX;
-    timeSpace.pxAtPause = event.clientX - 611;
-    timeSpace.timeAtPause = timeSpace.pxAtPause / 5;
-    cursor.moveAtClick(timeSpace.pointedWidth);
+    timeSpace.pxIncrement = event.offsetX;
+    timeSpace.timeAtPause = event.offsetX * timeSpace.zoom;
+    cursor.moveAtClick();
     if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
         soundcontroller.stopSound(audioBufferSources);
         setTimeout(soundcontroller.playSound(grid.tracks),10);

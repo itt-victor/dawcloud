@@ -15,6 +15,10 @@
                         src="storage/icons/record-icon.png" alt="record-button" /></button>
             </div>
             <button id="load_sound" class="btn btn-outline-info">Load sound</button>
+            <div>
+                <button id="zoomin" type="button" class="btn btn-outline-info">+</button>
+                <button id="zoomout" type="button" class="btn btn-outline-info">-</button>
+            </div>
         </div>
 
         <section id="mixer" class="mixer">
