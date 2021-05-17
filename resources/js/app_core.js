@@ -46,8 +46,8 @@ drawLayout();
 
 
 //cargo temas para desarrollo
-setTimeout(function () { soundcontroller.loadSound("storage/sound/1.mp3", 0, 0) }, 0);
-setTimeout(function () { soundcontroller.loadSound("storage/sound/2.mp3", 1, 20) }, 400);
+//setTimeout(function () { soundcontroller.loadSound("storage/sound/1.mp3", 0, 0) }, 0);
+//setTimeout(function () { soundcontroller.loadSound("storage/sound/2.mp3", 1, 20) }, 400);
 //setTimeout(function () { soundcontroller.loadSound("storage/sound/3.mp3", 2) }, 800);
 
 /////////////////////////////////////
