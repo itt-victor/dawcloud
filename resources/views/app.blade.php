@@ -8,14 +8,16 @@
         <div id="buttonpad" class="buttonpad">
             <div class="master_controls">
                 <button id="play-button" class="play-button btn btn-outline-info"><img width="30px" height="30px"
-                        src="storage/icons/play-icon.jpg" alt="play-button" /></button>
+                        src="storage/icons/play-icon.jpg"  /></button><!--alt="play-button"-->
                 <button id="stop-button" class="stop-button btn btn-outline-info"><img width="30px" height="30px"
-                        src="storage/icons/stop-icon.png" alt="stop-button" /></button>
+                        src="storage/icons/stop-icon.png" /></button><!-- alt="stop-button"-->
                 <button id="record-button" class="record-button btn btn-outline-info"><img width="30px" height="30px"
-                        src="storage/icons/record-icon.png" alt="record-button" /></button>
+                        src="storage/icons/record-icon.png"  /></button><!-- alt="record-button"-->
+                <button id=metric_button class="btn btn-outline-info btn-metric"></button>
+                <button id="bpm_button" class="btn btn-outline-info btn-bpm"></button>
             </div>
             <button id="load_sound" class="btn btn-outline-info">Load sound</button>
-            <div>
+            <div class="zoom-btn">
                 <button id="zoomin" type="button" class="btn btn-outline-info">+</button>
                 <button id="zoomout" type="button" class="btn btn-outline-info">-</button>
             </div>
@@ -47,8 +49,9 @@
                 @include('layouts.track_name', ['number'=> '8', 'number2'=> '7'])
             </div>
             <canvas id="cursor"></canvas>
-            <div id="time-layout" style="background-color: grey;"><canvas id="layout"></canvas></div>
+            <!--<div id="time-layout" style="background-color: grey;"><canvas id="layout"></canvas></div>-->
             <div id="tracks" class="tracks">
+                <div id="time-layout" style="background-color: grey;"><canvas id="layout"></canvas></div>
                 @include('layouts.track_canvas', ['number'=>'0'])
                 @include('layouts.track_canvas', ['number'=>'1'])
                 @include('layouts.track_canvas', ['number'=>'2'])

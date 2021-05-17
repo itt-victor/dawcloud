@@ -2,6 +2,7 @@ import { soundcontroller } from './app_core';
 import { grid } from './components/generalgrid';
 import { timeSpace } from './timeSpace';
 import { ui_draw } from './ui/ui_draw';
+import drawLayout from './ui/ui_layout';
 import { interval } from './components/cursor';
 import { cursor } from './components/cursor';
 import { soundStatuses } from './app_core';
@@ -30,8 +31,13 @@ function selectTrack() {
 }
 selectTrack();
 
-//Cambiar nombre de pista
-function changeTrackName() {
+//resalta grabación al clicar
+/*function recordingOnClick(){
+
+}*/
+
+//Cambiar nombre de pista  - NO ME CONVENCE NO ES NECESARIO
+/*function changeTrackName() {
     var tracksNames = document.getElementsByClassName('select');
     var prr = document.getElementsByClassName('input');
     for (var i = 0; i < prr.length; i++) {
@@ -68,7 +74,7 @@ function changeTrackName() {
         });
     }
 }
-changeTrackName();
+changeTrackName();*/
 
 //Cargar una canción --- desde el pc del usuario o desde una base remote????
 function loadSong() {
@@ -83,29 +89,120 @@ function loadSong() {
 function zoom() {
     let zoomIn = document.getElementById("zoomin");
     let zoomOut = document.getElementById("zoomout");
-    zoomIn.addEventListener('click', function () {
+
+    function zIn() {
         timeSpace.zoom -= 0.05; //hay que hacer una funci´pon para que el número se mueva porcentualmente
+        timeSpace.zoom = timeSpace.zoom.toFixed(3);
         for (var i = 0; i < grid.recordings.length; i++) {
             ui_draw.drawRecording(grid.recordings[i]);
         }
+        drawLayout();
+        if (soundStatuses.isPlaying === true) {
+            clearInterval(interval);
+            cursor.play();
+        }
+    }
+  /*  function zOut() {
+        timeSpace.zoom += 0.05;
+        for (var i = 0; i < grid.recordings.length; i++) {
+            ui_draw.drawRecording(grid.recordings[i]);
+        }
+        drawLayout();
+        if (soundStatuses.isPlaying === true) {
+            clearInterval(interval);
+            cursor.play();
+        }
+    }*/
+
+    zoomIn.addEventListener('click', zIn);
+  //  zoomOut.addEventListener('click', zOut);
+    zoomOut.addEventListener('click', function zOut() {
+        timeSpace.zoom += 0.05;
+        for (var i = 0; i < grid.recordings.length; i++) {
+            ui_draw.drawRecording(grid.recordings[i]);
+        }
+        drawLayout();
         if (soundStatuses.isPlaying === true) {
             clearInterval(interval);
             cursor.play();
         }
     });
-    zoomOut.addEventListener('click', function () {
-        timeSpace.zoom += 0.05;
-        for (var i = 0; i < grid.recordings.length; i++) {
-            ui_draw.drawRecording(grid.recordings[i]);
+
+    window.addEventListener('keyup', function(e){
+        if (e.keyCode === 72) {
+            zIn();
         }
-        if (soundStatuses.isPlaying === true) {
-            clearInterval(interval);
-            cursor.play();
+    });
+    window.addEventListener('keyup', function(r){
+        if (r.keyCode === 71) {
+            zOut();
         }
-    })
+    });
 }
 zoom();
 
+function setBpm() {
+    const bpmButton = document.getElementById('bpm_button');
+    let input;
+    bpmButton.innerHTML = (timeSpace.bpm * 120) + '  bpm';
+    bpmButton.style.width = '180px';
+    bpmButton.addEventListener('click', function(e){
+        e.stopPropagation();
+        if (!document.getElementById('bpm_value')){
+            input = document.createElement('input');
+            input.id = 'bpm_value';
+            input.style.width = '80px';
+            input.setAttribute('placeholder', 'set tempo');
+            bpmButton.appendChild(input);
+        }
+        window.addEventListener('click', function (a) {
+            if (!a.target.contains(e.currentTarget)) {
+                input.remove();
+            }
+        });
+        input.addEventListener('keyup', function (o) {
+            if (o.keyCode === 13) {
+                o.preventDefault();
+                timeSpace.bpm = this.value /-120;  //mirate esto bien 
+                bpmButton.innerHTML = timeSpace.bpm+ '  bpm';
+                input.remove();
+                drawLayout();
+            }
+        });
+    });
+}
+setBpm();
+
+function metric(){
+    let metricButton = document.getElementById('metric_button');
+    metricButton.innerHTML = '4/4';
+    metricButton.style.width = '180px';
+    /*metricButton.addEventListener('click', function(e){
+        e.stopPropagation();
+        if (!document.getElementById('metric_value')){
+            input = document.createElement('input');
+            input.id = 'metric_value';
+            input.style.width = '80px';
+            //input.setAttribute('placeholder', 'set tempo');
+            bpmButton.appendChild(input);
+        }
+        window.addEventListener('click', function (a) {
+            if (!a.target.contains(e.currentTarget)) {
+                input.remove();
+            }
+        });
+        input.addEventListener('keyup', function (o) {
+            if (o.keyCode === 13) {
+                o.preventDefault();
+                timeSpace.compas = this.value;
+                metricButton.innerHTML = timeSpace.bpm+ '  bpm';
+                input.remove();
+                drawLayout();
+            }
+        });
+    });*/
+}
+metric();
 
 function mute() {
     let button = document.getElementsByClassName('track_mute');
@@ -127,3 +224,20 @@ function solo() {
     }
 }
 solo();
+
+function removeRecording() {
+    let recording;
+    for (var i = 0; i < grid.recordings.length; i++) {
+        grid.recordings[i].canvas.addEventListener('click', function(e){
+            e.stopPropagation();
+            recording = this.parent;
+            window.addEventListener('keyup', function(a){
+                if (a.keyCode === 46) {
+                    a.preventDefault();
+                    recording.deleteRecording();
+                }
+            })
+        });
+    }
+}
+setTimeout(removeRecording, 2000);

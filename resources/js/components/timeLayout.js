@@ -19,5 +19,3 @@ timeLayout.addEventListener('click', function (event) {
         setTimeout(soundcontroller.playSound(grid.tracks),10);
     }
 });
-
-

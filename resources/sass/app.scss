@@ -24,12 +24,12 @@ body {
 
 .buttonpad {
     position: relative;
-    left: 20%;
+    left: 25%;
     margin-top: 10px;
     margin-bottom: 40px;
     display: flex;
     width: 1000px;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
 .btn {
@@ -47,10 +47,15 @@ body {
     background-color: #c9c7c7;
 }
 
+.btn-metric {
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
 .master_controls {
     display: flex;
     justify-content: space-between;
-    width: 180px;
+    width: 250px;
 }
 
 .other_controls {
@@ -59,19 +64,29 @@ body {
     width: 250px;
 }
 
+.zoom-btn {
+    width: 200px;
+}
+
 .sound-clips {
     //position: relative;
     height: 590px;
 }
 
 #time-layout {
-    left: 160px;
-    width: 1000px;
+  /*left:160px;*/
+    width: 4000px;
     height: 30px;
     margin: auto;
     position: relative;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+#layout {
+    width: 4000px;
 }
 
 
@@ -157,27 +172,29 @@ body {
 
 #tracks{
     width: 1000px;
-    height: 560px;
+    height: 608px;/*578px;*/
     left: 160px;
     position: relative;
     margin: auto;
     text-align: left;
     vertical-align: middle;
     background-color: darkgray;
+    overflow-x: auto;
+    overflow-y:hidden;
 }
 
 .track {
-    width: 1000px;
+    width: 4000px;
     height: 70px;
     z-index: 3;
     background-color: aquamarine;
     position: relative;
     border: solid 1.3px rgb(122, 35, 50);
+    overflow-x: hidden;
 }
 
 .recording {
     position: absolute;
-    //overflow: hidden;
 }
 
 div [data-selected] {
@@ -210,4 +227,12 @@ div [data-selected] {
     text-decoration: none;
     cursor:context-menu;
     color: red;
+}
+
+::-webkit-scrollbar {
+    //height: 20px;
+}
+
+::-webkit-scrollbar-button {
+    /*display: none;*/
 }

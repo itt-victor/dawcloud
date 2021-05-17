@@ -25,6 +25,7 @@ export var ui_draw = {
     drawRecording(recording) {
         var canvas = recording.canvas;
         canvas.setAttribute("class", "recording");
+        canvas.id = recording.id;
         var x = recording.timeToStart / timeSpace.zoom;
         var width = recording.audioBuffer.duration / timeSpace.zoom;
         var height = 67;
