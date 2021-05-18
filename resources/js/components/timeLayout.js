@@ -10,9 +10,9 @@ import { grid } from './generalgrid';
 const timeLayout = document.querySelector('#time-layout');
 
 timeLayout.addEventListener('click', function (event) {
-    timeSpace.pointedWidth = event.clientX;
+    timeSpace.pointedWidth = event.offsetX -1;
     timeSpace.pxIncrement = event.offsetX;
-    timeSpace.timeAtPause = event.offsetX * timeSpace.zoom;
+    timeSpace.timeAtPause = (event.offsetX -1) * timeSpace.zoom;  // mirate bien esos -1 que has metido
     cursor.moveAtClick();
     if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
         soundcontroller.stopSound(audioBufferSources);

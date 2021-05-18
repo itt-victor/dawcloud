@@ -13,7 +13,7 @@ export var cursor = {
     draw: function () {
         this.canvas.width = 3;
         this.canvas.height = 70 * grid.howMany + 30;  //70 por pista + 30 de time layout
-        this.canvas.style.left = layout.getBoundingClientRect().x + 'px';//'620px'; '611px';
+        this.canvas.style.left = 0//grid.canvas.getBoundingClientRect().x + 'px';//'620px'; '611px';
         this.canvas.style.zIndex = '10';
         this.ctx = this.canvas.getContext('2d');
         this.ctx.fillStyle = 'black';
@@ -40,6 +40,6 @@ export var cursor = {
     },
     moveAtClick: function () {
         this.canvas.style.left = timeSpace.pointedWidth + 'px';
-        timeSpace.widthAtPause = timeSpace.pointedWidth;
+        timeSpace.widthAtPause = timeSpace.pointedWidth; 
     }
 }

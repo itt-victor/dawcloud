@@ -155,6 +155,21 @@ window.addEventListener('keyup', function (e) {
     }
 });
 
+function eStop() {
+    soundcontroller.stopSound(audioBufferSources);
+    play.disabled = false;
+    stop.disabled = true;
+    soundStatuses.hasStopped = true;
+    soundStatuses.isPlaying = false;
+}
+stop.addEventListener('click', eStop);
+window.addEventListener('keyup', function (e) {
+    if (e.keyCode === 32) {
+        e.preventDefault();
+        eStop();
+    }
+});
+
 
 /////////////
 //startApp();

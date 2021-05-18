@@ -141,7 +141,7 @@ zoom();
 function setBpm() {
     const bpmButton = document.getElementById('bpm_button');
     let input;
-    bpmButton.innerHTML = (timeSpace.bpm * 120) + '  bpm';
+    bpmButton.innerHTML = (120 / timeSpace.bpm) + '  bpm';
     bpmButton.addEventListener('click', function (e) {
         e.stopPropagation();
         if (!document.getElementById('bpm_value')) {
@@ -155,7 +155,7 @@ function setBpm() {
         window.addEventListener('click', function br(a) {
             if (!a.target.contains(e.currentTarget)) {
                 input.remove();
-                bpmButton.innerHTML = (timeSpace.bpm * 120) + '  bpm';
+                bpmButton.innerHTML = (120 / timeSpace.bpm) + '  bpm';
                 this.removeEventListener('click', br);
             }
         });
@@ -163,7 +163,7 @@ function setBpm() {
             if (o.keyCode === 13) {
                 o.preventDefault();
                 timeSpace.bpm = 120 / this.value;
-                bpmButton.innerHTML = this.value + '  bpm';
+                bpmButton.innerHTML =  (120 / timeSpace.bpm) + '  bpm';
                 input.remove();
                 drawLayout();
             }

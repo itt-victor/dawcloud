@@ -48,10 +48,11 @@
                 @include('layouts.track_name', ['number'=> '7', 'number2'=> '6'])
                 @include('layouts.track_name', ['number'=> '8', 'number2'=> '7'])
             </div>
-            <canvas id="cursor"></canvas>
+
             <!--<div id="time-layout" style="background-color: grey;"><canvas id="layout"></canvas></div>-->
             <div id="tracks" class="tracks">
                 <div id="time-layout" style="background-color: grey;"><canvas id="layout"></canvas></div>
+                <canvas id="cursor"></canvas>
                 @include('layouts.track_canvas', ['number'=>'0'])
                 @include('layouts.track_canvas', ['number'=>'1'])
                 @include('layouts.track_canvas', ['number'=>'2'])
