@@ -41,29 +41,17 @@ export default function recordController() {
                 if (mediaRecorder.state == 'recording') {
                     mediaRecorder.stop();
                     console.log(mediaRecorder.state);
-                    //soundcontroller.stopSound(audioBufferSources);
                     timeSpace.timeAtPause = timeSpace.pxIncrement * timeSpace.zoom; //es necesario aquí?
                     record.style.background = "";
                     record.style.color = "";
-                    //stop.disabled = true;
                     record.disabled = false;
-                    //play.disabled = false;
-                    //soundStatuses.hasStopped = true;
-                    //soundStatuses.isPlaying = false;
                 }
-                /*else {
-                    soundcontroller.stopSound(audioBufferSources);
-                    play.disabled = false;
-                    stop.disabled = true;
-                    soundStatuses.hasStopped = true;
-                    soundStatuses.isPlaying = false;
-                }*/
             }
             stop.addEventListener('click', rStop);
             window.addEventListener('keyup', function (e) {
                 if (e.keyCode === 32) {
                     e.preventDefault();
-                    eStop();
+                    rStop();
                 }
             });
 

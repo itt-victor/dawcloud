@@ -92,15 +92,7 @@ function zoom() {
     let zoomOut = document.getElementById("zoomout");
 
     function zIn() {
-        if (timeSpace.zoom > 0.05) {             ///esto es una mierda, pon un decremento a cada click hombre
-            timeSpace.zoom -= 0.05;
-        } else if(timeSpace.zoom <= 0.05 ) {
-            timeSpace.zoom -=0.002;
-        /*} else if (timeSpace.zoom <= 0.02 ) {
-            timeSpace.zoom -=0.001;*/
-        } else if (timeSpace.zoom.isFinite()) {
-            timeSpace.zoom = 0.001;
-        }
+        timeSpace.zoom /= 1.3
 
         for (var i = 0; i < grid.recordings.length; i++) {
             ui_draw.drawRecording(grid.recordings[i]);
@@ -111,16 +103,18 @@ function zoom() {
         }
     }
     function zOut() {
-        timeSpace.zoom += 0.05;
+        timeSpace.zoom *= 1.3;
         for (var i = 0; i < grid.recordings.length; i++) {
             ui_draw.drawRecording(grid.recordings[i]);
         }
         drawLayout();
         if (soundStatuses.isPlaying === true) {
+            /*soundcontroller.stopSound();
+            soundcontroller.playSound();*/
+            cursor.stop();
             cursor.play();
         }
     }
-
     zoomIn.addEventListener('click', zIn);
     zoomOut.addEventListener('click', zOut);
 
@@ -218,16 +212,16 @@ solo();
 function removeRecording() {
     let recording;
     for (var i = 0; i < grid.recordings.length; i++) {
-        grid.recordings[i].canvas.addEventListener('click', function (e) {
-            e.stopPropagation();
+        grid.recordings[i].canvas.addEventListener('click', function arrr(e) {
             recording = this.parent;
             window.addEventListener('keyup', function (a) {
                 if (a.keyCode === 46) {
                     a.preventDefault();
+                    e.target.removeEventListener('click', arrr)
                     recording.deleteRecording();
                 }
             })
         });
     }
 }
-setTimeout(removeRecording, 2000);
+setTimeout(removeRecording, 3000);

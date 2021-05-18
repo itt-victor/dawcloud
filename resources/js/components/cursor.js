@@ -1,7 +1,6 @@
 import { stop } from '../app_core';
 import { grid } from './generalgrid';
 import { timeSpace } from '../timeSpace';
-import { times } from 'lodash';
 
 var interval;
 let zoomIn = document.getElementById("zoomin");
@@ -12,7 +11,7 @@ export var cursor = {
     canvas: document.getElementById("cursor"),
     draw: function () {
         this.canvas.width = 3;
-        this.canvas.height = 70 * grid.howMany + 30;  //70 por pista + 30 de time layout
+        this.canvas.height = 70 * grid.howMany;
         this.canvas.style.left = 0//grid.canvas.getBoundingClientRect().x + 'px';//'620px'; '611px';
         this.canvas.style.zIndex = '10';
         this.ctx = this.canvas.getContext('2d');
@@ -26,20 +25,25 @@ export var cursor = {
         interval = setInterval(function () {
             timeSpace.widthAtPause++
             timeSpace.pxIncrement++
-            this.cursor.style.left = timeSpace.widthAtPause + 'px';
+            this.cursor.style.left = (timeSpace.widthAtPause) + 'px';
         }, timeSpace.zoom * 1000)
-    stop.addEventListener('click', function clr() {
-        clearInterval(interval);
-    });
-    zoomIn.addEventListener('click', function () {
-        clearInterval(interval);
-    });
-    zoomOut.addEventListener('click', function () {
-        clearInterval(interval);
-    });
+        stop.addEventListener('click', function clr() {
+            clearInterval(interval);
+        });
+        zoomIn.addEventListener('click', function () {
+            clearInterval(interval);
+        });
+        zoomOut.addEventListener('click', function () {
+            clearInterval(interval);
+        });
     },
+
+    stop: function () {
+        clearInterval(interval);
+    },
+
     moveAtClick: function () {
-        this.canvas.style.left = timeSpace.pointedWidth + 'px';
-        timeSpace.widthAtPause = timeSpace.pointedWidth; 
+        this.canvas.style.left = (timeSpace.pointedWidth - 1) + 'px';
+        timeSpace.widthAtPause = timeSpace.pointedWidth;
     }
 }

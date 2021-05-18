@@ -24,7 +24,7 @@ class Grid {
         //default la 1a pista
         jQuery(".track:first").attr("data-selected", '');
     }
-    //MÉTODO NO NECESARIO
+
     addTracks(howMany) {
         for (var i = 0; i < howMany; i++) {
             trackName = generateTrackNumbers();

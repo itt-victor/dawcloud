@@ -3,14 +3,16 @@ import Recording from './recording';
 import { generateRecordingNumbers } from '../utils';
 import { ui_draw } from '../ui/ui_draw';
 import { grid } from './/generalgrid';
+import { audioCtx } from '../app_core';
 var rcdName;
 
 export default class Track {
     constructor(tracknumber) {
         this.tracknumber = tracknumber;
-        this.track = document.getElementsByClassName('track')[this.tracknumber];
+        this.trackDOMElement = document.getElementsByClassName('track')[this.tracknumber];
         this.recordings = [];
-        //aquí cosas del canal, volumen, pan...
+        this.audioBufferSources = [];
+        this.gain = audioCtx.createGain();
         this.soloButton = document.getElementById('solo_'+ this.tracknumber);
         this.muteButton = document.getElementById('mute_'+ this.tracknumber);
         this.fader = document.getElementById('fader_'+ this.tracknumber);
@@ -20,7 +22,7 @@ export default class Track {
         window[rcdName] = new Recording(timeToStart, audioBuffer, this.tracknumber);
         this.recordings.push(window[rcdName]);
         grid.recordings.push(window[rcdName]);
-        this.track.appendChild(window[rcdName].canvas);
+        this.trackDOMElement.appendChild(window[rcdName].canvas);
         ui_draw.drawRecording(window[rcdName]);
     };
 }

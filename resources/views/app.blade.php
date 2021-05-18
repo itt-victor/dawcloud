@@ -63,7 +63,7 @@
                 @include('layouts.track_canvas', ['number'=>'7'])
             </div>
         </section>
-
+        <div class="modal-loading" id="modal-loading"></div>
     </div>
 
 @endsection

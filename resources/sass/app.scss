@@ -235,10 +235,8 @@ div [data-selected] {
     color: red;
 }
 
-::-webkit-scrollbar {
-    //height: 20px;
-}
-
-::-webkit-scrollbar-button {
-    /*display: none;*/
+#modal-loading {
+    display:none;
+    visibility: hidden;
+    position: absolute;
 }

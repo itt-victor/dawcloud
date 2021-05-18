@@ -11057,6 +11057,8 @@ div [data-selected] {
   color: red;
 }
 
-::-webkit-scrollbar-button {
-  /*display: none;*/
+#modal-loading {
+  display: none;
+  visibility: hidden;
+  position: absolute;
 }

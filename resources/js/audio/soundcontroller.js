@@ -2,19 +2,12 @@ import { timeSpace } from '../timeSpace';
 import { grid } from '../components/generalgrid';
 import { audioCtx } from '../app_core';
 
-
-//Esto aquí mismo ya que se se pierden en cada play
-export var audioBufferSources = [];
-
 export default class SoundController {
 
     constructor(audioCtx) {
         this.audioCtx = audioCtx;
+        this.audioBufferSources = [];
     }
-
-    /*getAudioBuffers() {
-        return audioBuffers;
-    }*/
 
     loadSound(url, trcknr, startTime) {
         //let trcknr = document.querySelector('[data-selected] > canvas').id;
@@ -37,6 +30,7 @@ export default class SoundController {
             const source = audioCtx.createBufferSource();
             source.buffer = grid.recordings[h].audioBuffer;
             source.connect(audioCtx.destination);
+            source.connect(grid.tracks[grid.recordings[h].tracknumber].gain)//gain node
             var start = grid.recordings[h].timeToStart - timeSpace.timeAtPause + audioCtx.currentTime;
             var offset = timeSpace.timeAtPause - grid.recordings[h].timeToStart;
             if (start <= 0) {
@@ -46,17 +40,17 @@ export default class SoundController {
                 offset = 0;
             }
             source.start(start, offset);
-            audioBufferSources.push(source);
+            this.audioBufferSources.push(source);
             grid.recordings[h].audioBufferSource = source;
         }
     }
 
-    stopSound(sources) {
-        for (var i = 0; i < sources.length; i++) {
-            sources[i].stop(0);
+    stopSound() {
+        for (var i = 0; i < this.audioBufferSources.length; i++) {
+            this.audioBufferSources[i].stop(0);
         }
         timeSpace.timeAtPause = timeSpace.pxIncrement * timeSpace.zoom;
-        audioBufferSources = [];
+        this.audioBufferSources = [];
     }
 
     playWhileDragging(recording) {
@@ -75,7 +69,7 @@ export default class SoundController {
         }
         source.start(start, offset);
         recording.audioBufferSource = source;
-        audioBufferSources.push(source);
+        this.audioBufferSources.push(source);
     }
 
 }
