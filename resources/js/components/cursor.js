@@ -3,7 +3,10 @@ import { grid } from './generalgrid';
 import { timeSpace } from '../timeSpace';
 import { times } from 'lodash';
 
-export var interval;
+var interval;
+let zoomIn = document.getElementById("zoomin");
+let zoomOut = document.getElementById("zoomout");
+
 const layout = document.querySelector('#layout');
 export var cursor = {
     canvas: document.getElementById("cursor"),
@@ -20,16 +23,22 @@ export var cursor = {
         this.ctx.fillRect(0, 0, 3, this.canvas.height);
     },
     play: function () {
-            interval = setInterval(function () {
+        interval = setInterval(function () {
             timeSpace.widthAtPause++
             timeSpace.pxIncrement++
             this.cursor.style.left = timeSpace.widthAtPause + 'px';
         }, timeSpace.zoom * 1000)
-        stop.addEventListener('click', function () {
-            clearInterval(interval);
-        })
+    stop.addEventListener('click', function clr() {
+        clearInterval(interval);
+    });
+    zoomIn.addEventListener('click', function () {
+        clearInterval(interval);
+    });
+    zoomOut.addEventListener('click', function () {
+        clearInterval(interval);
+    });
     },
-    moveAtClick: function() {
+    moveAtClick: function () {
         this.canvas.style.left = timeSpace.pointedWidth + 'px';
         timeSpace.widthAtPause = timeSpace.pointedWidth;
     }

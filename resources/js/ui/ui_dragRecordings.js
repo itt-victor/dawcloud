@@ -25,7 +25,7 @@ export function dragRecording() {
         grid.recordings[i].canvas.addEventListener("mousedown", function (evt) {
             ctx = this.parent.canvasCtx;
             recording = this.parent;
-            X = recording.timeToStart * 5;
+            X = recording.timeToStart / timeSpace.zoom;
             Y = 0;
             widths = selectTrackWidth(recording.tracknumber);
             var mousePos = onMousePos(grid.canvas, evt);
@@ -40,14 +40,14 @@ export function dragRecording() {
         grid.recordings[i].canvas.addEventListener("mousemove", function a(evt) {
             ctx = this.parent.canvasCtx;
             recording = this.parent;
-            X = recording.timeToStart * 5;
+            X = recording.timeToStart / timeSpace.zoom;
             Y = 0;
             var mousePos = onMousePos(grid.canvas, evt);
             if (drag) {
                 X = mousePos.x + delta.x, Y = mousePos.y + delta.y
                 if (X < 0) { X = 0 };
                 this.style.left = X + 'px';
-                recording.timeToStart = X / 5;
+                recording.timeToStart = X * timeSpace.zoom;
                 if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
                     soundcontroller.playWhileDragging(this.parent);
                 }

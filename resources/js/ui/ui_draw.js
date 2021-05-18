@@ -14,7 +14,7 @@ export var ui_draw = {
         var interval = setInterval(function () {
             width++;
             canvasCtx.fillStyle = '#380166';
-            canvasCtx.fillRect(x, 0, width, 70);
+            canvasCtx.fillRect(x, 0, width, 67);
         }, timeSpace.zoom * 1000)
         stop.addEventListener('click', function () {
             clearInterval(interval);

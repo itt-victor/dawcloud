@@ -8,10 +8,9 @@ export default function drawLayout() {
     layoutCtx.clearRect(0, 0, layout.width, layout.height)
     layoutCtx.strokeStyle = '#7a2332';
     layoutCtx.lineWidth = '10px';
-    let text = 1;      //0.2
-    let zoomSetUp = 1 / timeSpace.zoom * timeSpace.compas * timeSpace.bpm;  // <-- ese *2 es por compás 4/4
-  //timeSpace.bpm: 120 //2 por segundo
-//ASUMIENDO QUE ES COMPÁS 4/4 y a 120 BPM, un compás dura 2s
+    let text = 1;
+    let zoomSetUp = 1 / timeSpace.zoom * timeSpace.compas * timeSpace.bpm;
+
     if (timeSpace.zoom <= 0.050) {
         for (var i = 0; i < 4000; i += (zoomSetUp)) {
             layoutCtx.beginPath();

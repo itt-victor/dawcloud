@@ -86,54 +86,50 @@ function loadSong() {
     })
 }
 
+//zoom!!!
 function zoom() {
     let zoomIn = document.getElementById("zoomin");
     let zoomOut = document.getElementById("zoomout");
 
     function zIn() {
-        timeSpace.zoom -= 0.05; //hay que hacer una funci´pon para que el número se mueva porcentualmente
-        timeSpace.zoom = timeSpace.zoom.toFixed(3);
+        if (timeSpace.zoom > 0.05) {             ///esto es una mierda, pon un decremento a cada click hombre
+            timeSpace.zoom -= 0.05;
+        } else if(timeSpace.zoom <= 0.05 ) {
+            timeSpace.zoom -=0.002;
+        /*} else if (timeSpace.zoom <= 0.02 ) {
+            timeSpace.zoom -=0.001;*/
+        } else if (timeSpace.zoom.isFinite()) {
+            timeSpace.zoom = 0.001;
+        }
+
         for (var i = 0; i < grid.recordings.length; i++) {
             ui_draw.drawRecording(grid.recordings[i]);
         }
         drawLayout();
         if (soundStatuses.isPlaying === true) {
-            clearInterval(interval);
             cursor.play();
         }
     }
-  /*  function zOut() {
+    function zOut() {
         timeSpace.zoom += 0.05;
         for (var i = 0; i < grid.recordings.length; i++) {
             ui_draw.drawRecording(grid.recordings[i]);
         }
         drawLayout();
         if (soundStatuses.isPlaying === true) {
-            clearInterval(interval);
             cursor.play();
         }
-    }*/
+    }
 
     zoomIn.addEventListener('click', zIn);
-  //  zoomOut.addEventListener('click', zOut);
-    zoomOut.addEventListener('click', function zOut() {
-        timeSpace.zoom += 0.05;
-        for (var i = 0; i < grid.recordings.length; i++) {
-            ui_draw.drawRecording(grid.recordings[i]);
-        }
-        drawLayout();
-        if (soundStatuses.isPlaying === true) {
-            clearInterval(interval);
-            cursor.play();
-        }
-    });
+    zoomOut.addEventListener('click', zOut);
 
-    window.addEventListener('keyup', function(e){
+    window.addEventListener('keyup', function (e) {
         if (e.keyCode === 72) {
             zIn();
         }
     });
-    window.addEventListener('keyup', function(r){
+    window.addEventListener('keyup', function (r) {
         if (r.keyCode === 71) {
             zOut();
         }
@@ -141,30 +137,33 @@ function zoom() {
 }
 zoom();
 
+//establece el bpm
 function setBpm() {
     const bpmButton = document.getElementById('bpm_button');
     let input;
     bpmButton.innerHTML = (timeSpace.bpm * 120) + '  bpm';
-    bpmButton.style.width = '180px';
-    bpmButton.addEventListener('click', function(e){
+    bpmButton.addEventListener('click', function (e) {
         e.stopPropagation();
-        if (!document.getElementById('bpm_value')){
+        if (!document.getElementById('bpm_value')) {
+            bpmButton.innerHTML = '';
             input = document.createElement('input');
             input.id = 'bpm_value';
             input.style.width = '80px';
             input.setAttribute('placeholder', 'set tempo');
             bpmButton.appendChild(input);
         }
-        window.addEventListener('click', function (a) {
+        window.addEventListener('click', function br(a) {
             if (!a.target.contains(e.currentTarget)) {
                 input.remove();
+                bpmButton.innerHTML = (timeSpace.bpm * 120) + '  bpm';
+                this.removeEventListener('click', br);
             }
         });
         input.addEventListener('keyup', function (o) {
             if (o.keyCode === 13) {
                 o.preventDefault();
-                timeSpace.bpm = this.value /-120;  //mirate esto bien 
-                bpmButton.innerHTML = timeSpace.bpm+ '  bpm';
+                timeSpace.bpm = 120 / this.value;
+                bpmButton.innerHTML = this.value + '  bpm';
                 input.remove();
                 drawLayout();
             }
@@ -173,37 +172,25 @@ function setBpm() {
 }
 setBpm();
 
-function metric(){
+//cambia el compás, ya se añadiran
+function metric() {
     let metricButton = document.getElementById('metric_button');
     metricButton.innerHTML = '4/4';
-    metricButton.style.width = '180px';
-    /*metricButton.addEventListener('click', function(e){
-        e.stopPropagation();
-        if (!document.getElementById('metric_value')){
-            input = document.createElement('input');
-            input.id = 'metric_value';
-            input.style.width = '80px';
-            //input.setAttribute('placeholder', 'set tempo');
-            bpmButton.appendChild(input);
+    metricButton.addEventListener('click', function (e) {
+        if (metricButton.textContent == '4/4') {
+            metricButton.innerHTML = '3/4';
+            timeSpace.compas = 1.5;
+            drawLayout()
+        } else {
+            metricButton.innerHTML = '4/4';
+            timeSpace.compas = 2;
+            drawLayout()
         }
-        window.addEventListener('click', function (a) {
-            if (!a.target.contains(e.currentTarget)) {
-                input.remove();
-            }
-        });
-        input.addEventListener('keyup', function (o) {
-            if (o.keyCode === 13) {
-                o.preventDefault();
-                timeSpace.compas = this.value;
-                metricButton.innerHTML = timeSpace.bpm+ '  bpm';
-                input.remove();
-                drawLayout();
-            }
-        });
-    });*/
+    });
 }
 metric();
 
+//mutea la pista
 function mute() {
     let button = document.getElementsByClassName('track_mute');
     for (let a = 0; a < button.length; a++) {
@@ -215,6 +202,7 @@ function mute() {
 }
 mute();
 
+//solea la pista
 function solo() {
     let button = document.getElementsByClassName('track_solo');
     for (let a = 0; a < button.length; a++) {
@@ -225,13 +213,15 @@ function solo() {
 }
 solo();
 
+
+//elimina la grabación
 function removeRecording() {
     let recording;
     for (var i = 0; i < grid.recordings.length; i++) {
-        grid.recordings[i].canvas.addEventListener('click', function(e){
+        grid.recordings[i].canvas.addEventListener('click', function (e) {
             e.stopPropagation();
             recording = this.parent;
-            window.addEventListener('keyup', function(a){
+            window.addEventListener('keyup', function (a) {
                 if (a.keyCode === 46) {
                     a.preventDefault();
                     recording.deleteRecording();

@@ -1,62 +1,16 @@
-require('./bootstrap');
-require('./app_logic');
-require('./audio/recordcontroller');
-require('./components/timeLayout');
-require('./ui/ui_dragRecordings');
-require('./ui/ui_layout');
+import { grid } from '../components/generalgrid';
+import { ui_draw } from '../ui/ui_draw';
+import { cursor } from '../components/cursor';
+import { timeSpace } from '../timeSpace';
+import { audioBufferSources } from './soundcontroller';
+import { dragRecording } from '../ui/ui_dragRecordings';
+import { soundcontroller } from '../app_core';
+import { soundStatuses } from '../app_core';
+import { audioCtx } from '../app_core';
 
-import { grid } from './components/generalgrid';
-import drawLayout from './ui/ui_layout'
-import { cursor } from './components/cursor';
-import { ui_draw } from './ui/ui_draw';
-import SoundController from './audio/soundcontroller';
-import { timeSpace } from './timeSpace';
-import { audioBufferSources } from './audio/soundcontroller';
-import { dragRecording } from './ui/ui_dragRecordings';
-import recordcontroller from './audio/recordcontroller';
+import { play, record, stop } from '../app_core';
 
-export const play = document.querySelector('#play-button'),
-    record = document.querySelector('#record-button'),
-    stop = document.querySelector('#stop-button');
-export var soundStatuses = { isPlaying: false, hasStopped: true };
-
-const addTrack = document.querySelector('#add-track'),
-    removeTrack = document.querySelector('#remove-track');
-
-
-stop.disabled = true;
-
-//se inicia audio context
-export const audioCtx = new (window.AudioContext ||
-    window.webkitAudioContext);
-
-///////////////////////////////////////
-
-//llamo al controlador de sonido
-export var soundcontroller = new SoundController(audioCtx);
-
-//prepara el grid
-grid.prepareCanvas();
-grid.addTracks(grid.howMany);
-//dibuja cursor inicial
-cursor.draw();
-//dibuja layout
-drawLayout();
-
-///////////////////////////////////
-
-
-
-//cargo temas para desarrollo
-setTimeout(function () { soundcontroller.loadSound("storage/sound/1.mp3", 0, 0) }, 0);
-setTimeout(function () { soundcontroller.loadSound("storage/sound/2.mp3", 1, 20) }, 400);
-//setTimeout(function () { soundcontroller.loadSound("storage/sound/3.mp3", 4, 0) }, 800);
-
-/////////////////////////////////////
-///////////recordSound//////////////
-////////////////////////////////////
-
-/*function startApp() {
+export default function recordController() {
     if (navigator.mediaDevices.getUserMedia) {
         const constraints = { audio: true };
         let chunks = [];
@@ -135,34 +89,4 @@ setTimeout(function () { soundcontroller.loadSound("storage/sound/2.mp3", 1, 20)
     } else {
         alert('getUserMedia not supported on your browser!');
     }
-}*/
-
-function ePlay() {
-    cursor.play();
-    soundcontroller.playSound();
-    stop.disabled = false;
-    play.disabled = true;
-    soundStatuses.isPlaying = true;
-    soundStatuses.hasStopped = false;
-    return true;
 }
-
-play.addEventListener('click', ePlay);
-window.addEventListener('keyup', function (e) {
-    if (e.keyCode === 32) {
-        e.preventDefault();
-        ePlay();
-    }
-});
-
-
-/////////////
-//startApp();
-recordcontroller();
-////////////
-
-
-window.onresize = function () {
-}
-
-window.onresize();

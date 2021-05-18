@@ -30,6 +30,7 @@ body {
     display: flex;
     width: 1000px;
     justify-content: space-between;
+    height: 50px;
 }
 
 .btn {
@@ -50,12 +51,17 @@ body {
 .btn-metric {
   margin-left: 30px;
   margin-right: 30px;
+  width: 180px;
+}
+
+#bpm_button {
+    width: 250px;
 }
 
 .master_controls {
     display: flex;
     justify-content: space-between;
-    width: 250px;
+    width: 450px;
 }
 
 .other_controls {
