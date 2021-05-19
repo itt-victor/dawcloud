@@ -217,8 +217,9 @@ function removeRecording() {
             window.addEventListener('keyup', function (a) {
                 if (a.keyCode === 46) {
                     a.preventDefault();
+                    if (!soundStatuses.hasStopped) { soundcontroller.stopSingleSound(recording); }
+                    if (recording != undefined) { recording.deleteRecording(); }
                     e.target.removeEventListener('click', arrr)
-                    recording.deleteRecording();
                 }
             })
         });

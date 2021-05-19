@@ -15,8 +15,8 @@ export default class Recording {
 
     deleteRecording(){
         this.canvasCtx.clearRect(0, 0, 4000, 70);
-        delete this.canvas;
-        delete this.canvasCtx;
+        //delete this.canvas;
+        //delete this.canvasCtx;
         delete this.audioBuffer;
         delete this.audioBufferSource;
     }

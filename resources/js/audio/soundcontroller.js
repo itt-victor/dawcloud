@@ -48,6 +48,10 @@ export default class SoundController {
         this.audioBufferSources = [];
     }
 
+    stopSingleSound(recording) {
+        recording.audioBufferSource.stop(0);
+    }
+
     playWhileDragging(recording) {
         recording.audioBufferSource.stop();
         timeSpace.timeAtPause = timeSpace.pxIncrement * timeSpace.zoom;
