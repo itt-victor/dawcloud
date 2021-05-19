@@ -31,17 +31,12 @@ export default class SoundController {
             source.buffer = grid.recordings[h].audioBuffer;
             source.connect(audioCtx.destination);
             source.connect(grid.tracks[grid.recordings[h].tracknumber].gain)//gain node
-            var start = grid.recordings[h].timeToStart - timeSpace.timeAtPause + audioCtx.currentTime;
-            var offset = timeSpace.timeAtPause - grid.recordings[h].timeToStart;
-            if (start <= 0) {
-                start = 0;
-            }
-            if (offset <= 0) {
-                offset = 0;
-            }
+            var start = Math.max((grid.recordings[h].timeToStart - timeSpace.timeAtPause + audioCtx.currentTime), 0);
+            var offset = Math.max((timeSpace.timeAtPause - grid.recordings[h].timeToStart), 0);
             source.start(start, offset);
             this.audioBufferSources.push(source);
             grid.recordings[h].audioBufferSource = source;
+            grid.tracks[grid.recordings[h].tracknumber].audioBufferSources.push(source);
         }
     }
 
@@ -59,17 +54,12 @@ export default class SoundController {
         const source = audioCtx.createBufferSource();
         source.buffer = recording.audioBuffer;
         source.connect(audioCtx.destination);
-        var start = recording.timeToStart - timeSpace.timeAtPause + audioCtx.currentTime;
-        var offset = timeSpace.timeAtPause - recording.timeToStart;
-        if (start <= 0) {
-            start = 0;
-        }
-        if (offset <= 0) {
-            offset = 0;
-        }
+        var start = Math.max((recording.timeToStart - timeSpace.timeAtPause + audioCtx.currentTime), 0);
+        var offset = Math.max((timeSpace.timeAtPause - recording.timeToStart), 0);
         source.start(start, offset);
         recording.audioBufferSource = source;
         this.audioBufferSources.push(source);
+        grid.tracks[recording.tracknumber].audioBufferSources.push(source);
     }
 
 }
