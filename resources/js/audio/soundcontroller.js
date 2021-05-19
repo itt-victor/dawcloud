@@ -29,14 +29,14 @@ export default class SoundController {
         for (var h = 0; h < grid.recordings.length; h++) {
             const source = audioCtx.createBufferSource();
             source.buffer = grid.recordings[h].audioBuffer;
-            source.connect(audioCtx.destination);
+            //source.connect(audioCtx.destination);            CUIDAO, AHORA EN VEZ DE CONECTARLO AL OUTPUTDIRECTAMENTE, LO CONECTAS AL GAIN NODE Y ESE YA VA CONECTADO A DESTINATION
             source.connect(grid.tracks[grid.recordings[h].tracknumber].gain)//gain node
             var start = Math.max((grid.recordings[h].timeToStart - timeSpace.timeAtPause + audioCtx.currentTime), 0);
             var offset = Math.max((timeSpace.timeAtPause - grid.recordings[h].timeToStart), 0);
             source.start(start, offset);
             this.audioBufferSources.push(source);
             grid.recordings[h].audioBufferSource = source;
-            grid.tracks[grid.recordings[h].tracknumber].audioBufferSources.push(source);
+            grid.tracks[grid.recordings[h].tracknumber].audioBufferSources.push(source);//igual esto no hace falta, el nodo ya está atado al darle play
         }
     }
 
@@ -63,7 +63,15 @@ export default class SoundController {
         source.start(start, offset);
         recording.audioBufferSource = source;
         this.audioBufferSources.push(source);
-        grid.tracks[recording.tracknumber].audioBufferSources.push(source);
+        grid.tracks[recording.tracknumber].audioBufferSources.push(source);//igual esto no hace falta, el nodo ya está atado al darle play
+    }
+
+    mute(gainNode) {
+        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);//hay que mirar como hacer toggle
+    }
+
+    solo(gainNode) {
+      //este es más complicated
     }
 
 }

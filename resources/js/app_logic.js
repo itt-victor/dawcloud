@@ -31,10 +31,6 @@ function selectTrack() {
 }
 selectTrack();
 
-//resalta grabación al clicar
-/*function recordingOnClick(){
-
-}*/
 
 //Cambiar nombre de pista  - NO ME CONVENCE NO ES NECESARIO
 /*function changeTrackName() {
@@ -190,6 +186,7 @@ function mute() {
     for (let a = 0; a < button.length; a++) {
         button[a].addEventListener('click', function () {
             this.classList.toggle('track_mute_on');
+            soundcontroller.mute(grid.tracks[a].gain);
             //pon aqui funcion de mutear, ponla en sound controller
         });
     }
@@ -202,11 +199,11 @@ function solo() {
     for (let a = 0; a < button.length; a++) {
         button[a].addEventListener('click', function () {
             this.classList.toggle('track_solo_on');
+            console.log(a);
         });
     }
 }
 solo();
-
 
 //elimina la grabación
 function removeRecording() {
@@ -214,6 +211,10 @@ function removeRecording() {
     for (var i = 0; i < grid.recordings.length; i++) {
         grid.recordings[i].canvas.addEventListener('click', function arrr(e) {
             recording = this.parent;
+            for (var i = 0; i < grid.recordings.length; i++) {
+                ui_draw.drawRecording(grid.recordings[i]);
+            }
+            ui_draw.clickAtRecording(recording);
             window.addEventListener('keyup', function (a) {
                 if (a.keyCode === 46) {
                     a.preventDefault();

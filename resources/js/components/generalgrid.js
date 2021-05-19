@@ -1,5 +1,6 @@
 import Track from './track';
 import { generateTrackNumbers } from '../utils';
+import { audioCtx } from '../app_core';
 var trackName;
 var recordings;
 
@@ -29,6 +30,7 @@ class Grid {
         for (var i = 0; i < howMany; i++) {
             trackName = generateTrackNumbers();
             window[trackName] = new Track(i);
+            window[trackName].gain.connect(audioCtx.destination);  //mira bien esto 
             grid.tracks.push(window[trackName]);
         }
     }
