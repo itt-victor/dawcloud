@@ -153,7 +153,7 @@ function setBpm() {
             if (o.keyCode === 13) {
                 o.preventDefault();
                 timeSpace.bpm = 120 / this.value;
-                bpmButton.innerHTML =  (120 / timeSpace.bpm) + '  bpm';
+                bpmButton.innerHTML = (120 / timeSpace.bpm) + '  bpm';
                 input.remove();
                 drawLayout();
             }
@@ -186,20 +186,23 @@ function mute() {
     for (let a = 0; a < button.length; a++) {
         button[a].addEventListener('click', function () {
             this.classList.toggle('track_mute_on');
-            soundcontroller.mute(grid.tracks[a].gain);
+            soundcontroller.mute(grid.tracks[a].gainNode);
             //pon aqui funcion de mutear, ponla en sound controller
         });
     }
 }
 mute();
 
-//solea la pista
+//solea la pista                    MIRATE ESTO
 function solo() {
     let button = document.getElementsByClassName('track_solo');
     for (let a = 0; a < button.length; a++) {
         button[a].addEventListener('click', function () {
             this.classList.toggle('track_solo_on');
-            console.log(a);
+            for (let u = 0; u < button.length; u++) {
+                soundcontroller.mute(grid.tracks[u].gainNode);
+            }
+            soundcontroller.solo(this.parent.gainNode);
         });
     }
 }
@@ -209,7 +212,7 @@ solo();
 function removeRecording() {
     let recording;
     for (var i = 0; i < grid.recordings.length; i++) {
-        grid.recordings[i].canvas.addEventListener('click', function arrr(e) {
+        grid.recordings[i].canvas.addEventListener('mouseup', function arrr(e) {
             recording = this.parent;
             for (var i = 0; i < grid.recordings.length; i++) {
                 ui_draw.drawRecording(grid.recordings[i]);

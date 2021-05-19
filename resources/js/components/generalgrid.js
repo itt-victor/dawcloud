@@ -30,7 +30,7 @@ class Grid {
         for (var i = 0; i < howMany; i++) {
             trackName = generateTrackNumbers();
             window[trackName] = new Track(i);
-            window[trackName].gain.connect(audioCtx.destination);  //mira bien esto 
+            window[trackName].gainNode.connect(audioCtx.destination);  //mira bien esto
             grid.tracks.push(window[trackName]);
         }
     }

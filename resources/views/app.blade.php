@@ -2,6 +2,7 @@
 @section('title', 'DawCloud')
 
 @section('content')
+<div class="loading"></div>
     <div id="app">
         <h1 id="page-title" class="h1 center">daw Cloud</h1>
 

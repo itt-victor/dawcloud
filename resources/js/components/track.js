@@ -12,8 +12,9 @@ export default class Track {
         this.trackDOMElement = document.getElementsByClassName('track')[this.tracknumber];
         this.recordings = [];
         this.audioBufferSources = [];
-        this.gain = audioCtx.createGain();
+        this.gainNode = audioCtx.createGain();
         this.soloButton = document.getElementById('solo_'+ this.tracknumber);
+        this.soloButton.parent = this;
         this.muteButton = document.getElementById('mute_'+ this.tracknumber);
         this.fader = document.getElementById('fader_'+ this.tracknumber);
     }

@@ -13,6 +13,23 @@ body {
     height: auto;
 }
 
+.loading {
+    position: absolute;
+    height: 50px;
+    width: 200px;
+    top: 380px;
+    left: 45%;
+    z-index: 50;
+    background-color: white;
+    color:rgb(122, 35, 50);
+    padding-top: 35px;
+    padding-bottom: 60px;
+    border-radius: 10px;
+    text-align: center;
+    /*display: none;
+    visibility: hidden;*/
+}
+
 #page-title {
     margin: auto;
     width: 200px;
@@ -239,4 +256,12 @@ div [data-selected] {
     display:none;
     visibility: hidden;
     position: absolute;
+}
+
+#mixer {
+    height: 400px;
+    width: 400px;
+    position: absolute; //relative;
+    background-color: grey;
+    left: 50px;
 }

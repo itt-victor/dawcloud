@@ -28,82 +28,101 @@ export const audioCtx = new (window.AudioContext ||
 //llamo al controlador de sonido
 export var soundcontroller = new SoundController(audioCtx);
 
-//prepara el grid
-grid.prepareCanvas();
-grid.addTracks(grid.howMany);
-//dibuja cursor inicial
-cursor.draw();
-//dibuja layout
-drawLayout();
-
-///////////////////////////////////
 
 
-
-//cargo temas para desarrollo
-setTimeout(function () { soundcontroller.loadSound("storage/sound/1.mp3", 0, 0) }, 0);
-setTimeout(function () { soundcontroller.loadSound("storage/sound/2.mp3", 1, 20) }, 400);
-//setTimeout(function () { soundcontroller.loadSound("storage/sound/3.mp3", 4, 0) }, 800);
-
-/////////////////////////////////////
-///////////recordSound//////////////
-////////////////////////////////////
-
-function loading(){
-// aquí plantea lo de la modal cargando
-
+function loading() {
+    //window.style.background = '#FFFFFF';
+    let ventana = document.querySelector('.loading');
+    ventana.innerHTML = "<p> Loading </p>";
+    setTimeout(function () {
+        ventana.style.display = 'none;';
+        ventana.style.visibility = 'hidden';
+    }, 3000)
 }
 loading();
 
+function tomaYaStart() {
+    //prepara el grid
+    grid.prepareCanvas();
+    grid.addTracks(grid.howMany);
+    //dibuja cursor inicial
+    cursor.draw();
+    //dibuja layout
+    drawLayout();
 
-function ePlay() {
-    cursor.play();
-    soundcontroller.playSound();
-    stop.disabled = false;
-    play.disabled = true;
-    soundStatuses.isPlaying = true;
-    soundStatuses.hasStopped = false;
-    return true;
-}
+    ///////////////////////////////////
 
-play.addEventListener('click', ePlay);
 
-//teclas play stop
-window.addEventListener('keyup', function (e) {
-    if (soundStatuses.hasStopped === true &&
-        soundStatuses.isPlaying === false) {
-        if (e.keyCode === 32) {
-            //e.preventDefault();
-            ePlay();
-        }
+
+    //cargo temas para desarrollo
+    setTimeout(function () { soundcontroller.loadSound("storage/sound/1.mp3", 0, 0) }, 0);
+    setTimeout(function () { soundcontroller.loadSound("storage/sound/2.mp3", 1, 20) }, 400);
+    //setTimeout(function () { soundcontroller.loadSound("storage/sound/3.mp3", 4, 0) }, 800);
+
+    /////////////////////////////////////
+    ///////////recordSound//////////////
+    ////////////////////////////////////
+
+    function loading() {
+        // aquí plantea lo de la modal cargando
 
     }
-    else {
-        if (e.keyCode === 32) {
-            e.preventDefault();
-            eStop();
-        }
+    loading();
+
+
+    function ePlay() {
+        cursor.play();
+        soundcontroller.playSound();
+        stop.disabled = false;
+        play.disabled = true;
+        soundStatuses.isPlaying = true;
+        soundStatuses.hasStopped = false;
+        return true;
     }
-});
 
-function eStop() {
-    soundcontroller.stopSound();
-    play.disabled = false;
-    stop.disabled = true;
-    soundStatuses.hasStopped = true;
-    soundStatuses.isPlaying = false;
+    play.addEventListener('click', ePlay);
+
+    //teclas play stop
+    window.addEventListener('keyup', function (e) {
+        if (soundStatuses.hasStopped === true &&
+            soundStatuses.isPlaying === false) {
+            if (e.keyCode === 32) {
+                //e.preventDefault();
+                ePlay();
+            }
+
+        }
+        else {
+            if (e.keyCode === 32) {
+                e.preventDefault();
+                eStop();
+            }
+        }
+    });
+
+    function eStop() {
+        soundcontroller.stopSound();
+        play.disabled = false;
+        stop.disabled = true;
+        soundStatuses.hasStopped = true;
+        soundStatuses.isPlaying = false;
+    }
+    stop.addEventListener('click', eStop);
+
+
+
+    /////////////
+    recordcontroller();
+    ////////////
+
+
+    window.onresize = function () {
+    }
+
+    window.onresize();
+
 }
-stop.addEventListener('click', eStop);
 
 
 
-/////////////
-//startApp();
-recordcontroller();
-////////////
-
-
-window.onresize = function () {
-}
-
-window.onresize();
+tomaYaStart()
