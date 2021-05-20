@@ -4,20 +4,21 @@ import { audioCtx } from '../app_core';
 var trackName;
 var recordings;
 
-class Grid {
+export class Grid {
 
     constructor() {
         this.howMany = document.getElementsByClassName('track').length;
         this.canvas = document.createElement('canvas');
-
+        //this.gainNode = audioCtx.createGain();
         this.tracks = [];
         this.recordings = [];
 
     }
 
-    prepareCanvas() {
+    prepareGrid() {
         let tracks = document.getElementById('tracks');
         tracks.appendChild(this.canvas);
+        //this.gainNode.connect(audioCtx.destination);
         this.canvas.style.visibility = 'hidden';
         this.canvas.width = 1000;
         //this.canvas.style.position = 'absolute';

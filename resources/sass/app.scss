@@ -258,4 +258,11 @@ div [data-selected] {
     position: absolute; //relative;
     background-color: grey;
     left: 50px;
+    display: flex;
+}
+
+.fader {
+  height: 250px;
+  width: 40px;
+  border: solid 2px rgb(122, 35, 50);
 }

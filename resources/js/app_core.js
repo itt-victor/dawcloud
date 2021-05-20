@@ -6,6 +6,7 @@ require('./ui/ui_dragRecordings');
 require('./ui/ui_layout');
 require('./loadproject');
 
+import { Grid } from './components/generalgrid';
 import { grid } from './components/generalgrid';
 import drawLayout from './ui/ui_layout'
 import { cursor } from './components/cursor';
@@ -29,7 +30,6 @@ export const audioCtx = new (window.AudioContext ||
 export var soundcontroller = new SoundController(audioCtx);
 
 
-
 function loading() {
     //window.style.background = '#FFFFFF';
     let ventana = document.querySelector('.loading');
@@ -40,10 +40,9 @@ function loading() {
     }, 3000)
 }
 loading();
-
 function tomaYaStart() {
     //prepara el grid
-    grid.prepareCanvas();
+    grid.prepareGrid();
     grid.addTracks(grid.howMany);
     //dibuja cursor inicial
     cursor.draw();
