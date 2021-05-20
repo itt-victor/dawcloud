@@ -34,10 +34,12 @@ function loading() {
     //window.style.background = '#FFFFFF';
     let ventana = document.querySelector('.loading');
     ventana.innerHTML = "<p> Loading </p>";
+    document.body.style.background = 'black'
     setTimeout(function () {
         ventana.style.display = 'none;';
         ventana.style.visibility = 'hidden';
-    }, 3000)
+        document.body.style.background = '#dbf2fd'
+    }, 5000);
 }
 loading();
 function tomaYaStart() {
@@ -56,7 +58,7 @@ function tomaYaStart() {
     //cargo temas para desarrollo
     setTimeout(function () { soundcontroller.loadSound("storage/sound/1.mp3", 0, 0) }, 0);
     setTimeout(function () { soundcontroller.loadSound("storage/sound/2.mp3", 1, 20) }, 400);
-    //setTimeout(function () { soundcontroller.loadSound("storage/sound/3.mp3", 4, 0) }, 800);
+    setTimeout(function () { soundcontroller.loadSound("storage/sound/4.wav", 4, 0) }, 800);
 
     /////////////////////////////////////
     ///////////recordSound//////////////

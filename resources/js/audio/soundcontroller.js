@@ -69,25 +69,13 @@ export default class SoundController {
     }
 
     mute(gainNode) {
-        if (isMuted === false) {
-            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-            isMuted = true;
-        }
-        else {
-            gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
-            isMuted = false;
-        }
-    }
-    //mirate esta mierda
-    solo(gainNode) {
-        if (isSolo === false) {
-            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-        }
-        isMuted = true;
+        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
     }
 
-    //gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
-    //isMuted = false;
+    //mirate esta mierda
+    solo(gainNode) {
+        gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+    }
 
 
 

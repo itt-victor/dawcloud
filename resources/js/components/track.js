@@ -16,6 +16,9 @@ export default class Track {
         this.soloButton = document.getElementById('solo_'+ this.tracknumber);
         this.soloButton.parent = this;
         this.muteButton = document.getElementById('mute_'+ this.tracknumber);
+        this.muteButton.parent = this;
+        this.soloButton.toggle = false;
+        this.muteButton.toggle = false;
         this.fader = document.getElementById('fader_'+ this.tracknumber);
     }
     addRecord(timeToStart, audioBuffer) {

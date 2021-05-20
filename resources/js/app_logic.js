@@ -186,8 +186,13 @@ function mute() {
     for (let a = 0; a < button.length; a++) {
         button[a].addEventListener('click', function () {
             this.classList.toggle('track_mute_on');
-            soundcontroller.mute(grid.tracks[a].gainNode);
-            //pon aqui funcion de mutear, ponla en sound controller
+            if (this.parent.muteButton.toggle === false) {
+                soundcontroller.mute(this.parent.gainNode);
+                this.parent.muteButton.toggle = true;
+            } else {
+                soundcontroller.solo(this.parent.gainNode);
+                this.parent.muteButton.toggle = false;
+            }
         });
     }
 }
@@ -199,10 +204,25 @@ function solo() {
     for (let a = 0; a < button.length; a++) {
         button[a].addEventListener('click', function () {
             this.classList.toggle('track_solo_on');
-            for (let u = 0; u < button.length; u++) {
-                soundcontroller.mute(grid.tracks[u].gainNode);
+            if (this.parent.soloButton.toggle === false) {
+                for (let b = 0; b < button.length; b++) {
+                    soundcontroller.mute(button[b].parent.gainNode);
+                }
+                soundcontroller.solo(this.parent.gainNode);
+            } else {
+                for (let b = 0; b < button.length; b++) {
+                    soundcontroller.solo(button[b].parent.gainNode);
+                }
+                //soundcontroller.solo(this.parent.gainNode);
             }
-            soundcontroller.solo(this.parent.gainNode);
+
+            /*    if (this.parent.soloButton.toggle === false) {
+                    soundcontroller.solo(this.parent.gainNode);
+                    this.parent.soloButton.toggle = true;
+                } else {
+                    soundcontroller.solo(this.parent.gainNode);
+                    this.parent.soloButton.toggle = false;
+                }*/
         });
     }
 }

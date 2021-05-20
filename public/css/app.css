@@ -11079,4 +11079,11 @@ div [data-selected] {
   position: absolute;
   background-color: grey;
   left: 50px;
+  display: flex;
+}
+
+.fader {
+  height: 250px;
+  width: 40px;
+  border: solid 2px #7a2332;
 }

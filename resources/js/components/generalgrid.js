@@ -21,7 +21,6 @@ export class Grid {
         //this.gainNode.connect(audioCtx.destination);
         this.canvas.style.visibility = 'hidden';
         this.canvas.width = 1000;
-        //this.canvas.style.position = 'absolute';
         this.canvas.height = 70 * this.howMany;
         //default la 1a pista
         jQuery(".track:first").attr("data-selected", '');
