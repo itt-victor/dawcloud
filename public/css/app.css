@@ -10866,11 +10866,11 @@ body {
 
 .buttonpad {
   position: relative;
-  left: 25%;
+  left: 5%;
   margin-top: 10px;
   margin-bottom: 40px;
   display: flex;
-  width: 1000px;
+  width: 1600px;
   justify-content: space-between;
   height: 50px;
 }
@@ -10922,7 +10922,6 @@ body {
 }
 
 #time-layout {
-  /*left:160px;*/
   width: 4000px;
   height: 30px;
   margin: auto;
@@ -10939,8 +10938,6 @@ body {
 
 #cursor {
   position: absolute;
-  /*width: 1000px;
-  height: 420px;*/
 }
 
 .track_name {
@@ -10951,11 +10948,9 @@ body {
 }
 
 .track_names {
-  /*height: 320px;*/
   width: 150px;
   position: absolute;
-  left: 470px;
-  /*top: 182px;*/
+  left: 570px;
 }
 
 #track_name_0 {
@@ -11011,14 +11006,12 @@ body {
 .dummy-block {
   height: 30px;
   width: 150px;
-  /*background-color: grey;*/
 }
 
 #tracks {
   width: 1000px;
   height: 608px;
-  /*578px;*/
-  left: 160px;
+  left: 260px;
   position: relative;
   margin: auto;
   text-align: left;
