@@ -91,4 +91,13 @@ export default class SoundController {
 
 
 
+    leftCut() {
+        //se aumenta offset por el dith dado source.start(start, offset + cantidad recortada);
+    }
+
+    rightCut() {
+        //se aumenta duración con source.start(start, offset, source.duration - cantidad recortada);
+    }
+
+
 }
