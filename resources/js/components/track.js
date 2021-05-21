@@ -2,7 +2,7 @@
 import Recording from './recording';
 import { generateRecordingNumbers } from '../utils';
 import { ui_draw } from '../ui/ui_draw';
-import { grid } from './/generalgrid';
+import { grid } from './generalgrid';
 import { audioCtx } from '../app_core';
 var rcdName;
 

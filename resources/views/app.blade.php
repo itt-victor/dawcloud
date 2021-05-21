@@ -25,8 +25,6 @@
         </div>
 
         <section id="mixer" class="mixer">
-            <div class="fader" id="master_fader">
-            </div>
             @include('layouts.fader', ['number'=> '0'])
             @include('layouts.fader', ['number'=> '1'])
             @include('layouts.fader', ['number'=> '2'])
@@ -35,6 +33,7 @@
             @include('layouts.fader', ['number'=> '5'])
             @include('layouts.fader', ['number'=> '6'])
             @include('layouts.fader', ['number'=> '7'])
+            <div class="fader" id="master_fader"><a class="fader-knob"></a></div>
         </section>
 
         <section class="sound-clips">

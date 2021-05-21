@@ -5,6 +5,7 @@ require('./components/timeLayout');
 require('./ui/ui_dragRecordings');
 require('./ui/ui_layout');
 require('./loadproject');
+require('./components/mixer');
 
 import { Grid } from './components/generalgrid';
 import { grid } from './components/generalgrid';
@@ -58,7 +59,7 @@ function tomaYaStart() {
     //cargo temas para desarrollo
     setTimeout(function () { soundcontroller.loadSound("storage/sound/1.mp3", 0, 0) }, 0);
     setTimeout(function () { soundcontroller.loadSound("storage/sound/2.mp3", 1, 20) }, 400);
-    setTimeout(function () { soundcontroller.loadSound("storage/sound/4.wav", 4, 0) }, 800);
+    //setTimeout(function () { soundcontroller.loadSound("storage/sound/4.wav", 4, 0) }, 800);
 
     /////////////////////////////////////
     ///////////recordSound//////////////
