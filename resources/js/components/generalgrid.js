@@ -9,7 +9,7 @@ export class Grid {
     constructor() {
         this.howMany = document.getElementsByClassName('track').length;
         this.canvas = document.createElement('canvas');
-        //this.gainNode = audioCtx.createGain();
+        this.gainNode;
         this.tracks = [];
         this.recordings = [];
 
@@ -18,7 +18,8 @@ export class Grid {
     prepareGrid() {
         let tracks = document.getElementById('tracks');
         tracks.appendChild(this.canvas);
-        //this.gainNode.connect(audioCtx.destination);
+        this.gainNode = audioCtx.createGain();
+        this.gainNode.connect(audioCtx.destination);
         this.canvas.style.visibility = 'hidden';
         this.canvas.width = 1000;
         this.canvas.height = 70 * this.howMany;
@@ -30,7 +31,7 @@ export class Grid {
         for (var i = 0; i < howMany; i++) {
             trackName = generateTrackNumbers();
             window[trackName] = new Track(i);
-            window[trackName].gainNode.connect(audioCtx.destination);  //mira bien esto
+            window[trackName].gainNode.connect(this.gainNode);
             grid.tracks.push(window[trackName]);
         }
     }
