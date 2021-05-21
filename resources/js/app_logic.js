@@ -228,21 +228,22 @@ function solo() {
 }
 solo();
 
-//elimina la grabación                   MÍRATE ESTO, PORQUE AL LLAMARSE UNA SOLA VEZ PETA
+//elimina la grabación
 function removeRecording() {
     let recording;
     for (var i = 0; i < grid.recordings.length; i++) {
         grid.recordings[i].canvas.addEventListener('mouseup', function arrr(e) {
             recording = this.parent;
             for (var i = 0; i < grid.recordings.length; i++) {
-                ui_draw.drawRecording(grid.recordings[i]);
+                console.log(grid.recordings[i]);
+                if ( grid.recordings[i].audioBuffer != undefined ) { ui_draw.drawRecording(grid.recordings[i]); }
             }
-            ui_draw.clickAtRecording(recording);
+            if (recording.audioBuffer != undefined) { ui_draw.clickAtRecording(recording); }
             window.addEventListener('keyup', function (a) {
                 if (a.keyCode === 46) {
                     a.preventDefault();
                     if (!soundStatuses.hasStopped) { soundcontroller.stopSingleSound(recording); }
-                    if (recording != undefined) { recording.deleteRecording(); }
+                    if (recording.audioBuffer != undefined) { recording.deleteRecording(); }
                     e.target.removeEventListener('click', arrr);
                 }
             })
