@@ -235,7 +235,6 @@ function removeRecording() {
         grid.recordings[i].canvas.addEventListener('mouseup', function arrr(e) {
             recording = this.parent;
             for (var i = 0; i < grid.recordings.length; i++) {
-                console.log(grid.recordings[i]);
                 if ( grid.recordings[i].audioBuffer != undefined ) { ui_draw.drawRecording(grid.recordings[i]); }
             }
             if (recording.audioBuffer != undefined) { ui_draw.clickAtRecording(recording); }

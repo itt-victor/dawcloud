@@ -6,7 +6,7 @@ import { timeSpace } from '../timeSpace';
 export function dragRecording() {
     var ctx;
     var recording;
-    var drag = false;
+    var drag = [false, false, false, false, false, false, false, false];
     var delta = new Object();
     var X;
     var Y;
@@ -31,7 +31,7 @@ export function dragRecording() {
             var mousePos = onMousePos(grid.canvas, evt);
             if (mousePos.y < widths.maxHeight &&
                 mousePos.y > widths.minHeight){
-            drag = true;
+            drag[recording.tracknumber] = true;
             delta.x = X - mousePos.x;
             delta.y = Y - mousePos.y;
             }
@@ -43,19 +43,26 @@ export function dragRecording() {
             X = recording.timeToStart / timeSpace.zoom;
             Y = 0;
             var mousePos = onMousePos(grid.canvas, evt);
-            if (drag) {
-                X = mousePos.x + delta.x, Y = mousePos.y + delta.y
+            let heights = selectTrackWidth(recording.tracknumber);
+            if (drag[recording.tracknumber]) {
+                X = mousePos.x + delta.x, Y = mousePos.y
                 if (X < 0) { X = 0 };
+                if (Y < heights.minHeight || Y > heights.maxHeight)
+                   { drag[recording.tracknumber]=false;}
+
                 this.style.left = X + 'px';
                 recording.timeToStart = X * timeSpace.zoom;
                 if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
                     soundcontroller.playWhileDragging(this.parent);
                 }
+                console.log(mousePos.y);
+
             }
         }, false);
 
         grid.recordings[i].canvas.addEventListener("mouseup", function (evt) {
-            drag = false;
+            recording = this.parent;
+            drag[recording.tracknumber] = false;
         }, false);
     }
 }
