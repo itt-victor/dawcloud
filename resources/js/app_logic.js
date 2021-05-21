@@ -3,7 +3,6 @@ import { grid } from './components/generalgrid';
 import { timeSpace } from './timeSpace';
 import { ui_draw } from './ui/ui_draw';
 import drawLayout from './ui/ui_layout';
-import { interval } from './components/cursor';
 import { cursor } from './components/cursor';
 import { soundStatuses } from './app_core';
 
