@@ -186,49 +186,50 @@ function mute() {
     for (let a = 0; a < button.length; a++) {
         button[a].addEventListener('click', function () {
             this.classList.toggle('track_mute_on');
-            if (this.parent.muteButton.toggle === false) {
+            if (this.toggle === false) {
                 soundcontroller.mute(this.parent.gainNode);
-                this.parent.muteButton.toggle = true;
+                this.toggle = true;
             } else {
                 soundcontroller.solo(this.parent.gainNode);
-                this.parent.muteButton.toggle = false;
+                this.toggle = false;
             }
         });
     }
 }
 mute();
 
-//solea la pista                    MIRATE ESTO
+//solea la pista
 function solo() {
     let button = document.getElementsByClassName('track_solo');
     for (let a = 0; a < button.length; a++) {
         button[a].addEventListener('click', function () {
             this.classList.toggle('track_solo_on');
-            if (this.parent.soloButton.toggle === false) {
+            for (let b = 0; b < button.length; b++) {
+                if (button[b].toggle === false){
+                    soundcontroller.mute(button[b].parent.gainNode);
+
+                } else {
+                    soundcontroller.solo(button[b].parent.gainNode);
+                }
+            }   //ACABA DE PERFILAR ESTo
+            if (this.toggle === false) {
                 for (let b = 0; b < button.length; b++) {
                     soundcontroller.mute(button[b].parent.gainNode);
                 }
                 soundcontroller.solo(this.parent.gainNode);
+                this.toggle = true;
             } else {
                 for (let b = 0; b < button.length; b++) {
                     soundcontroller.solo(button[b].parent.gainNode);
                 }
-                //soundcontroller.solo(this.parent.gainNode);
+                this.toggle = false;
             }
-
-            /*    if (this.parent.soloButton.toggle === false) {
-                    soundcontroller.solo(this.parent.gainNode);
-                    this.parent.soloButton.toggle = true;
-                } else {
-                    soundcontroller.solo(this.parent.gainNode);
-                    this.parent.soloButton.toggle = false;
-                }*/
         });
     }
 }
 solo();
 
-//elimina la grabación
+//elimina la grabación                   MÍRATE ESTO, PORQUE AL LLAMARSE UNA SOLA VEZ PETA
 function removeRecording() {
     let recording;
     for (var i = 0; i < grid.recordings.length; i++) {
@@ -243,7 +244,7 @@ function removeRecording() {
                     a.preventDefault();
                     if (!soundStatuses.hasStopped) { soundcontroller.stopSingleSound(recording); }
                     if (recording != undefined) { recording.deleteRecording(); }
-                    e.target.removeEventListener('click', arrr)
+                    e.target.removeEventListener('click', arrr);
                 }
             })
         });
