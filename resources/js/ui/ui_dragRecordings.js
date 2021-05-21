@@ -55,8 +55,6 @@ export function dragRecording() {
                 if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
                     soundcontroller.playWhileDragging(this.parent);
                 }
-                console.log(mousePos.y);
-
             }
         }, false);
 

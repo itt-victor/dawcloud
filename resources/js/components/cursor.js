@@ -9,6 +9,7 @@ let zoomOut = document.getElementById("zoomout");
 const layout = document.querySelector('#layout');
 export var cursor = {
     canvas: document.getElementById("cursor"),
+    interval,
     draw: function () {
         this.canvas.width = 3;
         this.canvas.height = 70 * grid.howMany;
@@ -37,6 +38,8 @@ export var cursor = {
             clearInterval(interval);
         });
     },
+
+
 
     stop: function () {
         clearInterval(interval);

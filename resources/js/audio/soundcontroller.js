@@ -74,7 +74,7 @@ export default class SoundController {
 
     //mirate esta mierda
     solo(gainNode) {
-        gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+        gainNode.gain.setValueAtTime(gainNode.gainValue, audioCtx.currentTime);
     }
 
 

@@ -264,7 +264,7 @@ div [data-selected] {
 }
 
 .fader {
-    height: 300px;
+    height: 310px;
     width: 45px;
     border: solid 1.5px rgb(122, 35, 50);
     z-index: 1;
@@ -276,7 +276,7 @@ div [data-selected] {
     margin-left: 18px;
     top: 20px;
     width: 5px;
-    height: 260px;
+    height: 261px;
     background-color: #595858;
     z-index: 2;
 }
@@ -285,10 +285,11 @@ div [data-selected] {
     position: absolute;
     margin-left: 9px;
     top: 20px;
-    width: 25px;
-    height: 25px;
+    width: 20px;
+    height: 40px;
     background-image: url(/dawcloud/public/storage/icons/fader.svg);
-    //background-repeat: no-repeat;
+    background-repeat: no-repeat;
+    background-size: cover;
     z-index: 3;
 }
 
@@ -298,4 +299,17 @@ div [data-selected] {
 
 #fader_0 {
     border-top-left-radius: 7px;
+}
+
+.trcknr {
+    position: absolute;
+    top: 285px;
+    color: #7a2332;
+    font-size: 13px;
+    font-weight: 600;
+    margin-left: 16px;
+}
+
+.mxrmstr {
+    margin-left: 0px!important;
 }

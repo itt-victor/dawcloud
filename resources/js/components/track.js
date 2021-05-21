@@ -13,6 +13,7 @@ export default class Track {
         this.recordings = [];
         this.audioBufferSources = [];
         this.gainNode = audioCtx.createGain();
+        this.gainNode.gainValue = 1;
         this.soloButton = document.getElementById('solo_'+ this.tracknumber);
         this.soloButton.parent = this;
         this.muteButton = document.getElementById('mute_'+ this.tracknumber);

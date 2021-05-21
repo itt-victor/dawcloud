@@ -11075,15 +11075,62 @@ div [data-selected] {
 
 #mixer {
   height: 400px;
-  width: 400px;
+  width: 405px;
+  border-radius: 7px;
   position: absolute;
   background-color: grey;
-  left: 50px;
+  top: 300px;
+  left: 100px;
   display: flex;
 }
 
 .fader {
-  height: 250px;
-  width: 40px;
-  border: solid 2px #7a2332;
+  height: 310px;
+  width: 45px;
+  border: solid 1.5px #7a2332;
+  z-index: 1;
+}
+
+.fader::before {
+  content: "";
+  position: absolute;
+  margin-left: 18px;
+  top: 20px;
+  width: 5px;
+  height: 261px;
+  background-color: #595858;
+  z-index: 2;
+}
+
+.fader-knob {
+  position: absolute;
+  margin-left: 9px;
+  top: 20px;
+  width: 20px;
+  height: 40px;
+  background-image: url(/dawcloud/public/storage/icons/fader.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: 3;
+}
+
+#master_fader {
+  border-top-right-radius: 7px;
+}
+
+#fader_0 {
+  border-top-left-radius: 7px;
+}
+
+.trcknr {
+  position: absolute;
+  top: 285px;
+  color: #7a2332;
+  font-size: 13px;
+  font-weight: 600;
+  margin-left: 16px;
+}
+
+.mxrmstr {
+  margin-left: 0px !important;
 }

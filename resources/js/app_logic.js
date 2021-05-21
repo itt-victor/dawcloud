@@ -94,6 +94,7 @@ function zoom() {
         }
         drawLayout();
         if (soundStatuses.isPlaying === true) {
+            //cursor.stop();
             cursor.play();
         }
     }
@@ -104,10 +105,9 @@ function zoom() {
         }
         drawLayout();
         if (soundStatuses.isPlaying === true) {
-            /*soundcontroller.stopSound();
-            soundcontroller.playSound();*/
-            cursor.stop();
+            //cursor.stop();
             cursor.play();
+
         }
     }
     zoomIn.addEventListener('click', zIn);
@@ -204,13 +204,13 @@ function solo() {
         button[a].addEventListener('click', function () {
             this.classList.toggle('track_solo_on');
             for (let b = 0; b < button.length; b++) {
-                if (button[b].toggle === false){
+                if (button[b].toggle === false) {
                     soundcontroller.mute(button[b].parent.gainNode);
 
                 } else {
                     soundcontroller.solo(button[b].parent.gainNode);
                 }
-            }   //ACABA DE PERFILAR ESTo
+            }
             if (this.toggle === false) {
                 for (let b = 0; b < button.length; b++) {
                     soundcontroller.mute(button[b].parent.gainNode);
@@ -219,7 +219,9 @@ function solo() {
                 this.toggle = true;
             } else {
                 for (let b = 0; b < button.length; b++) {
-                    soundcontroller.solo(button[b].parent.gainNode);
+                    if (!button[b].parent.muteButton.toggle) {
+                        soundcontroller.solo(button[b].parent.gainNode);
+                    }
                 }
                 this.toggle = false;
             }
@@ -235,7 +237,7 @@ function removeRecording() {
         grid.recordings[i].canvas.addEventListener('mouseup', function arrr(e) {
             recording = this.parent;
             for (var i = 0; i < grid.recordings.length; i++) {
-                if ( grid.recordings[i].audioBuffer != undefined ) { ui_draw.drawRecording(grid.recordings[i]); }
+                if (grid.recordings[i].audioBuffer != undefined) { ui_draw.drawRecording(grid.recordings[i]); }
             }
             if (recording.audioBuffer != undefined) { ui_draw.clickAtRecording(recording); }
             window.addEventListener('keyup', function (a) {
@@ -245,7 +247,7 @@ function removeRecording() {
                     if (recording.audioBuffer != undefined) { recording.deleteRecording(); }
                     e.target.removeEventListener('click', arrr);
                 }
-            })
+            });
         });
     }
 }

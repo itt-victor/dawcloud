@@ -25,15 +25,15 @@
         </div>
 
         <section id="mixer" class="mixer">
-            @include('layouts.fader', ['number'=> '0'])
-            @include('layouts.fader', ['number'=> '1'])
-            @include('layouts.fader', ['number'=> '2'])
-            @include('layouts.fader', ['number'=> '3'])
-            @include('layouts.fader', ['number'=> '4'])
-            @include('layouts.fader', ['number'=> '5'])
-            @include('layouts.fader', ['number'=> '6'])
-            @include('layouts.fader', ['number'=> '7'])
-            <div class="fader" id="master_fader"><a class="fader-knob"></a></div>
+            @include('layouts.fader', ['number'=> '0', 'number2'=>'1'])
+            @include('layouts.fader', ['number'=> '1', 'number2'=>'2'])
+            @include('layouts.fader', ['number'=> '2', 'number2'=>'3'])
+            @include('layouts.fader', ['number'=> '3', 'number2'=>'4'])
+            @include('layouts.fader', ['number'=> '4', 'number2'=>'5'])
+            @include('layouts.fader', ['number'=> '5', 'number2'=>'6'])
+            @include('layouts.fader', ['number'=> '6', 'number2'=>'7'])
+            @include('layouts.fader', ['number'=> '7', 'number2'=>'8'])
+            <div class="fader" id="master_fader"><a class="fader-knob" data-y="20"></a><div class="trcknr mxrmstr">Master</div></div>
         </section>
 
         <section class="sound-clips">
