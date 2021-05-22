@@ -6,12 +6,12 @@ var recordings;
 
 export class Grid {
 
-    constructor() {
+    constructor( tracks, recordings) {
         this.howMany = document.getElementsByClassName('track').length;
         this.canvas = document.createElement('canvas');
         this.gainNode;
-        this.tracks = [];
-        this.recordings = [];
+        this.tracks = tracks;
+        this.recordings = recordings;
 
     }
 
@@ -30,7 +30,7 @@ export class Grid {
     addTracks(howMany) {
         for (var i = 0; i < howMany; i++) {
             trackName = generateTrackNumbers();
-            window[trackName] = new Track(i);
+            window[trackName] = new Track(i, 1);
             window[trackName].gainNode.connect(this.gainNode);
             grid.tracks.push(window[trackName]);
         }
@@ -46,4 +46,4 @@ export class Grid {
     }
 }
 //La creo
-export var grid = new Grid();
+export var grid = new Grid([], []);

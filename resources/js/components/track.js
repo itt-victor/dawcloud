@@ -7,13 +7,13 @@ import { audioCtx } from '../app_core';
 var rcdName;
 
 export default class Track {
-    constructor(tracknumber) {
+    constructor(tracknumber, gainValue) {
         this.tracknumber = tracknumber;
         this.trackDOMElement = document.getElementsByClassName('track')[this.tracknumber];
         this.recordings = [];
         this.audioBufferSources = [];
         this.gainNode = audioCtx.createGain();
-        this.gainNode.gainValue = 1;
+        this.gainNode.gainValue = gainValue;
         this.soloButton = document.getElementById('solo_'+ this.tracknumber);
         this.soloButton.parent = this;
         this.muteButton = document.getElementById('mute_'+ this.tracknumber);
