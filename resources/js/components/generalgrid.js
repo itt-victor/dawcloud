@@ -30,7 +30,7 @@ export class Grid {
     addTracks(howMany) {
         for (var i = 0; i < howMany; i++) {
             trackName = generateTrackNumbers();
-            window[trackName] = new Track(i, 1);
+            window[trackName] = new Track(i, 1); //ese 1 es por el gainNode, mirateo de cara a guardar project
             window[trackName].gainNode.connect(this.gainNode);
             grid.tracks.push(window[trackName]);
         }

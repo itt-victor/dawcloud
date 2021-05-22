@@ -85,9 +85,7 @@ function setMasterGain() {
         };
     }
     fader.firstChild.addEventListener("mousedown", function (evt) {
-        //fader = this.parentNode;
         Y = this.getAttribute('data-y')
-        //gain = fader.parent.gainNode;
         var mousePos = onMousePos(fader, evt);
         if (mousePos.y <= 260 &&
             mousePos.y >= 20) {
@@ -98,8 +96,6 @@ function setMasterGain() {
     }, false);
 
     fader.firstChild.addEventListener("mousemove", function a(evt) {
-        //fader = this.parentNode;
-        //  gain = this.parent.gainNode;
         var mousePos = onMousePos(fader, evt);
         if (drag) {
             X = mousePos.x + delta.x, Y = mousePos.y + delta.y

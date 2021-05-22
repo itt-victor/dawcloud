@@ -32,7 +32,6 @@ export var soundcontroller = new SoundController(audioCtx);
 
 
 function loading() {
-    //window.style.background = '#FFFFFF';
     let ventana = document.querySelector('.loading');
     ventana.innerHTML = "<p> Loading </p>";
     document.body.style.background = 'black'
@@ -43,6 +42,7 @@ function loading() {
     }, 5000);
 }
 loading();
+
 function tomaYaStart() {
     //prepara el grid
     grid.prepareGrid();
@@ -64,13 +64,6 @@ function tomaYaStart() {
     /////////////////////////////////////
     ///////////recordSound//////////////
     ////////////////////////////////////
-
-    function loading() {
-        // aquí plantea lo de la modal cargando
-
-    }
-    loading();
-
 
     function ePlay() {
         cursor.play();
