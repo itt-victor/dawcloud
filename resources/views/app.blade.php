@@ -18,6 +18,18 @@
                 <button id="bpm_button" class="btn btn-outline-info btn-bpm"></button>
             </div>
             <button id="load_sound" class="btn btn-outline-info">Load sound</button>
+            <div>
+                <button id="load_project" class="btn btn-outline-info">Load project</button>
+                <div id="load_dialogue">
+                    <p>Enter project to load:</p>
+                    <input id="project_to_load" type="text">
+                </div>
+                <button id="save_project" class="btn btn-outline-info">Save project</button>
+                <div id="save_dialogue">
+                    <p>Enter a name for your new project:</p>
+                    <input id="project_name" type="text">
+                </div>
+            </div>
             <div class="zoom-btn">
                 <button id="zoomin" type="button" class="btn btn-outline-info">+</button>
                 <button id="zoomout" type="button" class="btn btn-outline-info">-</button>
@@ -63,7 +75,6 @@
                 @include('layouts.track_canvas', ['number'=>'7'])
             </div>
         </section>
-        <div class="modal-loading" id="modal-loading"></div>
     </div>
 
 @endsection

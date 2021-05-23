@@ -23,8 +23,9 @@ export function dragRecording() {
     for (var i = 0; i < grid.recordings.length; i++) {
 
         grid.recordings[i].canvas.addEventListener("mousedown", function (evt) {
-            ctx = this.parent.canvasCtx;
-            recording = this.parent;
+            recording = grid.recordings[this.id.charAt(10)];
+            ctx = recording.canvasCtx;
+
             X = recording.timeToStart / timeSpace.zoom;
             Y = 0;
             widths = selectTrackWidth(recording.tracknumber);
@@ -38,8 +39,8 @@ export function dragRecording() {
         }, false);
 
         grid.recordings[i].canvas.addEventListener("mousemove", function a(evt) {
-            ctx = this.parent.canvasCtx;
-            recording = this.parent;
+            recording = grid.recordings[this.id.charAt(10)];
+            ctx = recording.canvasCtx;
             X = recording.timeToStart / timeSpace.zoom;
             Y = 0;
             var mousePos = onMousePos(grid.canvas, evt);
@@ -59,7 +60,7 @@ export function dragRecording() {
         }, false);
 
         grid.recordings[i].canvas.addEventListener("mouseup", function (evt) {
-            recording = this.parent;
+            recording = grid.recordings[this.id.charAt(10)];
             drag[recording.tracknumber] = false;
         }, false);
     }

@@ -21,6 +21,7 @@ export default class Track {
         this.soloButton.toggle = false;
         this.muteButton.toggle = false;
         this.fader = document.getElementById('fader_'+ this.tracknumber);
+        this.fader.Y = 20;
         this.fader.parent = this;
     }
     addRecord(timeToStart, audioBuffer) {

@@ -20,6 +20,17 @@ use Illuminate\Http\Request;
 
 //Route::get('/', HomeController::class)->name('home');
 
-Route::get('/', AppController::class)->name('app');
+Route::get('/', [AppController::class, 'app'])->name('app');
+
+Route::post('/savesound', [AppController::class, 'saveSound'])->name('saveSound');
+
+Route::post('/saveproject', [AppController::class, 'saveProject'])->name('saveProject');
+
+Route::get('/loadproject/{project}', [AppController::class, 'loadProject'])->name('loadProject');
+
+Route::get('/loadproject/{project}', [AppController::class, 'loadProject'])->name('loadProject');
+
+Route::get('/loadsound/{project}/{recording}', [AppController::class, 'loadSound'])->name('loadSound');
+
 
 

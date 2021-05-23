@@ -23,6 +23,7 @@
     },
     "dependencies": {
         "@popperjs/core": "^2.9.2",
+        "audiobuffer-to-wav": "^1.0.0",
         "chokidar": "^3.5.1",
         "webpack": "^5.37.0"
     }

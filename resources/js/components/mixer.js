@@ -24,7 +24,7 @@ function setChannelGain() {
         grid.tracks[i].fader.firstChild.nextSibling.addEventListener("mousedown", function (evt) {
             fader = this.parentNode;
             trckNr = fader.id.charAt(6);
-            Y = this.getAttribute('data-y')
+            Y = fader.Y;
             gain = grid.tracks[trckNr].gainNode;
             var mousePos = onMousePos(fader, evt);
             if (mousePos.y <= 260 &&
@@ -46,7 +46,7 @@ function setChannelGain() {
                 X = mousePos.x + delta.x, Y = mousePos.y + delta.y
                 if (Y < 20) { Y = 20 };
                 if (Y > 260) { Y = 260 };
-                this.setAttribute('data-y', Y);
+                fader.Y = Y;
                 this.style.top = Y + 'px';
                 gainValue = Math.log10(1 / ((Y + 5) / 260));
                 track.gainNode.gainValue = gainValue;

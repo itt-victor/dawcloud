@@ -47,7 +47,7 @@ body {
     display: flex;
     width: 1600px;
     justify-content: space-between;
-    height: 50px;
+    height: 45px;
 }
 
 .btn {
@@ -89,6 +89,10 @@ body {
 
 .zoom-btn {
     width: 200px;
+}
+
+#zoomin, #zoomout {
+    height: 45px;
 }
 
 .sound-clips {
@@ -246,12 +250,6 @@ div [data-selected] {
     color: red;
 }
 
-#modal-loading {
-    display:none;
-    visibility: hidden;
-    position: absolute;
-}
-
 #mixer {
     height: 400px;
     width: 405px;
@@ -308,8 +306,53 @@ div [data-selected] {
     font-size: 13px;
     font-weight: 600;
     margin-left: 16px;
+    z-index: 50;
 }
 
 .mxrmstr {
     margin-left: 0px!important;
+}
+
+#save_dialogue {
+    position: absolute;
+    top: 300px;
+    left: 45%;
+    width: 350px;
+    height: 200px;
+    display: none;
+    visibility: hidden;
+    z-index: 60;
+    background-color: white;
+    text-align: center;
+}
+
+#save_dialogue {
+    position: absolute;
+    top: 300px;
+    left: 45%;
+    width: 350px;
+    height: 200px;
+    display: none;
+    visibility: hidden;
+    z-index: 60;
+    background-color: white;
+    text-align: center;
+    height: 100%;
+}
+
+#load_dialogue {
+    position: absolute;
+    top: 300px;
+    left: 45%;
+    width: 350px;
+    height: 200px;
+    display: none;
+    visibility: hidden;
+    z-index: 60;
+    background-color: white;
+    text-align: center;
+}
+
+#load_project, #save_project {
+    height: 45px;
 }

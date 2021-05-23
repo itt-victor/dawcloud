@@ -163,7 +163,7 @@ setBpm();
 
 //cambia el compás, ya se añadiran
 function metric() {
-    let metricButton = document.getElementById('metric_button');
+    const metricButton = document.getElementById('metric_button');
     metricButton.innerHTML = '4/4';
     metricButton.addEventListener('click', function (e) {
         if (metricButton.textContent == '4/4') {

@@ -58,7 +58,7 @@ export default function recordController() {
             mediaRecorder.onstop = function recordSound() {
                 const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
                 chunks = [];
-                const audioURL = window.URL.createObjectURL(blob);
+                //const audioURL = window.URL.createObjectURL(blob);
                 let aB;
                 blob.arrayBuffer().then(arrayBuffer => {
                     audioCtx.decodeAudioData(arrayBuffer, (audioBuffer) => {
