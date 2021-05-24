@@ -28,8 +28,6 @@ Route::post('/saveproject', [AppController::class, 'saveProject'])->name('savePr
 
 Route::get('/loadproject/{project}', [AppController::class, 'loadProject'])->name('loadProject');
 
-Route::get('/loadproject/{project}', [AppController::class, 'loadProject'])->name('loadProject');
-
 Route::get('/loadsound/{project}/{recording}', [AppController::class, 'loadSound'])->name('loadSound');
 
 
