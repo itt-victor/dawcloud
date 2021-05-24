@@ -8,6 +8,7 @@ import { dragRecording } from './ui/ui_dragRecordings';
 import drawLayout from './ui/ui_layout';
 import { cursor } from './components/cursor';
 import { recordingId } from './utils';
+import { removeRecording } from './app_logic';
 
 
 class Project {
@@ -182,7 +183,8 @@ function loadProject() {
                         fader.firstChild.nextSibling.style.top = project.tracksY[i] + 'px';
                         grid.tracks[i].gainNode.gain.setValueAtTime(grid.tracks[i].gainNode.gainValue, audioCtx.currentTime);
                     }
-                    setTimeout(dragRecording, 1000);
+                    setTimeout(dragRecording, 200);
+                    setTimeout(removeRecording, 1000);
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log(errorThrown);

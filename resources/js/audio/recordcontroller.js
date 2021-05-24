@@ -4,6 +4,7 @@ import { cursor } from '../components/cursor';
 import { timeSpace } from '../timeSpace';
 import { audioBufferSources } from './soundcontroller';
 import { dragRecording } from '../ui/ui_dragRecordings';
+import { removeRecording } from '../app_logic';
 import { soundcontroller } from '../app_core';
 import { soundStatuses } from '../app_core';
 import { audioCtx } from '../app_core';
@@ -66,6 +67,7 @@ export default function recordController() {
                         var track = document.querySelector('[data-selected]').id;
                         grid.tracks[track].addRecord(startTime, aB);
                         dragRecording();
+                        setTimeout(removeRecording, 20);
                     });
                 })
             }

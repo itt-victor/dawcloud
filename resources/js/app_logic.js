@@ -236,11 +236,17 @@ function solo() {
 solo();
 
 //elimina la grabación
-function removeRecording() {
+export function removeRecording() {
     let recording;
     for (var i = 0; i < grid.recordings.length; i++) {
         grid.recordings[i].canvas.addEventListener('mouseup', function arrr(e) {
-            recording = this.parent;
+
+            for (var i = 0; i < grid.recordings.length; i++) {
+                if (this.id === grid.recordings[i].id) {
+                    recording = grid.recordings[i]
+                }
+            }
+
             for (var i = 0; i < grid.recordings.length; i++) {
                 if (grid.recordings[i].audioBuffer != undefined) { ui_draw.drawRecording(grid.recordings[i]); }
             }
