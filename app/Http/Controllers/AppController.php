@@ -31,6 +31,7 @@ class AppController extends Controller
         Storage::put($filename, file_get_contents($sound));
     }
 
+    //Lo siguiente que puedes hacer aquí, es que en vez de guardar el fichero en storage, haces json_decode y metes las cosas en mySQL
     public function saveProject(Request $request)
     {
         $projectname = $request->input('project-name');
