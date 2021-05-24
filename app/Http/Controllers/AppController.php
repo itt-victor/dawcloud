@@ -35,7 +35,12 @@ class AppController extends Controller
     {
         $projectname = $request->input('project-name');
         $project = $request->input('project');
-        Storage::put('public/projects/'. $projectname . '/' . $projectname .'.json', json_encode($project));
+        $filename = 'public/projects/'. $projectname . '/' . $projectname .'.json';
+
+        if (Storage::exists($filename)) {
+            Storage::delete($filename);
+        }
+        Storage::put($filename, json_encode($project));
     }
 
     public function loadProject($project)

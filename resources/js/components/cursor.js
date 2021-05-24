@@ -39,7 +39,11 @@ export var cursor = {
         });
     },
 
-
+    moveAtZoom: function (oldZoom) {
+        timeSpace.widthAtPause = (timeSpace.widthAtPause * (1 / timeSpace.zoom)) / (1 / oldZoom);
+        timeSpace.pxIncrement = (timeSpace.pxIncrement * (1 / timeSpace.zoom)) / (1 / oldZoom); //CUIDAO
+        this.canvas.style.left = (timeSpace.widthAtPause) + 'px';
+    },
 
     stop: function () {
         clearInterval(interval);

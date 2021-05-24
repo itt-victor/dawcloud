@@ -4,7 +4,7 @@
 var tracknumber = 0;
 var recordnumber = 0;
 var tracknamenumber = 0;
-var recordingId = -1;
+export var recordingId = -1;
 
 
 export function generateTrackNumbers(){

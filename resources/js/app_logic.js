@@ -85,25 +85,30 @@ function loadSong() {
 function zoom() {
     let zoomIn = document.getElementById("zoomin");
     let zoomOut = document.getElementById("zoomout");
+    let oldZoom;
 
     function zIn() {
+        oldZoom = timeSpace.zoom;
         timeSpace.zoom /= 1.3
 
         for (var i = 0; i < grid.recordings.length; i++) {
             ui_draw.drawRecording(grid.recordings[i]);
         }
         drawLayout();
+        cursor.moveAtZoom(oldZoom);
         if (soundStatuses.isPlaying === true) {
             //cursor.stop();
             cursor.play();
         }
     }
     function zOut() {
+        oldZoom = timeSpace.zoom;
         timeSpace.zoom *= 1.3;
         for (var i = 0; i < grid.recordings.length; i++) {
             ui_draw.drawRecording(grid.recordings[i]);
         }
         drawLayout();
+        cursor.moveAtZoom(oldZoom);
         if (soundStatuses.isPlaying === true) {
             //cursor.stop();
             cursor.play();

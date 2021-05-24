@@ -7,7 +7,7 @@ import { ui_draw } from './ui/ui_draw';
 import { dragRecording } from './ui/ui_dragRecordings';
 import drawLayout from './ui/ui_layout';
 import { cursor } from './components/cursor';
-
+import { recordingId } from './utils';
 
 
 class Project {
@@ -38,18 +38,41 @@ function saveProject() {
             saveWindow.style.display = 'none';
             saveWindow.style.visibility = 'hidden';
 
-            var tracksGainValues = [];
             var audioBuffers = [];
+            var tracksGainValues = [];
             var tracksY = [];
+            if (!project === undefined) {
+                audioBuffers = project.audioBuffers;
+                tracksGainValues = project.tracksGainValues;
+                tracksY = project.tracksY;
+                recordingId = project.audioReferences.length;
 
-            //Se guardan los valores de gain de cada pista
-            for (let i = 0; i < grid.tracks.length; i++) {
-                tracksGainValues.push(grid.tracks[i].gainNode.gainValue);
-                tracksY.push(grid.tracks[i].fader.Y);
+                //Se guardan los valores de gain de cada pista
+                for (let i = 0; i < grid.tracks.length; i++) {
+                    if (tracksGainValues[i] != grid.tracks[i].gainNode.gainValue){
+                        tracksGainValues[i] = grid.tracks[i].gainNode.gainValue;
+                    }
+                    if (tracksY[i] != grid.tracks[i].fader.Y){
+                        tracksY[i] = grid.tracks[i].fader.Y;
+                    }
+                }
+            } else { //MIRATE ESTO DE LOS FADERS QUE HACE EXTRAÑOS; LO DEMAS YA ESTA GENIAL
+                for (let i = 0; i < grid.tracks.length; i++) {
+                    tracksGainValues.push(grid.tracks[i].gainNode.gainValue);
+                    tracksY.push(grid.tracks[i].fader.Y);
+                }
             }
 
             //creo objeto proyecto
-            project = new Project(timeSpace, grid.recordings, audioBuffers, tracksGainValues, tracksY);
+            if (project === undefined) {
+                project = new Project(timeSpace, grid.recordings, audioBuffers, tracksGainValues, tracksY);
+            }
+            else {
+                project.timeSpace = timeSpace;
+                project.recordings = grid.recordings;
+                project.tracksGainValues = tracksGainValues;
+                project.tracksY = tracksY;
+            }
 
             //Se convierten los audioBuffers en wav, se convierten a su vez en blob, y se genera una URL del mismo
             for (let i = 0; i < grid.recordings.length; i++) {
@@ -80,9 +103,11 @@ function saveProject() {
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                     }
                 });
-                project.audioReferences.push(projectName + '_' + grid.recordings[i].id);
+                if (project.audioReferences[i] === undefined) {
+                    project.audioReferences.push(projectName + '_' + grid.recordings[i].id);
+                }
             }
-
+            console.log(project.tracksGainValues, project.tracksY);
             var projectForm = new FormData();
             projectForm.append('project-name', projectName);
             projectForm.append('project', JSON.stringify(project));
@@ -104,9 +129,7 @@ function saveProject() {
     });
 }
 
-//setTimeout(function() {saveProject();}, 5000);
 
-//hum, igual es mejor hacerlo por backend
 function loadProject() {
     var loadWindow = document.getElementById('load_dialogue');
     loadWindow.children[1].addEventListener('keyup', function (e) {
@@ -136,10 +159,8 @@ function loadProject() {
 
                     drawLayout();
 
-                    //var newGrid = new Grid([], project.recordings);
-                    grid.recordings = project.recordings;
-                    for (let i = 0; i < grid.recordings.length; i++) {
-                        //grid.recordings[i].audioBuffer =
+
+                    for (let i = 0; i < project.recordings.length; i++) {
                         const request = new XMLHttpRequest();
                         request.open("GET", 'loadsound/' + projectName + '/' + project.audioReferences[i], true);
                         request.responseType = "arraybuffer";
@@ -147,24 +168,20 @@ function loadProject() {
                             let undecodedAudio = request.response;
                             audioCtx.decodeAudioData(undecodedAudio, (data) => {
                                 var audioBuffer = data;
-                                grid.recordings[i].audioBuffer = audioBuffer;
-                                grid.recordings[i].canvas = document.createElement('canvas');
-                                grid.recordings[i].canvasCtx = grid.recordings[i].canvas.getContext('2d');
-                                //grid.tracks[grid.recordings[i].tracknumber].recordings.push(grid.recordings[i]);
-                                grid.tracks[grid.recordings[i].tracknumber].trackDOMElement.appendChild(grid.recordings[i].canvas);
-                                ui_draw.drawRecording(grid.recordings[i]);
+                                let track = grid.tracks[project.recordings[i].tracknumber];
+                                track.addRecord(project.recordings[i].timeToStart, audioBuffer);
                             });
                         };
                         request.send();
                     }
-                    for (let i = 0; i < grid.tracks.length; i++){
+                    for (let i = 0; i < grid.tracks.length; i++) {
+                        console.log(project.tracksGainValues[i], project.tracksY[i]);
                         let fader = grid.tracks[i].fader;
                         grid.tracks[i].gainNode.gainValue = project.tracksGainValues[i];
                         fader.firstChild.nextSibling.style.top = project.tracksY[i] + 'px';
                         grid.tracks[i].gainNode.gain.setValueAtTime(grid.tracks[i].gainNode.gainValue, audioCtx.currentTime);
                     }
                     setTimeout(dragRecording, 1000);
-
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log(errorThrown);
