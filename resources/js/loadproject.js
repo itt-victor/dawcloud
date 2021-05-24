@@ -178,6 +178,7 @@ function loadProject() {
                         console.log(project.tracksGainValues[i], project.tracksY[i]);
                         let fader = grid.tracks[i].fader;
                         grid.tracks[i].gainNode.gainValue = project.tracksGainValues[i];
+                        fader.Y = project.tracksY[i];
                         fader.firstChild.nextSibling.style.top = project.tracksY[i] + 'px';
                         grid.tracks[i].gainNode.gain.setValueAtTime(grid.tracks[i].gainNode.gainValue, audioCtx.currentTime);
                     }
