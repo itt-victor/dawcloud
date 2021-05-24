@@ -50,10 +50,10 @@ function saveProject() {
 
                 //Se guardan los valores de gain de cada pista
                 for (let i = 0; i < grid.tracks.length; i++) {
-                    if (tracksGainValues[i] != grid.tracks[i].gainNode.gainValue){
+                    if (tracksGainValues[i] != grid.tracks[i].gainNode.gainValue) {
                         tracksGainValues[i] = grid.tracks[i].gainNode.gainValue;
                     }
-                    if (tracksY[i] != grid.tracks[i].fader.Y){
+                    if (tracksY[i] != grid.tracks[i].fader.Y) {
                         tracksY[i] = grid.tracks[i].fader.Y;
                     }
                 }
@@ -85,7 +85,7 @@ function saveProject() {
                 formdata.append('audio-blob', blob);
                 formdata.append('recording-id', grid.recordings[i].id);
                 formdata.append('project-name', projectName);
-                /*$.ajaxSetup({
+                /*$.ajaxSetup({      no cal esto
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
@@ -139,6 +139,7 @@ function loadProject() {
             projectName = loadWindow.children[1].value;
             loadWindow.style.display = 'none';
             loadWindow.style.visibility = 'hidden';
+
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -160,6 +161,12 @@ function loadProject() {
 
                     drawLayout();
 
+                    //cuidado con esto - borrar las pistas existentes por si ya había algo,
+                    //porque ahora está añadiendo sobre lo que ya hubiese
+                    /*grid.recordings = [];
+                    for (let i = 0; i < grid.tracks.length; i++) {
+                        grid.tracks[i].recordings = [];
+                    }*/
 
                     for (let i = 0; i < project.recordings.length; i++) {
                         const request = new XMLHttpRequest();
@@ -176,7 +183,6 @@ function loadProject() {
                         request.send();
                     }
                     for (let i = 0; i < grid.tracks.length; i++) {
-                        console.log(project.tracksGainValues[i], project.tracksY[i]);
                         let fader = grid.tracks[i].fader;
                         grid.tracks[i].gainNode.gainValue = project.tracksGainValues[i];
                         fader.Y = project.tracksY[i];
@@ -214,7 +220,3 @@ savebtn.addEventListener('click', function (e) {
     saveProject()
 });
 
-
-
-//BUENO, A VER, LA COSA ESTÁ EN QUE PARA HAXCERLO BIEN, ESTOS JSON HABRÁN DE REFERENCIAR TAMBIÉN LA LISTA DE AUDIOS ASOCIADOS
-//AL PROYECTO,
