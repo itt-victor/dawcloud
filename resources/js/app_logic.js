@@ -239,7 +239,8 @@ solo();
 export function removeRecording() {
     let recording;
     for (var i = 0; i < grid.recordings.length; i++) {
-        grid.recordings[i].canvas.addEventListener('mouseup', function arrr(e) {
+
+        grid.recordings[i].canvas.addEventListener('click', function arrr(e) {
 
             for (var i = 0; i < grid.recordings.length; i++) {
                 if (this.id === grid.recordings[i].id) {

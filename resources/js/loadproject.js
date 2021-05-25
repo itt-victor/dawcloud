@@ -163,10 +163,16 @@ function loadProject() {
 
                     //cuidado con esto - borrar las pistas existentes por si ya había algo,
                     //porque ahora está añadiendo sobre lo que ya hubiese
-                    /*grid.recordings = [];
+                    for (let i = 0; i < grid.recordings.length; i++) {
+                        grid.recordings[i].canvasCtx.clearRect(0, 0, 4000, 70);
+                        grid.recordings[i].canvas = null;
+                        grid.recordings[i].canvasCtx = null;
+                        delete grid.recordings[i].audioBuffer;
+                    }
+                    grid.recordings = [];
                     for (let i = 0; i < grid.tracks.length; i++) {
                         grid.tracks[i].recordings = [];
-                    }*/
+                    }
 
                     for (let i = 0; i < project.recordings.length; i++) {
                         const request = new XMLHttpRequest();
@@ -189,8 +195,10 @@ function loadProject() {
                         fader.firstChild.nextSibling.style.top = project.tracksY[i] + 'px';
                         grid.tracks[i].gainNode.gain.setValueAtTime(grid.tracks[i].gainNode.gainValue, audioCtx.currentTime);
                     }
-                    setTimeout(dragRecording, 200);
-                    setTimeout(removeRecording, 1000);
+
+                    setTimeout(dragRecording, 500);
+                    setTimeout(removeRecording, 500);
+
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log(errorThrown);

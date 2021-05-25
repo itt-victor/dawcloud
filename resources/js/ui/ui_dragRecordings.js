@@ -22,47 +22,49 @@ export function dragRecording() {
 
     for (var i = 0; i < grid.recordings.length; i++) {
 
-        grid.recordings[i].canvas.addEventListener("mousedown", function (evt) {
-            recording = grid.recordings[this.id.charAt(10)];
-            ctx = recording.canvasCtx;
+        if (grid.recordings[i].canvas != undefined) {  //MIRATE ESTO
 
-            X = recording.timeToStart / timeSpace.zoom;
-            Y = 0;
-            widths = selectTrackWidth(recording.tracknumber);
-            var mousePos = onMousePos(grid.canvas, evt);
-            if (mousePos.y < widths.maxHeight &&
-                mousePos.y > widths.minHeight){
-            drag[recording.tracknumber] = true;
-            delta.x = X - mousePos.x;
-            delta.y = Y - mousePos.y;
-            }
-        }, false);
+            grid.recordings[i].canvas.addEventListener("mousedown", function (evt) {
+                recording = grid.recordings[this.id.charAt(10)];
+                ctx = recording.canvasCtx;
 
-        grid.recordings[i].canvas.addEventListener("mousemove", function a(evt) {
-            recording = grid.recordings[this.id.charAt(10)];
-            ctx = recording.canvasCtx;
-            X = recording.timeToStart / timeSpace.zoom;
-            Y = 0;
-            var mousePos = onMousePos(grid.canvas, evt);
-            let heights = selectTrackWidth(recording.tracknumber);
-            if (drag[recording.tracknumber]) {
-                X = mousePos.x + delta.x, Y = mousePos.y
-                if (X < 0) { X = 0 };
-                if (Y < heights.minHeight || Y > heights.maxHeight)
-                   { drag[recording.tracknumber]=false;}
-
-                this.style.left = X + 'px';
-                recording.timeToStart = X * timeSpace.zoom;
-                if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
-                    soundcontroller.playWhileDragging(this.parent);
+                X = recording.timeToStart / timeSpace.zoom;
+                Y = 0;
+                widths = selectTrackWidth(recording.tracknumber);
+                var mousePos = onMousePos(grid.canvas, evt);
+                if (mousePos.y < widths.maxHeight &&
+                    mousePos.y > widths.minHeight) {
+                    drag[recording.tracknumber] = true;
+                    delta.x = X - mousePos.x;
+                    delta.y = Y - mousePos.y;
                 }
-            }
-        }, false);
+            }, false);
 
-        grid.recordings[i].canvas.addEventListener("mouseup", function (evt) {
-            recording = grid.recordings[this.id.charAt(10)];
-            drag[recording.tracknumber] = false;
-        }, false);
+            grid.recordings[i].canvas.addEventListener("mousemove", function a(evt) {
+                recording = grid.recordings[this.id.charAt(10)];
+                ctx = recording.canvasCtx;
+                X = recording.timeToStart / timeSpace.zoom;
+                Y = 0;
+                var mousePos = onMousePos(grid.canvas, evt);
+                let heights = selectTrackWidth(recording.tracknumber);
+                if (drag[recording.tracknumber]) {
+                    X = mousePos.x + delta.x, Y = mousePos.y
+                    if (X < 0) { X = 0 };
+                    if (Y < heights.minHeight || Y > heights.maxHeight) { drag[recording.tracknumber] = false; }
+
+                    this.style.left = X + 'px';
+                    recording.timeToStart = X * timeSpace.zoom;
+                    if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
+                        soundcontroller.playWhileDragging(this.parent);
+                    }
+                }
+            }, false);
+
+            grid.recordings[i].canvas.addEventListener("mouseup", function (evt) {
+                recording = grid.recordings[this.id.charAt(10)];
+                drag[recording.tracknumber] = false;
+            }, false);
+        }
     }
 }
 
