@@ -262,7 +262,7 @@ div [data-selected] {
 }
 
 .fader {
-    height: 310px;
+    height: 325px;
     width: 45px;
     border: solid 1.5px rgb(122, 35, 50);
     z-index: 1;
@@ -301,16 +301,17 @@ div [data-selected] {
 
 .trcknr {
     position: absolute;
-    top: 285px;
+    top: 300px;
     color: #7a2332;
     font-size: 13px;
     font-weight: 600;
-    margin-left: 16px;
+    margin-left: 17px;
     z-index: 50;
+	cursor: default;
 }
 
 .mxrmstr {
-    margin-left: 0px!important;
+    margin-left: 1px!important;
 }
 
 #save_dialogue {
@@ -355,4 +356,14 @@ div [data-selected] {
 
 #load_project, #save_project {
     height: 45px;
+}
+
+::-webkit-scrollbar {
+	background-color: grey;
+    opacity: 0.3;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: #7a2332;
+	width: 50px;
 }
