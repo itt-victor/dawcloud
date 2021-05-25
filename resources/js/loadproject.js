@@ -57,7 +57,7 @@ function saveProject() {
                         tracksY[i] = grid.tracks[i].fader.Y;
                     }
                 }
-            } else { //MIRATE ESTO DE LOS FADERS QUE HACE EXTRAÑOS; LO DEMAS YA ESTA GENIAL
+            } else {
                 for (let i = 0; i < grid.tracks.length; i++) {
                     tracksGainValues.push(grid.tracks[i].gainNode.gainValue);
                     tracksY.push(grid.tracks[i].fader.Y);
