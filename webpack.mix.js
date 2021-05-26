@@ -13,6 +13,7 @@ const mix = require('laravel-mix');
 
 mix.js(['resources/js/app_core.js'],'public/js/')
     .sass('resources/sass/app.scss', 'public/css')
+    .js(['resources/js/home.js'],'public/js/')
     .sourceMaps()
     .disableSuccessNotifications();
 

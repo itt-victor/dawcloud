@@ -18,9 +18,15 @@ use Illuminate\Http\Request;
 |
 */
 
-//Route::get('/', HomeController::class)->name('home');
+Route::get('/', [HomeController::class, 'home'])->name('home');
 
-Route::get('/', [AppController::class, 'app'])->name('app');
+//Route::get('/', [HomeController::class, 'signup'])->name('prueba');  //con este puesto tienes una ventana al server <3 - para probar solo
+
+Route::post('/', [HomeController::class, 'signup'])->name('signup');  //has de poner que las forms en html hagan action aqui
+
+Route::post('/', [HomeController::class, 'login'])->name('login');
+
+Route::get('/app', [AppController::class, 'app'])->name('app');
 
 Route::post('/savesound', [AppController::class, 'saveSound'])->name('saveSound');
 

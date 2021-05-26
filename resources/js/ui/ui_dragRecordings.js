@@ -22,7 +22,7 @@ export function dragRecording() {
 
     for (var i = 0; i < grid.recordings.length; i++) {
 
-        if (grid.recordings[i].canvas != undefined) {  //MIRATE ESTO
+        if (!grid.recordings[i].canvas === undefined) {  //MIRATE ESTO
 
             grid.recordings[i].canvas.addEventListener("mousedown", function (evt) {
                 recording = grid.recordings[this.id.charAt(10)];

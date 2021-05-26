@@ -31,15 +31,22 @@ export const audioCtx = new (window.AudioContext ||
 export var soundcontroller = new SoundController(audioCtx);
 
 
-function loading() {
+export function loading() {
+    let text = document.querySelector('#page-title');
     let ventana = document.querySelector('.loading');
-    ventana.innerHTML = "<p> Loading </p>";
-    document.body.style.background = 'black'
+    text.style.color = 'white';
+    document.body.style.background = 'black';
+    ventana.style.display = 'block';
+    ventana.style.visibility = 'visible';
     setTimeout(function () {
         ventana.style.display = 'none';
         ventana.style.visibility = 'hidden';
-        document.body.style.background = '#dbf2fd'
-    }, 5000);
+        document.body.style.background = '#b9edf1';
+        text.style.color = 'black';
+        document.body.style.transition = 'background 0.7s'
+        ventana.style.transition = 'display 0.7s, visibility 0.7s'
+        text.style.transition = 'color 0.7s'
+    }, 3500);
 }
 loading();
 

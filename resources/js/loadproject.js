@@ -9,6 +9,7 @@ import drawLayout from './ui/ui_layout';
 import { cursor } from './components/cursor';
 import { recordingId } from './utils';
 import { removeRecording } from './app_logic';
+import { loading } from './app_core';
 
 
 class Project {
@@ -139,6 +140,7 @@ function loadProject() {
             projectName = loadWindow.children[1].value;
             loadWindow.style.display = 'none';
             loadWindow.style.visibility = 'hidden';
+            loading();
 
             $.ajax({
                 headers: {
@@ -148,7 +150,10 @@ function loadProject() {
                 url: 'loadproject/' + projectName,
                 dataType: 'json',
                 success: function (response, request) {
-                    project = JSON.parse(response);
+
+                    project = response;
+                    console.log(project);
+
                     timeSpace.timeAtPause = project.timeSpace.timeAtPause;
                     timeSpace.pxIncrement = project.timeSpace.pxIncrement;
                     timeSpace.pointedWidth = project.timeSpace.pointedWidth;
@@ -196,8 +201,8 @@ function loadProject() {
                         grid.tracks[i].gainNode.gain.setValueAtTime(grid.tracks[i].gainNode.gainValue, audioCtx.currentTime);
                     }
 
-                    setTimeout(dragRecording, 500);
-                    setTimeout(removeRecording, 500);
+                    setTimeout(dragRecording, 1000);
+                    setTimeout(removeRecording, 1000);
 
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -212,7 +217,7 @@ loadbtn.addEventListener('click', function (e) {
     var loadWindow = document.getElementById('load_dialogue');
     loadWindow.style.display = 'block';
     loadWindow.style.visibility = 'visible';
-    loadProject()
+    loadProject();
 });
 savebtn.addEventListener('click', function (e) {
     var saveWindow = document.getElementById('save_dialogue');

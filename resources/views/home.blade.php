@@ -9,15 +9,31 @@
 
     </head>
     <body class="antialiased">
-        <div id="user-window" style="display: none; visibility: hidden;">
-            <form id="user login">
+        <h1 id="page-title" class="h1 center">daw Cloud</h1>
+        <div id="user-window">
+            <form id="user_signup">
+                <p>Create account. It's free</p>
                 @csrf
-                <input type="email" placeholder="Type your user e-mail">
-                <input type="text" placeholder="Password">
-                <button type="submit">Log In!</button>
+                <label for="signup_email">Email</label>
+                <input type="email" id="signup_email" name="signup_email" autocomplete="off">
+                <label for="signup_username">User Name</label>
+                <input type="text" id="signup_username" name="signup_username" autocomplete="off">
+                <label for="signup_password">Password</label>
+                <input type="text" id="signup_password" name="signup_password" autocomplete="off">
+                <button id="register" type="submit">Sign Up!</button>
             </form>
-            <button id="register">Sign In!</button>
-        </div>
+            <form id="user_login">
+                <p>Log in to daw Cloud</p>
+                @csrf
+                <label for="login_email">Email</label>
+                <input type="email" id="login_email" name="login_email" autocomplete="off">
+                <label for="login_password">Password</label>
+                <input type="text" id="login_password" name="login_password" autocomplete="off">
+                <button id="login" type="submit">Log In!</button>
+            </form>
 
+        </div>
+        <a href={{ route('app') }} id="startunsigned" name="startunsigned" class="startunsigned">Start daw Cloud without account</a>
+        <script type="text/javascript" src="js/home.js"></script>
     </body>
 </html>

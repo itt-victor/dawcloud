@@ -9,7 +9,7 @@
 
 
 body {
-    background-color: #dbf2fd;
+    background-color: #b9edf1;
     height: auto;
 }
 
@@ -18,7 +18,7 @@ body {
     height: 50px;
     width: 200px;
     top: 380px;
-    left: 45%;
+    left: 44%;
     z-index: 50;
     background-color: white;
     color:rgb(122, 35, 50);
@@ -31,13 +31,21 @@ body {
 }
 
 #page-title {
+    color: black;
     margin: auto;
     width: 200px;
     position: relative;
     margin-top: 50px;
     margin-bottom: 30px;
     font-weight: 700;
+    font-size: 40px;
+    cursor: default;
 }
+
+.a_title {
+    text-decoration: none;
+}
+
 
 .buttonpad {
     position: relative;
@@ -366,4 +374,73 @@ div [data-selected] {
 ::-webkit-scrollbar-thumb {
 	background-color: #7a2332;
 	width: 50px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+// HOME
+
+#user-window {
+    display: flex;
+    justify-content: space-around;
+    background-color: white;
+    border-radius: 10px;
+    position: relative;
+    width: 600px;
+    height: 400px;
+    top: 80px;
+    left: 34%;
+    margin-bottom: 30px;
+}
+
+#user_signup, #user_login {
+    width: 240px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    //justify-content: space-around;
+}
+
+#user_signup input, #user_login input{
+    height: 40px;
+    border-radius: 5px;
+    border: solid 1.3px #7a2332;
+    margin-bottom: 25px;
+}
+
+#user_signup button, #user_login button{
+    align-self: center;
+    height: 40px;
+    width: 100px;
+    border-radius: 5px;
+    border: solid 1.3px #7a2332;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+
+
+.startunsigned {
+    text-decoration: none;
+    color:rgb(122, 35, 50);
+    background-color: rgb(179, 173, 173);
+    border-radius: 5px;
+    padding: 10px;
+    width: 200px;
+    position: relative;
+    top: 100px;
+    left: 41%;
+    font-weight: 700;
+    font-size: 20px;
 }

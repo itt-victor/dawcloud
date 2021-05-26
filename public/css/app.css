@@ -10834,7 +10834,7 @@ textarea.form-control-lg {
   }
 }
 body {
-  background-color: #dbf2fd;
+  background-color: #b9edf1;
   height: auto;
 }
 
@@ -10843,7 +10843,7 @@ body {
   height: 50px;
   width: 200px;
   top: 380px;
-  left: 45%;
+  left: 44%;
   z-index: 50;
   background-color: white;
   color: #7a2332;
@@ -10856,12 +10856,19 @@ body {
 }
 
 #page-title {
+  color: black;
   margin: auto;
   width: 200px;
   position: relative;
   margin-top: 50px;
   margin-bottom: 30px;
   font-weight: 700;
+  font-size: 40px;
+  cursor: default;
+}
+
+.a_title {
+  text-decoration: none;
 }
 
 .buttonpad {
@@ -11083,7 +11090,7 @@ div [data-selected] {
 }
 
 .fader {
-  height: 310px;
+  height: 325px;
   width: 45px;
   border: solid 1.5px #7a2332;
   z-index: 1;
@@ -11122,16 +11129,17 @@ div [data-selected] {
 
 .trcknr {
   position: absolute;
-  top: 285px;
+  top: 300px;
   color: #7a2332;
   font-size: 13px;
   font-weight: 600;
-  margin-left: 16px;
+  margin-left: 17px;
   z-index: 50;
+  cursor: default;
 }
 
 .mxrmstr {
-  margin-left: 0px !important;
+  margin-left: 1px !important;
 }
 
 #save_dialogue {
@@ -11176,4 +11184,66 @@ div [data-selected] {
 
 #load_project, #save_project {
   height: 45px;
+}
+
+::-webkit-scrollbar {
+  background-color: grey;
+  opacity: 0.3;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #7a2332;
+  width: 50px;
+}
+
+#user-window {
+  display: flex;
+  justify-content: space-around;
+  background-color: white;
+  border-radius: 10px;
+  position: relative;
+  width: 600px;
+  height: 400px;
+  top: 80px;
+  left: 34%;
+  margin-bottom: 30px;
+}
+
+#user_signup, #user_login {
+  width: 240px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+#user_signup input, #user_login input {
+  height: 40px;
+  border-radius: 5px;
+  border: solid 1.3px #7a2332;
+  margin-bottom: 25px;
+}
+
+#user_signup button, #user_login button {
+  align-self: center;
+  height: 40px;
+  width: 100px;
+  border-radius: 5px;
+  border: solid 1.3px #7a2332;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.startunsigned {
+  text-decoration: none;
+  color: #7a2332;
+  background-color: #b3adad;
+  border-radius: 5px;
+  padding: 10px;
+  width: 200px;
+  position: relative;
+  top: 100px;
+  left: 41%;
+  font-weight: 700;
+  font-size: 20px;
 }

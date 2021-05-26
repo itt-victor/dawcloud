@@ -2,9 +2,9 @@
 @section('title', 'DawCloud')
 
 @section('content')
-<div class="loading"></div>
+<div class="loading"><p>Loading</p></div>
     <div id="app">
-        <h1 id="page-title" class="h1 center">daw Cloud</h1>
+        <a class="a_title" href={{route('home')}}><h1 id="page-title" class="h1 center">daw Cloud</h1></a>
 
         <div id="buttonpad" class="buttonpad">
             <div class="master_controls">
@@ -61,7 +61,6 @@
                 @include('layouts.track_name', ['number'=> '8', 'number2'=> '7'])
             </div>
 
-            <!--<div id="time-layout" style="background-color: grey;"><canvas id="layout"></canvas></div>-->
             <div id="tracks" class="tracks">
                 <div id="time-layout" style="background-color: grey;"><canvas id="layout"></canvas></div>
                 <canvas id="cursor"></canvas>
