@@ -36,24 +36,108 @@ body {
     width: 200px;
     position: relative;
     margin-top: 50px;
-    margin-bottom: 30px;
+    margin-bottom: 50px;
     font-weight: 700;
     font-size: 40px;
     cursor: default;
+	text-decoration: none;
 }
 
 .a_title {
+	color: black;
     text-decoration: none;
+	margin:auto;
+}
+
+.a_title:hover {
+	text-decoration: none;
+}
+
+#user_options {
+	position: absolute;
+	right: 400px;
+	top: 53px;
+	width: 220px;
+}
+
+#user_welcome {
+	width: 220px;
+}
+
+#signup_now {
+	right: 500px;
+	top: 50px;
+	text-align: center;
+	width: 170px;
+	cursor: pointer;
+	position: absolute;
+}
+
+#signup_now:hover {
+	color: red;
+}
+
+
+#signup_reminder {
+	display: none;
+	visibility: hidden;
+	left: 42%;
+	top: 270px;
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	width: 300px;
+	background-color: #b3b3b3;
+	border-radius: 10px;
+	z-index: 70;
+}
+
+.signup_reminder_text{
+	margin-left: 20px;
+	margin-top: 15px;
+	margin-right: 0;
+}
+
+.x-button {
+	font-size:30px;
+	position: absolute;
+	left: 255px;
+	top: 5px;
+	color: darkgray;
+	cursor: pointer;
+}
+
+.x-button:hover {
+	color: black;
+}
+
+#signup_reminder input {
+	width: 200px;
+	height: 35px;
+    align-self: center;
+	margin-bottom: 10px;
+}
+
+#signup_reminder button {
+	width: 150px;
+	align-self: center;
+	margin-bottom: 30px;
+	margin-top: 30px;
+}
+
+#signup_reminder label {
+	margin-left: 20px;
 }
 
 
 .buttonpad {
-    position: relative;
-    left: 5%;
+    position: absolute;
+    right: 1200px;
+	top: 44px;
     margin-top: 10px;
     margin-bottom: 40px;
     display: flex;
-    width: 1600px;
+    width: 600px;
     justify-content: space-between;
     height: 45px;
 }
@@ -96,11 +180,14 @@ body {
 }
 
 .zoom-btn {
-    width: 200px;
+	position: absolute;
+	right: 100px;
+	top: 52px;
+    width: 210px;
 }
 
 #zoomin, #zoomout {
-    height: 45px;
+    height: 40px;
 }
 
 .sound-clips {
@@ -205,6 +292,7 @@ body {
     left: 260px; //160px;
     position: relative;
     margin: auto;
+	//margin-right: 0!important;
     text-align: left;
     vertical-align: middle;
     background-color: darkgray;
@@ -325,34 +413,7 @@ div [data-selected] {
 #save_dialogue {
     position: absolute;
     top: 300px;
-    left: 45%;
-    width: 350px;
-    height: 200px;
-    display: none;
-    visibility: hidden;
-    z-index: 60;
-    background-color: white;
-    text-align: center;
-}
-
-#save_dialogue {
-    position: absolute;
-    top: 300px;
-    left: 45%;
-    width: 350px;
-    height: 150px!important;
-    display: none;
-    visibility: hidden;
-    z-index: 60;
-    background-color: white;
-    text-align: center;
-    height: 100%;
-}
-
-#load_dialogue {
-    position: absolute;
-    top: 300px;
-    left: 45%;
+    right: 400px;
     width: 350px;
     height: 150px;
     display: none;
@@ -360,10 +421,33 @@ div [data-selected] {
     z-index: 60;
     background-color: white;
     text-align: center;
+	border-radius: 8px;
 }
 
-#load_project, #save_project {
+#load_dialogue {
+    position: absolute;
+    top: 300px;
+    right: 400px;
+    width: 350px;
+    height: 150px;
+    display: none;
+    visibility: hidden;
+    z-index: 60;
+    background-color: white;
+    text-align: center;
+	border-radius: 8px;
+}
+
+#load_project, #save_project, #load_sound {
     height: 45px;
+	width: 220px;
+}
+
+.dropdown-menu {
+	padding-top: 1px;
+	height: 136px;
+	background-color: #b9edf1;
+	border: none;
 }
 
 ::-webkit-scrollbar {
@@ -374,6 +458,11 @@ div [data-selected] {
 ::-webkit-scrollbar-thumb {
 	background-color: #7a2332;
 	width: 50px;
+}
+
+#projects_window {
+	display:none;
+	visibility: hidden;
 }
 
 
@@ -397,7 +486,7 @@ div [data-selected] {
     border-radius: 10px;
     position: relative;
     width: 600px;
-    height: 400px;
+    height: 450px;
     top: 80px;
     left: 34%;
     margin-bottom: 30px;
@@ -429,6 +518,10 @@ div [data-selected] {
     margin-bottom: 15px;
 }
 
+#user_signup b, #user_login b{
+	font-size: 18px;
+	margin-bottom: 20px;
+}
 
 
 .startunsigned {

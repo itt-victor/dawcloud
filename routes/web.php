@@ -18,23 +18,26 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/', [HomeController::class, 'home'])->name('home');
-
 //Route::get('/', [HomeController::class, 'signup'])->name('prueba');  //con este puesto tienes una ventana al server <3 - para probar solo
 
-Route::post('/', [HomeController::class, 'signup'])->name('signup');  //has de poner que las forms en html hagan action aqui
+Route::get('/', [HomeController::class, 'home'])->name('home');
 
-Route::post('/', [HomeController::class, 'login'])->name('login');
+Route::post('/signup', [HomeController::class, 'signup'])->name('signup');
+
+Route::post('/login', [HomeController::class, 'login'])->name('login');
 
 Route::get('/app', [AppController::class, 'app'])->name('app');
 
+Route::get('/app/signup', [AppController::class, 'signup'])->name('signupFromApp');
+
 Route::post('/savesound', [AppController::class, 'saveSound'])->name('saveSound');
 
-Route::post('/saveproject', [AppController::class, 'saveProject'])->name('saveProject');
+Route::post('/saveproject', [AppController::class, 'saveProject'])->name('saveProject');   //hay que pasar por parámetro el id del usuario
 
 Route::get('/loadproject/{project}', [AppController::class, 'loadProject'])->name('loadProject');
 
 Route::get('/loadsound/{project}/{recording}', [AppController::class, 'loadSound'])->name('loadSound');
 
+//Auth::routes();
 
-
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');   HAY QUE MIRAR LO DE ARTISAN AUTH

@@ -6,6 +6,22 @@ import drawLayout from './ui/ui_layout';
 import { cursor } from './components/cursor';
 import { soundStatuses } from './app_core';
 
+//toggle registrarse para uruarios no registrados
+function toggleSignUp() {
+    let signup = document.querySelector('#signup_now');
+    let signupReminder = document.querySelector('#signup_reminder');
+	let xButton = document.querySelector('.x-button');
+    signup.addEventListener('click', function(){
+        signupReminder.style.display = 'flex';
+		signupReminder.style.visibility = 'visible';
+    });
+	xButton.addEventListener('click', function(){
+		signupReminder.style.display = 'none';
+		signupReminder.style.visibility = 'hidden';
+	});
+}
+toggleSignUp();
+
 
 //Seleccionar pista
 function selectTrack() {

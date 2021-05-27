@@ -32,18 +32,22 @@ export var soundcontroller = new SoundController(audioCtx);
 
 
 export function loading() {
-    let text = document.querySelector('#page-title');
+    let text = document.querySelector('.a_title');
     let ventana = document.querySelector('.loading');
+	let signup = document.querySelector('#signup_now');
     text.style.color = 'white';
     document.body.style.background = 'black';
     ventana.style.display = 'block';
     ventana.style.visibility = 'visible';
+	signup.style.color = 'white';
     setTimeout(function () {
+		signup.style.color = 'black';
         ventana.style.display = 'none';
         ventana.style.visibility = 'hidden';
         document.body.style.background = '#b9edf1';
         text.style.color = 'black';
         document.body.style.transition = 'background 0.7s'
+		signup.style.transition = 'color 0.7s';
         ventana.style.transition = 'display 0.7s, visibility 0.7s'
         text.style.transition = 'color 0.7s'
     }, 3500);

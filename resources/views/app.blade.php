@@ -4,7 +4,71 @@
 @section('content')
 <div class="loading"><p>Loading</p></div>
     <div id="app">
-        <a class="a_title" href={{route('home')}}><h1 id="page-title" class="h1 center">daw Cloud</h1></a>
+        <h1 id="page-title" class="h1 center"><a class="a_title" href="{{route('home')}}">daw Cloud</a></h1>
+
+		@if (Request::get('user') !== 'public')
+        <div id="user_options">
+			<button id="user_welcome" type="button" class= "btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hello {{Request::get('user')}} </button>
+			<div class="dropdown-menu" aria-labelledby="user_welcome">
+                <button id="load_project" class="btn btn-outline-info dropdown-item">Load project</button>
+                <button id="save_project" class="btn btn-outline-info dropdown-item">Save project</button>
+				<button id="load_sound" class="btn btn-outline-info dropdown-item">Load sound</button>
+			</div>
+			<div id="load_dialogue">
+				<p>Enter project to load:</p>
+				<input id="project_to_load" type="text">
+			</div>
+			<div id="save_dialogue">
+				<p>Enter a name for your new project:</p>
+				<input id="project_name" type="text">
+			</div>
+		</div>
+		<div style="display: none; visibility: hidden">
+			<p id="signup_now">Sign up, you will be able to save your projects<p>
+			<form id="signup_reminder" method="POST" action="{{ route('signupFromApp') }}">
+                <p class="signup_reminder_text">Create account. It's free <span class="x-button">&#10006;</span></p>
+                @csrf
+                <label for="signup_email">Email</label>
+                <input type="email" class="" name="signup_email" autocomplete="off">
+                <label for="signup_username">User Name</label>
+                <input type="text" class="" name="signup_username" autocomplete="off">
+                <label for="signup_password">Password</label>
+                <input type="password" class="" name="signup_password" autocomplete="off">
+                <button id="register2" type="submit">Sign Up!</button>
+            </form>
+		</div>
+		@else
+		<div id="user_options" style="display: none; visibility: hidden">
+			<button id="user_welcome" type="button" class= "btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hello {{Request::get('user')}} </button>
+			<div class="dropdown-menu" aria-labelledby="user_welcome">
+                <button id="load_project" class="btn btn-outline-info dropdown-item">Load project</button>
+                <button id="save_project" class="btn btn-outline-info dropdown-item">Save project</button>
+				<button id="load_sound" class="btn btn-outline-info dropdown-item">Load sound</button>
+			</div>
+			<div id="load_dialogue">
+				<p>Enter project to load:</p>
+				<input id="project_to_load" type="text">
+			</div>
+			<div id="save_dialogue">
+				<p>Enter a name for your new project:</p>
+				<input id="project_name" type="text">
+			</div>
+		</div>
+		<div>
+			<p id="signup_now">Sign up, you will be able to save your projects<p>
+			<form id="signup_reminder">
+                <p class="signup_reminder_text">Create account. It's free <span class="x-button">&#10006;</span></p>
+                @csrf
+                <label for="signup_email">Email</label>
+                <input type="email" class="" name="signup_email" autocomplete="off">
+                <label for="signup_username">User Name</label>
+                <input type="text" class="" name="signup_username" autocomplete="off">
+                <label for="signup_password">Password</label>
+                <input type="password" class="" name="signup_password" autocomplete="off">
+                <button id="register2" type="submit">Sign Up!</button>
+            </form>
+		</div>
+        @endif
 
         <div id="buttonpad" class="buttonpad">
             <div class="master_controls">
@@ -16,23 +80,6 @@
                         src="storage/icons/record-icon.png"  /></button><!-- alt="record-button"-->
                 <button id=metric_button class="btn btn-outline-info btn-metric"></button>
                 <button id="bpm_button" class="btn btn-outline-info btn-bpm"></button>
-            </div>
-            <button id="load_sound" class="btn btn-outline-info">Load sound</button>
-            <div>
-                <button id="load_project" class="btn btn-outline-info">Load project</button>
-                <div id="load_dialogue">
-                    <p>Enter project to load:</p>
-                    <input id="project_to_load" type="text">
-                </div>
-                <button id="save_project" class="btn btn-outline-info">Save project</button>
-                <div id="save_dialogue">
-                    <p>Enter a name for your new project:</p>
-                    <input id="project_name" type="text">
-                </div>
-            </div>
-            <div class="zoom-btn">
-                <button id="zoomin" type="button" class="btn btn-outline-info">+</button>
-                <button id="zoomout" type="button" class="btn btn-outline-info">-</button>
             </div>
         </div>
 
@@ -49,6 +96,11 @@
         </section>
 
         <section class="sound-clips">
+			<div class="zoom-btn">
+                <button id="zoomin" type="button" class="btn btn-outline-info">+</button>
+                <button id="zoomout" type="button" class="btn btn-outline-info">-</button>
+            </div>
+
             <div class="track_names">
                 <div class="dummy-block"></div>
                 @include('layouts.track_name', ['number'=> '1', 'number2'=> '0'])
@@ -74,6 +126,9 @@
                 @include('layouts.track_canvas', ['number'=>'7'])
             </div>
         </section>
+
+		<div id="projects_window"></div>
+
     </div>
 
 @endsection
