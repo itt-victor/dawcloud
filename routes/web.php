@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AppController;
 use Illuminate\Http\Request;
@@ -28,11 +27,9 @@ Route::post('/login', [HomeController::class, 'login'])->name('login');
 
 Route::get('/app', [AppController::class, 'app'])->name('app');
 
-Route::get('/app/signup', [AppController::class, 'signup'])->name('signupFromApp');
-
 Route::post('/savesound', [AppController::class, 'saveSound'])->name('saveSound');
 
-Route::post('/saveproject', [AppController::class, 'saveProject'])->name('saveProject');   //hay que pasar por parámetro el id del usuario
+Route::post('/saveproject', [AppController::class, 'saveProject'])->name('saveProject');
 
 Route::get('/loadproject/{project}', [AppController::class, 'loadProject'])->name('loadProject');
 

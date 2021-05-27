@@ -128,11 +128,13 @@ function saveProject() {
 
 
 function loadProject() {
-    var loadWindow = document.getElementById('load_dialogue');
-    loadWindow.children[1].addEventListener('keyup', function (e) {
-        if (e.keyCode === 13) {
-            e.preventDefault();
-            projectName = loadWindow.children[1].value;
+    const loadWindow = document.getElementById('load_dialogue');
+    const projects = document.getElementsByClassName('projects');
+
+    for (let h = 0; h < projects.length; h++) {
+        projects[h].addEventListener('dblclick', function (e) {
+
+            projectName = this.id;
             loadWindow.style.display = 'none';
             loadWindow.style.visibility = 'hidden';
             loading();
@@ -203,27 +205,23 @@ function loadProject() {
                     console.log(errorThrown);
                 }
             });
-        }
-    });
+        });
+    }
 }
 
-loadbtn.addEventListener('click', function (e) {
-    var loadWindow = document.getElementById('load_dialogue');
-    loadWindow.style.display = 'block';
-    loadWindow.style.visibility = 'visible';
-    loadProject();
-});
-savebtn.addEventListener('click', function (e) {
-    var saveWindow = document.getElementById('save_dialogue');
-    saveWindow.style.display = 'block';
-    saveWindow.style.visibility = 'visible';
-    /*window.addEventListener('click', function br(a) {
-        if (!a.target.contains(e.target)) {
-            saveWindow.style.display = 'none';
-            saveWindow.style.visibility = 'hidden';
-            this.removeEventListener('click', br);
-        }
-    });*/
-    saveProject()
-});
-
+if (loadbtn) {
+    loadbtn.addEventListener('click', function (e) {
+        var loadWindow = document.getElementById('load_dialogue');
+        loadWindow.style.display = 'block';
+        loadWindow.style.visibility = 'visible';
+        loadProject();
+    });
+}
+if (savebtn) {
+    savebtn.addEventListener('click', function (e) {
+        var saveWindow = document.getElementById('save_dialogue');
+        saveWindow.style.display = 'block';
+        saveWindow.style.visibility = 'visible';
+        saveProject()
+    });
+}

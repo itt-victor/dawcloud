@@ -116,7 +116,6 @@ body {
 	height: 35px;
     align-self: center;
 	margin-bottom: 10px;
-    border-radius: 5px;
 }
 
 #signup_reminder button {
@@ -439,12 +438,6 @@ div [data-selected] {
 	border-radius: 8px;
 }
 
-.projects {
-    background-color: #bbb8b8;
-    width: 320px;
-    height: 35px;
-}
-
 #load_project, #save_project, #load_sound {
     height: 45px;
 	width: 220px;
@@ -453,7 +446,7 @@ div [data-selected] {
 .dropdown-menu {
 	padding-top: 1px;
 	height: 136px;
-	background-color: transparent;
+	background-color: #b9edf1;
 	border: none;
 }
 
@@ -465,6 +458,11 @@ div [data-selected] {
 ::-webkit-scrollbar-thumb {
 	background-color: #7a2332;
 	width: 50px;
+}
+
+#projects_window {
+	display:none;
+	visibility: hidden;
 }
 
 

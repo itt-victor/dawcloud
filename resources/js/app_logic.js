@@ -10,15 +10,19 @@ import { soundStatuses } from './app_core';
 function toggleSignUp() {
     let signup = document.querySelector('#signup_now');
     let signupReminder = document.querySelector('#signup_reminder');
-	let xButton = document.querySelector('.x-button');
-    signup.addEventListener('click', function(){
-        signupReminder.style.display = 'flex';
-		signupReminder.style.visibility = 'visible';
-    });
-	xButton.addEventListener('click', function(){
-		signupReminder.style.display = 'none';
-		signupReminder.style.visibility = 'hidden';
-	});
+    let xButton = document.querySelector('.x-button');
+    if (signup) {
+        signup.addEventListener('click', function () {
+            signupReminder.style.display = 'flex';
+            signupReminder.style.visibility = 'visible';
+        });
+    }
+    if (xButton) {
+        xButton.addEventListener('click', function () {
+            signupReminder.style.display = 'none';
+            signupReminder.style.visibility = 'hidden';
+        });
+    }
 }
 toggleSignUp();
 
@@ -45,47 +49,6 @@ function selectTrack() {
     }
 }
 selectTrack();
-
-
-//Cambiar nombre de pista  - NO ME CONVENCE NO ES NECESARIO
-/*function changeTrackName() {
-    var tracksNames = document.getElementsByClassName('select');
-    var prr = document.getElementsByClassName('input');
-    for (var i = 0; i < prr.length; i++) {
-        prr[i].style.display = 'none';
-        prr[i].style.visibility = 'hidden';
-    }
-    for (var i = 0; i < tracksNames.length; i++) {
-        tracksNames[i].addEventListener('dblclick', function dbl(e) {
-            var box = this.nextSibling.nextSibling;
-            var text = this;
-            console.log(box, text);
-            text.style.display = 'none';
-            text.style.visibility = 'hidden';
-            box.style.display = 'block';
-            box.style.visibility = 'visible';
-            window.addEventListener('click', function (a) {
-                if (a.target.contains(e.target)) {
-                    box.style.display = 'none';
-                    box.style.visibility = 'hidden';
-                    text.style.display = 'block';
-                    text.style.visibility = 'visible';
-                }
-            });
-            box.addEventListener('keyup', function (e) {
-                if (e.keyCode === 13) {
-                    e.preventDefault();
-                    text.innerHTML = box.value;
-                    box.style.display = 'none';
-                    box.style.visibility = 'hidden';
-                    text.style.display = 'block';
-                    text.style.visibility = 'visible';
-                }
-            });
-        });
-    }
-}
-changeTrackName();*/
 
 //Cargar una canción --- desde el pc del usuario o desde una base remote????
 function loadSong() {

@@ -6,26 +6,10 @@
     <div id="app">
         <h1 id="page-title" class="h1 center"><a class="a_title" href="{{route('home')}}">daw Cloud</a></h1>
 
-		@if (Request::get('user') !== 'public')
-        <div id="user_options">
-			<button id="user_welcome" type="button" class= "btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hello {{Request::get('user')}} </button>
-			<div class="dropdown-menu" aria-labelledby="user_welcome">
-                <button id="load_project" class="btn btn-outline-info dropdown-item">Load project</button>
-                <button id="save_project" class="btn btn-outline-info dropdown-item">Save project</button>
-				<button id="load_sound" class="btn btn-outline-info dropdown-item">Load sound</button>
-			</div>
-			<div id="load_dialogue">
-				<p>Enter project to load:</p>
-				<input id="project_to_load" type="text">
-			</div>
-			<div id="save_dialogue">
-				<p>Enter a name for your new project:</p>
-				<input id="project_name" type="text">
-			</div>
-		</div>
-		<div style="display: none; visibility: hidden">
-			<p id="signup_now">Sign up, you will be able to save your projects<p>
-			<form id="signup_reminder" method="POST" action="{{ route('signupFromApp') }}">
+		@if (Request::get('user') == 'unsigned')
+        <div>
+			<p id="signup_now">Sign up, you will be able to save your projects</p>
+			<form id="signup_reminder" method="POST" action="{{ route('signup') }}">
                 <p class="signup_reminder_text">Create account. It's free <span class="x-button">&#10006;</span></p>
                 @csrf
                 <label for="signup_email">Email</label>
@@ -38,35 +22,27 @@
             </form>
 		</div>
 		@else
-		<div id="user_options" style="display: none; visibility: hidden">
-			<button id="user_welcome" type="button" class= "btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hello {{Request::get('user')}} </button>
+		<div id="user_options">
+			<button id="user_welcome" type="button" class= "btn dropdown-toggle"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hello {{ session('user_name') }} </button>
 			<div class="dropdown-menu" aria-labelledby="user_welcome">
-                <button id="load_project" class="btn btn-outline-info dropdown-item">Load project</button>
-                <button id="save_project" class="btn btn-outline-info dropdown-item">Save project</button>
+                <button id="load_project" class="btn btn-outline-info dropdown-item">My projects</button>
+                <button id="save_project" class="btn btn-outline-info dropdown-item">Save new project</button>
 				<button id="load_sound" class="btn btn-outline-info dropdown-item">Load sound</button>
 			</div>
 			<div id="load_dialogue">
-				<p>Enter project to load:</p>
-				<input id="project_to_load" type="text">
+                @if (!empty($projects[0]))
+				    @foreach ( $projects as $project)
+                        <a class="projects btn" id="{{$project}}">{{$project }}</a>
+                    @endforeach
+                @else
+                    <p>No projects yet!!</p>
+                @endif
 			</div>
 			<div id="save_dialogue">
 				<p>Enter a name for your new project:</p>
 				<input id="project_name" type="text">
 			</div>
-		</div>
-		<div>
-			<p id="signup_now">Sign up, you will be able to save your projects<p>
-			<form id="signup_reminder">
-                <p class="signup_reminder_text">Create account. It's free <span class="x-button">&#10006;</span></p>
-                @csrf
-                <label for="signup_email">Email</label>
-                <input type="email" class="" name="signup_email" autocomplete="off">
-                <label for="signup_username">User Name</label>
-                <input type="text" class="" name="signup_username" autocomplete="off">
-                <label for="signup_password">Password</label>
-                <input type="password" class="" name="signup_password" autocomplete="off">
-                <button id="register2" type="submit">Sign Up!</button>
-            </form>
 		</div>
         @endif
 
@@ -126,9 +102,6 @@
                 @include('layouts.track_canvas', ['number'=>'7'])
             </div>
         </section>
-
-		<div id="projects_window"></div>
-
     </div>
 
 @endsection

@@ -33,8 +33,8 @@
             </form>
 
         </div>
-        <a href="{{ route('app', ['user' => 'public']) }}" id="startunsigned" name="startunsigned" class="startunsigned">Start daw Cloud without account</a>
-
+        <a href="{{ route('app', ['user' => 'unsigned']) }}"
+            id="startunsigned" name="startunsigned" class="startunsigned">Start daw Cloud without account</a>
 
 		@if ($errors->any())
         <div class="alert alert-danger">
