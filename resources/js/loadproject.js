@@ -3,7 +3,6 @@ var toWav = require('audiobuffer-to-wav')
 import { audioCtx } from './app_core';
 import { timeSpace } from './timeSpace';
 import { grid } from './components/generalgrid';
-import { ui_draw } from './ui/ui_draw';
 import { dragRecording } from './ui/ui_dragRecordings';
 import drawLayout from './ui/ui_layout';
 import { cursor } from './components/cursor';
@@ -86,11 +85,7 @@ function saveProject() {
                 formdata.append('audio-blob', blob);
                 formdata.append('recording-id', grid.recordings[i].id);
                 formdata.append('project-name', projectName);
-                /*$.ajaxSetup({      no cal esto
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });*/
+
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -109,7 +104,7 @@ function saveProject() {
                     project.audioReferences.push(projectName + '_' + grid.recordings[i].id);
                 }
             }
-            console.log(project.tracksGainValues, project.tracksY);
+
             var projectForm = new FormData();
             projectForm.append('project-name', projectName);
             projectForm.append('project', JSON.stringify(project));
@@ -152,7 +147,6 @@ function loadProject() {
                 success: function (response, request) {
 
                     project = response;
-                    console.log(project);
 
                     timeSpace.timeAtPause = project.timeSpace.timeAtPause;
                     timeSpace.pxIncrement = project.timeSpace.pxIncrement;
@@ -189,6 +183,7 @@ function loadProject() {
                                 var audioBuffer = data;
                                 let track = grid.tracks[project.recordings[i].tracknumber];
                                 track.addRecord(project.recordings[i].timeToStart, audioBuffer);
+                                setTimeout(dragRecording, 20);
                             });
                         };
                         request.send();
@@ -201,7 +196,6 @@ function loadProject() {
                         grid.tracks[i].gainNode.gain.setValueAtTime(grid.tracks[i].gainNode.gainValue, audioCtx.currentTime);
                     }
 
-                    setTimeout(dragRecording, 1000);
                     setTimeout(removeRecording, 1000);
 
                 },

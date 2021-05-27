@@ -67,6 +67,7 @@ export default function recordController() {
                         var track = document.querySelector('[data-selected]').id;
                         grid.tracks[track].addRecord(startTime, aB);
                         dragRecording();
+                        setTimeout(dragRecording, 0);
                         setTimeout(removeRecording, 20);
                     });
                 })

@@ -39,10 +39,10 @@ class AppController extends Controller
         $project = $request->input('project');
         $filename = 'public/projects/'. $projectname . '/' . $projectname .'.json';
 
-        if (Storage::exists($filename)) {
+        /*if (Storage::exists($filename)) {
             Storage::delete($filename);
         }
-        //Storage::put($filename, json_encode($project));
+        Storage::put($filename, json_encode($project));*/
 
         $project = DB::table('projects')->insert([
             'project_name' => $projectname,
