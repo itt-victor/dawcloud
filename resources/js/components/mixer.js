@@ -27,7 +27,7 @@ function setChannelGain() {
             Y = fader.Y;
             gain = grid.tracks[trckNr].gainNode;
             var mousePos = onMousePos(fader, evt);
-            if (mousePos.y <= 260 &&
+            if (mousePos.y <= 280 &&
                 mousePos.y >= 20) {
                 drag[trckNr] = true;
                 delta.x = X - mousePos.x;
@@ -87,7 +87,7 @@ function setMasterGain() {
     fader.firstChild.addEventListener("mousedown", function (evt) {
         Y = this.getAttribute('data-y')
         var mousePos = onMousePos(fader, evt);
-        if (mousePos.y <= 260 &&
+        if (mousePos.y <= 280 &&
             mousePos.y >= 20) {
             drag = true;
             delta.x = X - mousePos.x;
@@ -118,4 +118,3 @@ function setMasterGain() {
 }
 
 setTimeout(function () { setMasterGain(); }, 500);
-

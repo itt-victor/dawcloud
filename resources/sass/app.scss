@@ -450,6 +450,14 @@ div [data-selected] {
 	width: 220px;
 }
 
+#load_sound {
+	padding-top: 8px;
+}
+
+input[type="file" i]{
+	visibility: hidden;
+}
+
 .dropdown-menu {
 	padding-top: 1px;
 	height: 136px;

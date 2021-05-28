@@ -1,10 +1,15 @@
+require('./bootstrap');
+
 import { soundcontroller } from './app_core';
+import { audioCtx } from './app_core'
 import { grid } from './components/generalgrid';
 import { timeSpace } from './timeSpace';
 import { ui_draw } from './ui/ui_draw';
 import drawLayout from './ui/ui_layout';
 import { cursor } from './components/cursor';
 import { soundStatuses } from './app_core';
+import { dragRecording } from './ui/ui_dragRecordings';
+
 
 //toggle registrarse para uruarios no registrados
 function toggleSignUp() {
@@ -50,15 +55,29 @@ function selectTrack() {
 }
 selectTrack();
 
+
 //Cargar una canción --- desde el pc del usuario o desde una base remote????
 function loadSong() {
-    let button = document.getElementById('load_sound');
-    button.addEventListener('click', function () {
-        let trcknr = document.querySelector('[data-selected] > canvas').id;
-        let url;
-        soundcontroller.loadSound(url, trcknr, 0);
-    })
+    const button = document.getElementById('load_sound_hidden');
+	button.onchange = function () {
+	    var reader = new FileReader();
+	    reader.onload = function(e) {
+			let trcknr = document.querySelector('[data-selected]').id;
+			let startTime = timeSpace.timeAtPause;
+			audioCtx.decodeAudioData(e.target.result).then(function(buffer) {
+				grid.tracks[trcknr].addRecord(startTime, buffer);
+				setTimeout(dragRecording, 0);
+				setTimeout(removeRecording, 20);
+            });
+	    }
+		reader.readAsArrayBuffer(button.files[0]);
+	}
 }
+setTimeout(loadSong, 0);
+
+
+
+	    //resolve(HTMLInputElement.files);
 
 //zoom!!!
 function zoom() {

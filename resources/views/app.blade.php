@@ -28,7 +28,8 @@
 			<div class="dropdown-menu" aria-labelledby="user_welcome">
                 <button id="load_project" class="btn btn-outline-info dropdown-item">My projects</button>
                 <button id="save_project" class="btn btn-outline-info dropdown-item">Save new project</button>
-				<button id="load_sound" class="btn btn-outline-info dropdown-item">Load sound</button>
+				<label id="load_sound" for="load_sound_hidden" class="btn btn-outline-info dropdown-item">Load sound</label>
+				<input type="file" id="load_sound_hidden" class="btn btn-outline-info dropdown-item" accept="audio/wav, audio/mp3"></input>
 			</div>
 			<div id="load_dialogue">
                 @if (!empty($projects[0]))

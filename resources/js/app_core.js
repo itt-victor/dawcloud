@@ -30,7 +30,6 @@ export const audioCtx = new (window.AudioContext ||
 //llamo al controlador de sonido
 export var soundcontroller = new SoundController(audioCtx);
 
-
 export function loading() {
     let text = document.querySelector('.a_title');
     let ventana = document.querySelector('.loading');
