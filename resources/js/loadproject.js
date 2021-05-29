@@ -182,7 +182,6 @@ function loadProject() {
                         request.onload = function () {
                             let undecodedAudio = request.response;
                             audioCtx.decodeAudioData(undecodedAudio, (audioBuffer) => {
-                                //var audioBuffer = data;
                                 let track = grid.tracks[project.recordings[i].tracknumber];
                                 track.addRecord(project.recordings[i].timeToStart, audioBuffer);
                                 setTimeout(dragRecording, 20);
