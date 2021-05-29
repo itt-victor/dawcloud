@@ -45,7 +45,7 @@ class AppController extends Controller
     {
         $projectname = $request->input('project-name');
         $project = $request->input('project');
-        $filename = 'public/projects/' . $projectname . '/' . $projectname . '.json';
+        //$filename = 'public/projects/' . $projectname . '/' . $projectname . '.json';
 
         $search = DB::table('projects')
             ->where('project_name', $projectname)

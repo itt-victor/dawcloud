@@ -17,8 +17,6 @@ use Illuminate\Http\Request;
 |
 */
 
-//Route::get('/', [HomeController::class, 'signup'])->name('prueba');  //con este puesto tienes una ventana al server <3 - para probar solo
-
 Route::get('/', [HomeController::class, 'home'])->name('home');
 
 Route::post('/signup', [HomeController::class, 'signup'])->name('signup');

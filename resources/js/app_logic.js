@@ -56,28 +56,28 @@ function selectTrack() {
 selectTrack();
 
 
-//Cargar una canción --- desde el pc del usuario o desde una base remote????
+//Cargar una canción desde el pc del usuario
 function loadSong() {
     const button = document.getElementById('load_sound_hidden');
-	button.onchange = function () {
-	    var reader = new FileReader();
-	    reader.onload = function(e) {
-			let trcknr = document.querySelector('[data-selected]').id;
-			let startTime = timeSpace.timeAtPause;
-			audioCtx.decodeAudioData(e.target.result).then(function(buffer) {
-				grid.tracks[trcknr].addRecord(startTime, buffer);
-				setTimeout(dragRecording, 0);
-				setTimeout(removeRecording, 20);
-            });
-	    }
-		reader.readAsArrayBuffer(button.files[0]);
-	}
+    if (button) {
+        button.onchange = function () {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                let trcknr = document.querySelector('[data-selected]').id;
+                let startTime = timeSpace.timeAtPause;
+                audioCtx.decodeAudioData(e.target.result).then(function (buffer) {
+                    grid.tracks[trcknr].addRecord(startTime, buffer);
+                    setTimeout(dragRecording, 0);
+                    setTimeout(removeRecording, 20);
+                });
+            }
+            reader.readAsArrayBuffer(button.files[0]);
+        }
+    }
 }
 setTimeout(loadSong, 0);
 
 
-
-	    //resolve(HTMLInputElement.files);
 
 //zoom!!!
 function zoom() {
@@ -164,7 +164,7 @@ function setBpm() {
 }
 setBpm();
 
-//cambia el compás, ya se añadiran
+//cambia el compás, ya se añadiran más
 function metric() {
     const metricButton = document.getElementById('metric_button');
     metricButton.innerHTML = '4/4';
