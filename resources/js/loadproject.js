@@ -6,8 +6,10 @@ import { grid } from './components/generalgrid';
 import { dragRecording } from './ui/ui_dragRecordings';
 import drawLayout from './ui/ui_layout';
 import { cursor } from './components/cursor';
-import { recordingId } from './utils';
+import { numbers } from './utils';
 import { removeRecording } from './app_logic';
+import { modifyRecording } from './ui/modifyRecordings';
+import { cutRecording } from './ui/cutRecordings';
 import { loading } from './app_core';
 
 
@@ -46,7 +48,7 @@ function saveProject() {
                 audioBuffers = project.audioBuffers;
                 tracksGainValues = project.tracksGainValues;
                 tracksY = project.tracksY;
-                recordingId = project.audioReferences.length;
+                numbers.recordingId = project.audioReferences.length;
 
                 //Se guardan los valores de gain de cada pista
                 for (let i = 0; i < grid.tracks.length; i++) {
@@ -73,6 +75,7 @@ function saveProject() {
                 project.recordings = grid.recordings;
                 project.tracksGainValues = tracksGainValues;
                 project.tracksY = tracksY;
+                project.audioReferences = [];
             }
 
             //Se convierten los audioBuffers en wav, se convierten a su vez en blob, y se genera una URL del mismo
@@ -104,6 +107,7 @@ function saveProject() {
                     project.audioReferences.push(projectName + '_' + grid.recordings[i].id);
                 }
             }
+            numbers.recordingId = project.audioReferences.length;
 
             var projectForm = new FormData();
             projectForm.append('project-name', projectName);
@@ -118,6 +122,7 @@ function saveProject() {
                 processData: false,
                 contentType: false,
                 success: function (data) {
+                    console.log('Project saved successfully');
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                 }
@@ -132,8 +137,7 @@ function loadProject() {
     const projects = document.getElementsByClassName('projects');
 
     for (let h = 0; h < projects.length; h++) {
-        projects[h].addEventListener('dblclick', function (e) {
-
+        projects[h].addEventListener('dblclick', function ld(e) {
             projectName = this.id;
             loadWindow.style.display = 'none';
             loadWindow.style.visibility = 'hidden';
@@ -162,12 +166,10 @@ function loadProject() {
 
                     drawLayout();
 
-                    //cuidado con esto - borrar las pistas existentes por si ya había algo,
-                    //porque ahora está añadiendo sobre lo que ya hubiese
+                    //se elimina las pistas existentes si hubiesen
                     for (let i = 0; i < grid.recordings.length; i++) {
                         grid.recordings[i].canvasCtx.clearRect(0, 0, 4000, 70);
-                        grid.recordings[i].canvas = null;
-                        grid.recordings[i].canvasCtx = null;
+                        grid.recordings[i].deleteRecording();
                         delete grid.recordings[i].audioBuffer;
                     }
                     grid.recordings = [];
@@ -185,6 +187,7 @@ function loadProject() {
                                 let track = grid.tracks[project.recordings[i].tracknumber];
                                 track.addRecord(project.recordings[i].timeToStart, audioBuffer);
                                 setTimeout(dragRecording, 20);
+                                setTimeout(removeRecording, 20);
                             });
                         };
                         request.send();
@@ -196,9 +199,10 @@ function loadProject() {
                         fader.firstChild.nextSibling.style.top = project.tracksY[i] + 'px';
                         grid.tracks[i].gainNode.gain.setValueAtTime(grid.tracks[i].gainNode.gainValue, audioCtx.currentTime);
                     }
+                    //setTimeout(modifyRecording, 1000);
+                    //setTimeout(cutRecording, 1000);
 
-                    setTimeout(removeRecording, 1000);
-
+                    console.log('Project loaded successfully');
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log(errorThrown);
@@ -207,13 +211,14 @@ function loadProject() {
         });
     }
 }
+loadProject();
+saveProject();
 
 if (loadbtn) {
     loadbtn.addEventListener('click', function (e) {
         var loadWindow = document.getElementById('load_dialogue');
         loadWindow.style.display = 'block';
         loadWindow.style.visibility = 'visible';
-        loadProject();
     });
 }
 if (savebtn) {
@@ -221,6 +226,5 @@ if (savebtn) {
         var saveWindow = document.getElementById('save_dialogue');
         saveWindow.style.display = 'block';
         saveWindow.style.visibility = 'visible';
-        saveProject()
     });
 }

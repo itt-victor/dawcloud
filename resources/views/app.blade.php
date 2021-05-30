@@ -60,6 +60,13 @@
             </div>
         </div>
 
+        <div id="toolbox">
+            <button id="normal_function" class="btn btn-outline-info"><img width="20px" height="20px"
+                src="storage/icons/normal_cursor.png"  /></button>
+            <button id="cut_function" class="btn btn-outline-info"><img width="20px" height="20px"
+                src="storage/icons/cut_icon.svg"  /></button>
+        </div>
+
         <section id="mixer" class="mixer">
             @include('layouts.fader', ['number'=> '0', 'number2'=>'1'])
             @include('layouts.fader', ['number'=> '1', 'number2'=>'2'])

@@ -4,10 +4,11 @@ require('./audio/recordcontroller');
 require('./components/timeLayout');
 require('./ui/ui_dragRecordings');
 require('./ui/ui_layout');
+require('./ui/modifyRecordings');
+require('./ui/cutRecordings');
 require('./loadproject');
 require('./components/mixer');
 
-//import { Grid } from './components/generalgrid';
 import { grid } from './components/generalgrid';
 import drawLayout from './ui/ui_layout';
 import { cursor } from './components/cursor';

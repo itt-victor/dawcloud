@@ -22,10 +22,15 @@ export function dragRecording() {
 
     for (var i = 0; i < grid.recordings.length; i++) {
 
-        if (grid.recordings[i].canvas) {
+        if (grid.recordings[i].canvas != undefined) {
 
             grid.recordings[i].canvas.addEventListener("mousedown", function (evt) {
-                recording = grid.recordings[this.id.charAt(10)];
+
+                for (var i = 0; i < grid.recordings.length; i++) {
+                    if (evt.target.id === grid.recordings[i].id) {
+                        recording = grid.recordings[i];
+                    }
+                }
                 ctx = recording.canvasCtx;
 
                 X = recording.timeToStart / timeSpace.zoom;
@@ -41,7 +46,13 @@ export function dragRecording() {
             }, false);
 
             grid.recordings[i].canvas.addEventListener("mousemove", function a(evt) {
-                recording = grid.recordings[this.id.charAt(10)];
+
+                for (var i = 0; i < grid.recordings.length; i++) {
+                    if (evt.target.id === grid.recordings[i].id) {
+                        recording = grid.recordings[i];
+                    }
+                }
+
                 ctx = recording.canvasCtx;
                 X = recording.timeToStart / timeSpace.zoom;
                 Y = 0;
@@ -61,7 +72,13 @@ export function dragRecording() {
             }, false);
 
             grid.recordings[i].canvas.addEventListener("mouseup", function (evt) {
-                recording = grid.recordings[this.id.charAt(10)];
+
+                for (var i = 0; i < grid.recordings.length; i++) {
+                    if (evt.target.id === grid.recordings[i].id) {
+                        recording = grid.recordings[i];
+                    }
+                }
+
                 drag[recording.tracknumber] = false;
             }, false);
         }

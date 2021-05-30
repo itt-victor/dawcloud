@@ -143,6 +143,16 @@ body {
     height: 45px;
 }
 
+#toolbox {
+    position: absolute;
+    left: 120px;
+    top: 240px;
+}
+
+.cursor_text {
+    cursor: text;
+}
+
 .btn {
     background-color: #b3b3b3;
     border: solid 0.5px #7a2332;

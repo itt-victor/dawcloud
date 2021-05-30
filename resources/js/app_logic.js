@@ -9,6 +9,9 @@ import drawLayout from './ui/ui_layout';
 import { cursor } from './components/cursor';
 import { soundStatuses } from './app_core';
 import { dragRecording } from './ui/ui_dragRecordings';
+import { cutRecording } from './ui/cutRecordings';
+
+
 
 
 //toggle registrarse para uruarios no registrados
@@ -69,6 +72,8 @@ function loadSong() {
                     grid.tracks[trcknr].addRecord(startTime, buffer);
                     setTimeout(dragRecording, 0);
                     setTimeout(removeRecording, 20);
+                    //setTimeout(cutRecording, 20);
+                    //modifyRecording
                 });
             }
             reader.readAsArrayBuffer(button.files[0]);
@@ -241,7 +246,7 @@ export function removeRecording() {
         grid.recordings[i].canvas.addEventListener('click', function arrr(e) {
 
             for (var i = 0; i < grid.recordings.length; i++) {
-                if (this.id === grid.recordings[i].id) {
+                if (e.target.id === grid.recordings[i].id) {
                     recording = grid.recordings[i]
                 }
             }
@@ -249,16 +254,20 @@ export function removeRecording() {
             for (var i = 0; i < grid.recordings.length; i++) {
                 if (grid.recordings[i].audioBuffer != undefined) { ui_draw.drawRecording(grid.recordings[i]); }
             }
-            if (recording.audioBuffer != undefined) { ui_draw.clickAtRecording(recording); }
+            ui_draw.clickAtRecording(recording);
             window.addEventListener('keyup', function (a) {
                 if (a.keyCode === 46) {
                     a.preventDefault();
                     if (!soundStatuses.hasStopped) { soundcontroller.stopSingleSound(recording); }
-                    if (recording.audioBuffer != undefined) { recording.deleteRecording(); }
+                    if (recording.audioBuffer != undefined) {
+                        recording.deleteRecording();
+                        grid.recordings.splice(grid.recordings.indexOf(recording), 1);
+                        setTimeout(dragRecording, 100);
+                    }
                     e.target.removeEventListener('click', arrr);
                 }
             });
         });
     }
 }
-setTimeout(removeRecording, 3000);
+//setTimeout(removeRecording, 3000);
