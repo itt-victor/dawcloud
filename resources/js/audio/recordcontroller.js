@@ -2,13 +2,9 @@ import { grid } from '../components/generalgrid';
 import { ui_draw } from '../ui/ui_draw';
 import { cursor } from '../components/cursor';
 import { timeSpace } from '../timeSpace';
-import { audioBufferSources } from './soundcontroller';
-import { dragRecording } from '../ui/ui_dragRecordings';
-import { removeRecording } from '../app_logic';
 import { soundcontroller } from '../app_core';
 import { soundStatuses } from '../app_core';
 import { audioCtx } from '../app_core';
-
 import { play, record, stop } from '../app_core';
 
 export default function recordController() {
@@ -42,19 +38,14 @@ export default function recordController() {
                 if (mediaRecorder.state == 'recording') {
                     mediaRecorder.stop();
                     console.log(mediaRecorder.state);
-                    timeSpace.timeAtPause = timeSpace.pxIncrement * timeSpace.zoom; //es necesario aquí?
+                    timeSpace.timeAtPause = timeSpace.pxIncrement * timeSpace.zoom;
                     record.style.background = "";
                     record.style.color = "";
                     record.disabled = false;
+                    cursor.stop();
                 }
             }
             stop.addEventListener('click', rStop);
-            window.addEventListener('keyup', function (e) {
-                if (e.keyCode === 32) {
-                    e.preventDefault();
-                    rStop();
-                }
-            });
 
             mediaRecorder.onstop = function recordSound() {
                 const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
@@ -63,10 +54,6 @@ export default function recordController() {
                     audioCtx.decodeAudioData(arrayBuffer, (audioBuffer) => {
                         var track = document.querySelector('[data-selected]').id;
                         grid.tracks[track].addRecord(startTime, audioBuffer);
-                        setTimeout(dragRecording, 20);
-                        setTimeout(removeRecording, 20);
-                        //modify
-                        //cut
                     });
                 })
             }

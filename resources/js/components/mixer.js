@@ -67,7 +67,7 @@ function setChannelGain() {
         }, false);
     }
 }
-setTimeout(function () { setChannelGain(); }, 500);
+setTimeout( setChannelGain, 500);
 
 function setMasterGain() {
     var fader = document.getElementById('master_fader');
@@ -117,4 +117,4 @@ function setMasterGain() {
     }, false);
 }
 
-setTimeout(function () { setMasterGain(); }, 500);
+setTimeout( setMasterGain, 500);

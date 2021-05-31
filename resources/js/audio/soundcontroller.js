@@ -2,8 +2,6 @@ import { timeSpace } from '../timeSpace';
 import { grid } from '../components/generalgrid';
 import { audioCtx } from '../app_core';
 
-let isMuted = false;
-let isSolo = false;
 
 export default class SoundController {
 
@@ -37,7 +35,7 @@ export default class SoundController {
             var start = Math.max((grid.recordings[h].timeToStart - timeSpace.timeAtPause + audioCtx.currentTime), 0);
             var offset = Math.max((timeSpace.timeAtPause - grid.recordings[h].timeToStart) + grid.recordings[h].offset, 0);
             var duration;
-            if (grid.recordings[h].duration){ duration = grid.recordings[h].duration}
+            if (grid.recordings[h].duration){ duration = grid.recordings[h].duration; }
             source.start(start, offset, duration);
             this.audioBufferSources.push(source);
             grid.recordings[h].audioBufferSource = source;
@@ -66,7 +64,9 @@ export default class SoundController {
         source.connect(grid.tracks[recording.tracknumber].gainNode)  //gain node asociado a la pista
         var start = Math.max((recording.timeToStart - timeSpace.timeAtPause + audioCtx.currentTime), 0);
         var offset = Math.max((timeSpace.timeAtPause - recording.timeToStart), 0);
-        source.start(start, offset);
+        var duration;
+        if (recording.duration){ duration = recording.duration; }
+        source.start(start, offset, duration);
         recording.audioBufferSource = source;
         this.audioBufferSources.push(source);
     }

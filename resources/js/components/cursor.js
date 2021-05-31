@@ -3,8 +3,6 @@ import { grid } from './generalgrid';
 import { timeSpace } from '../timeSpace';
 
 var interval;
-let zoomIn = document.getElementById("zoomin");
-let zoomOut = document.getElementById("zoomout");
 
 const layout = document.querySelector('#layout');
 export var cursor = {
@@ -13,7 +11,7 @@ export var cursor = {
     draw: function () {
         this.canvas.width = 3;
         this.canvas.height = 70 * grid.howMany;
-        this.canvas.style.left = 0//grid.canvas.getBoundingClientRect().x + 'px';//'620px'; '611px';
+        this.canvas.style.left = 0;
         this.canvas.style.zIndex = '10';
         this.ctx = this.canvas.getContext('2d');
         this.ctx.fillStyle = 'black';
@@ -28,20 +26,11 @@ export var cursor = {
             timeSpace.pxIncrement++
             this.cursor.style.left = (timeSpace.widthAtPause) + 'px';
         }, timeSpace.zoom * 1000)
-        stop.addEventListener('click', function clr() {
-            clearInterval(interval);
-        });
-        zoomIn.addEventListener('click', function () {
-            clearInterval(interval);
-        });
-        zoomOut.addEventListener('click', function () {
-            clearInterval(interval);
-        });
     },
 
     moveAtZoom: function (oldZoom) {
         timeSpace.widthAtPause = (timeSpace.widthAtPause * (1 / timeSpace.zoom)) / (1 / oldZoom);
-        timeSpace.pxIncrement = (timeSpace.pxIncrement * (1 / timeSpace.zoom)) / (1 / oldZoom); //CUIDAO
+        timeSpace.pxIncrement = (timeSpace.pxIncrement * (1 / timeSpace.zoom)) / (1 / oldZoom); //CUIDADO
         this.canvas.style.left = (timeSpace.widthAtPause) + 'px';
     },
 

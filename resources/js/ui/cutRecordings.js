@@ -46,10 +46,7 @@ export function cutRecording() {
                         }
                     }
                 }
-
-                console.log(duration);
             });
         }
     }
 }
-//setTimeout(cutRecording, 1000);

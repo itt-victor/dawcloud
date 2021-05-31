@@ -4,6 +4,9 @@ import { generateRecordingNumbers } from '../utils';
 import { ui_draw } from '../ui/ui_draw';
 import { grid } from './generalgrid';
 import { audioCtx } from '../app_core';
+import { dragRecording } from '../ui/ui_dragRecordings';
+import { removeRecording } from '../app_logic';
+
 var rcdName;
 
 export default class Track {
@@ -31,5 +34,7 @@ export default class Track {
         grid.recordings.push(window[rcdName]);
         this.trackDOMElement.appendChild(window[rcdName].canvas);
         ui_draw.drawRecording(window[rcdName]);
+        setTimeout(dragRecording(window[rcdName]), 20);
+        setTimeout(removeRecording(window[rcdName]), 20);
     };
 }

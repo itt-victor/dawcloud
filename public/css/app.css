@@ -10096,7 +10096,7 @@ body {
   position: absolute;
   left: 255px;
   top: 5px;
-  color: darkgray;
+  color: #868585;
   cursor: pointer;
 }
 
@@ -10188,10 +10188,14 @@ body {
   right: 100px;
   top: 52px;
   width: 210px;
+  height: 39px;
 }
 
 #zoomin, #zoomout {
-  height: 40px;
+  padding-top: 0;
+  padding-bottom: 0;
+  font-size: 25px;
+  font-weight: 700;
 }
 
 .sound-clips {
@@ -10417,21 +10421,41 @@ div [data-selected] {
   display: none;
   visibility: hidden;
   z-index: 60;
-  background-color: white;
+  background-color: #d4cfcf;
   text-align: center;
   border-radius: 8px;
 }
 
+.x-button2 {
+  font-size: 30px;
+  position: relative;
+  left: 40px;
+  cursor: pointer;
+  color: #595858;
+}
+
+.x-button2:hover {
+  color: black;
+}
+
+.dummy-space2 {
+  position: relative;
+  top: 0px;
+  left: 110px;
+  margin-bottom: 0;
+}
+
 #load_dialogue {
   position: absolute;
-  top: 300px;
+  padding-top: 0;
+  padding-bottom: 20px;
+  top: 175px;
   right: 400px;
   width: 350px;
-  height: 150px;
   display: none;
   visibility: hidden;
   z-index: 60;
-  background-color: white;
+  background-color: #d4cfcf;
   text-align: center;
   border-radius: 8px;
 }

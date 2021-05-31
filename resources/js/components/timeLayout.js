@@ -1,7 +1,6 @@
 import { timeSpace } from '../timeSpace';
 import { cursor } from './cursor';
 import { soundStatuses } from '../app_core';
-import { audioBufferSources } from '../audio/soundcontroller';
 import { soundcontroller } from '../app_core';
 import { grid } from './generalgrid';
 

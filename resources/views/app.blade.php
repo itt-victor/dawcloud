@@ -33,15 +33,16 @@
 			</div>
 			<div id="load_dialogue">
                 @if (!empty($projects[0]))
+                    <p class="dummy-space2"><span class="x-button2" id="projects-close" >&#10006;</span></p>
 				    @foreach ( $projects as $project)
                         <a class="projects btn" id="{{$project}}">{{$project }}</a>
                     @endforeach
                 @else
-                    <p>No projects yet!!</p>
+                    <p>No projects yet!! <span class="x-button2" id="projects-close" >&#10006;</span></p>
                 @endif
 			</div>
 			<div id="save_dialogue">
-				<p>Enter a name for your new project:</p>
+				<p>Enter a name for your new project: <span class="x-button2" id="save-close">&#10006;</span></p>
 				<input id="project_name" type="text">
 			</div>
 		</div>

@@ -2,10 +2,7 @@ require('./bootstrap');
 require('./app_logic');
 require('./audio/recordcontroller');
 require('./components/timeLayout');
-require('./ui/ui_dragRecordings');
 require('./ui/ui_layout');
-require('./ui/modifyRecordings');
-require('./ui/cutRecordings');
 require('./loadproject');
 require('./components/mixer');
 
@@ -22,11 +19,17 @@ export var soundStatuses = { isPlaying: false, hasStopped: true };
 
 stop.disabled = true;
 
+
+
+
+    /////////////////////////////////////
+    /////////////dawCloud///////////////
+    ////////////////////////////////////
+
 //se inicia audio context
 export const audioCtx = new (window.AudioContext ||
     window.webkitAudioContext);
 
-///////////////////////////////////////
 
 //llamo al controlador de sonido
 export var soundcontroller = new SoundController(audioCtx);
@@ -53,6 +56,7 @@ export function loading() {
         text.style.transition = 'color 0.7s'
     }, 3500);
 }
+
 loading();
 
 function appStart() {
@@ -65,35 +69,11 @@ function appStart() {
     //dibuja layout
     drawLayout();
 
-
-    /////////////////////////////////////
-    /////////////dawCloud///////////////
-    ////////////////////////////////////
-
-    //reproducir
-    function ePlay() {
-        cursor.play();
-        soundcontroller.playSound();
-        stop.disabled = false;
-        play.disabled = true;
-        soundStatuses.isPlaying = true;
-        soundStatuses.hasStopped = false;
-        return true;
-    }
     play.addEventListener('click', ePlay);
-
-    //stop
-    function eStop() {
-        soundcontroller.stopSound();
-        play.disabled = false;
-        stop.disabled = true;
-        soundStatuses.hasStopped = true;
-        soundStatuses.isPlaying = false;
-    }
     stop.addEventListener('click', eStop);
 
     //teclas play stop
-    window.addEventListener('keyup', function (e) {
+    /*window.addEventListener('keyup', function (e) {
         if (soundStatuses.hasStopped === true &&
             soundStatuses.isPlaying === false) {
             if (e.keyCode === 32) {
@@ -106,18 +86,36 @@ function appStart() {
                 eStop();
             }
         }
-    });
+    });*/
 
     /////////////
     recordcontroller();
     ////////////
 
-
     window.onresize = function () {
     }
-
     window.onresize();
+}
 
+//reproducir
+function ePlay() {
+    cursor.play();
+    soundcontroller.playSound();
+    stop.disabled = false;
+    play.disabled = true;
+    soundStatuses.isPlaying = true;
+    soundStatuses.hasStopped = false;
+    return true;
+}
+
+//stop
+export function eStop() {
+    cursor.stop();
+    soundcontroller.stopSound();
+    play.disabled = false;
+    stop.disabled = true;
+    soundStatuses.hasStopped = true;
+    soundStatuses.isPlaying = false;
 }
 
 

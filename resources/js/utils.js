@@ -8,11 +8,6 @@ export var numbers = {
     recordingId : -1
 };
 
-/*var tracknumber = 0;
-var recordnumber = 0;
-var tracknamenumber = 0;
-export var recordingId = -1;*/
-
 
 export function generateTrackNumbers(){
     numbers.tracknumber++;

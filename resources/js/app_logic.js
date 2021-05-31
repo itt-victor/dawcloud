@@ -8,10 +8,7 @@ import { ui_draw } from './ui/ui_draw';
 import drawLayout from './ui/ui_layout';
 import { cursor } from './components/cursor';
 import { soundStatuses } from './app_core';
-import { dragRecording } from './ui/ui_dragRecordings';
-import { cutRecording } from './ui/cutRecordings';
-
-
+import { eStop } from './app_core';
 
 
 //toggle registrarse para uruarios no registrados
@@ -64,16 +61,13 @@ function loadSong() {
     const button = document.getElementById('load_sound_hidden');
     if (button) {
         button.onchange = function () {
+            eStop();
             var reader = new FileReader();
             reader.onload = function (e) {
                 let trcknr = document.querySelector('[data-selected]').id;
                 let startTime = timeSpace.timeAtPause;
                 audioCtx.decodeAudioData(e.target.result).then(function (buffer) {
                     grid.tracks[trcknr].addRecord(startTime, buffer);
-                    setTimeout(dragRecording, 0);
-                    setTimeout(removeRecording, 20);
-                    //setTimeout(cutRecording, 20);
-                    //modifyRecording
                 });
             }
             reader.readAsArrayBuffer(button.files[0]);
@@ -99,8 +93,8 @@ function zoom() {
         }
         drawLayout();
         cursor.moveAtZoom(oldZoom);
-        if (soundStatuses.isPlaying === true) {
-            //cursor.stop();
+        if (soundStatuses.isPlaying) {
+            cursor.stop();
             cursor.play();
         }
     }
@@ -112,10 +106,9 @@ function zoom() {
         }
         drawLayout();
         cursor.moveAtZoom(oldZoom);
-        if (soundStatuses.isPlaying === true) {
-            //cursor.stop();
+        if (soundStatuses.isPlaying) {
+            cursor.stop();
             cursor.play();
-
         }
     }
     zoomIn.addEventListener('click', zIn);
@@ -239,35 +232,28 @@ function solo() {
 solo();
 
 //elimina la grabación
-export function removeRecording() {
-    let recording;
-    for (var i = 0; i < grid.recordings.length; i++) {
+export function removeRecording(recording) {
 
-        grid.recordings[i].canvas.addEventListener('click', function arrr(e) {
+    recording.canvas.addEventListener('click', function arrr(e) {
 
-            for (var i = 0; i < grid.recordings.length; i++) {
-                if (e.target.id === grid.recordings[i].id) {
-                    recording = grid.recordings[i]
-                }
+        for (var i = 0; i < grid.recordings.length; i++) {
+            if (grid.recordings[i].audioBuffer != undefined) {
+                ui_draw.drawRecording(grid.recordings[i]);
             }
-
-            for (var i = 0; i < grid.recordings.length; i++) {
-                if (grid.recordings[i].audioBuffer != undefined) { ui_draw.drawRecording(grid.recordings[i]); }
-            }
-            ui_draw.clickAtRecording(recording);
-            window.addEventListener('keyup', function (a) {
-                if (a.keyCode === 46) {
-                    a.preventDefault();
-                    if (!soundStatuses.hasStopped) { soundcontroller.stopSingleSound(recording); }
-                    if (recording.audioBuffer != undefined) {
-                        recording.deleteRecording();
-                        grid.recordings.splice(grid.recordings.indexOf(recording), 1);
-                        setTimeout(dragRecording, 100);
+        }
+        ui_draw.clickAtRecording(recording);
+        window.addEventListener('keyup', function (a) {
+            if (a.keyCode === 46) {
+                a.preventDefault();
+                if (recording.audioBuffer) {
+                    if (!soundStatuses.hasStopped) {
+                        soundcontroller.stopSingleSound(recording);
                     }
-                    e.target.removeEventListener('click', arrr);
+                    recording.deleteRecording();
+                    grid.recordings.splice(grid.recordings.indexOf(recording), 1);
                 }
-            });
+                e.target.removeEventListener('click', arrr);
+            }
         });
-    }
+    });
 }
-//setTimeout(removeRecording, 3000);
