@@ -4,61 +4,70 @@
 @section('content')
 <div class="loading"><p>Loading</p></div>
     <div id="app">
-        <h1 id="page-title" class="h1 center"><a class="a_title" href="{{route('home')}}">daw Cloud</a></h1>
+        <div class="top-row">
 
-		@if (Request::get('user') == 'unsigned')
-        <div>
-			<p id="signup_now">Sign up, you will be able to save your projects</p>
-			<form id="signup_reminder" method="POST" action="{{ route('signup') }}">
-                <p class="signup_reminder_text">Create account. It's free <span class="x-button">&#10006;</span></p>
-                @csrf
-                <label for="signup_email">Email</label>
-                <input type="email" class="" name="signup_email" autocomplete="off">
-                <label for="signup_username">User Name</label>
-                <input type="text" class="" name="signup_username" autocomplete="off">
-                <label for="signup_password">Password</label>
-                <input type="password" class="" name="signup_password" autocomplete="off">
-                <button id="register2" type="submit">Sign Up!</button>
-            </form>
-		</div>
-		@else
-		<div id="user_options">
-			<button id="user_welcome" type="button" class= "btn dropdown-toggle"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hello {{ session('user_name') }} </button>
-			<div class="dropdown-menu" aria-labelledby="user_welcome">
-                <button id="load_project" class="btn btn-outline-info dropdown-item">My projects</button>
-                <button id="save_project" class="btn btn-outline-info dropdown-item">Save new project</button>
-				<label id="load_sound" for="load_sound_hidden" class="btn btn-outline-info dropdown-item">Load sound</label>
-				<input type="file" id="load_sound_hidden" class="btn btn-outline-info dropdown-item" accept="audio/wav, audio/mp3"/>
-			</div>
-			<div id="load_dialogue">
-                @if (!empty($projects[0]))
-                    <p class="dummy-space2"><span class="x-button2" id="projects-close" >&#10006;</span></p>
-				    @foreach ( $projects as $project)
-                        <a class="projects btn" id="{{$project}}">{{$project }}</a>
-                    @endforeach
-                @else
-                    <p>No projects yet!! <span class="x-button2" id="projects-close" >&#10006;</span></p>
-                @endif
-			</div>
-			<div id="save_dialogue">
-				<p>Enter a name for your new project: <span class="x-button2" id="save-close">&#10006;</span></p>
-				<input id="project_name" type="text">
-			</div>
-		</div>
-        @endif
-
-        <div id="buttonpad" class="buttonpad">
-            <div class="master_controls">
-                <button id="play-button" class="play-button btn btn-outline-info"><img width="30px" height="30px"
-                        src="storage/icons/play-icon.jpg"  /></button><!--alt="play-button"-->
-                <button id="stop-button" class="stop-button btn btn-outline-info"><img width="30px" height="30px"
-                        src="storage/icons/stop-icon.png" /></button><!-- alt="stop-button"-->
-                <button id="record-button" class="record-button btn btn-outline-info"><img width="30px" height="30px"
-                        src="storage/icons/record-icon.png"  /></button><!-- alt="record-button"-->
-                <button id=metric_button class="btn btn-outline-info btn-metric"></button>
-                <button id="bpm_button" class="btn btn-outline-info btn-bpm"></button>
+            <div id="buttonpad" class="buttonpad">
+                <div class="master_controls">
+                    <button id="play-button" class="play-button btn btn-outline-info"><img width="30px" height="30px"
+                            src="storage/icons/play-icon.jpg"  /></button><!--alt="play-button"-->
+                    <button id="stop-button" class="stop-button btn btn-outline-info"><img width="30px" height="30px"
+                            src="storage/icons/stop-icon.png" /></button><!-- alt="stop-button"-->
+                    <button id="record-button" class="record-button btn btn-outline-info"><img width="30px" height="30px"
+                            src="storage/icons/record-icon.png"  /></button><!-- alt="record-button"-->
+                    <button id=metric_button class="btn btn-outline-info btn-metric"></button>
+                    <button id="bpm_button" class="btn btn-outline-info btn-bpm"></button>
+                </div>
             </div>
+
+            <h1 id="page-title" class="h1 center"><a class="a_title" href="{{route('home')}}">daw Cloud</a></h1>
+
+		    @if (Request::get('user') == 'unsigned')
+            <div id="user_options">
+			    <p id="signup_now">Sign up, you will be able to save your projects</p>
+			    <form id="signup_reminder" method="POST" action="{{ route('signup') }}">
+                    <p class="signup_reminder_text">Create account. It's free <span class="x-button">&#10006;</span></p>
+                    @csrf
+                    <label for="signup_email">Email</label>
+                    <input type="email" class="" name="signup_email" autocomplete="off">
+                    <label for="signup_username">User Name</label>
+                    <input type="text" class="" name="signup_username" autocomplete="off">
+                    <label for="signup_password">Password</label>
+                    <input type="password" class="" name="signup_password" autocomplete="off">
+                    <button id="register2" type="submit">Sign Up!</button>
+                </form>
+		    </div>
+		    @else
+		    <div id="user_options">
+			    <button id="user_welcome" type="button" class= "btn dropdown-toggle"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hello {{ session('user_name') }} </button>
+		    	<div class="dropdown-menu" aria-labelledby="user_welcome">
+                   <button id="load_project" class="btn btn-outline-info dropdown-item">My projects</button>
+                    <button id="save_project" class="btn btn-outline-info dropdown-item">Save new project</button>
+		    		<label id="load_sound" for="load_sound_hidden" class="btn btn-outline-info dropdown-item">Load sound</label>
+		    		<input type="file" id="load_sound_hidden" class="btn btn-outline-info dropdown-item" accept="audio/wav, audio/mp3"/>
+		    	</div>
+		    	<div id="load_dialogue">
+                    @if (!empty($projects[0]))
+                        <p class="dummy-space2"><span class="x-button2" id="projects-close" >&#10006;</span></p>
+			    	    @foreach ( $projects as $project)
+                            <a class="projects btn" id="{{$project}}">{{$project }}</a>
+                        @endforeach
+                    @else
+                        <p>No projects yet!! <span class="x-button2" id="projects-close" >&#10006;</span></p>
+                    @endif
+		    	</div>
+		    	<div id="save_dialogue">
+		    		<p>Enter a name for your new project: <span class="x-button2" id="save-close">&#10006;</span></p>
+		    		<input id="project_name" type="text">
+	    		</div>
+	    	</div>
+            @endif
+
+            <div class="zoom-btn">
+                <button id="zoomin" type="button" class="btn btn-outline-info">+</button>
+                <button id="zoomout" type="button" class="btn btn-outline-info">-</button>
+            </div>
+
         </div>
 
         <div id="toolbox">
@@ -81,10 +90,6 @@
         </section>
 
         <section class="sound-clips">
-			<div class="zoom-btn">
-                <button id="zoomin" type="button" class="btn btn-outline-info">+</button>
-                <button id="zoomout" type="button" class="btn btn-outline-info">-</button>
-            </div>
 
             <div class="track_names">
                 <div class="dummy-block"></div>

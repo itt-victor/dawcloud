@@ -10020,17 +10020,22 @@ body {
   padding-bottom: 60px;
   border-radius: 10px;
   text-align: center;
-  /*display: none;
-  visibility: hidden;*/
+}
+
+.top-row {
+  display: flex;
+  justify-content: space-between;
+  width: 1600px;
+  align-items: center;
+  margin-top: 50px;
+  margin-bottom: 80px;
+  margin-left: 160px;
 }
 
 #page-title {
   color: black;
   margin: auto;
   width: 200px;
-  position: relative;
-  margin-top: 50px;
-  margin-bottom: 50px;
   font-weight: 700;
   font-size: 40px;
   cursor: default;
@@ -10048,10 +10053,9 @@ body {
 }
 
 #user_options {
-  position: absolute;
-  right: 400px;
-  top: 53px;
   width: 220px;
+  margin-left: 100px;
+  margin-right: 100px;
 }
 
 #user_welcome {
@@ -10124,13 +10128,8 @@ body {
 }
 
 .buttonpad {
-  position: absolute;
-  right: 1200px;
-  top: 44px;
-  margin-top: 10px;
-  margin-bottom: 40px;
   display: flex;
-  width: 600px;
+  width: 650px;
   justify-content: space-between;
   height: 45px;
 }
@@ -10184,10 +10183,8 @@ body {
 }
 
 .zoom-btn {
-  position: absolute;
-  right: 100px;
-  top: 52px;
-  width: 210px;
+  width: 250px;
+  text-align: center;
   height: 39px;
 }
 
@@ -10292,8 +10289,8 @@ body {
 #tracks {
   width: 1000px;
   height: 608px;
-  left: 260px;
-  position: relative;
+  left: 720px;
+  position: absolute;
   margin: auto;
   text-align: left;
   vertical-align: middle;
@@ -10415,7 +10412,7 @@ div [data-selected] {
 #save_dialogue {
   position: absolute;
   top: 300px;
-  right: 400px;
+  right: 780px;
   width: 350px;
   height: 150px;
   display: none;
@@ -10449,8 +10446,8 @@ div [data-selected] {
   position: absolute;
   padding-top: 0;
   padding-bottom: 20px;
-  top: 175px;
-  right: 400px;
+  top: 250px;
+  right: 780px;
   width: 350px;
   display: none;
   visibility: hidden;
