@@ -10355,6 +10355,7 @@ div [data-selected] {
   left: 100px;
   display: flex;
   flex-wrap: wrap;
+  align-content: flex-start;
 }
 
 .fader {
@@ -10413,6 +10414,8 @@ div [data-selected] {
 .panner {
   width: 45px;
   height: 50px;
+  border: solid 1.5px #7a2332;
+  z-index: 1;
 }
 
 #save_dialogue {
