@@ -26,8 +26,8 @@ export function dragRecording(recording) {
             Y = 0;
             widths = selectTrackWidth(recording.tracknumber);
             var mousePos = onMousePos(grid.canvas, evt);
-            if (mousePos.y < widths.maxHeight &&
-                mousePos.y > widths.minHeight) {
+            if (evt.clientY < widths.maxHeight &&
+                evt.clientY > widths.minHeight) {
                 drag = true;
                 delta.x = X - mousePos.x;
                 delta.y = Y - mousePos.y;
@@ -41,7 +41,7 @@ export function dragRecording(recording) {
             var mousePos = onMousePos(grid.canvas, evt);
             let heights = selectTrackWidth(recording.tracknumber);
             if (drag) {
-                X = mousePos.x + delta.x, Y = mousePos.y
+                X = mousePos.x + delta.x, Y = evt.clientY;
                 if (X < 0) { X = 0 };
                 if (Y < heights.minHeight || Y > heights.maxHeight) { drag = false; }
 
@@ -53,7 +53,7 @@ export function dragRecording(recording) {
             }
         }, false);
 
-        recording.canvas.addEventListener("mouseup", function (evt) {
+        window.addEventListener("mouseup", function (evt) {
             drag = false;
         }, false);
     }
@@ -62,9 +62,11 @@ export function dragRecording(recording) {
 function selectTrackWidth(tracknumber) {
     var incremento = 70 * tracknumber;
     let widths = {
-        minHeight: (-560 + incremento),
-        maxHeight: -500 + incremento,
-        minWidth: 1.5,
+        minHeight: grid.canvas.getBoundingClientRect().top
+        - grid.canvas.getBoundingClientRect().height + incremento,
+        maxHeight: grid.canvas.getBoundingClientRect().top
+        - grid.canvas.getBoundingClientRect().height + incremento + 70,
+        minWidth: 0.5,
         maxWidth: 1001.5
     }
     return widths;
