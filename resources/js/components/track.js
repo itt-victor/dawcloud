@@ -16,7 +16,7 @@ export default class Track {
         this.recordings = [];
         this.audioBufferSources = [];
         this.pannerNode = audioCtx.createStereoPanner();
-        this.pannerValue = pannerValue;
+        this.pannerNode.pannerValue = pannerValue;
         this.gainNode = audioCtx.createGain();
         this.gainNode.gainValue = gainValue;
         this.soloButton = document.getElementById('solo_'+ this.tracknumber);

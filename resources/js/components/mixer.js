@@ -67,7 +67,7 @@ function setChannelGain() {
         }, false);
     }
 }
-setTimeout( setChannelGain, 500);
+setTimeout(setChannelGain, 500);
 
 function setMasterGain() {
     var fader = document.getElementById('master_fader');
@@ -117,9 +117,55 @@ function setMasterGain() {
     }, false);
 }
 
-setTimeout( setMasterGain, 500);
+setTimeout(setMasterGain, 500);
 
 function setPan() {
-     //grid.tracks[grid.recordings[h].tracknumber].pannerNode.pan.setValueAtTime(1, audioCtx.currentTime);
- // L = '-'
+    const panButton = document.getElementsByClassName('panner');
+    let newValue;
+    let trackNR;
+    for (let i = 0; i < panButton.length; i++) {
+        panButton[i].addEventListener('click', function (e) {
+            trackNR = this.id.charAt(7);
+            e.stopPropagation();
+            if (!document.getElementById('pan-value')) {
+                newValue = document.createElement('input');
+                newValue.id = 'pan-value';
+                newValue.setAttribute('placeholder', 'set L-R value');
+                this.appendChild(newValue);
+            }
+            window.addEventListener('click', function br(a) {
+                if (!a.target.contains(e.currentTarget)) {
+                    newValue.remove();
+                    newValue.innerHTML = grid.tracks[i].pannerValue;
+                    this.removeEventListener('click', br);
+                }
+            });
+            newValue.addEventListener('keyup', function (o) {
+                if (o.keyCode === 13) {
+                    o.preventDefault();
+                    grid.tracks[i].pannerNode.pannerValue = this.value.toUpperCase();
+                    e.target.innerHTML = this.value.toUpperCase();
+                    let ctxValue;
+                    if (this.value.toUpperCase().startsWith('L')) {
+                        ctxValue = - + this.value.slice(1) / 100;
+                        grid.tracks[trackNR].pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
+                        newValue.remove();
+                    }
+                    else if (this.value == 0 || this.value.toUpperCase() == 'C') {
+                        ctxValue = 0;
+                        grid.tracks[trackNR].pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
+                        newValue.remove();
+                    }
+                    else if (this.value.toUpperCase().startsWith('R')) {
+                        ctxValue = this.value.slice(1) / 100;
+                        grid.tracks[trackNR].pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
+                        newValue.remove();
+                    } else {
+                        newValue.setAttribute('placeholder', 'Invalid value!');
+                    }
+                }
+            });
+        });
+    }
 }
+setTimeout(setPan, 500);

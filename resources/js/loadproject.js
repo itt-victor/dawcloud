@@ -10,12 +10,13 @@ import { loading } from './app_core';
 import { eStop } from './app_core';
 
 class Project {
-    constructor(timeSpace, recordings, audioBuffers, tracksGainValues, tracksY) {
+    constructor(timeSpace, recordings, audioBuffers, tracksGainValues, trackspanValues, tracksY) {
         this.timeSpace = timeSpace;
         this.recordings = recordings;
         this.audioBuffers = audioBuffers;
         this.audioReferences = [];  //almacenas los nombres de los wav para recuperarlos
         this.tracksGainValues = tracksGainValues;
+        this.trackspanValues = trackspanValues;
         this.tracksY = tracksY;
     }
 }
@@ -27,6 +28,7 @@ const closeProjects = document.querySelector('#projects-close');
 const closeSave = document.querySelector('#save-close');
 const saveWindow = document.getElementById('save_dialogue');
 const loadWindow = document.getElementById('load_dialogue');
+const panButtons = document.getElementsByClassName('panner');
 
 var project;
 var projectName;
@@ -43,10 +45,12 @@ function saveProject() {
 
                 var audioBuffers = [];
                 var tracksGainValues = [];
+                var trackspanValues = [];
                 var tracksY = [];
                 if (!project === undefined) {
                     audioBuffers = project.audioBuffers;
                     tracksGainValues = project.tracksGainValues;
+                    trackspanValues = project.trackspanValues;
                     tracksY = project.tracksY;
                     numbers.recordingId = project.audioReferences.length;
 
@@ -58,22 +62,27 @@ function saveProject() {
                         if (tracksY[i] != grid.tracks[i].fader.Y) {
                             tracksY[i] = grid.tracks[i].fader.Y;
                         }
+                        if (trackspanValues[i] != grid.tracks[i].pannerNode.pannerValue) {
+                            trackspanValues[i] = grid.tracks[i].pannerNode.pannerValue;
+                        }
                     }
                 } else {
                     for (let i = 0; i < grid.tracks.length; i++) {
                         tracksGainValues.push(grid.tracks[i].gainNode.gainValue);
                         tracksY.push(grid.tracks[i].fader.Y);
+                        trackspanValues.push(grid.tracks[i].pannerNode.pannerValue);
                     }
                 }
 
                 //creo objeto proyecto
                 if (project === undefined) {
-                    project = new Project(timeSpace, grid.recordings, audioBuffers, tracksGainValues, tracksY);
+                    project = new Project(timeSpace, grid.recordings, audioBuffers, tracksGainValues, trackspanValues, tracksY);
                 }
                 else {
                     project.timeSpace = timeSpace;
                     project.recordings = grid.recordings;
                     project.tracksGainValues = tracksGainValues;
+                    project.trackspanValues = trackspanValues;
                     project.tracksY = tracksY;
                     project.audioReferences = [];
                 }
@@ -193,12 +202,32 @@ function loadProject() {
                         };
                         request.send();
                     }
+                    //Se cargan los volúmenes de los faders
                     for (let i = 0; i < grid.tracks.length; i++) {
                         let fader = grid.tracks[i].fader;
                         grid.tracks[i].gainNode.gainValue = project.tracksGainValues[i];
                         fader.Y = project.tracksY[i];
                         fader.firstChild.nextSibling.style.top = project.tracksY[i] + 'px';
                         grid.tracks[i].gainNode.gain.setValueAtTime(grid.tracks[i].gainNode.gainValue, audioCtx.currentTime);
+                    }
+                    //Se carga el panorama
+                    for (let f = 0; f < panButtons.length; f++) {
+                        let ctxValue;
+                        grid.tracks[f].pannerNode.pannerValue = project.trackspanValues[f];
+                        panButtons[f].innerHTML = grid.tracks[f].pannerNode.pannerValue;
+                        if (grid.tracks[f].pannerNode.pannerValue.toString().startsWith('L')) {
+                            ctxValue = - + grid.tracks[f].pannerNode.pannerValue.slice(1) / 100;
+                            grid.tracks[f].pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
+                        }
+                        else if (grid.tracks[f].pannerNode.pannerValue == 0
+                            || grid.tracks[f].pannerNode.pannerValue.toString() == 'C') {
+                            ctxValue = 0;
+                            grid.tracks[f].pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
+                        }
+                        else if (grid.tracks[f].pannerNode.pannerValue.toString().startsWith('R')) {
+                            ctxValue = grid.tracks[f].pannerNode.pannerValue.slice(1) / 100;
+                            grid.tracks[f].pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
+                        }
                     }
 
                     console.log('Project loaded successfully');

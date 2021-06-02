@@ -41,7 +41,7 @@ body {
 #page-title {
     color: black;
     margin: auto;
-    width: 200px;
+    width: 250px;
     font-weight: 700;
     font-size: 40px;
     cursor: default;
@@ -137,7 +137,7 @@ body {
 
 .buttonpad {
     display: flex;
-    width: 650px;
+    width: 550px;
     justify-content: space-between;
     height: 45px;
 }
@@ -427,6 +427,17 @@ div [data-selected] {
     height: 50px;
     border: solid 1.5px rgb(122, 35, 50);
     z-index: 1;
+    padding-left: 0!important;
+    padding-right: 0!important;
+}
+
+#pan-value {
+    position: absolute;
+    top: 400px;
+    left: 125px;
+    width: 150px;
+    text-align: center;
+    border-radius: 4px;
 }
 
 #save_dialogue {

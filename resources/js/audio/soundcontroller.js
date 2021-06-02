@@ -64,7 +64,6 @@ export default class SoundController {
     }
 
 
-
     leftCut() {
         //se aumenta offset por el dith dado source.start(start, offset + cantidad recortada);
     }
