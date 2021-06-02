@@ -10,10 +10,9 @@ import { loading } from './app_core';
 import { eStop } from './app_core';
 
 class Project {
-    constructor(timeSpace, recordings, audioBuffers, tracksGainValues, trackspanValues, tracksY) {
+    constructor(timeSpace, recordings, tracksGainValues, trackspanValues, tracksY) {
         this.timeSpace = timeSpace;
         this.recordings = recordings;
-        this.audioBuffers = audioBuffers;
         this.audioReferences = [];  //almacenas los nombres de los wav para recuperarlos
         this.tracksGainValues = tracksGainValues;
         this.trackspanValues = trackspanValues;
@@ -43,12 +42,11 @@ function saveProject() {
                 saveWindow.style.display = 'none';
                 saveWindow.style.visibility = 'hidden';
 
-                var audioBuffers = [];
+                //var audioBuffers = [];
                 var tracksGainValues = [];
                 var trackspanValues = [];
                 var tracksY = [];
                 if (!project === undefined) {
-                    audioBuffers = project.audioBuffers;
                     tracksGainValues = project.tracksGainValues;
                     trackspanValues = project.trackspanValues;
                     tracksY = project.tracksY;
@@ -76,7 +74,7 @@ function saveProject() {
 
                 //creo objeto proyecto
                 if (project === undefined) {
-                    project = new Project(timeSpace, grid.recordings, audioBuffers, tracksGainValues, trackspanValues, tracksY);
+                    project = new Project(timeSpace, grid.recordings, tracksGainValues, trackspanValues, tracksY);
                 }
                 else {
                     project.timeSpace = timeSpace;

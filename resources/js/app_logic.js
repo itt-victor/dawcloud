@@ -86,6 +86,7 @@ function zoom() {
     function zIn() {
         oldZoom = timeSpace.zoom;
         timeSpace.zoom /= 1.3
+        console.log(timeSpace.zoom);
 
         for (var i = 0; i < grid.recordings.length; i++) {
             ui_draw.drawRecording(grid.recordings[i]);
@@ -99,7 +100,8 @@ function zoom() {
     }
     function zOut() {
         oldZoom = timeSpace.zoom;
-        timeSpace.zoom *= 1.3;
+        timeSpace.zoom /= (1/1.3); //*= 1.3;
+        console.log(timeSpace.zoom);
         for (var i = 0; i < grid.recordings.length; i++) {
             ui_draw.drawRecording(grid.recordings[i]);
         }
@@ -181,16 +183,23 @@ metric();
 
 //mutea la pista
 function mute() {
-    let button = document.getElementsByClassName('track_mute');
+    const button = document.getElementsByClassName('track_mute');
+    const soloButton = document.getElementsByClassName('track_solo');
+
     for (let a = 0; a < button.length; a++) {
         button[a].addEventListener('click', function () {
             this.classList.toggle('track_mute_on');
-            if (this.toggle === false) {
+            if (!this.toggle) {
                 soundcontroller.mute(this.parent.gainNode);
                 this.toggle = true;
-            } else {
+            } else if (this.toggle) {
                 soundcontroller.solo(this.parent.gainNode);
                 this.toggle = false;
+            }
+            for (let b = 0; b < soloButton.length; b++) {
+                if (soloButton[b].toggle) {
+                    soundcontroller.mute(this.parent.gainNode);
+                }
             }
         });
     }
@@ -199,19 +208,18 @@ mute();
 
 //solea la pista
 function solo() {
-    let button = document.getElementsByClassName('track_solo');
+    const button = document.getElementsByClassName('track_solo');
     for (let a = 0; a < button.length; a++) {
         button[a].addEventListener('click', function () {
             this.classList.toggle('track_solo_on');
             for (let b = 0; b < button.length; b++) {
-                if (button[b].toggle === false) {
+                if (!button[b].toggle) {
                     soundcontroller.mute(button[b].parent.gainNode);
-
                 } else {
                     soundcontroller.solo(button[b].parent.gainNode);
                 }
             }
-            if (this.toggle === false) {
+            if (!this.toggle) {
                 for (let b = 0; b < button.length; b++) {
                     soundcontroller.mute(button[b].parent.gainNode);
                 }

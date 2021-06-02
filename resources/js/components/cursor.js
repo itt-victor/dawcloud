@@ -22,8 +22,6 @@ export var cursor = {
     },
     play: function () {
         interval = setInterval(function () {
-            //timeSpace.widthAtPause++
-            //timeSpace.pxIncrement++
             timeSpace.space++;
             this.cursor.style.left = timeSpace.space + 'px';
         }, timeSpace.zoom * 1000)
@@ -31,7 +29,6 @@ export var cursor = {
 
     moveAtZoom: function (oldZoom) {
         timeSpace.space = (timeSpace.space * (1 / timeSpace.zoom)) / (1 / oldZoom);
-        //timeSpace.pxIncrement = (timeSpace.pxIncrement * (1 / timeSpace.zoom)) / (1 / oldZoom); //CUIDADO
         this.canvas.style.left = timeSpace.space + 'px';
     },
 
@@ -41,6 +38,5 @@ export var cursor = {
 
     moveAtClick: function () {
         this.canvas.style.left = (timeSpace.space -1 )+ 'px';
-        //timeSpace.widthAtPause = timeSpace.pointedWidth;
     }
 }

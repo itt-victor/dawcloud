@@ -11,7 +11,7 @@ export default function drawLayout() {
     let text = 1;
     let zoomSetUp = 1 / timeSpace.zoom * timeSpace.compas * timeSpace.bpm;
 
-    if (timeSpace.zoom <= 0.050) {
+    if (timeSpace.zoom <= 0.050001) {
         for (var i = 0; i < 4000; i += (zoomSetUp)) {
             layoutCtx.beginPath();
             layoutCtx.moveTo(i, 30);
