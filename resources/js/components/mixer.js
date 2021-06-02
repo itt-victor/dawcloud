@@ -118,3 +118,8 @@ function setMasterGain() {
 }
 
 setTimeout( setMasterGain, 500);
+
+function setPan() {
+     //grid.tracks[grid.recordings[h].tracknumber].pannerNode.pan.setValueAtTime(1, audioCtx.currentTime);
+ // L = '-'
+}

@@ -202,7 +202,6 @@ function loadProject() {
                     }
 
                     console.log('Project loaded successfully');
-                    console.log(grid.recordings);
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log(errorThrown);
