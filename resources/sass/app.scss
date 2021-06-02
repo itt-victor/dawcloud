@@ -365,6 +365,7 @@ div [data-selected] {
     top: 300px;
     left: 100px;
     display: flex;
+    flex-wrap: wrap;
 }
 
 .fader {
@@ -418,6 +419,11 @@ div [data-selected] {
 
 .mxrmstr {
     margin-left: 1px!important;
+}
+
+.panner {
+    width: 45px;
+    height: 50px;
 }
 
 #save_dialogue {

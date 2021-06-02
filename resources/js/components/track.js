@@ -10,11 +10,13 @@ import { removeRecording } from '../app_logic';
 var rcdName;
 
 export default class Track {
-    constructor(tracknumber, gainValue) {
+    constructor(tracknumber, gainValue, pannerValue) {
         this.tracknumber = tracknumber;
         this.trackDOMElement = document.getElementsByClassName('track')[this.tracknumber];
         this.recordings = [];
         this.audioBufferSources = [];
+        this.pannerNode = audioCtx.createStereoPanner();
+        this.pannerValue = pannerValue;
         this.gainNode = audioCtx.createGain();
         this.gainNode.gainValue = gainValue;
         this.soloButton = document.getElementById('solo_'+ this.tracknumber);

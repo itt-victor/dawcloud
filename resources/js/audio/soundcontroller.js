@@ -10,28 +10,12 @@ export default class SoundController {
         this.audioBufferSources = [];
     }
 
-    //Esta función sería ya innecesaria
-   /* loadSound(url, trcknr, startTime) {
-        //let trcknr = document.querySelector('[data-selected] > canvas').id;
-        //esto para cuando no cargues audio a lo feo, de momento pasa por parámetro, o igual en la funcion a crear.
-        const request = new XMLHttpRequest();
-        request.open("GET", url, true);
-        request.responseType = "arraybuffer";
-        request.onload = function () {
-            let undecodedAudio = request.response;
-            audioCtx.decodeAudioData(undecodedAudio, (data) => {
-                var audioBuffer = data;
-                grid.tracks[trcknr].addRecord(startTime, audioBuffer, trcknr);//creo recording
-            });
-        };
-        request.send();
-    }*/
-
     playSound() {
         for (var h = 0; h < grid.recordings.length; h++) {
             const source = audioCtx.createBufferSource();
             source.buffer = grid.recordings[h].audioBuffer;
-            source.connect(grid.tracks[grid.recordings[h].tracknumber].gainNode)  //gain node asociado a la pista
+            source.connect(grid.tracks[grid.recordings[h].tracknumber].pannerNode);
+            //grid.tracks[grid.recordings[h].tracknumber].pannerNode.pan.setValueAtTime(1, audioCtx.currentTime);  prueba de que funciona correctamente
             var start = Math.max((grid.recordings[h].timeToStart - timeSpace.timeAtPause + audioCtx.currentTime), 0);
             var offset = Math.max((timeSpace.timeAtPause - grid.recordings[h].timeToStart) + grid.recordings[h].offset, 0);
             var duration;

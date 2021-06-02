@@ -87,6 +87,16 @@
             @include('layouts.fader', ['number'=> '6', 'number2'=>'7'])
             @include('layouts.fader', ['number'=> '7', 'number2'=>'8'])
             <div class="fader" id="master_fader"><a class="fader-knob" data-y="20"></a><div class="trcknr mxrmstr">Master</div></div>
+
+            @include('layouts.panner', ['number'=> '0'])
+            @include('layouts.panner', ['number'=> '1'])
+            @include('layouts.panner', ['number'=> '2'])
+            @include('layouts.panner', ['number'=> '3'])
+            @include('layouts.panner', ['number'=> '4'])
+            @include('layouts.panner', ['number'=> '5'])
+            @include('layouts.panner', ['number'=> '6'])
+            @include('layouts.panner', ['number'=> '7'])
+
         </section>
 
         <section class="sound-clips">
