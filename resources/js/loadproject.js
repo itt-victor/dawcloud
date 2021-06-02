@@ -166,15 +166,12 @@ function loadProject() {
 
                     project = response;
 
-                    timeSpace.timeAtPause = project.timeSpace.timeAtPause;
-                    timeSpace.pxIncrement = project.timeSpace.pxIncrement;
-                    timeSpace.pointedWidth = project.timeSpace.pointedWidth;
-                    timeSpace.widthAtPause = project.timeSpace.widthAtPause;
+                    timeSpace.space = project.timeSpace.space;
                     timeSpace.zoom = project.timeSpace.zoom;
                     timeSpace.bpm = project.timeSpace.bpm;
                     timeSpace.compas = project.timeSpace.compas;
                     bpmButton.innerHTML = (120 / timeSpace.bpm) + '  bpm';
-                    cursor.canvas.style.left = timeSpace.widthAtPause + 'px';
+                    cursor.canvas.style.left = timeSpace.space + 'px';
 
                     drawLayout();
 

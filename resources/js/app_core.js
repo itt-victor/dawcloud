@@ -21,7 +21,6 @@ stop.disabled = true;
 
 
 
-
     /////////////////////////////////////
     /////////////dawCloud///////////////
     ////////////////////////////////////
@@ -71,22 +70,6 @@ function appStart() {
 
     play.addEventListener('click', ePlay);
     stop.addEventListener('click', eStop);
-
-    //teclas play stop
-    /*window.addEventListener('keyup', function (e) {
-        if (soundStatuses.hasStopped === true &&
-            soundStatuses.isPlaying === false) {
-            if (e.keyCode === 32) {
-                //e.preventDefault();
-                ePlay();
-            }
-        } else {
-            if (e.keyCode === 32) {
-                e.preventDefault();
-                eStop();
-            }
-        }
-    });*/
 
     /////////////
     recordcontroller();

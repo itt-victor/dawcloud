@@ -5,12 +5,12 @@ export var ui_draw = {
     drawTrackWhileRecording(actualTime) {
         var width = 0;
         var height = 67;
-        var x = actualTime / timeSpace.zoom;
+        var x = timeSpace.space;
         var track = document.querySelector('[data-selected]');
         var canvas = document.createElement('canvas')
         track.appendChild(canvas)
         var canvasCtx = canvas.getContext('2d');
-        canvas.width = 1000;
+        canvas.width = 4000;
         canvas.height = 70;
         var interval = setInterval(function () {
             width++;

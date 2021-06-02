@@ -15,16 +15,13 @@ export default class SoundController {
             const source = audioCtx.createBufferSource();
             source.buffer = grid.recordings[h].audioBuffer;
             source.connect(grid.tracks[grid.recordings[h].tracknumber].pannerNode);
-            //grid.tracks[grid.recordings[h].tracknumber].pannerNode.pan.setValueAtTime(-1, audioCtx.currentTime);  //panner!
-            var start = Math.max((grid.recordings[h].timeToStart - timeSpace.timeAtPause + audioCtx.currentTime), 0);
-            var offset = Math.max((timeSpace.timeAtPause - grid.recordings[h].timeToStart) + grid.recordings[h].offset, 0);
+            var start = Math.max((grid.recordings[h].timeToStart - timeSpace.time() + audioCtx.currentTime), 0);
+            var offset = Math.max((timeSpace.time() - grid.recordings[h].timeToStart) + grid.recordings[h].offset, 0);
             var duration;
             if (grid.recordings[h].duration){ duration = grid.recordings[h].duration; }
             source.start(start, offset, duration);
             this.audioBufferSources.push(source);
             grid.recordings[h].audioBufferSource = source;
-            //source.addEventListener('ended', () => { timeSpace.timeAtPause = timeSpace.pxIncrement * timeSpace.zoom; });
-            //esto último y ponderlo en stop parece que es lo mesmo, dejalo en barbecho
         }
     }
 
@@ -32,7 +29,6 @@ export default class SoundController {
         for (var i = 0; i < this.audioBufferSources.length; i++) {
             this.audioBufferSources[i].stop();
         }
-        timeSpace.timeAtPause = timeSpace.pxIncrement * timeSpace.zoom;    //me refiero a lo que decía en playsound
         this.audioBufferSources = [];
     }
 
@@ -42,12 +38,11 @@ export default class SoundController {
 
     playWhileDragging(recording) {
         recording.audioBufferSource.stop();
-        timeSpace.timeAtPause = timeSpace.pxIncrement * timeSpace.zoom;
         const source = audioCtx.createBufferSource();
         source.buffer = recording.audioBuffer;
-        source.connect(grid.tracks[recording.tracknumber].gainNode)  //gain node asociado a la pista
-        var start = Math.max((recording.timeToStart - timeSpace.timeAtPause + audioCtx.currentTime), 0);
-        var offset = Math.max((timeSpace.timeAtPause - recording.timeToStart), 0);
+        source.connect(grid.tracks[recording.tracknumber].pannerNode);
+        var start = Math.max((recording.timeToStart - timeSpace.time() + audioCtx.currentTime), 0);
+        var offset = Math.max((timeSpace.time() - recording.timeToStart), 0);
         var duration;
         if (recording.duration){ duration = recording.duration; }
         source.start(start, offset, duration);

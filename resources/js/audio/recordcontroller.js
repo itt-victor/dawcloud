@@ -19,14 +19,12 @@ export default function recordController() {
             record.onclick = function () {
                 mediaRecorder.ondataavailable = event => chunks.push(event.data);
                 mediaRecorder.start();
+                startTime = timeSpace.time();
                 if (soundStatuses.hasStopped === true && soundStatuses.isPlaying === false) {
                     cursor.play();
                     soundcontroller.playSound();
-                    startTime = timeSpace.pxIncrement * timeSpace.zoom;
-                } else {
-                    startTime = timeSpace.pxIncrement * timeSpace.zoom;
                 }
-                ui_draw.drawTrackWhileRecording(startTime);
+                ui_draw.drawTrackWhileRecording();
                 console.log(mediaRecorder.state);
                 record.style.background = "red";
                 stop.disabled = false;
@@ -38,7 +36,6 @@ export default function recordController() {
                 if (mediaRecorder.state == 'recording') {
                     mediaRecorder.stop();
                     console.log(mediaRecorder.state);
-                    timeSpace.timeAtPause = timeSpace.pxIncrement * timeSpace.zoom;
                     record.style.background = "";
                     record.style.color = "";
                     record.disabled = false;

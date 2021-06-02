@@ -22,16 +22,17 @@ export var cursor = {
     },
     play: function () {
         interval = setInterval(function () {
-            timeSpace.widthAtPause++
-            timeSpace.pxIncrement++
-            this.cursor.style.left = (timeSpace.widthAtPause) + 'px';
+            //timeSpace.widthAtPause++
+            //timeSpace.pxIncrement++
+            timeSpace.space++;
+            this.cursor.style.left = timeSpace.space + 'px';
         }, timeSpace.zoom * 1000)
     },
 
     moveAtZoom: function (oldZoom) {
-        timeSpace.widthAtPause = (timeSpace.widthAtPause * (1 / timeSpace.zoom)) / (1 / oldZoom);
-        timeSpace.pxIncrement = (timeSpace.pxIncrement * (1 / timeSpace.zoom)) / (1 / oldZoom); //CUIDADO
-        this.canvas.style.left = (timeSpace.widthAtPause) + 'px';
+        timeSpace.space = (timeSpace.space * (1 / timeSpace.zoom)) / (1 / oldZoom);
+        //timeSpace.pxIncrement = (timeSpace.pxIncrement * (1 / timeSpace.zoom)) / (1 / oldZoom); //CUIDADO
+        this.canvas.style.left = timeSpace.space + 'px';
     },
 
     stop: function () {
@@ -39,7 +40,7 @@ export var cursor = {
     },
 
     moveAtClick: function () {
-        this.canvas.style.left = (timeSpace.pointedWidth - 1) + 'px';
-        timeSpace.widthAtPause = timeSpace.pointedWidth;
+        this.canvas.style.left = (timeSpace.space -1 )+ 'px';
+        //timeSpace.widthAtPause = timeSpace.pointedWidth;
     }
 }

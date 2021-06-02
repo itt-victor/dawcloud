@@ -9,12 +9,10 @@ import { grid } from './generalgrid';
 const timeLayout = document.querySelector('#time-layout');
 
 timeLayout.addEventListener('click', function (event) {
-    timeSpace.pointedWidth = Math.max(event.offsetX, 0);
-    timeSpace.pxIncrement = Math.max(event.offsetX, 0);
-    timeSpace.timeAtPause = Math.max(event.offsetX, 0) * timeSpace.zoom;
+    timeSpace.space = Math.max(event.offsetX, 0);
     cursor.moveAtClick();
     if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
-        soundcontroller.stopSound(soundcontroller.audioBufferSources);
-        setTimeout(soundcontroller.playSound(grid.tracks),10);
+        soundcontroller.stopSound();
+        setTimeout(soundcontroller.playSound(), 10);
     }
 });
