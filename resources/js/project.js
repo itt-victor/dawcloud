@@ -20,25 +20,28 @@ class Project {
     }
 }
 
-const loadbtn = document.getElementById('load_project');
-const savebtn = document.getElementById('save_project');
-const bpmButton = document.getElementById('bpm_button');
-const closeProjects = document.querySelector('#projects-close');
-const closeSave = document.querySelector('#save-close');
-const saveWindow = document.getElementById('save_dialogue');
-const loadWindow = document.getElementById('load_dialogue');
-const panButtons = document.getElementsByClassName('panner');
+const loadbtn = document.getElementById('load_project'),
+    savebtn = document.getElementById('save_project'),
+    bpmButton = document.getElementById('bpm_button'),
+    closeProjects = document.querySelector('#projects-close'),
+    closeSave = document.querySelector('#save-close'),
+    saveWindow = document.getElementById('save_dialogue'),
+    loadWindow = document.getElementById('load_dialogue'),
+    panButtons = document.getElementsByClassName('panner'),
+    projects = document.getElementsByClassName('projects'),
+    projectNameNode = document.getElementById('project_name');
 
 var project;
 var projectName;
 
 function saveProject() {
-    if (saveWindow) {
-        saveWindow.children[1].addEventListener('keyup', function (e) {
+    if (saveWindow && projectNameNode) {
+
+        projectNameNode.addEventListener('keyup', function (e) {
 
             if (e.keyCode === 13) {
                 e.preventDefault();
-                projectName = saveWindow.children[1].value;
+                let projectName = this.value;
                 saveWindow.style.display = 'none';
                 saveWindow.style.visibility = 'hidden';
 
@@ -142,10 +145,9 @@ function saveProject() {
 
 function loadProject() {
 
-    const projects = document.getElementsByClassName('projects');
-
     for (let h = 0; h < projects.length; h++) {
         projects[h].addEventListener('dblclick', function ld(e) {
+            e.stopPropagation;
             projectName = this.id;
             loadWindow.style.display = 'none';
             loadWindow.style.visibility = 'hidden';
@@ -224,7 +226,6 @@ function loadProject() {
                             grid.tracks[f].pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
                         }
                     }
-
                     console.log('Project loaded successfully');
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -236,13 +237,46 @@ function loadProject() {
 }
 
 function deleteProject() {
-//Según se manda por evento borrar una, se hace petición al controller
+    for (let h = 0; h < projects.length; h++) {
+
+        const dltConfirmation = document.getElementsByClassName('delete_confirmation')[0],
+            delete_cancel = document.getElementById('delete_cancel'),
+            delete_confirm = document.getElementById('delete_confirm');
+
+        projects[h].childNodes[1].addEventListener('click', function dlt(e) {
+            const project = this.parentNode.id;
+            dltConfirmation.classList.toggle('visible');
+            delete_cancel.addEventListener('click', function () {
+                dltConfirmation.classList.toggle('visible');
+            });
+            delete_confirm.addEventListener('click', function () {
+                let form = new FormData();
+                form.append('project', project);
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: 'POST',
+                    url: 'delete',
+                    data: form,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        console.log('Project deleted successfully');
+                        dltConfirmation.classList.toggle('visible');
+                        document.getElementById(project).remove();
+                        },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    }
+                });
+            });
+        });
+    }
 }
 
 loadProject();
 saveProject();
-//deleteProject();
-
+deleteProject();
 
 
 if (loadbtn) {
@@ -265,4 +299,6 @@ if (savebtn) {
         saveWindow.style.visibility = 'invisible';
     });
 }
+
+
 

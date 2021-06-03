@@ -21,44 +21,51 @@
 
             <h1 id="page-title" class="h1 center"><a class="a_title" href="{{route('home')}}">daw Cloud</a></h1>
 
-		    @if (Request::get('user') == 'unsigned')
+		    @if (!$signed)
             <div id="user_options">
 			    <p id="signup_now">Sign up, you will be able to save your projects</p>
 			    <form id="signup_reminder" method="POST" action="{{ route('signup') }}">
                     <p class="signup_reminder_text">Create account. It's free <span class="x-button">&#10006;</span></p>
                     @csrf
                     <label for="signup_email">Email</label>
-                    <input type="email" class="" name="signup_email" autocomplete="off">
+                    <input type="email" class="" name="email" autocomplete="off">
                     <label for="signup_username">User Name</label>
-                    <input type="text" class="" name="signup_username" autocomplete="off">
+                    <input type="text" class="" name="user_name" autocomplete="off">
                     <label for="signup_password">Password</label>
-                    <input type="password" class="" name="signup_password" autocomplete="off">
+                    <input type="password" class="" name="password" autocomplete="off">
                     <button id="register2" type="submit">Sign Up!</button>
                 </form>
 		    </div>
 		    @else
 		    <div id="user_options">
 			    <button id="user_welcome" type="button" class= "btn dropdown-toggle"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hello {{ session('user_name') }} </button>
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hello {{ Auth::user()->user_name }}</button>
 		    	<div class="dropdown-menu" aria-labelledby="user_welcome">
                     <label id="load_sound" for="load_sound_hidden" class="btn btn-outline-info dropdown-item">Load sound</label>
 		    		<input type="file" id="load_sound_hidden" class="btn btn-outline-info dropdown-item" accept="audio/wav, audio/mp3"/>
                     <button id="load_project" class="btn btn-outline-info dropdown-item">My projects</button>
                     <button id="save_project" class="btn btn-outline-info dropdown-item">Save project</button>
-		    		<button id="log_out" class="btn btn-outline-info dropdown-item">Log out</button>
+		    		<button id="log_out" class="btn btn-outline-info dropdown-item"><a href="{{route('logout')}}">Log out</a></button>
 		    	</div>
 		    	<div id="load_dialogue">
                     @if (!empty($projects[0]))
                         <p class="dummy-space2"><span class="x-button2" id="projects-close" >&#10006;</span></p>
 			    	    @foreach ( $projects as $project)
-                            <a class="projects btn" id="{{$project}}">{{$project }}</a>
+                            <a class="projects btn" id="{{$project}}">{{$project }}
+                                <span class="x-button3" >&#10006;</span>
+                            </a>
                         @endforeach
+                        <div class="delete_confirmation">
+                            <p>Are you sure you want to delete this project?</p>
+                            <button id="delete_confirm">Ok</button><button id="delete_cancel">Cancel</button>
+                        </div>
                     @else
                         <p>No projects yet!! <span class="x-button2" id="projects-close" >&#10006;</span></p>
                     @endif
 		    	</div>
 		    	<div id="save_dialogue">
-		    		<p>Enter a name for your new project: <span class="x-button2" id="save-close">&#10006;</span></p>
+		    		<p class="padding-to-text">Enter the name of your new or existing project:</p>
+                        <span class="x-button4" id="save-close">&#10006;</span>
 		    		<input id="project_name" type="text">
 	    		</div>
 	    	</div>

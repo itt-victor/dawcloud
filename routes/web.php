@@ -1,9 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\AppController;
-use Illuminate\Http\Request;
 
 
 /*
@@ -17,15 +16,17 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('/', [UserController::class, 'home'])->name('home');
 
-Route::post('/signup', [HomeController::class, 'signup'])->name('signup');
+Route::post('/signup', [UserController::class, 'signup'])->name('signup');
 
-Route::post('/login', [HomeController::class, 'login'])->name('login');
+Route::post('/login', [UserController::class, 'login'])->name('login');
 
-//Route post, get, delete?? ('/logout', [HomeController::class, 'logout'])->name('logout');
+Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
 Route::get('/app', [AppController::class, 'app'])->name('app');
+
+Route::get('/unsigned', [AppController::class, 'appUnsigned'])->name('appUnsigned');
 
 Route::post('/savesound', [AppController::class, 'saveSound'])->name('saveSound');
 
@@ -35,5 +36,5 @@ Route::get('/loadproject/{project}', [AppController::class, 'loadProject'])->nam
 
 Route::get('/loadsound/{project}/{recording}', [AppController::class, 'loadSound'])->name('loadSound');
 
-//Route::delete('delete/{project}', [AppController::class, 'deleteProject'])->name('deleteProject');
+Route::post('/delete', [AppController::class, 'deleteProject'])->name('deleteProject');
 

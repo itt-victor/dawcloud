@@ -3,29 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Auth;
 
 class AppController extends Controller
 {
 
     public function app()
     {
+        $signed = true;
         $projects = DB::table('projects')
-            ->where('user_id', session('user_id'))
+            ->where('user_id', Auth::user()->id)
             ->pluck('project_name');
 
-        $creation_dates = DB::table('projects')
-            ->where('user_id', session('user_id'))
-            ->select('created_at')
-            ->get();
-
-
-        return view('app', ['projects' => $projects]);
+        return view('app', ['projects' => $projects, 'signed' => $signed]);
     }
 
+    public function appUnsigned()
+    {
+        $signed = false;
+        return view('app', ['signed' => $signed]);
+    }
 
     public function saveSound(Request $request)
     {
@@ -45,25 +44,24 @@ class AppController extends Controller
     {
         $projectname = $request->input('project-name');
         $project = $request->input('project');
-        //$filename = 'public/projects/' . $projectname . '/' . $projectname . '.json';
 
         $search = DB::table('projects')
             ->where('project_name', $projectname)
-            ->where('user_id', session('user_id'))
+            ->where('user_id', Auth::user()->id)
             ->first();
 
         if (!$search) {
             DB::table('projects')->insert([
                 'project_name' => $projectname,
                 'json_data' => json_encode($project),
-                'user_id' => session('user_id'),
+                'user_id' => Auth::user()->id,
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
         } else {
             DB::table('projects')
                 ->where('project_name', $projectname)
-                ->where('user_id', session('user_id'))
+                ->where('user_id', Auth::user()->id)
                 ->update([
                     'json_data' => json_encode($project),
                     'updated_at' => now()
@@ -89,8 +87,13 @@ class AppController extends Controller
         return response($file);
     }
 
-    public function deleteProject($project)
+    public function deleteProject(Request $request)
     {
+        $project = $request->input('project');
+
+        DB::table('projects')
+        ->where('project_name', '=', $project)
+        ->delete();
 
     }
 }

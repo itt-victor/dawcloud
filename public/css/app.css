@@ -10020,6 +10020,8 @@ body {
   padding-bottom: 60px;
   border-radius: 10px;
   text-align: center;
+  display: none;
+  visibility: hidden;
 }
 
 .top-row {
@@ -10029,13 +10031,15 @@ body {
   align-items: center;
   margin-top: 50px;
   margin-bottom: 80px;
-  margin-left: 160px;
+  margin-left: 140px;
 }
 
 #page-title {
   color: black;
   margin: auto;
-  width: 250px;
+  /*margin-left: 0px;
+  margin-right: 0px;*/
+  width: 220px;
   font-weight: 700;
   font-size: 40px;
   cursor: default;
@@ -10054,7 +10058,6 @@ body {
 
 #user_options {
   width: 220px;
-  margin-left: 100px;
   margin-right: 100px;
 }
 
@@ -10183,7 +10186,7 @@ body {
 }
 
 .zoom-btn {
-  width: 250px;
+  width: 200px;
   text-align: center;
   height: 39px;
 }
@@ -10192,7 +10195,8 @@ body {
   padding-top: 0;
   padding-bottom: 0;
   font-size: 25px;
-  font-weight: 700;
+  font-weight: 800;
+  height: 39px;
 }
 
 .sound-clips {
@@ -10443,6 +10447,11 @@ div [data-selected] {
   border-radius: 8px;
 }
 
+#project_name {
+  border-radius: 5px;
+  width: 220px;
+}
+
 .x-button2 {
   font-size: 30px;
   position: relative;
@@ -10451,7 +10460,28 @@ div [data-selected] {
   color: #595858;
 }
 
+.x-button3 {
+  font-size: 15px;
+  position: absolute;
+  left: 310px;
+  cursor: pointer;
+  color: #595858;
+}
+
+.x-button4 {
+  font-size: 30px;
+  position: absolute;
+  top: 0px;
+  left: 313px;
+  cursor: pointer;
+  color: #595858;
+}
+
 .x-button2:hover {
+  color: black;
+}
+
+.x-button3:hover {
   color: black;
 }
 
@@ -10481,6 +10511,32 @@ div [data-selected] {
   background-color: #bbb8b8;
   width: 320px;
   height: 35px;
+  text-align: left;
+  padding-left: 20px;
+}
+
+.padding-to-text {
+  margin-left: 50px;
+  margin-top: 10px;
+  width: 220px;
+  text-align: left;
+  cursor: default;
+}
+
+.delete_confirmation {
+  margin-top: 10px;
+  display: none;
+  visibility: hidden;
+}
+
+.visible {
+  display: block;
+  visibility: visible;
+}
+
+.delete_confirmation button {
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 #load_project, #save_project, #load_sound, #log_out {
@@ -10503,6 +10559,18 @@ input[type=file i] {
   height: 136px;
   background-color: transparent;
   border: none;
+}
+
+#log_out a {
+  color: #7a2332 !important;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+#log_out a:hiver {
+  color: #7a2332 !important;
+  text-decoration: none;
 }
 
 ::-webkit-scrollbar {
@@ -10570,4 +10638,8 @@ input[type=file i] {
   left: 41%;
   font-weight: 700;
   font-size: 20px;
+}
+
+.alert {
+  top: 150px;
 }

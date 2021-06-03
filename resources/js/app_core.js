@@ -40,13 +40,11 @@ export function loading() {
     let signup = document.querySelector('#signup_now');
     text.style.color = 'white';
     document.body.style.background = 'black';
-    ventana.style.display = 'block';
-    ventana.style.visibility = 'visible';
+    ventana.classList.toggle('visible');
     if (signup) { signup.style.color = 'white'; }
     setTimeout(function () {
         if (signup) { signup.style.color = 'black'; }
-        ventana.style.display = 'none';
-        ventana.style.visibility = 'hidden';
+        ventana.classList.toggle('visible');
         document.body.style.background = '#b9edf1';
         text.style.color = 'black';
         document.body.style.transition = 'background 0.7s'
@@ -56,7 +54,7 @@ export function loading() {
     }, 3500);
 }
 
-loading();
+//loading();
 
 function appStart() {
 
