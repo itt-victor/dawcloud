@@ -494,17 +494,19 @@ div [data-selected] {
     height: 35px;
 }
 
-#load_project, #save_project, #load_sound {
+#load_project, #save_project, #load_sound, #log_out {
     height: 45px;
 	width: 220px;
 }
 
 #load_sound {
 	padding-top: 8px;
+    margin-bottom: 0;
 }
 
 input[type="file" i]{
 	visibility: hidden;
+    display: none;
 }
 
 .dropdown-menu {

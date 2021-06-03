@@ -89,4 +89,10 @@ class HomeController extends Controller
         }
         return $redirect;
     }
+
+    public function logout(Request $request)
+    {
+        //
+    }
+
 }

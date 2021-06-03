@@ -23,6 +23,8 @@ Route::post('/signup', [HomeController::class, 'signup'])->name('signup');
 
 Route::post('/login', [HomeController::class, 'login'])->name('login');
 
+//Route post, get, delete?? ('/logout', [HomeController::class, 'logout'])->name('logout');
+
 Route::get('/app', [AppController::class, 'app'])->name('app');
 
 Route::post('/savesound', [AppController::class, 'saveSound'])->name('saveSound');
@@ -33,8 +35,5 @@ Route::get('/loadproject/{project}', [AppController::class, 'loadProject'])->nam
 
 Route::get('/loadsound/{project}/{recording}', [AppController::class, 'loadSound'])->name('loadSound');
 
-Route::delete('delete/{project}', [AppController::class, 'deleteProject'])->name('deleteProject');
+//Route::delete('delete/{project}', [AppController::class, 'deleteProject'])->name('deleteProject');
 
-//Auth::routes();
-
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');   HAY QUE MIRAR LO DE ARTISAN AUTH
