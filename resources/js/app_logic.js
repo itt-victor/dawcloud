@@ -85,7 +85,7 @@ function zoom() {
 
     function zIn() {
         oldZoom = timeSpace.zoom;
-        timeSpace.zoom /= 1.3
+        timeSpace.zoom =  parseFloat((timeSpace.zoom * (1/1.25)).toFixed(8));
         console.log(timeSpace.zoom);
 
         for (var i = 0; i < grid.recordings.length; i++) {
@@ -100,7 +100,7 @@ function zoom() {
     }
     function zOut() {
         oldZoom = timeSpace.zoom;
-        timeSpace.zoom /= (1/1.3); //*= 1.3;
+        timeSpace.zoom = parseFloat((timeSpace.zoom / (1/1.25)).toFixed(8));
         console.log(timeSpace.zoom);
         for (var i = 0; i < grid.recordings.length; i++) {
             ui_draw.drawRecording(grid.recordings[i]);

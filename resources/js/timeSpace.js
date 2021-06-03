@@ -5,7 +5,7 @@ export var timeSpace = {
         var time = this.space * this.zoom;
         return time;
     },
-    zoom: 0.050,
+    zoom: 0.0500,
     bpm: 1,          // 120 = 1   60 = 2
     compas: 2        //2 es 4/4 1.5 es 3/4
 };
