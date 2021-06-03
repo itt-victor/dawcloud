@@ -234,9 +234,14 @@ function loadProject() {
         });
     }
 }
+
+function deleteProject() {
+//Según se manda por evento borrar una, se hace petición al controller
+}
+
 loadProject();
 saveProject();
-
+//deleteProject();
 
 
 

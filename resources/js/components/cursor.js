@@ -1,4 +1,3 @@
-import { stop } from '../app_core';
 import { grid } from './generalgrid';
 import { timeSpace } from '../timeSpace';
 

@@ -3,7 +3,7 @@ require('./app_logic');
 require('./audio/recordcontroller');
 require('./components/timeLayout');
 require('./ui/ui_layout');
-require('./loadproject');
+require('./project');
 require('./components/mixer');
 
 import { grid } from './components/generalgrid';

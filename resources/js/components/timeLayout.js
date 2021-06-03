@@ -2,8 +2,6 @@ import { timeSpace } from '../timeSpace';
 import { cursor } from './cursor';
 import { soundStatuses } from '../app_core';
 import { soundcontroller } from '../app_core';
-import { grid } from './generalgrid';
-
 
 //Interacción con el layout de tiempo
 const timeLayout = document.querySelector('#time-layout');

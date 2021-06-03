@@ -88,4 +88,9 @@ class AppController extends Controller
 
         return response($file);
     }
+
+    public function deleteProject($project)
+    {
+
+    }
 }
