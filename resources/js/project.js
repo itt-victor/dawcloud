@@ -246,7 +246,7 @@ function deleteProject() {
         projects[h].childNodes[1].addEventListener('click', function dlt(e) {
             const project = this.parentNode.id;
             dltConfirmation.classList.toggle('visible');
-            delete_cancel.addEventListener('click', function () {
+            delete_cancel.addEventListener('click', function (a) {
                 dltConfirmation.classList.toggle('visible');
             });
             delete_confirm.addEventListener('click', function () {

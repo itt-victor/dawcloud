@@ -2,6 +2,7 @@
 @section('title', 'DawCloud')
 
 @section('content')
+
 <div class="loading"><p>Loading</p></div>
     <div id="app">
         <div class="top-row">
@@ -9,11 +10,11 @@
             <div id="buttonpad" class="buttonpad">
                 <div class="master_controls">
                     <button id="play-button" class="play-button btn btn-outline-info"><img width="30px" height="30px"
-                            src="storage/icons/play-icon.jpg"  /></button><!--alt="play-button"-->
+                            src="storage/icons/play-icon.jpg"  /></button>
                     <button id="stop-button" class="stop-button btn btn-outline-info"><img width="30px" height="30px"
-                            src="storage/icons/stop-icon.png" /></button><!-- alt="stop-button"-->
+                            src="storage/icons/stop-icon.png" /></button>
                     <button id="record-button" class="record-button btn btn-outline-info"><img width="30px" height="30px"
-                            src="storage/icons/record-icon.png"  /></button><!-- alt="record-button"-->
+                            src="storage/icons/record-icon.png"  /></button>
                     <button id=metric_button class="btn btn-outline-info btn-metric"></button>
                     <button id="bpm_button" class="btn btn-outline-info btn-bpm"></button>
                 </div>
@@ -137,3 +138,5 @@
     </div>
 
 @endsection
+
+@section('script', 'js/app_core.js' )

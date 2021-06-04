@@ -34,8 +34,8 @@ toggleSignUp();
 
 //Seleccionar pista
 function selectTrack() {
-    var tracks = document.getElementsByClassName("track");
-    var trackNames = document.getElementsByClassName("track_name");
+    const tracks = document.getElementsByClassName("track");
+    const trackNames = document.getElementsByClassName("track_name");
     var index;
     for (var i = 0; i < tracks.length; i++) {
         tracks[i].addEventListener('mousedown', function (e) {
@@ -45,7 +45,7 @@ function selectTrack() {
             this.setAttribute('data-selected', '');
         })
         trackNames[i].addEventListener('click', function (e) {
-            index = this.id.substr(11, 1);
+            index = this.id.charAt(11);
             for (var i = 0; i < tracks.length; i++) {
                 tracks[i].removeAttribute('data-selected');
             }
@@ -69,7 +69,9 @@ function loadSong() {
                     grid.tracks[trcknr].addRecord(timeSpace.time(), buffer);
                 });
             }
-            reader.readAsArrayBuffer(button.files[0]);
+            if (button.files[0]) {
+                reader.readAsArrayBuffer(button.files[0]);
+            }
         }
     }
 }
@@ -77,7 +79,7 @@ setTimeout(loadSong, 0);
 
 
 
-//zoom!!!
+//zoom
 function zoom() {
     let zoomIn = document.getElementById("zoomin");
     let zoomOut = document.getElementById("zoomout");
@@ -85,7 +87,7 @@ function zoom() {
 
     function zIn() {
         oldZoom = timeSpace.zoom;
-        timeSpace.zoom =  parseFloat((timeSpace.zoom * (1/1.25)).toFixed(8));
+        timeSpace.zoom = parseFloat((timeSpace.zoom * (1 / 1.25)).toFixed(8));
 
         for (var i = 0; i < grid.recordings.length; i++) {
             ui_draw.drawRecording(grid.recordings[i]);
@@ -99,7 +101,7 @@ function zoom() {
     }
     function zOut() {
         oldZoom = timeSpace.zoom;
-        timeSpace.zoom = parseFloat((timeSpace.zoom / (1/1.25)).toFixed(8));
+        timeSpace.zoom = parseFloat((timeSpace.zoom / (1 / 1.25)).toFixed(8));
         for (var i = 0; i < grid.recordings.length; i++) {
             ui_draw.drawRecording(grid.recordings[i]);
         }
@@ -112,17 +114,6 @@ function zoom() {
     }
     zoomIn.addEventListener('click', zIn);
     zoomOut.addEventListener('click', zOut);
-
-    window.addEventListener('keyup', function (e) {
-        if (e.keyCode === 72) {
-            zIn();
-        }
-    });
-    window.addEventListener('keyup', function (r) {
-        if (r.keyCode === 71) {
-            zOut();
-        }
-    });
 }
 zoom();
 

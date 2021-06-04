@@ -14,7 +14,7 @@
             @yield('content')
 
 
-        <script type="text/javascript" src="js/app_core.js"></script>
+        <script type="text/javascript" src="@yield('script')"></script>
     </body>
 </html>
 

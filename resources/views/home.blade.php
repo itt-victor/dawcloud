@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html lang="en-us">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Daw Cloud</title>
-        <link rel="icon" href="favicon.ico" type="image/x-icon"/>
-        <link rel="stylesheet" type="text/css" href="css/app.css"/>
+@extends('layouts.template')
+@section('title', 'DawCloud')
 
-    </head>
-    <body class="antialiased">
+@section('content')
+
         <h1 id="page-title" class="h1 center">daw Cloud</h1>
         <div id="user-window">
             <form id="user_signup" method="POST" action="{{ route('signup') }}">
@@ -45,6 +39,7 @@
             </ul>
         </div>
         @endif
-        <script type="text/javascript" src="js/home.js"></script>
-    </body>
-</html>
+
+@endsection
+
+@section('script', 'js/home.js' )

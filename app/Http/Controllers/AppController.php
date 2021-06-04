@@ -12,12 +12,17 @@ class AppController extends Controller
 
     public function app()
     {
-        $signed = true;
-        $projects = DB::table('projects')
-            ->where('user_id', Auth::user()->id)
-            ->pluck('project_name');
+        $signed = false;
+        $projects = [];
 
-        return view('app', ['projects' => $projects, 'signed' => $signed]);
+        if (!empty(Auth::user())) {
+            $signed = true;
+            $projects = DB::table('projects')
+                ->where('user_id', Auth::user()->id)
+                ->pluck('project_name');
+        }
+
+       return view('app', ['projects' => $projects, 'signed' => $signed]);
     }
 
     public function appUnsigned()
@@ -92,8 +97,7 @@ class AppController extends Controller
         $project = $request->input('project');
 
         DB::table('projects')
-        ->where('project_name', '=', $project)
-        ->delete();
-
+            ->where('project_name', '=', $project)
+            ->delete();
     }
 }
