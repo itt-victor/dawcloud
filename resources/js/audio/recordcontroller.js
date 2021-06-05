@@ -52,7 +52,7 @@ export default function recordController() {
                         var track = document.querySelector('[data-selected]').id;
                         grid.tracks[track].addRecord(startTime, audioBuffer);
                     });
-                })
+                });
             }
         }
         let onError = function (err) {

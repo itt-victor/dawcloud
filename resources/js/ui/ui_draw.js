@@ -2,7 +2,7 @@ import { stop } from '../app_core';
 import { timeSpace } from '../timeSpace';
 
 export var ui_draw = {
-    drawTrackWhileRecording(actualTime) {
+    drawTrackWhileRecording() {
         var width = 0;
         var height = 67;
         var x = timeSpace.space;
