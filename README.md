@@ -19,6 +19,8 @@ https://github.com/leokhoa/laragon/releases/download/5.0.0/laragon-wamp.exe
 <p>En primer lugar, y como recomendación por facilidad de uso, debe configurarse Laragon para que llame a iniciarse con Apache y MySQL, cargando PHP y Node.js; es tan sencillo como introducir los directorios de las 4 aplicaciones en el directorio “bin” de Laragon. </p>
 <p>Acto seguido, se deben de habilitar las siguientes extensiones de PHP, fácilmente a través del menú de opciones de laragon: <br>
 Curl, fileinfo, gd, mbstring, mysqli, pdo_mysql</p>
+
+<p>Se clona este repositorio dentro del directorio “www” de Laragon.</p>
 <p>Desde un terminal de commandos, se hace “cd” al directorio donde se encuentra el proyecto, y se ejecutan los siguientes comandos: <br>
 composer install    <br>
 #se instalan las dependencias requeridas por el proyecto<br>
