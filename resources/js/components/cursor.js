@@ -25,13 +25,13 @@ export var cursor = {
         }, timeSpace.zoom * 1000)
     },
 
+    stop: function () {
+        clearInterval(interval);
+    },
+
     moveAtZoom: function (oldZoom) {
         timeSpace.space = (timeSpace.space * (1 / timeSpace.zoom)) / (1 / oldZoom);
         this.canvas.style.left = timeSpace.space + 'px';
-    },
-
-    stop: function () {
-        clearInterval(interval);
     },
 
     moveAtClick: function () {

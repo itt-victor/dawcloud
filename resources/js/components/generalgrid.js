@@ -6,13 +6,14 @@ var recordings;
 
 export class Grid {
 
-    constructor( tracks, recordings) {
+    constructor( gainValue, tracks, recordings) {
         this.howMany = document.getElementsByClassName('track').length;
         this.canvas = document.createElement('canvas');
         this.gainNode;
+        this.gainValue = gainValue;
+        this.faderY = 20;
         this.tracks = tracks;
         this.recordings = recordings;
-
     }
 
     prepareGrid() {
@@ -27,8 +28,8 @@ export class Grid {
         jQuery(".track:first").attr("data-selected", '');
     }
 
-    addTracks(howMany) {
-        for (var i = 0; i < howMany; i++) {
+    addTracks() {
+        for (var i = 0; i < this.howMany; i++) {
             trackName = generateTrackNumbers();
             window[trackName] = new Track(i, 1, 'C');
             window[trackName].pannerNode.connect(window[trackName].gainNode);
@@ -36,15 +37,6 @@ export class Grid {
             grid.tracks.push(window[trackName]);
         }
     }
-
-    addRecordings() {
-        for (var i = 0; i < this.tracks.length; i++) {
-            recordings = this.tracks[i].recordings;
-            for (var h = 0; h < recordings.length; h++) {
-                this.recordings.push(recordings[h]);
-            }
-        }
-    }
 }
 //La creo
-export var grid = new Grid([], []);
+export var grid = new Grid(1, [], []);

@@ -58,12 +58,11 @@ function appStart() {
 
     //prepara el grid
     grid.prepareGrid();
-    grid.addTracks(grid.howMany);
+    grid.addTracks();
     //dibuja cursor inicial
     cursor.draw();
     //dibuja layout
     drawLayout();
-
     play.addEventListener('click', ePlay);
     stop.addEventListener('click', eStop);
 

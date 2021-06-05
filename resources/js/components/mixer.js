@@ -49,9 +49,11 @@ function setChannelGain() {
                 fader.Y = Y;
                 this.style.top = Y + 'px';
                 gainValue = Math.log10(1 / ((Y + 5) / 260));
-                track.gainNode.gainValue = gainValue;
+
                 if (gainValue > 1) { gainValue = 1 };
                 if (gainValue < 0) { gainValue = 0 };
+
+                track.gainNode.gainValue = gainValue;
 
                 if (track.muteButton.toggle) { }
                 else {
@@ -85,7 +87,7 @@ function setMasterGain() {
         };
     }
     fader.firstChild.addEventListener("mousedown", function (evt) {
-        Y = this.getAttribute('data-y')
+        Y = grid.faderY;
         var mousePos = onMousePos(fader, evt);
         if (mousePos.y <= 280 &&
             mousePos.y >= 20) {
@@ -99,13 +101,18 @@ function setMasterGain() {
         var mousePos = onMousePos(fader, evt);
         if (drag) {
             X = mousePos.x + delta.x, Y = mousePos.y + delta.y
+
             if (Y < 20) { Y = 20 };
             if (Y > 260) { Y = 260 };
-            this.setAttribute('data-y', Y);
+
             this.style.top = Y + 'px';
             gainValue = Math.log10(1 / ((Y + 5) / 260));
             if (gainValue > 1) { gainValue = 1 };
             if (gainValue < 0) { gainValue = 0 };
+
+            grid.gainValue = gainValue;
+            grid.faderY = Y;
+
             gain.gain.setValueAtTime(gainValue, audioCtx.currentTime);
             if (X < fader.getBoundingClientRect.x) { drag = false; }
             if (X < (fader.getBoundingClientRect.x + 45)) { drag = false; };

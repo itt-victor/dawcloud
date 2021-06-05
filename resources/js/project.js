@@ -10,13 +10,15 @@ import { loading } from './app_core';
 import { eStop } from './app_core';
 
 class Project {
-    constructor(timeSpace, recordings, tracksGainValues, trackspanValues, tracksY) {
+    constructor(timeSpace, recordings, tracksGainValues, trackspanValues, tracksY, masterGainValue, masterY) {
         this.timeSpace = timeSpace;
         this.recordings = recordings;
         this.audioReferences = [];  //almacenas los nombres de los wav para recuperarlos
         this.tracksGainValues = tracksGainValues;
         this.trackspanValues = trackspanValues;
         this.tracksY = tracksY;
+        this.masterGainValue = masterGainValue;
+        this.masterY = masterY;
     }
 }
 
@@ -45,17 +47,20 @@ function saveProject() {
                 saveWindow.style.display = 'none';
                 saveWindow.style.visibility = 'hidden';
 
-                //var audioBuffers = [];
                 var tracksGainValues = [];
                 var trackspanValues = [];
                 var tracksY = [];
+                var masterGainValue;
+                var masterY;
                 if (!project === undefined) {
                     tracksGainValues = project.tracksGainValues;
                     trackspanValues = project.trackspanValues;
                     tracksY = project.tracksY;
+                    masterGainValue = project.masterGainValue;
+                    masterY = project.masterY;
                     numbers.recordingId = project.audioReferences.length;
 
-                    //Se guardan los valores de gain de cada pista
+                    //Se guardan los valores de gain y pan de cada pista, comparando si estos hubiesen cambiado
                     for (let i = 0; i < grid.tracks.length; i++) {
                         if (tracksGainValues[i] != grid.tracks[i].gainNode.gainValue) {
                             tracksGainValues[i] = grid.tracks[i].gainNode.gainValue;
@@ -67,25 +72,36 @@ function saveProject() {
                             trackspanValues[i] = grid.tracks[i].pannerNode.pannerValue;
                         }
                     }
+                    //gain master
+                    if (masterGainValue != grid.gainNode.value) {
+                        masterGainValue = grid.gainValue;
+                    }
+                    if (masterY != grid.faderY) {
+                        masterY = grid.faderY;
+                    }
                 } else {
                     for (let i = 0; i < grid.tracks.length; i++) {
                         tracksGainValues.push(grid.tracks[i].gainNode.gainValue);
                         tracksY.push(grid.tracks[i].fader.Y);
                         trackspanValues.push(grid.tracks[i].pannerNode.pannerValue);
                     }
+                    masterGainValue = grid.gainValue;
+                    masterY = grid.faderY;
                 }
 
                 //creo objeto proyecto
                 if (project === undefined) {
-                    project = new Project(timeSpace, grid.recordings, tracksGainValues, trackspanValues, tracksY);
+                    project = new Project(timeSpace, grid.recordings, tracksGainValues, trackspanValues, tracksY, masterGainValue, masterY);
                 }
                 else {
                     project.timeSpace = timeSpace;
                     project.recordings = grid.recordings;
+                    project.audioReferences = [];
                     project.tracksGainValues = tracksGainValues;
                     project.trackspanValues = trackspanValues;
                     project.tracksY = tracksY;
-                    project.audioReferences = [];
+                    project.masterGainValue = masterGainValue;
+                    project.masterY = masterY;
                 }
 
                 //Se convierten los audioBuffers en wav, se convierten a su vez en blob, y se genera una URL del mismo
@@ -226,6 +242,11 @@ function loadProject() {
                             grid.tracks[f].pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
                         }
                     }
+                    //Se carga el volumen master
+                    grid.gainValue = project.masterGainValue;
+                    grid.gainNode.gain.setValueAtTime(grid.gainValue, audioCtx.currentTime);
+                    grid.faderY = project.masterY;
+                    document.getElementById('master_fader').children[0].style.top = grid.faderY + 'px';
                     console.log('Project loaded successfully');
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {

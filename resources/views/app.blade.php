@@ -95,7 +95,7 @@
             @include('layouts.fader', ['number'=> '5', 'number2'=>'6'])
             @include('layouts.fader', ['number'=> '6', 'number2'=>'7'])
             @include('layouts.fader', ['number'=> '7', 'number2'=>'8'])
-            <div class="fader" id="master_fader"><a class="fader-knob" data-y="20"></a><div class="trcknr mxrmstr">Master</div></div>
+            <div class="fader" id="master_fader"><a class="fader-knob"></a><div class="trcknr mxrmstr">Master</div></div>
 
             @include('layouts.panner', ['number'=> '0'])
             @include('layouts.panner', ['number'=> '1'])
