@@ -25,7 +25,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect('/')
+            return back()
                 ->withErrors($validator)
                 ->withInput();
         }
