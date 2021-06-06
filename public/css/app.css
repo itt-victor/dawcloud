@@ -10546,10 +10546,9 @@ div [data-selected] {
 }
 
 /*Oculto mientras está en desarrollo*/
-#export_sound {
-  display: none;
-}
-
+/*#export_sound {
+    display: none;
+}*/
 #load_sound {
   padding-top: 8px;
   margin-bottom: 0;

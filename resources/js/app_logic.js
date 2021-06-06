@@ -1,4 +1,5 @@
 require('./bootstrap');
+var toWav = require('audiobuffer-to-wav');
 
 import { soundcontroller } from './app_core';
 import { audioCtx } from './app_core'
@@ -77,69 +78,75 @@ function loadSong() {
 }
 setTimeout(loadSong, 0);
 
-//Exportar - en desarrollo
-/*function exportSong() {
-    let sampleRate;
-    let startTime;
-    let offsetaudio;
-    let maxLength = 0;
-    let starts = 0;
-    let mixBuffer;
+//Exportar el proyecto
+function exportSong() {
 
+    let maxLength = 0;
+    let pannerValue;
+    let ctxValue;
 
     for (let i = 0; i < grid.recordings.length; i++) {
-
-        if (maxLength < grid.recordings[i].audioBuffer.length) {
-            maxLength = grid.recordings[i].audioBuffer.length;
-            if (starts < grid.recordings[i].timeToStart) {
-                starts = grid.recordings[i].timeToStart * 48000;
-            }
+        if (maxLength < (grid.recordings[i].audioBuffer.length
+            + (grid.recordings[i].timeToStart * 48000))) {
+            maxLength = grid.recordings[i].audioBuffer.length
+            + (grid.recordings[i].timeToStart * 48000);
         };
-        maxLength += starts;
     }
 
-    for (let i = 0; i < grid.recordings.length; i++) {
+    const offlineCtx = new OfflineAudioContext({
+        numberOfChannels: 2,
+        length: maxLength,
+        sampleRate: 48000,
+    });
 
-        let buffer = grid.recordings[i].audioBuffer;
-        mixBuffer = audioCtx.createBuffer(2, maxLength, 48000);
-        sampleRate = grid.recordings[i].audioBuffer.sampleRate;
-        length = grid.recordings[i].audioBuffer.length;
-        startTime = grid.recordings[i].timeToStart;
-        offsetaudio = audioCtx.createBuffer(buffer.numberOfChannels,
-            Math.round(startTime * sampleRate)
-            + length, sampleRate);
+    let mastergain = offlineCtx.createGain();
+    mastergain.connect(offlineCtx.destination);
+    let pannerNodes = [];
 
-        for (let channelNumber = 0; channelNumber < buffer.numberOfChannels; channelNumber++) {
+    for (let i = 0; i < grid.tracks.length; i++) {
+        let panner = offlineCtx.createStereoPanner();
+        pannerNodes.push(panner);
+        let gain = offlineCtx.createGain();
+        pannerValue = grid.tracks[i].pannerNode.pannerValue;
 
-            offsetaudio.getChannelData(channelNumber).set(buffer.getChannelData(channelNumber),
-                Math.round(startTime * sampleRate));
-
-            console.log(offsetaudio);
-
-            const outputData = mixBuffer.getChannelData(channelNumber);
-            const bufferData = offsetaudio.getChannelData(channelNumber);
-
-
-            for (let h = buffer.getChannelData(channelNumber).length - 1; h >= 0; h -= 1) {
-                outputData[h] += bufferData[h];
-            }
-            if (buffer.numberOfChannels == 1) {
-                for (let h = buffer.getChannelData(0).length - 1; h >= 0; h -= 1) {
-                    outputData[h] += offsetaudio.getChannelData(0)[h];
-                }
-            }
-
-            mixBuffer.getChannelData(channelNumber).set(outputData);
-            console.log(mixBuffer);
+        if (pannerValue.startsWith('L')) {
+            ctxValue = - + pannerValue.slice(1) / 100;
+            panner.pan.setValueAtTime(ctxValue, 0);
         }
-    };
-    const source = audioCtx.createBufferSource();
-    source.connect(audioCtx.destination);
-    source.buffer = mixBuffer;//offsetaudio;
-    source.start();
-    //return output;
+        else if (pannerValue == 0 || pannerValue == 'C') {
+            ctxValue = 0;
+            panner.pan.setValueAtTime(ctxValue, 0);
+        }
+        else if (pannerValue.startsWith('R')) {
+            ctxValue = pannerValue.slice(1) / 100;
+            panner.pan.setValueAtTime(ctxValue, 0);
+        }
+        gain.gain.setValueAtTime(grid.tracks[i].gainNode.gainValue, 0);
+        panner.connect(gain);
+        gain.connect(mastergain);
+    }
+
+    for (let h = 0; h < grid.recordings.length; h++) {
+        const source = offlineCtx.createBufferSource();
+        source.buffer = grid.recordings[h].audioBuffer;
+        source.connect(pannerNodes[grid.recordings[h].tracknumber]);
+        var start = Math.max((grid.recordings[h].timeToStart), 0);
+        source.start(start, 0);
+    }
+
+    offlineCtx.startRendering().then(function (renderedBuffer) {
+        let filename = 'project.wav'
+        const a = document.createElement('a');
+        var blob = new window.Blob([new DataView(toWav(renderedBuffer))], {
+            type: 'audio/wav'
+        });
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(a.href);
+    });
 }
-//export_sound.addEventListener('click', exportSong);*/
+export_sound.addEventListener('click', exportSong);
 
 
 
