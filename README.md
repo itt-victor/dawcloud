@@ -17,6 +17,10 @@ https://getcomposer.org/download/
 https://github.com/leokhoa/laragon/releases/download/5.0.0/laragon-wamp.exe 
 
 <p>En primer lugar, y como recomendación por facilidad de uso, debe configurarse Laragon para que llame a iniciarse con Apache y MySQL, cargando PHP y Node.js; es tan sencillo como introducir los directorios de las 4 aplicaciones en el directorio “bin” de Laragon. </p>
+
+<p>Es posible que, al iniciar el servidor, emita un mensaje de error referente a la librería PHP. Esto es fácilmente solucionable modificando el fichero “mod_php.CONF”, ubicado en el directorio de Laragon “/etc/apache2”, únicamente eliminando el número 8 en “php8_module”, para que quede del siguiente modo:<br> 
+LoadModule php_module "C:/laragon/bin/php/php-8.0.7-Win32-vs16-x64/php8apache2_4.dll"</p>
+
 <p>Acto seguido, se deben de habilitar las siguientes extensiones de PHP, fácilmente a través del menú de opciones de laragon: <br>
 Curl, fileinfo, gd, mbstring, mysqli, pdo_mysql</p>
 
@@ -31,7 +35,7 @@ cp .env.example .env <br>
 php artisan key:generate<br>
 #se genera una nueva clave de encriptación<br></p>
 
-<p>A continuación, se crea una nueva base de datos vacía en MySQL, y se conecta al proyecto, editando los campos DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, y DB_PASSWORD en el fichero .env</p>
+<p>A continuación, se crea una nueva base de datos vacía en MySQL, y se conecta al proyecto, editando los campos DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, y DB_PASSWORD en el fichero .env para que coincidan con la configuración de la base de datos.</p>
 <p>Por último, se crean las tablas con el siguiente comando:<br>
 php artisan migrate</p>
 
