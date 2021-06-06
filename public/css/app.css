@@ -10037,13 +10037,12 @@ body {
 #page-title {
   color: black;
   margin: auto;
-  /*margin-left: 0px;
-  margin-right: 0px;*/
   width: 220px;
   font-weight: 700;
   font-size: 40px;
   cursor: default;
   text-decoration: none;
+  padding-left: 5px;
 }
 
 .a_title {
@@ -10417,6 +10416,7 @@ div [data-selected] {
 }
 
 .panner {
+  font-size: 16px;
   width: 45px;
   height: 50px;
   border: solid 1.5px #7a2332;
@@ -10540,9 +10540,14 @@ div [data-selected] {
   margin-right: 10px;
 }
 
-#load_project, #save_project, #load_sound, #log_out {
+#load_project, #save_project, #load_sound, #log_out, #export_sound {
   height: 45px;
   width: 220px;
+}
+
+/*Oculto mientras está en desarrollo*/
+#export_sound {
+  display: none;
 }
 
 #load_sound {
@@ -10582,6 +10587,11 @@ input[type=file i] {
 ::-webkit-scrollbar-thumb {
   background-color: #7a2332;
   width: 50px;
+}
+
+.home-title {
+  padding-top: 50px;
+  padding-left: 0px !important;
 }
 
 #user-window {

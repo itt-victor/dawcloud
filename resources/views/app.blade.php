@@ -24,7 +24,7 @@
 
 		    @if (!$signed)
             <div id="user_options">
-			    <p id="signup_now">Sign up, you will be able to save your projects</p>
+			    <p id="signup_now">Sign up now, and start managing your projects</p>
 			    <form id="signup_reminder" method="POST" action="{{ route('signup') }}">
                     <p class="signup_reminder_text">Create account. It's free <span class="x-button">&#10006;</span></p>
                     @csrf
@@ -42,8 +42,9 @@
 			    <button id="user_welcome" type="button" class= "btn dropdown-toggle"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hello {{ Auth::user()->user_name }}</button>
 		    	<div class="dropdown-menu" aria-labelledby="user_welcome">
-                    <label id="load_sound" for="load_sound_hidden" class="btn btn-outline-info dropdown-item">Load sound</label>
+                    <label id="load_sound" for="load_sound_hidden" class="btn btn-outline-info dropdown-item">Import</label>
 		    		<input type="file" id="load_sound_hidden" class="btn btn-outline-info dropdown-item" accept="audio/wav, audio/mp3"/>
+                    <button id="export_sound" class="btn btn-outline-info dropdown-item">Export</button>
                     <button id="load_project" class="btn btn-outline-info dropdown-item">My projects</button>
                     <button id="save_project" class="btn btn-outline-info dropdown-item">Save project</button>
 		    		<button id="log_out" class="btn btn-outline-info dropdown-item"><a href="{{route('logout')}}">Log out</a></button>
@@ -79,12 +80,12 @@
 
         </div>
 
-        <div id="toolbox">
+        <!--<div id="toolbox">
             <button id="normal_function" class="btn btn-outline-info"><img width="20px" height="20px"
                 src="storage/icons/normal_cursor.png"  /></button>
             <button id="cut_function" class="btn btn-outline-info"><img width="20px" height="20px"
                 src="storage/icons/cut_icon.svg"  /></button>
-        </div>
+        </div>-->
 
         <section id="mixer" class="mixer">
             @include('layouts.fader', ['number'=> '0', 'number2'=>'1'])

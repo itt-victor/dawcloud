@@ -3,7 +3,7 @@
 
 @section('content')
 
-        <h1 id="page-title" class="h1 center">daw Cloud</h1>
+        <h1 id="page-title" class="h1 center home-title">daw Cloud</h1>
         <div id="user-window">
             <form id="user_signup" method="POST" action="{{ route('signup') }}">
                 <b>Create account. It's free</b>

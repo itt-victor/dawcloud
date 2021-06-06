@@ -77,6 +77,70 @@ function loadSong() {
 }
 setTimeout(loadSong, 0);
 
+//Exportar - en desarrollo
+/*function exportSong() {
+    let sampleRate;
+    let startTime;
+    let offsetaudio;
+    let maxLength = 0;
+    let starts = 0;
+    let mixBuffer;
+
+
+    for (let i = 0; i < grid.recordings.length; i++) {
+
+        if (maxLength < grid.recordings[i].audioBuffer.length) {
+            maxLength = grid.recordings[i].audioBuffer.length;
+            if (starts < grid.recordings[i].timeToStart) {
+                starts = grid.recordings[i].timeToStart * 48000;
+            }
+        };
+        maxLength += starts;
+    }
+
+    for (let i = 0; i < grid.recordings.length; i++) {
+
+        let buffer = grid.recordings[i].audioBuffer;
+        mixBuffer = audioCtx.createBuffer(2, maxLength, 48000);
+        sampleRate = grid.recordings[i].audioBuffer.sampleRate;
+        length = grid.recordings[i].audioBuffer.length;
+        startTime = grid.recordings[i].timeToStart;
+        offsetaudio = audioCtx.createBuffer(buffer.numberOfChannels,
+            Math.round(startTime * sampleRate)
+            + length, sampleRate);
+
+        for (let channelNumber = 0; channelNumber < buffer.numberOfChannels; channelNumber++) {
+
+            offsetaudio.getChannelData(channelNumber).set(buffer.getChannelData(channelNumber),
+                Math.round(startTime * sampleRate));
+
+            console.log(offsetaudio);
+
+            const outputData = mixBuffer.getChannelData(channelNumber);
+            const bufferData = offsetaudio.getChannelData(channelNumber);
+
+
+            for (let h = buffer.getChannelData(channelNumber).length - 1; h >= 0; h -= 1) {
+                outputData[h] += bufferData[h];
+            }
+            if (buffer.numberOfChannels == 1) {
+                for (let h = buffer.getChannelData(0).length - 1; h >= 0; h -= 1) {
+                    outputData[h] += offsetaudio.getChannelData(0)[h];
+                }
+            }
+
+            mixBuffer.getChannelData(channelNumber).set(outputData);
+            console.log(mixBuffer);
+        }
+    };
+    const source = audioCtx.createBufferSource();
+    source.connect(audioCtx.destination);
+    source.buffer = mixBuffer;//offsetaudio;
+    source.start();
+    //return output;
+}
+//export_sound.addEventListener('click', exportSong);*/
+
 
 
 //zoom
