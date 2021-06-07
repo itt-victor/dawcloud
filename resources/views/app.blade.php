@@ -42,11 +42,11 @@
 			    <button id="user_welcome" type="button" class= "btn dropdown-toggle"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hello {{ Auth::user()->user_name }}</button>
 		    	<div class="dropdown-menu" aria-labelledby="user_welcome">
+                    <button id="load_project" class="btn btn-outline-info dropdown-item">My projects</button>
+                    <button id="save_project" class="btn btn-outline-info dropdown-item">Save project</button>
                     <label id="load_sound" for="load_sound_hidden" class="btn btn-outline-info dropdown-item">Import</label>
 		    		<input type="file" id="load_sound_hidden" class="btn btn-outline-info dropdown-item" accept="audio/wav, audio/mp3"/>
                     <button id="export_sound" class="btn btn-outline-info dropdown-item">Export</button>
-                    <button id="load_project" class="btn btn-outline-info dropdown-item">My projects</button>
-                    <button id="save_project" class="btn btn-outline-info dropdown-item">Save project</button>
 		    		<button id="log_out" class="btn btn-outline-info dropdown-item"><a href="{{route('logout')}}">Log out</a></button>
 		    	</div>
 		    	<div id="load_dialogue">
