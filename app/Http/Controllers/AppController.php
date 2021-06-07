@@ -10,9 +10,8 @@ use Illuminate\Support\Facades\Auth;
 class AppController extends Controller
 {
 
-    public function app(Request $request)
+    public function app()
     {
-
         if (Auth::check()) {
             $logged = true;
             $projects = DB::table('projects')
