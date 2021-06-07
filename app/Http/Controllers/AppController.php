@@ -15,11 +15,10 @@ class AppController extends Controller
 
         if (Auth::check()) {
             $logged = true;
-            $project = $request->session()->get('project');
             $projects = DB::table('projects')
                 ->where('user_id', Auth::user()->id)
                 ->pluck('project_name');
-                return  view('app', ['projects' => $projects, 'project_name' => $project, 'logged' => $logged]);
+                return  view('app', ['projects' => $projects, 'logged' => $logged]);
         }
 
         $logged = false;
@@ -74,7 +73,9 @@ class AppController extends Controller
                 ]);
         }
 
-        session(['project'=> $project]);
+        session(['projectname'=> $project]);
+
+        return $projectname;
     }
 
     public function loadProject($project)
@@ -84,7 +85,7 @@ class AppController extends Controller
             ->pluck('json_data')
             ->first();
 
-        session(['project'=> $project]);
+        session(['projectname'=> $project]);
 
         return response(json_decode($projectContent));
     }

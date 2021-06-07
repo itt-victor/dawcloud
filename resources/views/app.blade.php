@@ -71,8 +71,8 @@
 		    		<input id="project_name" type="text">
 	    		</div>
 	    	</div>
-            @if(!empty($project_name))
-                <span id="project-n" class="project-n visible">{{$project_name}}</span>
+            @if(session()->has('projectname'))
+                <span id="project-n" class="project-n visible">{{session('projectname')}}</span>
             @else
                 <span id="project-n" class="project-n"></span>
             @endif
