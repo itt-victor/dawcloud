@@ -14,20 +14,22 @@ class AppController extends Controller
     {
 
         if (Auth::check()) {
+            $logged = true;
             $project = $request->session()->get('project');
             $projects = DB::table('projects')
                 ->where('user_id', Auth::user()->id)
                 ->pluck('project_name');
-                return  view('app', ['projects' => $projects, 'project_name' => $project]);
+                return  view('app', ['projects' => $projects, 'project_name' => $project, 'logged' => $logged]);
         }
 
-        return view('app');
+        $logged = false;
+        return view('app', ['logged' => $logged]);
     }
 
     public function appUnsigned()
     {
-        $signed = false;
-        return view('app', ['signed' => $signed]);
+        $logged = false;
+        return view('app', ['logged' => $logged]);
     }
 
     public function saveSound(Request $request)

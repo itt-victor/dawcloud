@@ -43,8 +43,8 @@ body {
 #page-title {
     color: black;
     margin: auto;
-    margin-left: 150px;
-    margin-right: 150px;
+    margin-left: 158px;
+    margin-right: 110px;
     width: 220px;
     font-weight: 700;
     font-size: 40px;
@@ -620,7 +620,9 @@ input[type="file" i]{
 
 .home-title {
     padding-top: 50px;
-    padding-left: 0px!important;
+    margin-left: initial;
+    margin-right: initial;
+    margin: auto!important;
 }
 
 #user-window {
