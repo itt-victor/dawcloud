@@ -22,7 +22,7 @@
 
             <h1 id="page-title" class="h1 center"><a class="a_title" href="{{route('home')}}">daw Cloud</a></h1>
 
-		    @if (!$signed)
+		    @if (!Auth::check())
             <div id="user_options">
 			    <p id="signup_now">Sign up now, and start managing your projects</p>
 			    <form id="signup_reminder" method="POST" action="{{ route('signup') }}">
@@ -72,12 +72,16 @@
 	    		</div>
 	    	</div>
             @endif
+            @if($project_name)
+                <span id="project-n" class="project-n visible">{{$project_name}}</span>
+            @else
+                <span id="project-n" class="project-n"></span>
+            @endif
 
             <div class="zoom-btn">
                 <button id="zoomin" type="button" class="btn btn-outline-info">+</button>
                 <button id="zoomout" type="button" class="btn btn-outline-info">-</button>
             </div>
-
         </div>
 
         <!--<div id="toolbox">

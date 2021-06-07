@@ -10,7 +10,7 @@ import drawLayout from './ui/ui_layout';
 import { cursor } from './components/cursor';
 import { soundStatuses } from './app_core';
 import { eStop } from './app_core';
-
+import { generateRecordingId } from './utils';
 
 //toggle registrarse para uruarios no registrados
 function toggleSignUp() {
@@ -67,7 +67,7 @@ function loadSong() {
             reader.onload = function (e) {
                 let trcknr = document.querySelector('[data-selected]').id;
                 audioCtx.decodeAudioData(e.target.result).then(function (buffer) {
-                    grid.tracks[trcknr].addRecord(timeSpace.time(), buffer);
+                    grid.tracks[trcknr].addRecord(generateRecordingId(), timeSpace.time(), buffer);
                 });
             }
             if (button.files[0]) {
@@ -148,7 +148,10 @@ function exportSong() {
         });
     }
 }
-export_sound.addEventListener('click', exportSong);
+let export_sound = document.getElementById('export_sound');
+if (export_sound) {
+    export_sound.addEventListener('click', exportSong);
+}
 
 
 

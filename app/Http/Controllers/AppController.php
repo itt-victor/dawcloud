@@ -10,19 +10,18 @@ use Illuminate\Support\Facades\Auth;
 class AppController extends Controller
 {
 
-    public function app()
+    public function app(Request $request)
     {
-        $signed = false;
-        $projects = [];
 
-        if (!empty(Auth::user())) {
-            $signed = true;
+        if (Auth::check()) {
+            $project = $request->session()->get('project');
             $projects = DB::table('projects')
                 ->where('user_id', Auth::user()->id)
                 ->pluck('project_name');
+                return  view('app', ['projects' => $projects, 'project_name' => $project]);
         }
 
-       return view('app', ['projects' => $projects, 'signed' => $signed]);
+        return view('app');
     }
 
     public function appUnsigned()
@@ -37,7 +36,7 @@ class AppController extends Controller
         $id = $request->input('recording-id');
         $projectname = $request->input('project-name');
         Storage::makeDirectory('public/projects/' . $projectname);
-        $filename = 'public/projects/' . $projectname . '/' . $projectname . '_' . $id . '.wav';
+        $filename = 'public/projects/' . $projectname . '/' . $id . '.wav';
 
         if (Storage::exists($filename)) {
             Storage::delete($filename);
@@ -72,15 +71,18 @@ class AppController extends Controller
                     'updated_at' => now()
                 ]);
         }
+
+        session(['project'=> $project]);
     }
 
     public function loadProject($project)
     {
-
         $projectContent = DB::table('projects')
             ->where('project_name', '=', $project)
             ->pluck('json_data')
             ->first();
+
+        session(['project'=> $project]);
 
         return response(json_decode($projectContent));
     }
@@ -95,6 +97,7 @@ class AppController extends Controller
     public function deleteProject(Request $request)
     {
         $project = $request->input('project');
+        Storage::deleteDirectory('public/projects/' . $project);
 
         DB::table('projects')
             ->where('project_name', '=', $project)

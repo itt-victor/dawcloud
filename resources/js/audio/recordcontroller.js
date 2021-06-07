@@ -5,6 +5,7 @@ import { timeSpace } from '../timeSpace';
 import { soundcontroller } from '../app_core';
 import { soundStatuses } from '../app_core';
 import { audioCtx } from '../app_core';
+import { generateRecordingId } from '../utils';
 import { play, record, stop } from '../app_core';
 
 export default function recordController() {
@@ -50,7 +51,7 @@ export default function recordController() {
                 blob.arrayBuffer().then(arrayBuffer => {
                     audioCtx.decodeAudioData(arrayBuffer, (audioBuffer) => {
                         var track = document.querySelector('[data-selected]').id;
-                        grid.tracks[track].addRecord(startTime, audioBuffer);
+                        grid.tracks[track].addRecord(generateRecordingId(), startTime, audioBuffer);
                     });
                 });
             }

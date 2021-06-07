@@ -7,6 +7,7 @@ import { dragRecording } from '../ui/ui_dragRecordings';
 import { removeRecording } from '../app_logic';
 
 var rcdName;
+var id;
 
 export default class Track {
     constructor(tracknumber, gainValue, pannerValue) {
@@ -26,9 +27,9 @@ export default class Track {
         this.fader.Y = 20;
         this.fader.parent = this;
     }
-    addRecord(timeToStart, audioBuffer) {
+    addRecord(recordingId, timeToStart, audioBuffer) {
         rcdName = generateRecordingNumbers();
-        window[rcdName] = new Recording(timeToStart, audioBuffer, this.tracknumber);
+        window[rcdName] = new Recording(recordingId, timeToStart, audioBuffer, this.tracknumber);
         grid.recordings.push(window[rcdName]);
         this.trackDOMElement.appendChild(window[rcdName].canvas);
         ui_draw.drawRecording(window[rcdName]);

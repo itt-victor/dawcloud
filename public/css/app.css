@@ -10037,6 +10037,8 @@ body {
 #page-title {
   color: black;
   margin: auto;
+  margin-left: 150px;
+  margin-right: 150px;
   width: 220px;
   font-weight: 700;
   font-size: 40px;
@@ -10057,11 +10059,18 @@ body {
 
 #user_options {
   width: 220px;
-  margin-right: 100px;
+  margin-right: 10px;
 }
 
 #user_welcome {
   width: 220px;
+}
+
+.project-n {
+  position: relative;
+  min-width: 100px;
+  font-weight: 900;
+  margin: auto;
 }
 
 #signup_now {
@@ -10545,10 +10554,6 @@ div [data-selected] {
   width: 220px;
 }
 
-/*Oculto mientras está en desarrollo*/
-/*#export_sound {
-    display: none;
-}*/
 #load_sound {
   padding-top: 8px;
   margin-bottom: 0;

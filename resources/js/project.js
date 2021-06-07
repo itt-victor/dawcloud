@@ -10,10 +10,10 @@ import { loading } from './app_core';
 import { eStop } from './app_core';
 
 class Project {
-    constructor(timeSpace, recordings, tracksGainValues, trackspanValues, tracksY, masterGainValue, masterY) {
+    constructor(timeSpace, recordings, recordingId, tracksGainValues, trackspanValues, tracksY, masterGainValue, masterY) {
         this.timeSpace = timeSpace;
         this.recordings = recordings;
-        this.audioReferences = [];  //almacenas los nombres de los wav para recuperarlos
+        this.recordingId = recordingId;
         this.tracksGainValues = tracksGainValues;
         this.trackspanValues = trackspanValues;
         this.tracksY = tracksY;
@@ -58,7 +58,6 @@ function saveProject() {
                     tracksY = project.tracksY;
                     masterGainValue = project.masterGainValue;
                     masterY = project.masterY;
-                    numbers.recordingId = project.audioReferences.length;
 
                     //Se guardan los valores de gain y pan de cada pista, comparando si estos hubiesen cambiado
                     for (let i = 0; i < grid.tracks.length; i++) {
@@ -91,12 +90,13 @@ function saveProject() {
 
                 //creo objeto proyecto
                 if (project === undefined) {
-                    project = new Project(timeSpace, grid.recordings, tracksGainValues, trackspanValues, tracksY, masterGainValue, masterY);
+                    project = new Project(timeSpace, grid.recordings, numbers.recordingId,
+                    tracksGainValues, trackspanValues, tracksY, masterGainValue, masterY);
                 }
                 else {
                     project.timeSpace = timeSpace;
                     project.recordings = grid.recordings;
-                    project.audioReferences = [];
+                    project.recordingId = numbers.recordingId;
                     project.tracksGainValues = tracksGainValues;
                     project.trackspanValues = trackspanValues;
                     project.tracksY = tracksY;
@@ -129,11 +129,7 @@ function saveProject() {
                         error: function (XMLHttpRequest, textStatus, errorThrown) {
                         }
                     });
-                    if (project.audioReferences[i] === undefined) {
-                        project.audioReferences.push(projectName + '_' + grid.recordings[i].id);
-                    }
                 }
-                numbers.recordingId = project.audioReferences.length;
 
                 var projectForm = new FormData();
                 projectForm.append('project-name', projectName);
@@ -188,6 +184,8 @@ function loadProject() {
                     timeSpace.compas = project.timeSpace.compas;
                     bpmButton.innerHTML = (120 / timeSpace.bpm) + '  bpm';
                     cursor.canvas.style.left = timeSpace.space + 'px';
+                    numbers.recordingId = project.recordingId;
+
 
                     drawLayout();
 
@@ -202,15 +200,17 @@ function loadProject() {
                         grid.tracks[i].recordings = [];
                     }
 
+                    //Se cargan los audios
                     for (let i = 0; i < project.recordings.length; i++) {
                         const request = new XMLHttpRequest();
-                        request.open("GET", 'loadsound/' + projectName + '/' + project.audioReferences[i], true);
+                        request.open("GET", 'loadsound/' + projectName + '/' + project.recordings[i].id, true);
                         request.responseType = "arraybuffer";
                         request.onload = function () {
                             let undecodedAudio = request.response;
                             audioCtx.decodeAudioData(undecodedAudio, (audioBuffer) => {
                                 let track = grid.tracks[project.recordings[i].tracknumber];
-                                track.addRecord(project.recordings[i].timeToStart, audioBuffer);
+                                track.addRecord(project.recordings[i].id, project.recordings[i].timeToStart, audioBuffer);
+                                setTimeout( function () {console.log(grid.recordings[i].id);}, 100);
                             });
                         };
                         request.send();

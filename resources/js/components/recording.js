@@ -1,9 +1,8 @@
 import { grid } from './generalgrid';
-import { generateRecordingId } from '../utils';
 
 export default class Recording {
-    constructor(timeToStart, audioBuffer, tracknumber) {
-        this.id = generateRecordingId();
+    constructor(id, timeToStart, audioBuffer, tracknumber) {
+        this.id = id;
         this.tracknumber = tracknumber;
         this.timeToStart = timeToStart;
         this.offset = 0;
