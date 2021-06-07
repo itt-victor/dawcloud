@@ -139,6 +139,7 @@ function setPan() {
                 newValue.id = 'pan-value';
                 newValue.setAttribute('placeholder', 'set L-R value');
                 this.appendChild(newValue);
+                newValue.focus();
             }
             window.addEventListener('click', function br(a) {
                 if (!a.target.contains(e.currentTarget)) {

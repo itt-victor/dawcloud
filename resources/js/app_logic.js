@@ -202,6 +202,7 @@ function setBpm() {
             input.style.width = '80px';
             input.setAttribute('placeholder', 'set tempo');
             bpmButton.appendChild(input);
+            input.focus();
         }
         window.addEventListener('click', function br(a) {
             if (!a.target.contains(e.currentTarget)) {
