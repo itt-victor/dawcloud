@@ -288,7 +288,7 @@ function deleteProject() {
                     success: function (data) {
                         console.log('Project deleted successfully');
                         dltConfirmation.classList.toggle('visible');
-                        this.parentNode.remove();
+                        document.getElementById(project).remove();
                         },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                     }

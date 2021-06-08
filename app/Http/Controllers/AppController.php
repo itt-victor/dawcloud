@@ -88,9 +88,9 @@ class AppController extends Controller
         return $project_data;
     }
 
-    public function loadSound($project, $recording)
+    public function loadSound($project_name, $recording)
     {
-        $file = Storage::get('public/projects/' . Auth::user()->email . '/' . $project . '/' . $recording . '.wav');
+        $file = Storage::get('public/projects/' . Auth::user()->email . '/' . $project_name . '/' . $recording . '.wav');
         return response($file);
     }
 
@@ -98,7 +98,7 @@ class AppController extends Controller
     {
         $project_name = $request->input('project');
 
-        Storage::deleteDirectory('public/projects/' . Auth::user()->email . $project_name);
+        Storage::deleteDirectory('public/projects/' . Auth::user()->email . '/' . $project_name);
 
         DB::table('projects')
             ->where('user_id', Auth::user()->id)
