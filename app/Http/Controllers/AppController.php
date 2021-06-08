@@ -16,12 +16,9 @@ class AppController extends Controller
             $logged = true;
             $projects = DB::table('projects')
                 ->where('user_id', Auth::user()->id)
-                //->pluck('project_name');
                 ->select('id', 'project_name')
                 ->get();
-                /*foreach($projects as $project) {
-                    echo($project->project_name);
-                }*/
+
                 return view('app', ['projects' => $projects, 'logged' => $logged]);
         }
 
