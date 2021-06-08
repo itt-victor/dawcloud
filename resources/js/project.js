@@ -31,10 +31,12 @@ const loadbtn = document.getElementById('load_project'),
     loadWindow = document.getElementById('load_dialogue'),
     panButtons = document.getElementsByClassName('panner'),
     projects = document.getElementsByClassName('projects'),
-    projectNameNode = document.getElementById('project_name');
+    projectNameNode = document.getElementById('project_name'),
+	projectTitle = document.getElementById('project-n');
 
 var project;
 var projectName;
+var projectId;
 
 function saveProject() {
     if (saveWindow && projectNameNode) {
@@ -104,7 +106,7 @@ function saveProject() {
                     project.masterY = masterY;
                 }
 
-                //Se convierten los audioBuffers en wav, se convierten a su vez en blob, y se genera una URL del mismo
+                //Se convierten los audioBuffers en wav, se convierten a su vez en blob y se envían
                 for (let i = 0; i < grid.recordings.length; i++) {
                     var blob = new window.Blob([new DataView(toWav(grid.recordings[i].audioBuffer))], {
                         type: 'audio/wav'
@@ -149,6 +151,8 @@ function saveProject() {
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                     }
                 });
+				//Se imprime el proyecto en pantalla
+				projectTitle.innerHTML = projectName;
             }
         });
     }
@@ -176,7 +180,8 @@ function loadProject() {
                 dataType: 'json',
                 success: function (response, request) {
 
-                    project = response;
+                    projectName = response.project_name;
+                    project = JSON.parse(response.json_data);
 
                     timeSpace.space = project.timeSpace.space;
                     timeSpace.zoom = project.timeSpace.zoom;
@@ -185,7 +190,6 @@ function loadProject() {
                     bpmButton.innerHTML = (120 / timeSpace.bpm) + '  bpm';
                     cursor.canvas.style.left = timeSpace.space + 'px';
                     numbers.recordingId = project.recordingId;
-
 
                     drawLayout();
 
@@ -200,17 +204,19 @@ function loadProject() {
                         grid.tracks[i].recordings = [];
                     }
 
+					//Se imprime el proyecto en pantalla
+					projectTitle.innerHTML = projectName;
+
                     //Se cargan los audios
                     for (let i = 0; i < project.recordings.length; i++) {
                         const request = new XMLHttpRequest();
-                        request.open("GET", 'loadsound/' + projectId + '/' + project.recordings[i].id, true);
+                        request.open("GET", 'loadsound/' + projectName + '/' + project.recordings[i].id, true);
                         request.responseType = "arraybuffer";
                         request.onload = function () {
                             let undecodedAudio = request.response;
                             audioCtx.decodeAudioData(undecodedAudio, (audioBuffer) => {
                                 let track = grid.tracks[project.recordings[i].tracknumber];
                                 track.addRecord(project.recordings[i].id, project.recordings[i].timeToStart, audioBuffer);
-                                setTimeout( function () {console.log(grid.recordings[i].id);}, 100);
                             });
                         };
                         request.send();
@@ -321,6 +327,3 @@ if (savebtn) {
         saveWindow.style.visibility = 'invisible';
     });
 }
-
-
-

@@ -22,7 +22,7 @@
 
             <h1 id="page-title" class="h1 center"><a class="a_title" href="{{route('home')}}">daw Cloud</a></h1>
 
-		    @if (!$logged)
+		    @if (!Auth::user())
             <div id="user_options">
 			    <p id="signup_now">Sign up now, and start managing your projects</p>
 			    <form id="signup_reminder" method="POST" action="{{ route('signup') }}">
@@ -53,8 +53,7 @@
                     @if (!empty($projects[0]))
                         <p class="dummy-space2"><span class="x-button2" id="projects-close" >&#10006;</span></p>
 			    	    @foreach ( $projects as $project)
-                            <a class="projects btn" data-id="{{$project->id}}">{{$project->project_name }}
-                                <span class="x-button3" >&#10006;</span>
+                            <a class="projects btn" data-id="{{$project->id}}">{{$project->project_name}}<span class="x-button3" >&#10006;</span>
                             </a>
                         @endforeach
                         <div class="delete_confirmation">
@@ -71,11 +70,8 @@
 		    		<input id="project_name" type="text">
 	    		</div>
 	    	</div>
-            @if(session()->has('projectname'))
-                <span id="project-n" class="project-n visible">{{--{{session('projectname')}}--}}</span>
-            @else
                 <span id="project-n" class="project-n"></span>
-            @endif
+
             @endif
 
             <div class="zoom-btn">

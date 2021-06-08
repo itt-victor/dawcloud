@@ -13,23 +13,25 @@ class AppController extends Controller
     public function app()
     {
         if (Auth::check()) {
-            $logged = true;
+
             $projects = DB::table('projects')
                 ->where('user_id', Auth::user()->id)
                 ->select('id', 'project_name')
                 ->get();
 
-                return view('app', ['projects' => $projects, 'logged' => $logged]);
+            return view('app', ['projects' => $projects]);
         }
 
-        $logged = false;
-        return view('app', ['logged' => $logged]);
+        return view('app');
     }
 
-    public function appUnsigned()
+    public function appUnsigned(Request $request)
     {
-        $logged = false;
-        return view('app', ['logged' => $logged]);
+		Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return view('app');
     }
 
     public function saveSound(Request $request)
@@ -59,7 +61,7 @@ class AppController extends Controller
         if (!$search) {
             DB::table('projects')->insert([
                 'project_name' => $projectname,
-                'json_data' => json_encode($project),
+                'json_data' => $project,
                 'user_id' => Auth::user()->id,
                 'created_at' => now(),
                 'updated_at' => now()
@@ -69,32 +71,31 @@ class AppController extends Controller
                 ->where('project_name', $projectname)
                 ->where('user_id', Auth::user()->id)
                 ->update([
-                    'json_data' => json_encode($project),
+                    'json_data' => $project,
                     'updated_at' => now()
                 ]);
         }
 
-        session(['projectname'=> $project]);
-
         return $projectname;
     }
 
-    public function loadProject($project)
+    public function loadProject($project, Request $request)
     {
         $projectContent = DB::table('projects')
             ->where('id', '=', $project)
-            ->pluck('json_data')
+			->where('user_id', '=', Auth::user()->id)
+            ->select('project_name', 'json_data')
             ->first();
 
-        session(['projectname'=> $project]);//Está pasando el id
-
-        return response(json_decode($projectContent));
+	    return [
+			'project_name' => $projectContent->project_name,
+	        'json_data' => $projectContent->json_data
+	    ];
     }
 
     public function loadSound($project, $recording)
     {
         $file = Storage::get('public/projects/' . $project . '/' . $recording . '.wav');
-
         return response($file);
     }
 
