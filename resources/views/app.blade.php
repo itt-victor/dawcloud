@@ -53,7 +53,7 @@
                     @if (!empty($projects[0]))
                         <p class="dummy-space2"><span class="x-button2" id="projects-close" >&#10006;</span></p>
 			    	    @foreach ( $projects as $project)
-                            <a class="projects btn" id="{{$project}}">{{$project }}
+                            <a class="projects btn" data-id="{{$project->id}}">{{$project->project_name }}
                                 <span class="x-button3" >&#10006;</span>
                             </a>
                         @endforeach
@@ -72,7 +72,7 @@
 	    		</div>
 	    	</div>
             @if(session()->has('projectname'))
-                <span id="project-n" class="project-n visible">{{session('projectname')}}</span>
+                <span id="project-n" class="project-n visible">{{--{{session('projectname')}}--}}</span>
             @else
                 <span id="project-n" class="project-n"></span>
             @endif

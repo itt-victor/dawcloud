@@ -160,7 +160,7 @@ function loadProject() {
     for (let h = 0; h < projects.length; h++) {
         projects[h].addEventListener('dblclick', function ld(e) {
             e.stopPropagation;
-            projectName = this.id;
+            projectId = this.getAttribute('data-id');
             loadWindow.style.display = 'none';
             loadWindow.style.visibility = 'hidden';
 
@@ -172,7 +172,7 @@ function loadProject() {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'GET',
-                url: 'loadproject/' + projectName,
+                url: 'loadproject/' + projectId,
                 dataType: 'json',
                 success: function (response, request) {
 
@@ -203,7 +203,7 @@ function loadProject() {
                     //Se cargan los audios
                     for (let i = 0; i < project.recordings.length; i++) {
                         const request = new XMLHttpRequest();
-                        request.open("GET", 'loadsound/' + projectName + '/' + project.recordings[i].id, true);
+                        request.open("GET", 'loadsound/' + projectId + '/' + project.recordings[i].id, true);
                         request.responseType = "arraybuffer";
                         request.onload = function () {
                             let undecodedAudio = request.response;
@@ -265,7 +265,7 @@ function deleteProject() {
             delete_confirm = document.getElementById('delete_confirm');
 
         projects[h].childNodes[1].addEventListener('click', function dlt(e) {
-            const project = this.parentNode.id;
+            const project = this.parentNode.getAttribute('data-id');
             dltConfirmation.classList.toggle('visible');
             delete_cancel.addEventListener('click', function (a) {
                 dltConfirmation.classList.toggle('visible');
@@ -285,7 +285,7 @@ function deleteProject() {
                     success: function (data) {
                         console.log('Project deleted successfully');
                         dltConfirmation.classList.toggle('visible');
-                        document.getElementById(project).remove();
+                        document.querySelector('[data-id="'+ project + '"]').remove();
                         },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                     }
@@ -314,6 +314,7 @@ if (savebtn) {
     savebtn.addEventListener('click', function (e) {
         saveWindow.style.display = 'block';
         saveWindow.style.visibility = 'visible';
+        projectNameNode.focus();
     });
     closeSave.addEventListener('click', function (e) {
         saveWindow.style.display = 'none';

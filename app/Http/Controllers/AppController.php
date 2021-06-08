@@ -16,8 +16,13 @@ class AppController extends Controller
             $logged = true;
             $projects = DB::table('projects')
                 ->where('user_id', Auth::user()->id)
-                ->pluck('project_name');
-                return  view('app', ['projects' => $projects, 'logged' => $logged]);
+                //->pluck('project_name');
+                ->select('id', 'project_name')
+                ->get();
+                /*foreach($projects as $project) {
+                    echo($project->project_name);
+                }*/
+                return view('app', ['projects' => $projects, 'logged' => $logged]);
         }
 
         $logged = false;
@@ -80,11 +85,11 @@ class AppController extends Controller
     public function loadProject($project)
     {
         $projectContent = DB::table('projects')
-            ->where('project_name', '=', $project)
+            ->where('id', '=', $project)
             ->pluck('json_data')
             ->first();
 
-        session(['projectname'=> $project]);
+        session(['projectname'=> $project]);//Está pasando el id
 
         return response(json_decode($projectContent));
     }
@@ -98,11 +103,16 @@ class AppController extends Controller
 
     public function deleteProject(Request $request)
     {
-        $project = $request->input('project');
-        Storage::deleteDirectory('public/projects/' . $project);
+        $projectId = $request->input('project');
+        $projectName = DB::table('projects')
+                    ->where('id', '=', $projectId)
+                    ->pluck('project_name')
+                    ->first();
+
+        Storage::deleteDirectory('public/projects/' . $projectName);
 
         DB::table('projects')
-            ->where('project_name', '=', $project)
+            ->where('id', '=', $projectId)
             ->delete();
     }
 }
