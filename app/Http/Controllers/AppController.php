@@ -16,8 +16,7 @@ class AppController extends Controller
 
             $projects = DB::table('projects')
                 ->where('user_id', Auth::user()->id)
-                ->select('id', 'project_name')
-                ->get();
+                ->pluck('project_name');
 
             return view('app', ['projects' => $projects]);
         }
@@ -27,7 +26,7 @@ class AppController extends Controller
 
     public function appUnsigned(Request $request)
     {
-		Auth::logout();
+        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
@@ -39,8 +38,9 @@ class AppController extends Controller
         $sound = $request->file('audio-blob');
         $id = $request->input('recording-id');
         $projectname = $request->input('project-name');
-        Storage::makeDirectory('public/projects/' . $projectname);
-        $filename = 'public/projects/' . $projectname . '/' . $id . '.wav';
+        $filename = 'public/projects/' . Auth::user()->email . '/' . $projectname . '/' . $id . '.wav';
+
+        Storage::makeDirectory('public/projects/' . Auth::user()->email . '/' . $projectname);
 
         if (Storage::exists($filename)) {
             Storage::delete($filename);
@@ -51,66 +51,58 @@ class AppController extends Controller
     public function saveProject(Request $request)
     {
         $projectname = $request->input('project-name');
-        $project = $request->input('project');
+        $project_data = $request->input('project');
 
         $search = DB::table('projects')
-            ->where('project_name', $projectname)
             ->where('user_id', Auth::user()->id)
+            ->where('project_name', $projectname)
             ->first();
 
         if (!$search) {
             DB::table('projects')->insert([
                 'project_name' => $projectname,
-                'json_data' => $project,
+                'json_data' => $project_data,
                 'user_id' => Auth::user()->id,
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
         } else {
             DB::table('projects')
-                ->where('project_name', $projectname)
                 ->where('user_id', Auth::user()->id)
+                ->where('project_name', $projectname)
                 ->update([
-                    'json_data' => $project,
+                    'json_data' => $project_data,
                     'updated_at' => now()
                 ]);
         }
-
-        return $projectname;
     }
 
-    public function loadProject($project, Request $request)
+    public function loadProject($project_name)
     {
-        $projectContent = DB::table('projects')
-            ->where('id', '=', $project)
-			->where('user_id', '=', Auth::user()->id)
-            ->select('project_name', 'json_data')
+        $project_data = DB::table('projects')
+            ->where('user_id', Auth::user()->id)
+            ->where('project_name', $project_name)
+            ->pluck('json_data')
             ->first();
 
-	    return [
-			'project_name' => $projectContent->project_name,
-	        'json_data' => $projectContent->json_data
-	    ];
+        return $project_data;
     }
 
     public function loadSound($project, $recording)
     {
-        $file = Storage::get('public/projects/' . $project . '/' . $recording . '.wav');
+        $file = Storage::get('public/projects/' . Auth::user()->email . '/' . $project . '/' . $recording . '.wav');
         return response($file);
     }
 
     public function deleteProject(Request $request)
     {
-        $projectId = $request->input('project');
-        $projectName = DB::table('projects')
-                    ->where('id', '=', $projectId)
-                    ->pluck('project_name')
-                    ->first();
+        $project_name = $request->input('project');
 
-        Storage::deleteDirectory('public/projects/' . $projectName);
+        Storage::deleteDirectory('public/projects/' . Auth::user()->email . $project_name);
 
         DB::table('projects')
-            ->where('id', '=', $projectId)
+            ->where('user_id', Auth::user()->id)
+            ->where('project_name', $project_name)
             ->delete();
     }
 }

@@ -50,7 +50,7 @@ export default function recordController() {
                 chunks = [];
                 blob.arrayBuffer().then(arrayBuffer => {
                     audioCtx.decodeAudioData(arrayBuffer, (audioBuffer) => {
-                        var track = document.querySelector('[data-selected]').id;
+                        let track = document.querySelector('[data-selected]').id.charAt(6);
                         grid.tracks[track].addRecord(generateRecordingId(), startTime, audioBuffer);
                     });
                 });

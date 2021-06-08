@@ -1,2 +1,2 @@
-<div class="track" id="{{$number}}">
+<div class="track" id="track_{{$number}}">
 </div>

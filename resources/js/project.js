@@ -36,7 +36,6 @@ const loadbtn = document.getElementById('load_project'),
 
 var project;
 var projectName;
-var projectId;
 
 function saveProject() {
     if (saveWindow && projectNameNode) {
@@ -132,7 +131,7 @@ function saveProject() {
                         }
                     });
                 }
-
+                //Se envía el proyecto en JSON
                 var projectForm = new FormData();
                 projectForm.append('project-name', projectName);
                 projectForm.append('project', JSON.stringify(project));
@@ -164,7 +163,7 @@ function loadProject() {
     for (let h = 0; h < projects.length; h++) {
         projects[h].addEventListener('dblclick', function ld(e) {
             e.stopPropagation;
-            projectId = this.getAttribute('data-id');
+            projectName = this.id;
             loadWindow.style.display = 'none';
             loadWindow.style.visibility = 'hidden';
 
@@ -176,12 +175,10 @@ function loadProject() {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: 'GET',
-                url: 'loadproject/' + projectId,
+                url: 'loadproject/' + projectName,
                 dataType: 'json',
                 success: function (response, request) {
-
-                    projectName = response.project_name;
-                    project = JSON.parse(response.json_data);
+                    project = response;
 
                     timeSpace.space = project.timeSpace.space;
                     timeSpace.zoom = project.timeSpace.zoom;
@@ -271,7 +268,7 @@ function deleteProject() {
             delete_confirm = document.getElementById('delete_confirm');
 
         projects[h].childNodes[1].addEventListener('click', function dlt(e) {
-            const project = this.parentNode.getAttribute('data-id');
+            const project = this.parentNode.id;
             dltConfirmation.classList.toggle('visible');
             delete_cancel.addEventListener('click', function (a) {
                 dltConfirmation.classList.toggle('visible');
@@ -291,7 +288,7 @@ function deleteProject() {
                     success: function (data) {
                         console.log('Project deleted successfully');
                         dltConfirmation.classList.toggle('visible');
-                        document.querySelector('[data-id="'+ project + '"]').remove();
+                        this.parentNode.remove();
                         },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                     }

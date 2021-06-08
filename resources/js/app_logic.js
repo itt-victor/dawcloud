@@ -65,7 +65,7 @@ function loadSong() {
             eStop();
             var reader = new FileReader();
             reader.onload = function (e) {
-                let trcknr = document.querySelector('[data-selected]').id;
+                let trcknr = document.querySelector('[data-selected]').id.charAt(6);
                 audioCtx.decodeAudioData(e.target.result).then(function (buffer) {
                     grid.tracks[trcknr].addRecord(generateRecordingId(), timeSpace.time(), buffer);
                 });

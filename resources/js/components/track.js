@@ -7,7 +7,6 @@ import { dragRecording } from '../ui/ui_dragRecordings';
 import { removeRecording } from '../app_logic';
 
 var rcdName;
-var id;
 
 export default class Track {
     constructor(tracknumber, gainValue, pannerValue) {
