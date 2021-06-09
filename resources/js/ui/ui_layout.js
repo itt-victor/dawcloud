@@ -7,26 +7,23 @@ export default function drawLayout() {
     var layoutCtx = layout.getContext('2d');
     layoutCtx.clearRect(0, 0, layout.width, layout.height)
     layoutCtx.strokeStyle = '#7a2332';
-    layoutCtx.lineWidth = '10px';
+	layoutCtx.lineWidth = 0.7;
     let text = 1;
     let zoomSetUp = 1 / timeSpace.zoom * timeSpace.compas * timeSpace.bpm;
 
     if (timeSpace.zoom <= 0.050001) {
-        for (var i = 0; i < 4000; i += (zoomSetUp)) {
+        for (var i = 0; i < layout.width; i += (zoomSetUp)) {
             layoutCtx.beginPath();
             layoutCtx.moveTo(i, 30);
-            layoutCtx.lineTo(i, 22);
+            layoutCtx.lineTo(i, 0);
             layoutCtx.closePath();
-            layoutCtx.stroke();
-            if (text < 10) {
-                layoutCtx.strokeText(text, i - 2, 18)
-            } else {
-                layoutCtx.strokeText(text, i - 6, 18)
-            }
+			layoutCtx.stroke();
+
+			layoutCtx.strokeText(text, i + 10, 28)
             text += 1;
         }
     } else {
-        for (var i = 0; i < 4000; i += (zoomSetUp * 2)) {
+        for (var i = 0; i < layout.width; i += (zoomSetUp * 2)) {
             layoutCtx.beginPath();
             layoutCtx.moveTo(i, 30);
             layoutCtx.lineTo(i, 22);
@@ -40,7 +37,7 @@ export default function drawLayout() {
             text += 2;
         }
 
-        for (var i = zoomSetUp; i < 4000; i += (zoomSetUp * 2)) {
+        for (var i = zoomSetUp; i < layout.width; i += (zoomSetUp * 2)) {
             layoutCtx.beginPath();
             layoutCtx.moveTo(i, 30);
             layoutCtx.lineTo(i, 27);

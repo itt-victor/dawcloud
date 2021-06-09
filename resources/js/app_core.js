@@ -5,6 +5,7 @@ require('./project');
 require('./components/mixer');
 
 import { grid } from './components/generalgrid';
+import drawGrid from './ui/ui_grid';
 import drawLayout from './ui/ui_layout';
 import { cursor } from './components/cursor';
 import SoundController from './audio/soundcontroller';
@@ -59,6 +60,7 @@ function appStart() {
     //prepara el grid
     grid.prepareGrid();
     grid.addTracks();
+	setTimeout(drawGrid, 0);
     //dibuja cursor inicial
     cursor.draw();
     //dibuja layout

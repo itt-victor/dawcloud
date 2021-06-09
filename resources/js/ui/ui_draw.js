@@ -14,7 +14,7 @@ export var ui_draw = {
         canvas.height = 70;
         var interval = setInterval(function () {
             width++;
-            canvasCtx.fillStyle = '#380166';
+            canvasCtx.fillStyle = '#367562';
             canvasCtx.fillRect(x, 0, width, height);
         }, timeSpace.zoom * 1000)
         stop.addEventListener('click', function () {
@@ -35,7 +35,7 @@ export var ui_draw = {
         canvas.height = height;
         var canvasCtx = canvas.getContext('2d');
         canvasCtx.clearRect(0, 0, width, height);
-        canvasCtx.fillStyle = '#8254a7';
+        canvasCtx.fillStyle = '#2ed9a5';
         canvasCtx.beginPath();
         canvasCtx.moveTo(0, 0);
         canvasCtx.lineTo(width, 0);
@@ -60,7 +60,7 @@ export var ui_draw = {
                     if (datum > max)
                         max = datum;
                 }
-                canvasCtx.fillStyle = '#022100';
+                canvasCtx.fillStyle = '#20453a';
                 canvasCtx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
             }
             var data = recording.audioBuffer.getChannelData(1);
@@ -76,7 +76,7 @@ export var ui_draw = {
                     if (datum > max)
                         max = datum;
                 }
-                canvasCtx.fillStyle = '#022100';
+                canvasCtx.fillStyle = '#20453a';
                 canvasCtx.fillRect(i, (1 + min) * amp + height / 2, 1, Math.max(1, (max - min) * amp));
             }
         } else if (recording.audioBuffer.numberOfChannels === 1) {  // si es mono..
@@ -93,7 +93,7 @@ export var ui_draw = {
                     if (datum > max)
                         max = datum;
                 }
-                canvasCtx.fillStyle = '#022100';
+                canvasCtx.fillStyle = '#20453a';
                 canvasCtx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
             }
         }
@@ -110,14 +110,14 @@ export var ui_draw = {
         canvas.height = height;
         var canvasCtx = canvas.getContext('2d');
         canvasCtx.clearRect(0, 0, width, height);
-        canvasCtx.fillStyle = '#022100';
+        canvasCtx.fillStyle = '#20453a';
         canvasCtx.beginPath();
         canvasCtx.moveTo(0, 0);
         canvasCtx.lineTo(width, 0);
         canvasCtx.lineTo(width, 67);
         canvasCtx.lineTo(0, 67);
         canvasCtx.fill();
-        canvasCtx.closePath()
+        canvasCtx.closePath();
         canvasCtx.strokeStyle = '#380166';
         canvasCtx.strokeRect(0, 0, width, height);
 
@@ -135,7 +135,7 @@ export var ui_draw = {
                     if (datum > max)
                         max = datum;
                 }
-                canvasCtx.fillStyle = '#FFFFFF';
+                canvasCtx.fillStyle = '#2ed9a5';
                 canvasCtx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
             }
             var data = recording.audioBuffer.getChannelData(1);
@@ -151,7 +151,7 @@ export var ui_draw = {
                     if (datum > max)
                         max = datum;
                 }
-                canvasCtx.fillStyle = '#FFFFFF';
+                canvasCtx.fillStyle = '#2ed9a5';
                 canvasCtx.fillRect(i, (1 + min) * amp + height / 2, 1, Math.max(1, (max - min) * amp));
             }
         } else if (recording.audioBuffer.numberOfChannels === 1) {  // si es mono..
@@ -168,7 +168,7 @@ export var ui_draw = {
                     if (datum > max)
                         max = datum;
                 }
-                canvasCtx.fillStyle = '#FFFFFF';
+                canvasCtx.fillStyle = '#2ed9a5';
                 canvasCtx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
             }
         }

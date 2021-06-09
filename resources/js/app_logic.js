@@ -4,6 +4,7 @@ var toWav = require('audiobuffer-to-wav');
 import { soundcontroller } from './app_core';
 import { audioCtx } from './app_core'
 import { grid } from './components/generalgrid';
+import drawGrid from './ui/ui_grid';
 import { timeSpace } from './timeSpace';
 import { ui_draw } from './ui/ui_draw';
 import drawLayout from './ui/ui_layout';
@@ -168,6 +169,7 @@ function zoom() {
         for (var i = 0; i < grid.recordings.length; i++) {
             ui_draw.drawRecording(grid.recordings[i]);
         }
+		drawGrid();
         drawLayout();
         cursor.moveAtZoom(oldZoom);
         if (soundStatuses.isPlaying) {
@@ -181,6 +183,7 @@ function zoom() {
         for (var i = 0; i < grid.recordings.length; i++) {
             ui_draw.drawRecording(grid.recordings[i]);
         }
+		drawGrid();
         drawLayout();
         cursor.moveAtZoom(oldZoom);
         if (soundStatuses.isPlaying) {
@@ -222,6 +225,7 @@ function setBpm() {
                 timeSpace.bpm = 120 / this.value;
                 bpmButton.innerHTML = (120 / timeSpace.bpm) + '  bpm';
                 input.remove();
+				drawGrid();
                 drawLayout();
             }
         });
@@ -237,10 +241,12 @@ function metric() {
         if (metricButton.textContent == '4/4') {
             metricButton.innerHTML = '3/4';
             timeSpace.compas = 1.5;
+			drawGrid();
             drawLayout()
         } else {
             metricButton.innerHTML = '4/4';
             timeSpace.compas = 2;
+			drawGrid();
             drawLayout()
         }
     });

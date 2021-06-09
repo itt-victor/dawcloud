@@ -311,6 +311,12 @@ body {
   width: 150px;
 }
 
+#canvas-grid {
+	position: absolute;
+	width: 4000px;
+	z-index: 0;
+}
+
 #tracks{
     width: 1000px;
     height: 608px;
@@ -327,20 +333,21 @@ body {
 .track {
     width: 4000px;
     height: 70px;
-    z-index: 3;
-    background-color: aquamarine;
+    z-index: 1;
     position: relative;
-    border: solid 1.3px rgb(122, 35, 50);
+    border: solid 1px rgb(122, 35, 50);
     overflow-x: hidden;
+    font-size: 100%;
+    font: inherit;
 }
 
 .recording {
     position: absolute;
+	z-index: 5;
 }
 
 div [data-selected] {
-    background-color: #ff203e7a;
-    opacity: 0.9;
+    background-color: rgba(235, 52, 134, 0.5);
 }
 
 .input {

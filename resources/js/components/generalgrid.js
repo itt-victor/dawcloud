@@ -8,7 +8,7 @@ export class Grid {
 
     constructor( gainValue, tracks, recordings) {
         this.howMany = document.getElementsByClassName('track').length;
-        this.canvas = document.createElement('canvas');
+        this.canvas = document.getElementById('canvas-grid');
         this.gainNode;
         this.gainValue = gainValue;
         this.faderY = 20;
@@ -17,13 +17,11 @@ export class Grid {
     }
 
     prepareGrid() {
-        let tracks = document.getElementById('tracks');
-        tracks.appendChild(this.canvas);
         this.gainNode = audioCtx.createGain();
         this.gainNode.connect(audioCtx.destination);
-        this.canvas.style.visibility = 'hidden';
-        this.canvas.width = 1000;
         this.canvas.height = 70 * this.howMany;
+		this.canvas.style.height = 70 * this.howMany + 'px';
+		this.canvas.width = 4000;
         //default la 1a pista
         jQuery(".track:first").attr("data-selected", '');
     }
@@ -32,6 +30,7 @@ export class Grid {
         for (var i = 0; i < this.howMany; i++) {
             trackName = generateTrackNumbers();
             window[trackName] = new Track(i, 1, 'C');
+			//window[trackName]
             window[trackName].pannerNode.connect(window[trackName].gainNode);
             window[trackName].gainNode.connect(this.gainNode);
             grid.tracks.push(window[trackName]);

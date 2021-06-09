@@ -18,9 +18,11 @@ export function dragRecording(recording) {
         };
     }
 
+
     if (recording.canvas) {
 
         recording.canvas.addEventListener("mousedown", function (evt) {
+			console.log(evt.clientX, grid.canvas.getBoundingClientRect());
 
             X = recording.timeToStart / timeSpace.zoom;
             Y = 0;
@@ -62,10 +64,8 @@ export function dragRecording(recording) {
 function selectTrackWidth(tracknumber) {
     var incremento = 70 * tracknumber;
     let widths = {
-        minHeight: grid.canvas.getBoundingClientRect().top
-        - grid.canvas.getBoundingClientRect().height + incremento,
-        maxHeight: grid.canvas.getBoundingClientRect().top
-        - grid.canvas.getBoundingClientRect().height + incremento + 70,
+        minHeight: grid.canvas.getBoundingClientRect().top + incremento,
+        maxHeight: grid.canvas.getBoundingClientRect().top + incremento + 70,
         minWidth: 0.5,
         maxWidth: 1001.5
     }
