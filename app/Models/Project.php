@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class Project extends Model
 {
 	protected $guarded = [];
 
-    public function projects()
+	public function user()
 	{
-		return $this->hasMany(Project::class);
+		return $this->belongsTo(User::class);
 	}
 
     use HasFactory;

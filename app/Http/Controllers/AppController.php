@@ -7,16 +7,16 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\Project;
+
 class AppController extends Controller
 {
 
     public function app()
     {
         if (Auth::check()) {
-
-            $projects = DB::table('projects')
-                ->where('user_id', Auth::user()->id)
-                ->pluck('project_name');
+            $projects = Project::where('user_id', Auth::user()->id)
+				->pluck('project_name');
 
             return view('app', ['projects' => $projects]);
         }
@@ -53,37 +53,18 @@ class AppController extends Controller
         $projectname = $request->input('project-name');
         $project_data = $request->input('project');
 
-        $search = DB::table('projects')
-            ->where('user_id', Auth::user()->id)
-            ->where('project_name', $projectname)
-            ->first();
-
-        if (!$search) {
-            DB::table('projects')->insert([
-                'project_name' => $projectname,
-                'json_data' => $project_data,
-                'user_id' => Auth::user()->id,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
-        } else {
-            DB::table('projects')
-                ->where('user_id', Auth::user()->id)
-                ->where('project_name', $projectname)
-                ->update([
-                    'json_data' => $project_data,
-                    'updated_at' => now()
-                ]);
-        }
+		$operation = Project::updateOrCreate(
+			['user_id' => Auth::user()->id, 'project_name' => $projectname],
+			['json_data' => $project_data]
+		);
     }
 
     public function loadProject($project_name)
     {
-        $project_data = DB::table('projects')
-            ->where('user_id', Auth::user()->id)
-            ->where('project_name', $project_name)
-            ->pluck('json_data')
-            ->first();
+        $project_data = Project::where('user_id', Auth::user()->id)
+            			->where('project_name', $project_name)
+            			->pluck('json_data')
+            			->first();
 
         return $project_data;
     }
@@ -100,8 +81,7 @@ class AppController extends Controller
 
         Storage::deleteDirectory('public/projects/' . Auth::user()->email . '/' . $project_name);
 
-        DB::table('projects')
-            ->where('user_id', Auth::user()->id)
+        Project::where('user_id', Auth::user()->id)
             ->where('project_name', $project_name)
             ->delete();
     }

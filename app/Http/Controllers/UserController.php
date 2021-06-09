@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Hash;
 
+use App\Models\User;
+
 class UserController extends Controller
 {
     public function home()
@@ -34,15 +36,13 @@ class UserController extends Controller
         $user_name = $request->input('user_name');
         $password = $request->input('password');
 
-        $user_id = DB::table('users')->insertGetId([
-            'user_name' => $user_name,
+		$user = User::create([
+			'user_name' => $user_name,
             'email' => $email,
-            'password' => Hash::make($password),
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+            'password' => Hash::make($password)
+		]);
 
-        Auth::loginUsingId($user_id);
+        Auth::loginUsingId($user->id);
 
         return redirect('app');
     }
