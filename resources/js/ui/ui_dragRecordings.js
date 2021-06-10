@@ -22,7 +22,6 @@ export function dragRecording(recording) {
     if (recording.canvas) {
 
         recording.canvas.addEventListener("mousedown", function (evt) {
-			console.log(evt.clientX, grid.canvas.getBoundingClientRect());
 
             X = recording.timeToStart / timeSpace.zoom;
             Y = 0;

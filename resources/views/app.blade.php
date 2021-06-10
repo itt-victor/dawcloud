@@ -124,9 +124,11 @@
             </div>
 
             <div id="tracks" class="tracks">
-                <div id="time-layout" style="background-color: grey;"><canvas id="layout"></canvas></div>
+				<canvas id="cursor"></canvas>
+                <canvas id="layout"></canvas>
+				
 				<canvas id="canvas-grid"></canvas>
-                <canvas id="cursor"></canvas>
+
                 @include('layouts.track_canvas', ['number'=>'0'])
                 @include('layouts.track_canvas', ['number'=>'1'])
                 @include('layouts.track_canvas', ['number'=>'2'])

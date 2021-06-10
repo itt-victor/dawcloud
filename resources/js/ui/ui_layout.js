@@ -12,37 +12,37 @@ export default function drawLayout() {
     let zoomSetUp = 1 / timeSpace.zoom * timeSpace.compas * timeSpace.bpm;
 
     if (timeSpace.zoom <= 0.050001) {
-        for (var i = 0; i < layout.width; i += (zoomSetUp)) {
+        for (var i = 0; i < layout.width; i += zoomSetUp) {
             layoutCtx.beginPath();
-            layoutCtx.moveTo(i, 30);
+            layoutCtx.moveTo(i, 29);
             layoutCtx.lineTo(i, 0);
             layoutCtx.closePath();
 			layoutCtx.stroke();
 
-			layoutCtx.strokeText(text, i + 10, 28)
+			layoutCtx.strokeText(text, i + 7, 28)
             text += 1;
         }
-    } else {
-        for (var i = 0; i < layout.width; i += (zoomSetUp * 2)) {
+
+		layoutCtx.lineWidth = 0.4;
+		for (var i = 0; i < layout.width; i += (zoomSetUp/4)) {
             layoutCtx.beginPath();
-            layoutCtx.moveTo(i, 30);
-            layoutCtx.lineTo(i, 22);
+            layoutCtx.moveTo(i, 7);
+            layoutCtx.lineTo(i, 0);
             layoutCtx.closePath();
-            layoutCtx.stroke();
-            if (text < 10) {
-                layoutCtx.strokeText(text, i - 2, 18)
-            } else {
-                layoutCtx.strokeText(text, i - 6, 18)
-            }
-            text += 2;
+			layoutCtx.stroke();
         }
 
-        for (var i = zoomSetUp; i < layout.width; i += (zoomSetUp * 2)) {
-            layoutCtx.beginPath();
-            layoutCtx.moveTo(i, 30);
-            layoutCtx.lineTo(i, 27);
-            layoutCtx.closePath();
-            layoutCtx.stroke();
-        }
+    } else {
+		for (var i = 0; i < layout.width; i += (zoomSetUp)) {
+			layoutCtx.beginPath();
+			layoutCtx.moveTo(i, 30);
+			layoutCtx.lineTo(i, 0);
+			layoutCtx.closePath();
+		    layoutCtx.stroke();
+
+		    layoutCtx.strokeText(text, i + 10, 28)
+			text += 1;
+		}
+
     }
 }

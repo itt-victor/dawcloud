@@ -4,7 +4,7 @@ import { soundStatuses } from '../app_core';
 import { soundcontroller } from '../app_core';
 
 //Interacción con el layout de tiempo
-const timeLayout = document.querySelector('#time-layout');
+const timeLayout = document.querySelector('#layout');
 
 timeLayout.addEventListener('click', function (event) {
     timeSpace.space = Math.max(event.offsetX, 0);
