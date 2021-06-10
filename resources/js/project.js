@@ -4,6 +4,7 @@ import { audioCtx } from './app_core';
 import { timeSpace } from './timeSpace';
 import { grid } from './components/generalgrid';
 import drawLayout from './ui/ui_layout';
+import drawGrid from './ui/ui_grid';
 import { cursor } from './components/cursor';
 import { numbers } from './utils';
 import { loading } from './app_core';
@@ -189,6 +190,7 @@ function loadProject() {
                     numbers.recordingId = project.recordingId;
 
                     drawLayout();
+                    drawGrid();
 
                     //se elimina las pistas existentes si hubiesen
                     for (let i = 0; i < grid.recordings.length; i++) {

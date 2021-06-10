@@ -1,5 +1,3 @@
-require('./bootstrap');
-var toWav = require('audiobuffer-to-wav');
 
 import { soundcontroller } from './app_core';
 import { audioCtx } from './app_core'
@@ -79,82 +77,6 @@ function loadSong() {
 }
 setTimeout(loadSong, 0);
 
-//Exportar el proyecto
-function exportSong() {
-
-    if (grid.recordings.length > 0) {
-        let maxLength = 0;
-        let pannerValue;
-        let ctxValue;
-
-        for (let i = 0; i < grid.recordings.length; i++) {
-            if (maxLength < (grid.recordings[i].audioBuffer.length
-                + (grid.recordings[i].timeToStart * 48000))) {
-                maxLength = grid.recordings[i].audioBuffer.length
-                    + (grid.recordings[i].timeToStart * 48000);
-            };
-        }
-
-        const offlineCtx = new OfflineAudioContext({
-            numberOfChannels: 2,
-            length: maxLength,
-            sampleRate: 48000,
-        });
-
-        let mastergain = offlineCtx.createGain();
-        mastergain.connect(offlineCtx.destination);
-        let pannerNodes = [];
-
-        for (let i = 0; i < grid.tracks.length; i++) {
-            let panner = offlineCtx.createStereoPanner();
-            pannerNodes.push(panner);
-            let gain = offlineCtx.createGain();
-            pannerValue = grid.tracks[i].pannerNode.pannerValue;
-
-            if (pannerValue.startsWith('L')) {
-                ctxValue = - + pannerValue.slice(1) / 100;
-                panner.pan.setValueAtTime(ctxValue, 0);
-            }
-            else if (pannerValue == 0 || pannerValue == 'C') {
-                ctxValue = 0;
-                panner.pan.setValueAtTime(ctxValue, 0);
-            }
-            else if (pannerValue.startsWith('R')) {
-                ctxValue = pannerValue.slice(1) / 100;
-                panner.pan.setValueAtTime(ctxValue, 0);
-            }
-            gain.gain.setValueAtTime(grid.tracks[i].gainNode.gainValue, 0);
-            panner.connect(gain);
-            gain.connect(mastergain);
-        }
-
-        for (let h = 0; h < grid.recordings.length; h++) {
-            const source = offlineCtx.createBufferSource();
-            source.buffer = grid.recordings[h].audioBuffer;
-            source.connect(pannerNodes[grid.recordings[h].tracknumber]);
-            var start = Math.max((grid.recordings[h].timeToStart), 0);
-            source.start(start, 0);
-        }
-
-        offlineCtx.startRendering().then(function (renderedBuffer) {
-            let filename = 'project.wav'
-            const a = document.createElement('a');
-            var blob = new window.Blob([new DataView(toWav(renderedBuffer))], {
-                type: 'audio/wav'
-            });
-            a.href = URL.createObjectURL(blob);
-            a.download = filename;
-            a.click();
-            URL.revokeObjectURL(a.href);
-        });
-    }
-}
-let export_sound = document.getElementById('export_sound');
-if (export_sound) {
-    export_sound.addEventListener('click', exportSong);
-}
-
-
 
 //zoom
 function zoom() {
@@ -164,7 +86,7 @@ function zoom() {
 
     function zIn() {
         oldZoom = timeSpace.zoom;
-        timeSpace.zoom = parseFloat((timeSpace.zoom * (1 / 1.25)).toFixed(8));
+        timeSpace.zoom = Math.round(timeSpace.zoom * 1.25);
 
         for (var i = 0; i < grid.recordings.length; i++) {
             ui_draw.drawRecording(grid.recordings[i]);
@@ -172,24 +94,16 @@ function zoom() {
 		drawGrid();
         drawLayout();
         cursor.moveAtZoom(oldZoom);
-        if (soundStatuses.isPlaying) {
-            cursor.stop();
-            cursor.play();
-        }
     }
     function zOut() {
         oldZoom = timeSpace.zoom;
-        timeSpace.zoom = parseFloat((timeSpace.zoom / (1 / 1.25)).toFixed(8));
+        timeSpace.zoom = Math.round(timeSpace.zoom / 1.25);
         for (var i = 0; i < grid.recordings.length; i++) {
             ui_draw.drawRecording(grid.recordings[i]);
         }
 		drawGrid();
         drawLayout();
         cursor.moveAtZoom(oldZoom);
-        if (soundStatuses.isPlaying) {
-            cursor.stop();
-            cursor.play();
-        }
     }
     zoomIn.addEventListener('click', zIn);
     zoomOut.addEventListener('click', zOut);
@@ -223,7 +137,7 @@ function setBpm() {
             if (o.keyCode === 13) {
                 o.preventDefault();
                 timeSpace.bpm = 120 / this.value;
-                bpmButton.innerHTML = (120 / timeSpace.bpm) + '  bpm';
+                bpmButton.innerHTML = this.value + '  bpm';
                 input.remove();
 				drawGrid();
                 drawLayout();

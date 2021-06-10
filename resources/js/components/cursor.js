@@ -15,22 +15,18 @@ export var cursor = {
         this.ctx.fillStyle = 'black';
         this.ctx.globalCompositeOperation = 'destination-over';
         this.ctx.globalAlpha = 0.8;
-        this.ctx.fillRect(0, 0, 2, this.canvas.height);
+        this.ctx.fillRect(0, 0, 5, this.canvas.height);
     },
     play: function () {
-        /*interval = setInterval(function () {
-            timeSpace.space++;
-            this.cursor.style.left = timeSpace.space + 'px';
-        }, timeSpace.zoom * 1000)*/
         let start = performance.now();
         let canvas = this.canvas;
-		let increase = 0;
-		let progress;
-		let fps;
-        function step(now){
+        let increase = 0;
+        let progress;
+        let fps;
+        function step(now) {
             progress = now - start;
-			fps = Math.round(1000 / (progress / ++increase) * 100) / 100;
-            timeSpace.space += ((1/fps) * (1/timeSpace.zoom));
+            fps = Math.round(1000 / (progress / ++increase) * 100) / 100;
+            timeSpace.space += timeSpace.zoom * 1/fps;
             canvas.style.left = timeSpace.space + 'px';
             interval = requestAnimationFrame(step);
         }
@@ -38,16 +34,15 @@ export var cursor = {
     },
 
     stop: function () {
-        //clearInterval(interval);
         window.cancelAnimationFrame(interval);
     },
 
     moveAtZoom: function (oldZoom) {
-        timeSpace.space = (timeSpace.space * (1 / timeSpace.zoom)) / (1 / oldZoom);
+        timeSpace.space *=  (timeSpace.zoom / oldZoom);
         this.canvas.style.left = timeSpace.space + 'px';
     },
 
     moveAtClick: function () {
-        this.canvas.style.left = (timeSpace.space -1 )+ 'px';
+        this.canvas.style.left = timeSpace.space + 'px';
     }
 }

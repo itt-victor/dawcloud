@@ -221,7 +221,7 @@ body {
 }
 
 #layout {
-    width: 4000px;
+    width: 10000px;
 	height: 30px;
 	display: block;
     margin: auto;
@@ -237,7 +237,7 @@ body {
 
 #cursor {
     position: absolute;
-	width: 5px;
+	width: 2px;
 	height: 590px;
 	overflow: visible;
 }
@@ -252,7 +252,7 @@ body {
 .track_names {
     width: 150px;
     position: absolute;
-    left: 570px;//470px;
+    left: 570px;
 }
 
 #track_name_0 {
@@ -314,7 +314,7 @@ body {
 
 #canvas-grid {
 	position: absolute;
-	width: 4000px;
+	width: 10000px;
 	z-index: 0;
 }
 
@@ -332,7 +332,7 @@ body {
 }
 
 .track {
-    width: 4000px;
+    width: 10000px;
     height: 70px;
     z-index: 1;
     position: relative;

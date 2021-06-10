@@ -2,9 +2,14 @@ import { grid } from '../components/generalgrid';
 import { soundcontroller } from '../app_core';
 import { soundStatuses } from '../app_core';
 import { timeSpace } from '../timeSpace';
+import { ui_draw } from './ui_draw';
 
 export function dragRecording(recording) {
+
+    //arrastrar grabaciones
+
     var drag = false;
+    var mod = false;
     var delta = new Object();
     var X;
     var Y;
@@ -23,10 +28,10 @@ export function dragRecording(recording) {
 
         recording.canvas.addEventListener("mousedown", function (evt) {
 
-            X = recording.timeToStart / timeSpace.zoom;
+            X = recording.timeToStart * timeSpace.zoom;
             Y = 0;
             widths = selectTrackWidth(recording.tracknumber);
-            var mousePos = onMousePos(grid.canvas, evt);
+            let mousePos = onMousePos(grid.canvas, evt);
             if (evt.clientY < widths.maxHeight &&
                 evt.clientY > widths.minHeight) {
                 drag = true;
@@ -37,9 +42,9 @@ export function dragRecording(recording) {
 
         recording.canvas.addEventListener("mousemove", function a(evt) {
 
-            X = recording.timeToStart / timeSpace.zoom;
+            X = recording.timeToStart * timeSpace.zoom;
             Y = 0;
-            var mousePos = onMousePos(grid.canvas, evt);
+            let mousePos = onMousePos(grid.canvas, evt);
             let heights = selectTrackWidth(recording.tracknumber);
             if (drag) {
                 X = mousePos.x + delta.x, Y = evt.clientY;
@@ -47,7 +52,7 @@ export function dragRecording(recording) {
                 if (Y < heights.minHeight || Y > heights.maxHeight) { drag = false; }
 
                 this.style.left = X + 'px';
-                recording.timeToStart = X * timeSpace.zoom;
+                recording.timeToStart = X / timeSpace.zoom;
                 if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
                     soundcontroller.playWhileDragging(recording);
                 }
@@ -57,6 +62,45 @@ export function dragRecording(recording) {
         window.addEventListener("mouseup", function (evt) {
             drag = false;
         }, false);
+
+        //Recortar grabaciones
+
+        recording.canvas.addEventListener("mousedown", function (evt) {
+            let mousePos = onMousePos(grid.canvas, evt);
+            delta.x = X - mousePos.x;
+            X = this.getBoundingClientRect().x;
+            if (evt.clientX < X + 2 && evt.clientX > X - 2) {
+                mod = true;
+                drag = false;
+            }
+        });
+
+        recording.canvas.addEventListener("mousemove", function (evt) {
+            let mousePos = onMousePos(grid.canvas, evt);
+            X = this.getBoundingClientRect().x;
+            if (evt.clientX < X + 2 && evt.clientX > X - 2) {
+                this.style.cursor = 'w-resize';
+            } else {
+                this.style.cursor = 'default';
+            }
+            if (mod) {
+                X = mousePos.x + delta.x - (recording.timeToStart * timeSpace.zoom);
+                ui_draw.drawWhileCropping(this, X);
+                console.log(mod);
+            }
+        });
+
+
+        recording.canvas.addEventListener("mouseup", function (evt) {
+            if (mod) { mod = false }
+            let canvasCtx = this.getContext('2d');
+            ui_draw.drawWhileCropping(this, X);
+            //canvasCtx.restore();
+        });
+
+
+
+
     }
 }
 

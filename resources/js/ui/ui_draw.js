@@ -3,22 +3,31 @@ import { timeSpace } from '../timeSpace';
 
 export var ui_draw = {
     drawTrackWhileRecording() {
-        var width = 0;
-        var height = 67;
-        var x = timeSpace.space;
-        var track = document.querySelector('[data-selected]');
+        let width = 0;
+        let height = 67;
+        let x = timeSpace.space;
+        let track = document.querySelector('[data-selected]');
         var canvas = document.createElement('canvas')
         track.appendChild(canvas)
-        var canvasCtx = canvas.getContext('2d');
-        canvas.width = 4000;
+        let canvasCtx = canvas.getContext('2d');
+        canvas.width = 10000;
         canvas.height = 70;
-        var interval = setInterval(function () {
-            width++;
-            canvasCtx.fillStyle = '#367562';
+        canvasCtx.fillStyle = '#2ed9a5';
+        let start = performance.now();
+        let increase = 0;
+        let progress;
+        let fps;
+        let interval;
+        function step(now) {
+            progress = now - start;
+            fps = Math.round(1000 / (progress / ++increase) * 100) / 100;
+            width += timeSpace.zoom * 1 / fps;
             canvasCtx.fillRect(x, 0, width, height);
-        }, timeSpace.zoom * 1000)
+            interval = requestAnimationFrame(step);
+        }
+        interval = requestAnimationFrame(step);
         stop.addEventListener('click', function () {
-            clearInterval(interval);
+            window.cancelAnimationFrame(interval);
             canvas.remove();
         });
     },
@@ -27,8 +36,8 @@ export var ui_draw = {
         var canvas = recording.canvas;
         canvas.setAttribute("class", "recording");
         canvas.id = recording.id;
-        var x = recording.timeToStart / timeSpace.zoom;
-        var width = recording.audioBuffer.duration / timeSpace.zoom;
+        var x = recording.timeToStart * timeSpace.zoom;
+        var width = recording.audioBuffer.duration * timeSpace.zoom;
         var height = 67;
         canvas.style.left = x + 'px';
         canvas.width = width;
@@ -102,8 +111,8 @@ export var ui_draw = {
     clickAtRecording(recording) {
         var canvas = recording.canvas;
         var canvasCtx = canvas.getContext('2d');
-        var x = recording.timeToStart / timeSpace.zoom;
-        var width = recording.audioBuffer.duration / timeSpace.zoom;
+        var x = recording.timeToStart * timeSpace.zoom;
+        var width = recording.audioBuffer.duration * timeSpace.zoom;
         var height = 67;
         canvas.style.left = x + 'px';
         canvas.width = width;
@@ -172,5 +181,16 @@ export var ui_draw = {
                 canvasCtx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
             }
         }
+    },
+
+    drawWhileCropping(canvas, X) {
+        console.log('hola');
+        let height = 67;
+        let canvasCtx = canvas.getContext('2d');
+        canvasCtx.fillStyle = '#2ed9a5';
+        canvasCtx.clearRect(0, 0, X, height)
+        canvasCtx.save();
+        //canvasCtx.fillRect(0, 0, X, height);
+        //canvasCtx.restore();
     }
 }

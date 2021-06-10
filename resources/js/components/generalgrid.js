@@ -21,7 +21,7 @@ export class Grid {
         this.gainNode.connect(audioCtx.destination);
         this.canvas.height = 70 * this.howMany;
 		this.canvas.style.height = 70 * this.howMany + 'px';
-		this.canvas.width = 4000;
+		this.canvas.width = 10000;
         //default la 1a pista
         jQuery(".track:first").attr("data-selected", '');
     }
@@ -30,7 +30,6 @@ export class Grid {
         for (var i = 0; i < this.howMany; i++) {
             trackName = generateTrackNumbers();
             window[trackName] = new Track(i, 1, 'C');
-			//window[trackName]
             window[trackName].pannerNode.connect(window[trackName].gainNode);
             window[trackName].gainNode.connect(this.gainNode);
             grid.tracks.push(window[trackName]);

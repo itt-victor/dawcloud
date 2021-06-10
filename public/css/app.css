@@ -10213,23 +10213,24 @@ body {
   height: 590px;
 }
 
-#time-layout {
-  width: 4000px;
+#layout {
+  width: 10000px;
   height: 30px;
+  display: block;
   margin: auto;
   position: relative;
+  top: 0;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
   overflow-x: hidden;
   overflow-y: hidden;
 }
 
-#layout {
-  width: 4000px;
-}
-
 #cursor {
   position: absolute;
+  width: 2px;
+  height: 590px;
+  overflow: visible;
 }
 
 .track_name {
@@ -10302,7 +10303,7 @@ body {
 
 #canvas-grid {
   position: absolute;
-  width: 4000px;
+  width: 10000px;
   z-index: 0;
 }
 
@@ -10320,7 +10321,7 @@ body {
 }
 
 .track {
-  width: 4000px;
+  width: 10000px;
   height: 70px;
   z-index: 1;
   position: relative;

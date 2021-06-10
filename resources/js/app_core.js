@@ -1,5 +1,6 @@
 require('./bootstrap');
 require('./app_logic');
+require('./audio/bouncecontroller');
 require('./components/timeLayout');
 require('./project');
 require('./components/mixer');

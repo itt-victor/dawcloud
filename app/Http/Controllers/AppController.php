@@ -52,7 +52,7 @@ class AppController extends Controller
         $projectname = $request->input('project-name');
         $project_data = $request->input('project');
 
-		$operation = Project::updateOrCreate(
+		Project::updateOrCreate(
 			['user_id' => Auth::user()->id, 'project_name' => $projectname],
 			['json_data' => $project_data]
 		);
