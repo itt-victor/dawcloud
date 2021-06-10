@@ -13,20 +13,31 @@ export var cursor = {
         this.canvas.style.zIndex = '10';
         this.ctx = this.canvas.getContext('2d');
         this.ctx.fillStyle = 'black';
-        this.ctx.lineWidth = '10px';
         this.ctx.globalCompositeOperation = 'destination-over';
-        this.ctx.globalAlpha = 0.8
+        this.ctx.globalAlpha = 0.8;
         this.ctx.fillRect(0, 0, 3, this.canvas.height);
     },
     play: function () {
-        interval = setInterval(function () {
+        /*interval = setInterval(function () {
             timeSpace.space++;
             this.cursor.style.left = timeSpace.space + 'px';
-        }, timeSpace.zoom * 1000)
+        }, timeSpace.zoom * 1000)*/
+        let start;
+        let canvas = this.canvas;
+        function step(timestamp){
+            if (!start) start = timestamp;
+            let progress = timestamp - start;
+            timeSpace.space++;
+            canvas.style.left = timeSpace.space + 'px';
+            interval = requestAnimationFrame(step);
+        }
+        interval = requestAnimationFrame(step);
+
     },
 
     stop: function () {
-        clearInterval(interval);
+        //clearInterval(interval);
+        window.cancelAnimationFrame(interval);
     },
 
     moveAtZoom: function (oldZoom) {
