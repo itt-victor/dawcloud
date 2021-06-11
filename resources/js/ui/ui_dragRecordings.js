@@ -61,6 +61,13 @@ export function dragRecording(recording) {
 
         window.addEventListener("mouseup", function (evt) {
             drag = false;
+
+			if (mod) {
+                let canvasCtx = recording.canvas.getContext('2d');
+				//canvasCtx.restore();
+                //ui_draw.drawRecording(recording);
+				mod = false;
+            }
         }, false);
 
         //Recortar grabaciones
@@ -86,21 +93,13 @@ export function dragRecording(recording) {
             if (mod) {
                 X = mousePos.x + delta.x - (recording.timeToStart * timeSpace.zoom);
                 ui_draw.drawWhileCropping(this, X);
-                console.log(mod);
+				this.style.cursor = 'w-resize';
+
+                //recording.offset = timeSpace.time() - recording.timeToStart;
+				//recording.timeToStart = timeSpace.time();
+
             }
         });
-
-
-        recording.canvas.addEventListener("mouseup", function (evt) {
-            if (mod) { mod = false }
-            let canvasCtx = this.getContext('2d');
-            ui_draw.drawWhileCropping(this, X);
-            //canvasCtx.restore();
-        });
-
-
-
-
     }
 }
 

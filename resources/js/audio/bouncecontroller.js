@@ -54,7 +54,7 @@ function exportSong() {
             const source = offlineCtx.createBufferSource();
             source.buffer = grid.recordings[h].audioBuffer;
             source.connect(pannerNodes[grid.recordings[h].tracknumber]);
-            var start = Math.max((grid.recordings[h].timeToStart), 0);
+            let start = Math.max((grid.recordings[h].timeToStart), 0);
             source.start(start, 0);
         }
 
@@ -75,4 +75,25 @@ function exportSong() {
 let export_sound = document.getElementById('export_sound');
 if (export_sound) {
     export_sound.addEventListener('click', exportSong);
+}
+
+export function cropAudio (recording) {
+
+	let length = recording.audioBuffer.duration - recording.timeToStart;
+	const offlineCtx = new OfflineAudioContext({
+		numberOfChannels: 2,
+		length: length,
+		sampleRate: 48000,
+	});
+
+	const source = offlineCtx.createBufferSource();
+	source.buffer = recording.audioBuffer;
+	source.connect(offlineCtx.destination);
+	let start = Math.max(recording.timeToStart, 0);
+	let offset = Math.max(recording.offset, 0);
+	source.start(start, offset);
+
+	offlineCtx.startRendering().then(function (renderedBuffer) {
+		//Habrá que pensar cómo almacenarlo
+	});
 }

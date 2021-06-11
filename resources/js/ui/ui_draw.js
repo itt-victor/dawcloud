@@ -106,6 +106,8 @@ export var ui_draw = {
                 canvasCtx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
             }
         }
+
+		canvasCtx.save();
     },
 
     clickAtRecording(recording) {
@@ -184,7 +186,6 @@ export var ui_draw = {
     },
 
     drawWhileCropping(canvas, X) {
-        console.log('hola');
         let height = 67;
         let canvasCtx = canvas.getContext('2d');
         canvasCtx.fillStyle = '#2ed9a5';
