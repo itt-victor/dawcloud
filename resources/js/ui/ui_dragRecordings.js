@@ -3,6 +3,7 @@ import { soundcontroller } from '../app_core';
 import { soundStatuses } from '../app_core';
 import { timeSpace } from '../timeSpace';
 import { ui_draw } from './ui_draw';
+import { cropAudio } from '../audio/bouncecontroller';
 
 export function dragRecording(recording) {
 
@@ -61,22 +62,21 @@ export function dragRecording(recording) {
 
         window.addEventListener("mouseup", function (evt) {
             drag = false;
-
+            /*
 			if (mod) {
-                let canvasCtx = recording.canvas.getContext('2d');
-				//canvasCtx.restore();
-                //ui_draw.drawRecording(recording);
+                cropAudio(recording);
+                recording.canvas.style.left = X + 'px';
 				mod = false;
-            }
+            }*/
         }, false);
 
         //Recortar grabaciones
-
+/*
         recording.canvas.addEventListener("mousedown", function (evt) {
             let mousePos = onMousePos(grid.canvas, evt);
             delta.x = X - mousePos.x;
             X = this.getBoundingClientRect().x;
-            if (evt.clientX < X + 2 && evt.clientX > X - 2) {
+            if (evt.clientX < X + 3 && evt.clientX > X - 2) {
                 mod = true;
                 drag = false;
             }
@@ -85,21 +85,21 @@ export function dragRecording(recording) {
         recording.canvas.addEventListener("mousemove", function (evt) {
             let mousePos = onMousePos(grid.canvas, evt);
             X = this.getBoundingClientRect().x;
-            if (evt.clientX < X + 2 && evt.clientX > X - 2) {
+            if (evt.clientX < X + 3 && evt.clientX > X - 2) {
                 this.style.cursor = 'w-resize';
             } else {
                 this.style.cursor = 'default';
             }
             if (mod) {
-                X = mousePos.x + delta.x - (recording.timeToStart * timeSpace.zoom);
+                X = mousePos.x + delta.x //- (recording.timeToStart * timeSpace.zoom);
                 ui_draw.drawWhileCropping(this, X);
 				this.style.cursor = 'w-resize';
-
-                //recording.offset = timeSpace.time() - recording.timeToStart;
-				//recording.timeToStart = timeSpace.time();
-
+                recording.offset = X / timeSpace.zoom;
+				recording.timeToStart = X / timeSpace.zoom;
+                //cropAudio(recording);
+                //this.style.left = X + 'px';
             }
-        });
+        });*/
     }
 }
 

@@ -106,8 +106,6 @@ export var ui_draw = {
                 canvasCtx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
             }
         }
-
-		canvasCtx.save();
     },
 
     clickAtRecording(recording) {
@@ -119,7 +117,6 @@ export var ui_draw = {
         canvas.style.left = x + 'px';
         canvas.width = width;
         canvas.height = height;
-        var canvasCtx = canvas.getContext('2d');
         canvasCtx.clearRect(0, 0, width, height);
         canvasCtx.fillStyle = '#20453a';
         canvasCtx.beginPath();
@@ -190,8 +187,6 @@ export var ui_draw = {
         let canvasCtx = canvas.getContext('2d');
         canvasCtx.fillStyle = '#2ed9a5';
         canvasCtx.clearRect(0, 0, X, height)
-        canvasCtx.save();
         //canvasCtx.fillRect(0, 0, X, height);
-        //canvasCtx.restore();
     }
 }

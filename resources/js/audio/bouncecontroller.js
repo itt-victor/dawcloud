@@ -1,5 +1,6 @@
 var toWav = require('audiobuffer-to-wav');
 import { grid } from '../components/generalgrid';
+import { timeSpace } from '../timeSpace';
 
 
 function exportSong() {
@@ -77,23 +78,22 @@ if (export_sound) {
     export_sound.addEventListener('click', exportSong);
 }
 
-export function cropAudio (recording) {
+export function cropAudio(recording) {
 
-	let length = recording.audioBuffer.duration - recording.timeToStart;
-	const offlineCtx = new OfflineAudioContext({
-		numberOfChannels: 2,
-		length: length,
-		sampleRate: 48000,
-	});
+    let length = recording.audioBuffer.length - (recording.offset * 48000);
+    const offlineCtx = new OfflineAudioContext({
+        numberOfChannels: 2,
+        length: length,
+        sampleRate: 48000,
+    });
 
-	const source = offlineCtx.createBufferSource();
-	source.buffer = recording.audioBuffer;
-	source.connect(offlineCtx.destination);
-	let start = Math.max(recording.timeToStart, 0);
-	let offset = Math.max(recording.offset, 0);
-	source.start(start, offset);
+    const source = offlineCtx.createBufferSource();
+    source.buffer = recording.audioBuffer;
+    source.connect(offlineCtx.destination);
+    let offset = Math.max(recording.offset, 0);
+    source.start(0, offset);
 
-	offlineCtx.startRendering().then(function (renderedBuffer) {
-		//Habrá que pensar cómo almacenarlo
-	});
+    offlineCtx.startRendering().then(function (renderedBuffer) {
+        console.log('algo');
+    });
 }
