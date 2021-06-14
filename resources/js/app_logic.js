@@ -229,12 +229,12 @@ export function removeRecording(recording) {
 
     recording.canvas.addEventListener('click', function arrr(e) {
 
-        /*for (var i = 0; i < grid.recordings.length; i++) {
+        for (var i = 0; i < grid.recordings.length; i++) {
             if (grid.recordings[i].audioBuffer != undefined) {
                 ui_draw.drawRecording(grid.recordings[i]);
             }
         }
-        ui_draw.clickAtRecording(recording);*/
+        ui_draw.clickAtRecording(recording);
 
         window.addEventListener('keyup', function rra(a) {
             if (a.keyCode === 46) {

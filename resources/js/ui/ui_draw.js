@@ -37,7 +37,7 @@ export var ui_draw = {
         canvas.setAttribute("class", "recording");
         canvas.id = recording.id;
         var x = recording.timeToStart * timeSpace.zoom;
-        var width = recording.audioBuffer.duration * timeSpace.zoom;
+        var width = recording.audioBuffer.duration * (timeSpace.zoom + 0.11); //Ese 0.11 corrige descompensación
         var height = 67;
         canvas.style.left = x + 'px';
         canvas.width = width;
@@ -112,7 +112,7 @@ export var ui_draw = {
         var canvas = recording.canvas;
         var canvasCtx = canvas.getContext('2d');
         var x = recording.timeToStart * timeSpace.zoom;
-        var width = recording.audioBuffer.duration * timeSpace.zoom;
+        var width = recording.audioBuffer.duration * (timeSpace.zoom + 0.11);
         var height = 67;
         canvas.style.left = x + 'px';
         canvas.width = width;
