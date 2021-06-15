@@ -230,7 +230,7 @@ solo();
 //elimina la grabación
 export function removeRecording(recording) {
     recording.canvas.addEventListener('mousedown', function arrr(e) {
-        for (var i = 0; i < grid.recordings.length; i++) {
+        /*for (var i = 0; i < grid.recordings.length; i++) {
             if (grid.recordings[i].croppedCanvas  !== undefined) {
                 ui_draw.printRecording(grid.recordings[i], grid.recordings[i].croppedCanvas);
             } else {
@@ -241,7 +241,7 @@ export function removeRecording(recording) {
             ui_draw.printRecording(recording, recording.croppedCanvas);
         } else {
             ui_draw.printRecording(recording, recording.offscreenSelectedCanvas[timeSpace.zoom]);
-        }
+        }*/
 
         window.addEventListener('keyup', function rra(a) {
             if (a.keyCode === 46) {

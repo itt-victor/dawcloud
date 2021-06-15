@@ -63,14 +63,14 @@ export function dragRecording(recording) {
         window.addEventListener("mouseup", function (evt) {
             drag = false;
 
-			if (mod) {
+            if (mod) {
                 let croppedCanvas = document.createElement('canvas');
                 croppedCanvas.getContext('2d').drawImage(recording.canvas, 0, 0);
                 recording.croppedCanvas = croppedCanvas;
                 recording.croppedCanvas.x = X;
                 recording.offset = X / timeSpace.zoom;
-				recording.timeToStart += (X / timeSpace.zoom);
-				mod = false;
+                //recording.timeToStart += (X / timeSpace.zoom);
+                mod = false;
             }
         }, false);
 
@@ -78,11 +78,7 @@ export function dragRecording(recording) {
 
         recording.canvas.addEventListener("mousedown", function (evt) {
             let mousePos = onMousePos(grid.canvas, evt);
-            if (recording.croppedCanvas != undefined) {
-                X = recording.croppedCanvas.x
-            } else {
-                X = recording.timeToStart * timeSpace.zoom;
-            }
+            //X = (recording.timeToStart + recording.offset) * timeSpace.zoom;
             if (mousePos.x < X + 3 && mousePos.x > X - 2) {
                 delta.x = Math.max(X, 0);
                 mod = true;
@@ -92,6 +88,7 @@ export function dragRecording(recording) {
 
         recording.canvas.addEventListener("mousemove", function (evt) {
             let mousePos = onMousePos(grid.canvas, evt);
+            X = (recording.timeToStart + recording.offset) * timeSpace.zoom;
             if (mousePos.x < X + 3 && mousePos.x > X - 2) {
                 this.style.cursor = 'w-resize';
             } else {
@@ -102,7 +99,7 @@ export function dragRecording(recording) {
 
                 ui_draw.printRecording(recording, recording.offscreenSelectedCanvas[timeSpace.zoom])
                 ui_draw.drawWhileCropping(this, X);
-				this.style.cursor = 'w-resize';
+                this.style.cursor = 'w-resize';
             }
         });
     }

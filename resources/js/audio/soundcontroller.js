@@ -15,9 +15,10 @@ export default class SoundController {
             const source = audioCtx.createBufferSource();
             source.buffer = grid.recordings[h].audioBuffer;
             source.connect(grid.tracks[grid.recordings[h].tracknumber].pannerNode);
-            var start = Math.max((grid.recordings[h].timeToStart - timeSpace.time() + audioCtx.currentTime), 0);
-            var offset = Math.max(timeSpace.time() - grid.recordings[h].timeToStart, 0) + grid.recordings[h].offset;
-            console.log(offset);
+            var start = Math.max((grid.recordings[h].timeToStart - timeSpace.time()
+                + grid.recordings[h].offset + audioCtx.currentTime), 0);
+            var offset = Math.max(timeSpace.time() - grid.recordings[h].timeToStart, 0)
+                + grid.recordings[h].offset;
             var duration;
             if (grid.recordings[h].duration){ duration = grid.recordings[h].duration; }
             source.start(start, offset, duration);
