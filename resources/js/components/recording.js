@@ -1,12 +1,12 @@
 import { grid } from './generalgrid';
 
 export default class Recording {
-    constructor(id, timeToStart, audioBuffer, tracknumber) {
+    constructor(id, timeToStart, audioBuffer, tracknumber, offset, duration) {
         this.id = id;
         this.tracknumber = tracknumber;
         this.timeToStart = timeToStart;
-        this.offset = 0;
-        this.duration;
+        this.offset = offset;
+        this.duration = duration;
         this.audioBuffer = audioBuffer;
         this.audioBufferSource;
         this.canvas = document.createElement('canvas');

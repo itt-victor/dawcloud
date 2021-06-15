@@ -215,7 +215,8 @@ function loadProject() {
                             let undecodedAudio = request.response;
                             audioCtx.decodeAudioData(undecodedAudio, (audioBuffer) => {
                                 let track = grid.tracks[project.recordings[i].tracknumber];
-                                track.addRecord(project.recordings[i].id, project.recordings[i].timeToStart, audioBuffer);
+                                track.addRecord(project.recordings[i].id, project.recordings[i].timeToStart,
+									audioBuffer, project.recordings[i].offset, project.recordings[i].duration);
                             });
                         };
                         request.send();
@@ -253,7 +254,6 @@ function loadProject() {
                     grid.faderY = project.masterY;
                     document.getElementById('master_fader').children[0].style.top = grid.faderY + 'px';
                     console.log('Project loaded successfully');
-                    console.log(grid.recordings);
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log(errorThrown);

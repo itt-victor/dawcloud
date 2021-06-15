@@ -55,8 +55,10 @@ function exportSong() {
             const source = offlineCtx.createBufferSource();
             source.buffer = grid.recordings[h].audioBuffer;
             source.connect(pannerNodes[grid.recordings[h].tracknumber]);
-            let start = Math.max((grid.recordings[h].timeToStart), 0);
-            source.start(start, 0);
+            let start = Math.max(grid.recordings[h].timeToStart + grid.recordings[h].offset, 0);
+			let offset = Math.max(grid.recordings[h].offset, 0);                    //ESTO FALTA DE MIRARLO BIEN
+			let duration = grid.recordings[h].duration - grid.recordings[h].offset;
+            source.start(start, offset, duration);
         }
 
         offlineCtx.startRendering().then(function (renderedBuffer) {

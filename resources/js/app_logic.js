@@ -66,7 +66,7 @@ function loadSong() {
             reader.onload = function (e) {
                 let trcknr = document.querySelector('[data-selected]').id.charAt(6);
                 audioCtx.decodeAudioData(e.target.result).then(function (buffer) {
-                    grid.tracks[trcknr].addRecord(generateRecordingId(), timeSpace.time(), buffer);
+                    grid.tracks[trcknr].addRecord(generateRecordingId(), timeSpace.time(), buffer, 0, buffer.duration);
                 });
             }
             if (button.files[0]) {
@@ -89,8 +89,11 @@ function zoom() {
         timeSpace.zoom = Math.round(timeSpace.zoom * 1.25);
         if (timeSpace.zoom >= 889) {timeSpace.zoom = 889}
         for (var i = 0; i < grid.recordings.length; i++) {
+			let offset = grid.recordings[i].offset * timeSpace.zoom;
+			let duration = grid.recordings[i].duration * timeSpace.zoom;
             ui_draw.printRecording(grid.recordings[i],
-                grid.recordings[i].offscreenCanvas[timeSpace.zoom]);
+                grid.recordings[i].offscreenCanvas[timeSpace.zoom],
+				offset, duration);
         }
 		drawGrid();
         drawLayout();
@@ -101,8 +104,11 @@ function zoom() {
         timeSpace.zoom = Math.round(timeSpace.zoom / 1.25);
         if (timeSpace.zoom <= 5) {timeSpace.zoom = 5}
         for (var i = 0; i < grid.recordings.length; i++) {
+			let offset = grid.recordings[i].offset * timeSpace.zoom;
+			let duration = grid.recordings[i].duration * timeSpace.zoom;
             ui_draw.printRecording(grid.recordings[i],
-                grid.recordings[i].offscreenCanvas[timeSpace.zoom]);
+                grid.recordings[i].offscreenCanvas[timeSpace.zoom],
+				offset, duration);
         }
 		drawGrid();
         drawLayout();
@@ -230,18 +236,16 @@ solo();
 //elimina la grabación
 export function removeRecording(recording) {
     recording.canvas.addEventListener('mousedown', function arrr(e) {
-        /*for (var i = 0; i < grid.recordings.length; i++) {
-            if (grid.recordings[i].croppedCanvas  !== undefined) {
-                ui_draw.printRecording(grid.recordings[i], grid.recordings[i].croppedCanvas);
-            } else {
-                ui_draw.printRecording(grid.recordings[i], grid.recordings[i].offscreenCanvas[timeSpace.zoom]);
-            }
+        for (var i = 0; i < grid.recordings.length; i++) {
+			let offset = grid.recordings[i].offset * timeSpace.zoom;
+			let duration = grid.recordings[i].duration * timeSpace.zoom;
+            ui_draw.printRecording(grid.recordings[i],
+				grid.recordings[i].offscreenCanvas[timeSpace.zoom], offset, duration);
         }
-        if (recording.croppedCanvas !== undefined) {
-            ui_draw.printRecording(recording, recording.croppedCanvas);
-        } else {
-            ui_draw.printRecording(recording, recording.offscreenSelectedCanvas[timeSpace.zoom]);
-        }*/
+		let offset = recording.offset * timeSpace.zoom;
+		let duration = recording.duration * timeSpace.zoom;
+        ui_draw.printRecording(recording,
+			recording.offscreenSelectedCanvas[timeSpace.zoom], offset, duration);
 
         window.addEventListener('keyup', function rra(a) {
             if (a.keyCode === 46) {

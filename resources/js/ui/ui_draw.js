@@ -179,20 +179,15 @@ export var ui_draw = {
         return offscreenCanvas;
     },
 
-    printRecording(recording, offscreenCanvas) {
+    printRecording(recording, offscreenCanvas, offset, duration) {
         let width = recording.audioBuffer.duration * (timeSpace.zoom + 0.15);
         let height = 67;
-        let x = (recording.timeToStart - recording.offset) * timeSpace.zoom;
+        let x = recording.timeToStart * timeSpace.zoom;
         recording.canvas.width = width;
         recording.canvas.height = height;
         recording.canvasCtx.clearRect(0, 0, width, height);
         recording.canvasCtx.drawImage(offscreenCanvas, 0, 0);
         recording.canvas.style.left = x + 'px';
-    },
-
-    drawWhileCropping(canvas, X) {
-        let height = 67;
-        let canvasCtx = canvas.getContext('2d');
-        canvasCtx.clearRect(0, 0, X, height);
+		recording.canvasCtx.clearRect(duration, 0, offset, height);
     }
 }

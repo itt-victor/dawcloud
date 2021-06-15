@@ -27,9 +27,9 @@ export default class Track {
         this.fader.Y = 20;
         this.fader.parent = this;
     }
-    addRecord(recordingId, timeToStart, audioBuffer) {
+    addRecord(recordingId, timeToStart, audioBuffer, offset, duration) {
         rcdName = generateRecordingNumbers();
-        window[rcdName] = new Recording(recordingId, timeToStart, audioBuffer, this.tracknumber);
+        window[rcdName] = new Recording(recordingId, timeToStart, audioBuffer, this.tracknumber, offset, duration);
         grid.recordings.push(window[rcdName]);
         this.trackDOMElement.appendChild(window[rcdName].canvas);
         drawZoomedwaveforms(window[rcdName]);
@@ -40,11 +40,13 @@ export default class Track {
 
 function drawZoomedwaveforms (recording) {
     let zoom = 5;
+	let offset = recording.offset * timeSpace.zoom;
+	let duration = recording.duration * timeSpace.zoom;
 
     while (zoom <= 889) {
         recording.offscreenCanvas[zoom] = ui_draw.drawRecording(recording, zoom);
         recording.offscreenSelectedCanvas[zoom] = ui_draw.selectedRecording(recording, zoom);
         zoom = Math.round(zoom * 1.25);
     }
-    ui_draw.printRecording(recording, recording.offscreenCanvas[timeSpace.zoom]);
+    ui_draw.printRecording(recording, recording.offscreenCanvas[timeSpace.zoom], offset, duration);
 }
