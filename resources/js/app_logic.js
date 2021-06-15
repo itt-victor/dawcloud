@@ -245,7 +245,7 @@ export function removeRecording(recording) {
 		let offset = recording.offset * timeSpace.zoom;
 		let duration = recording.duration * timeSpace.zoom;
         ui_draw.printRecording(recording,
-			recording.offscreenSelectedCanvas[timeSpace.zoom], offset, duration);
+			recording.offscreenCanvas[timeSpace.zoom], offset, duration);
 
         window.addEventListener('keyup', function rra(a) {
             if (a.keyCode === 46) {

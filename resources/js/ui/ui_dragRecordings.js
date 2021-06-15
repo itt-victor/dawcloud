@@ -18,7 +18,7 @@ export function dragRecording(recording) {
 	var cDelta = 0;
     var X = recording.timeToStart * timeSpace.zoom;
     var Y;
-	var offset = 0;
+	var offset = recording.offset * timeSpace.zoom;
 	var offsetReadOnly = (recording.timeToStart + recording.offset) * timeSpace.zoom;
 	var duration = 0;
 	var durationReadOnly = (recording.timeToStart + recording.audioBuffer.duration) * timeSpace.zoom;
@@ -76,7 +76,7 @@ export function dragRecording(recording) {
             }
 
 			if (crop_right) {
-				//recording.duration =
+				recording.duration = duration;
 				crop_right = false;
 			}
         }, false);
@@ -88,7 +88,7 @@ export function dragRecording(recording) {
             let mousePos = onMousePos(grid.canvas, evt);
 			offsetReadOnly = (recording.timeToStart + recording.offset) * timeSpace.zoom;
 			durationReadOnly = (recording.timeToStart + recording.audioBuffer.duration) * timeSpace.zoom;
-            if (mousePos.x < offsetReadOnly + 3 && mousePos.x > offsetReadOnly - 2) {
+            if (mousePos.x < offsetReadOnly + 3 && mousePos.x >  offsetReadOnly - 2) {
 				leftDelta = offset - mousePos.x;
                 crop_left = true;
                 drag = false;
@@ -103,7 +103,7 @@ export function dragRecording(recording) {
             let mousePos = onMousePos(grid.canvas, evt);
             offsetReadOnly = (recording.timeToStart + recording.offset) * timeSpace.zoom;
 			durationReadOnly = (recording.timeToStart + recording.audioBuffer.duration) * timeSpace.zoom;
-			if (mousePos.x < offsetReadOnly + 3 && mousePos.x > offsetReadOnly - 2) {
+			if (mousePos.x < offsetReadOnly + 3 && mousePos.x >  offsetReadOnly - 2) {
 				this.style.cursor = 'w-resize';
 			}
 			else if (mousePos.x < durationReadOnly + 3 && mousePos.x > durationReadOnly - 2) {
@@ -119,7 +119,6 @@ export function dragRecording(recording) {
 			if (crop_right) {
 				duration = Math.max(mousePos.x + leftDelta, 0);
 				cDelta = rightDelta - duration;
-				console.log(cDelta);
 				ui_draw.printRecording(recording, recording.offscreenCanvas[timeSpace.zoom], cDelta, duration);
 				this.style.cursor = 'w-resize';
 			}
