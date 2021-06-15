@@ -78,7 +78,7 @@ export function dragRecording(recording) {
 
         recording.canvas.addEventListener("mousedown", function (evt) {
             let mousePos = onMousePos(grid.canvas, evt);
-            if (recording.croppedCanvas) {
+            if (recording.croppedCanvas != undefined) {
                 X = recording.croppedCanvas.x
             } else {
                 X = recording.timeToStart * timeSpace.zoom;
