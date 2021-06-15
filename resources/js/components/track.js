@@ -5,6 +5,7 @@ import { grid } from './generalgrid';
 import { audioCtx } from '../app_core';
 import { dragRecording } from '../ui/ui_dragRecordings';
 import { removeRecording } from '../app_logic';
+import { timeSpace } from '../timeSpace';
 
 var rcdName;
 
@@ -31,8 +32,19 @@ export default class Track {
         window[rcdName] = new Recording(recordingId, timeToStart, audioBuffer, this.tracknumber);
         grid.recordings.push(window[rcdName]);
         this.trackDOMElement.appendChild(window[rcdName].canvas);
-        ui_draw.drawRecording(window[rcdName]);
+        drawZoomedwaveforms(window[rcdName]);
         setTimeout(dragRecording(window[rcdName]), 20);
         setTimeout(removeRecording(window[rcdName]), 20);
     };
+}
+
+function drawZoomedwaveforms (recording) {
+    let zoom = 5;
+
+    while (zoom <= 889) {
+        recording.offscreenCanvas[zoom] = ui_draw.drawRecording(recording, zoom);
+        recording.offscreenSelectedCanvas[zoom] = ui_draw.selectedRecording(recording, zoom);
+        zoom = Math.round(zoom * 1.25);
+    }
+    ui_draw.printRecording(recording, recording.offscreenCanvas[timeSpace.zoom]);
 }

@@ -253,6 +253,7 @@ function loadProject() {
                     grid.faderY = project.masterY;
                     document.getElementById('master_fader').children[0].style.top = grid.faderY + 'px';
                     console.log('Project loaded successfully');
+                    console.log(grid.recordings);
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log(errorThrown);

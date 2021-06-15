@@ -87,9 +87,10 @@ function zoom() {
     function zIn() {
         oldZoom = timeSpace.zoom;
         timeSpace.zoom = Math.round(timeSpace.zoom * 1.25);
-
+        if (timeSpace.zoom >= 889) {timeSpace.zoom = 889}
         for (var i = 0; i < grid.recordings.length; i++) {
-            ui_draw.drawRecording(grid.recordings[i]);
+            ui_draw.printRecording(grid.recordings[i],
+                grid.recordings[i].offscreenCanvas[timeSpace.zoom]);
         }
 		drawGrid();
         drawLayout();
@@ -98,8 +99,10 @@ function zoom() {
     function zOut() {
         oldZoom = timeSpace.zoom;
         timeSpace.zoom = Math.round(timeSpace.zoom / 1.25);
+        if (timeSpace.zoom <= 5) {timeSpace.zoom = 5}
         for (var i = 0; i < grid.recordings.length; i++) {
-            ui_draw.drawRecording(grid.recordings[i]);
+            ui_draw.printRecording(grid.recordings[i],
+                grid.recordings[i].offscreenCanvas[timeSpace.zoom]);
         }
 		drawGrid();
         drawLayout();
@@ -226,15 +229,19 @@ solo();
 
 //elimina la grabación
 export function removeRecording(recording) {
-
-    recording.canvas.addEventListener('click', function arrr(e) {
-
+    recording.canvas.addEventListener('mousedown', function arrr(e) {
         for (var i = 0; i < grid.recordings.length; i++) {
-            if (grid.recordings[i].audioBuffer != undefined) {
-                ui_draw.drawRecording(grid.recordings[i]);
+            if (grid.recordings[i].croppedCanvas  !== undefined) {
+                ui_draw.printRecording(grid.recordings[i], grid.recordings[i].croppedCanvas);
+            } else {
+                ui_draw.printRecording(grid.recordings[i], grid.recordings[i].offscreenCanvas[timeSpace.zoom]);
             }
         }
-        ui_draw.clickAtRecording(recording);
+        if (recording.croppedCanvas !== undefined) {
+            ui_draw.printRecording(recording, recording.croppedCanvas);
+        } else {
+            ui_draw.printRecording(recording, recording.offscreenSelectedCanvas[timeSpace.zoom]);
+        }
 
         window.addEventListener('keyup', function rra(a) {
             if (a.keyCode === 46) {

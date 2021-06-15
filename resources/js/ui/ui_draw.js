@@ -32,18 +32,16 @@ export var ui_draw = {
         });
     },
 
-    drawRecording(recording) {
-        var canvas = recording.canvas;
+    drawRecording(recording, zoom) {
+        let canvas = recording.canvas;
+        let offscreenCanvas = document.createElement('canvas');
         canvas.setAttribute("class", "recording");
         canvas.id = recording.id;
-        var x = recording.timeToStart * timeSpace.zoom;
-        var width = recording.audioBuffer.duration * (timeSpace.zoom + 0.11); //Ese 0.11 corrige descompensación
-        var height = 67;
-        canvas.style.left = x + 'px';
-        canvas.width = width;
-        canvas.height = height;
-        var canvasCtx = canvas.getContext('2d');
-        canvasCtx.clearRect(0, 0, width, height);
+        let width = recording.audioBuffer.duration * (zoom + 0.15); //Ese 0.11 corrige descompensación
+        let height = 67;
+        offscreenCanvas.width = width;
+        offscreenCanvas.height = height;
+        let canvasCtx = offscreenCanvas.getContext('2d');
         canvasCtx.fillStyle = '#2ed9a5';
         canvasCtx.beginPath();
         canvasCtx.moveTo(0, 0);
@@ -106,18 +104,16 @@ export var ui_draw = {
                 canvasCtx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
             }
         }
+        return offscreenCanvas;
     },
 
-    clickAtRecording(recording) {
-        var canvas = recording.canvas;
-        var canvasCtx = canvas.getContext('2d');
-        var x = recording.timeToStart * timeSpace.zoom;
-        var width = recording.audioBuffer.duration * (timeSpace.zoom + 0.11);
-        var height = 67;
-        canvas.style.left = x + 'px';
-        canvas.width = width;
-        canvas.height = height;
-        canvasCtx.clearRect(0, 0, width, height);
+    selectedRecording(recording, zoom) {
+        let offscreenCanvas = document.createElement('canvas');
+        let width = recording.audioBuffer.duration * (zoom + 0.15);
+        let height = 67;
+        offscreenCanvas.width = width;
+        offscreenCanvas.height = height;
+        let canvasCtx = offscreenCanvas.getContext('2d');
         canvasCtx.fillStyle = '#20453a';
         canvasCtx.beginPath();
         canvasCtx.moveTo(0, 0);
@@ -180,13 +176,29 @@ export var ui_draw = {
                 canvasCtx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
             }
         }
+        return offscreenCanvas;
+    },
+
+    printRecording(recording, offscreenCanvas) {
+        let width = recording.audioBuffer.duration * (timeSpace.zoom + 0.15);
+        let height = 67;
+        let x;
+        if (offscreenCanvas.x) {
+            x = offscreenCanvas.x
+        } else {
+            x = (recording.timeToStart - recording.offset) * timeSpace.zoom;
+        }
+        //let x = (recording.timeToStart - recording.offset) * timeSpace.zoom;
+        recording.canvas.width = width;
+        recording.canvas.height = height;
+        recording.canvasCtx.clearRect(0, 0, width, height);
+        recording.canvasCtx.drawImage(offscreenCanvas, 0, 0);
+        recording.canvas.style.left = x + 'px';
     },
 
     drawWhileCropping(canvas, X) {
         let height = 67;
         let canvasCtx = canvas.getContext('2d');
-        canvasCtx.fillStyle = '#2ed9a5';
-        canvasCtx.clearRect(0, 0, X, height)
-        //canvasCtx.fillRect(0, 0, X, height);
+        canvasCtx.clearRect(0, 0, X, height);
     }
 }

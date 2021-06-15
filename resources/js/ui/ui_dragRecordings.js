@@ -62,21 +62,29 @@ export function dragRecording(recording) {
 
         window.addEventListener("mouseup", function (evt) {
             drag = false;
-            /*
+
 			if (mod) {
-                cropAudio(recording);
-                recording.canvas.style.left = X + 'px';
+                let croppedCanvas = document.createElement('canvas');
+                croppedCanvas.getContext('2d').drawImage(recording.canvas, 0, 0);
+                recording.croppedCanvas = croppedCanvas;
+                recording.croppedCanvas.x = X;
+                recording.offset = X / timeSpace.zoom;
+				recording.timeToStart += (X / timeSpace.zoom);
 				mod = false;
-            }*/
+            }
         }, false);
 
         //Recortar grabaciones
-/*
+
         recording.canvas.addEventListener("mousedown", function (evt) {
             let mousePos = onMousePos(grid.canvas, evt);
-            delta.x = X - mousePos.x;
-            X = this.getBoundingClientRect().x;
-            if (evt.clientX < X + 3 && evt.clientX > X - 2) {
+            if (recording.croppedCanvas) {
+                X = recording.croppedCanvas.x
+            } else {
+                X = recording.timeToStart * timeSpace.zoom;
+            }
+            if (mousePos.x < X + 3 && mousePos.x > X - 2) {
+                delta.x = Math.max(X, 0);
                 mod = true;
                 drag = false;
             }
@@ -84,22 +92,19 @@ export function dragRecording(recording) {
 
         recording.canvas.addEventListener("mousemove", function (evt) {
             let mousePos = onMousePos(grid.canvas, evt);
-            X = this.getBoundingClientRect().x;
-            if (evt.clientX < X + 3 && evt.clientX > X - 2) {
+            if (mousePos.x < X + 3 && mousePos.x > X - 2) {
                 this.style.cursor = 'w-resize';
             } else {
                 this.style.cursor = 'default';
             }
             if (mod) {
-                X = mousePos.x + delta.x //- (recording.timeToStart * timeSpace.zoom);
+                X = mousePos.x - delta.x;
+
+                ui_draw.printRecording(recording, recording.offscreenSelectedCanvas[timeSpace.zoom])
                 ui_draw.drawWhileCropping(this, X);
 				this.style.cursor = 'w-resize';
-                recording.offset = X / timeSpace.zoom;
-				recording.timeToStart = X / timeSpace.zoom;
-                //cropAudio(recording);
-                //this.style.left = X + 'px';
             }
-        });*/
+        });
     }
 }
 
