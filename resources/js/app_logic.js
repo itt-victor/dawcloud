@@ -87,28 +87,28 @@ function zoom() {
     function zIn() {
         oldZoom = timeSpace.zoom;
         timeSpace.zoom = Math.round(timeSpace.zoom * 1.25);
-        if (timeSpace.zoom >= 889) {timeSpace.zoom = 889}
+        if (timeSpace.zoom >= 889) { timeSpace.zoom = 889 }
         zDraw();
     }
     function zOut() {
         oldZoom = timeSpace.zoom;
         timeSpace.zoom = Math.round(timeSpace.zoom / 1.25);
-        if (timeSpace.zoom <= 5) {timeSpace.zoom = 5}
+        if (timeSpace.zoom <= 5) { timeSpace.zoom = 5 }
         zDraw();
     }
-    function zDraw(){
+    function zDraw() {
         for (var i = 0; i < grid.recordings.length; i++) {
-			let offset = grid.recordings[i].offset * timeSpace.zoom;
-			let duration = grid.recordings[i].duration * timeSpace.zoom;
+            let offset = grid.recordings[i].offset * timeSpace.zoom;
+            let duration = grid.recordings[i].duration * timeSpace.zoom;
             let offCanvas;
-            if( grid.recordings[i].canvas.selected ){
+            if (grid.recordings[i].canvas.selected) {
                 offCanvas = grid.recordings[i].offSelectedCanvas[timeSpace.zoom];
             } else {
                 offCanvas = grid.recordings[i].offCanvas[timeSpace.zoom];
             }
             ui_draw.printRecording(grid.recordings[i], offCanvas, offset, duration);
         }
-		drawGrid();
+        drawGrid();
         drawLayout();
         cursor.moveAtZoom(oldZoom);
     }
@@ -146,7 +146,7 @@ function setBpm() {
                 timeSpace.bpm = 120 / this.value;
                 bpmButton.innerHTML = this.value + '  bpm';
                 input.remove();
-				drawGrid();
+                drawGrid();
                 drawLayout();
             }
         });
@@ -162,12 +162,12 @@ function metric() {
         if (metricButton.textContent == '4/4') {
             metricButton.innerHTML = '3/4';
             timeSpace.compas = 1.5;
-			drawGrid();
+            drawGrid();
             drawLayout()
         } else {
             metricButton.innerHTML = '4/4';
             timeSpace.compas = 2;
-			drawGrid();
+            drawGrid();
             drawLayout()
         }
     });
@@ -242,16 +242,16 @@ export function removeRecording(recording) {
             ui_draw.printRecording(
                 grid.recordings[i],
                 grid.recordings[i].offCanvas[timeSpace.zoom],
-                offset, duration );
+                offset, duration);
         }
 
-		this.selected = true;
+        this.selected = true;
         let offset = recording.offset * timeSpace.zoom;
         let duration = recording.duration * timeSpace.zoom;
         ui_draw.printRecording(
             recording,
             recording.offSelectedCanvas[timeSpace.zoom],
-            offset, duration );
+            offset, duration);
 
         window.addEventListener('keyup', function rra(a) {
             if (a.keyCode === 46) {

@@ -3,7 +3,7 @@ import { generateRecordingNumbers } from '../utils';
 import { ui_draw } from '../ui/ui_draw';
 import { grid } from './generalgrid';
 import { audioCtx } from '../app_core';
-import { dragRecording } from '../ui/ui_dragRecordings';
+import { editRecording } from '../ui/ui_editRecordings';
 import { removeRecording } from '../app_logic';
 import { timeSpace } from '../timeSpace';
 
@@ -17,13 +17,13 @@ export default class Track {
         this.pannerNode.pannerValue = pannerValue;
         this.gainNode = audioCtx.createGain();
         this.gainNode.gainValue = gainValue;
-        this.soloButton = document.getElementById('solo_'+ this.tracknumber);
+        this.soloButton = document.getElementById('solo_' + this.tracknumber);
         this.soloButton.parent = this;
         this.soloButton.toggle = false;
-        this.muteButton = document.getElementById('mute_'+ this.tracknumber);
+        this.muteButton = document.getElementById('mute_' + this.tracknumber);
         this.muteButton.parent = this;
         this.muteButton.toggle = false;
-        this.fader = document.getElementById('fader_'+ this.tracknumber);
+        this.fader = document.getElementById('fader_' + this.tracknumber);
         this.fader.Y = 20;
         this.fader.parent = this;
     }
@@ -33,15 +33,15 @@ export default class Track {
         grid.recordings.push(window[rcdName]);
         this.trackDOMElement.appendChild(window[rcdName].canvas);
         drawwaveforms(window[rcdName]);
-        setTimeout(dragRecording(window[rcdName]), 20);
+        setTimeout(editRecording(window[rcdName]), 20);
         setTimeout(removeRecording(window[rcdName]), 20);
     };
 }
 
-function drawwaveforms (recording) {
+function drawwaveforms(recording) {
     let zoom = 5;
-	let offset = recording.offset * timeSpace.zoom;
-	let duration = recording.duration * timeSpace.zoom;
+    let offset = recording.offset * timeSpace.zoom;
+    let duration = recording.duration * timeSpace.zoom;
 
     while (zoom <= 889) {
         recording.offCanvas[zoom] = ui_draw.drawRecording(recording, zoom);

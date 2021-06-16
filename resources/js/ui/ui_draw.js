@@ -186,7 +186,7 @@ export var ui_draw = {
         recording.canvasCtx.clearRect(0, 0, width, height);
         recording.canvasCtx.drawImage(offCanvas, 0, 0);
         recording.canvas.style.left = x + 'px';
-		recording.canvasCtx.clearRect(0, 0, offset, height);
-		recording.canvasCtx.clearRect(duration, 0, width - duration, height);
+        recording.canvasCtx.clearRect(0, 0, offset, height);
+        recording.canvasCtx.clearRect(duration, 0, width - duration, height);
     }
 }
