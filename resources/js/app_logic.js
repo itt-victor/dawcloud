@@ -88,27 +88,25 @@ function zoom() {
         oldZoom = timeSpace.zoom;
         timeSpace.zoom = Math.round(timeSpace.zoom * 1.25);
         if (timeSpace.zoom >= 889) {timeSpace.zoom = 889}
-        for (var i = 0; i < grid.recordings.length; i++) {
-			let offset = grid.recordings[i].offset * timeSpace.zoom;
-			let duration = grid.recordings[i].duration * timeSpace.zoom;
-            ui_draw.printRecording(grid.recordings[i],
-                grid.recordings[i].offscreenCanvas[timeSpace.zoom],
-				offset, duration);
-        }
-		drawGrid();
-        drawLayout();
-        cursor.moveAtZoom(oldZoom);
+        zDraw();
     }
     function zOut() {
         oldZoom = timeSpace.zoom;
         timeSpace.zoom = Math.round(timeSpace.zoom / 1.25);
         if (timeSpace.zoom <= 5) {timeSpace.zoom = 5}
+        zDraw();
+    }
+    function zDraw(){
         for (var i = 0; i < grid.recordings.length; i++) {
 			let offset = grid.recordings[i].offset * timeSpace.zoom;
 			let duration = grid.recordings[i].duration * timeSpace.zoom;
-            ui_draw.printRecording(grid.recordings[i],
-                grid.recordings[i].offscreenCanvas[timeSpace.zoom],
-				offset, duration);
+            let offCanvas;
+            if( grid.recordings[i].canvas.selected ){
+                offCanvas = grid.recordings[i].offSelectedCanvas[timeSpace.zoom];
+            } else {
+                offCanvas = grid.recordings[i].offCanvas[timeSpace.zoom];
+            }
+            ui_draw.printRecording(grid.recordings[i], offCanvas, offset, duration);
         }
 		drawGrid();
         drawLayout();
@@ -237,15 +235,23 @@ solo();
 export function removeRecording(recording) {
     recording.canvas.addEventListener('mousedown', function arrr(e) {
         for (var i = 0; i < grid.recordings.length; i++) {
-			let offset = grid.recordings[i].offset * timeSpace.zoom;
-			let duration = grid.recordings[i].duration * timeSpace.zoom;
-            ui_draw.printRecording(grid.recordings[i],
-				grid.recordings[i].offscreenCanvas[timeSpace.zoom], offset, duration);
+
+            grid.recordings[i].canvas.selected = false;
+            let offset = grid.recordings[i].offset * timeSpace.zoom;
+            let duration = grid.recordings[i].duration * timeSpace.zoom;
+            ui_draw.printRecording(
+                grid.recordings[i],
+                grid.recordings[i].offCanvas[timeSpace.zoom],
+                offset, duration );
         }
-		let offset = recording.offset * timeSpace.zoom;
-		let duration = recording.duration * timeSpace.zoom;
-        ui_draw.printRecording(recording,
-			recording.offscreenCanvas[timeSpace.zoom], offset, duration);
+
+		this.selected = true;
+        let offset = recording.offset * timeSpace.zoom;
+        let duration = recording.duration * timeSpace.zoom;
+        ui_draw.printRecording(
+            recording,
+            recording.offSelectedCanvas[timeSpace.zoom],
+            offset, duration );
 
         window.addEventListener('keyup', function rra(a) {
             if (a.keyCode === 46) {

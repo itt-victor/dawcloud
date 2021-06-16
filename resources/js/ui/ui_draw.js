@@ -34,14 +34,14 @@ export var ui_draw = {
 
     drawRecording(recording, zoom) {
         let canvas = recording.canvas;
-        let offscreenCanvas = document.createElement('canvas');
+        let offCanvas = document.createElement('canvas');
         canvas.setAttribute("class", "recording");
         canvas.id = recording.id;
         let width = recording.audioBuffer.duration * (zoom + 0.15); //Ese 0.11 corrige descompensación
         let height = 67;
-        offscreenCanvas.width = width;
-        offscreenCanvas.height = height;
-        let canvasCtx = offscreenCanvas.getContext('2d');
+        offCanvas.width = width;
+        offCanvas.height = height;
+        let canvasCtx = offCanvas.getContext('2d');
         canvasCtx.fillStyle = '#2ed9a5';
         canvasCtx.beginPath();
         canvasCtx.moveTo(0, 0);
@@ -52,6 +52,7 @@ export var ui_draw = {
         canvasCtx.closePath()
         canvasCtx.strokeStyle = '#380166';
         canvasCtx.strokeRect(0, 0, width, height);
+        canvasCtx.fillStyle = '#20453a';
 
         if (recording.audioBuffer.numberOfChannels === 2) {  //si es estereo..
             var data = recording.audioBuffer.getChannelData(0);
@@ -67,7 +68,6 @@ export var ui_draw = {
                     if (datum > max)
                         max = datum;
                 }
-                canvasCtx.fillStyle = '#20453a';
                 canvasCtx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
             }
             var data = recording.audioBuffer.getChannelData(1);
@@ -83,7 +83,6 @@ export var ui_draw = {
                     if (datum > max)
                         max = datum;
                 }
-                canvasCtx.fillStyle = '#20453a';
                 canvasCtx.fillRect(i, (1 + min) * amp + height / 2, 1, Math.max(1, (max - min) * amp));
             }
         } else if (recording.audioBuffer.numberOfChannels === 1) {  // si es mono..
@@ -100,20 +99,19 @@ export var ui_draw = {
                     if (datum > max)
                         max = datum;
                 }
-                canvasCtx.fillStyle = '#20453a';
                 canvasCtx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
             }
         }
-        return offscreenCanvas;
+        return offCanvas;
     },
 
     selectedRecording(recording, zoom) {
-        let offscreenCanvas = document.createElement('canvas');
+        let offCanvas = document.createElement('canvas');
         let width = recording.audioBuffer.duration * (zoom + 0.15);
         let height = 67;
-        offscreenCanvas.width = width;
-        offscreenCanvas.height = height;
-        let canvasCtx = offscreenCanvas.getContext('2d');
+        offCanvas.width = width;
+        offCanvas.height = height;
+        let canvasCtx = offCanvas.getContext('2d');
         canvasCtx.fillStyle = '#20453a';
         canvasCtx.beginPath();
         canvasCtx.moveTo(0, 0);
@@ -176,17 +174,17 @@ export var ui_draw = {
                 canvasCtx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
             }
         }
-        return offscreenCanvas;
+        return offCanvas;
     },
 
-    printRecording(recording, offscreenCanvas, offset, duration) {
+    printRecording(recording, offCanvas, offset, duration) {
         let width = recording.audioBuffer.duration * (timeSpace.zoom + 0.15);
         let height = 67;
         let x = recording.timeToStart * timeSpace.zoom;
         recording.canvas.width = width;
         recording.canvas.height = height;
         recording.canvasCtx.clearRect(0, 0, width, height);
-        recording.canvasCtx.drawImage(offscreenCanvas, 0, 0);
+        recording.canvasCtx.drawImage(offCanvas, 0, 0);
         recording.canvas.style.left = x + 'px';
 		recording.canvasCtx.clearRect(0, 0, offset, height);
 		recording.canvasCtx.clearRect(duration, 0, width - duration, height);

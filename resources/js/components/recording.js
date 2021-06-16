@@ -11,8 +11,8 @@ export default class Recording {
         this.audioBufferSource;
         this.canvas = document.createElement('canvas');
         this.canvasCtx = this.canvas.getContext('2d');
-        this.offscreenCanvas = {};
-        this.offscreenSelectedCanvas = {};
+        this.offCanvas = {};
+        this.offSelectedCanvas = {};
     }
 
     deleteRecording(){

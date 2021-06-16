@@ -15,11 +15,17 @@ export default class SoundController {
             const source = audioCtx.createBufferSource();
             source.buffer = grid.recordings[h].audioBuffer;
             source.connect(grid.tracks[grid.recordings[h].tracknumber].pannerNode);
-            var start = Math.max(grid.recordings[h].timeToStart - timeSpace.time()
-                + grid.recordings[h].offset + audioCtx.currentTime, 0);
-            var offset = Math.max(timeSpace.time() - grid.recordings[h].timeToStart - grid.recordings[h].offset, 0)
+            var start = Math.max(
+                grid.recordings[h].timeToStart
+                - timeSpace.time()
+                + grid.recordings[h].offset
+                + audioCtx.currentTime, 0);
+            var offset = Math.max(
+                timeSpace.time()
+                - grid.recordings[h].timeToStart
+                - grid.recordings[h].offset, 0)
                 + grid.recordings[h].offset;
-            var duration = grid.recordings[h].duration; // - grid.recordings[h].offset;
+            var duration = Math.max(grid.recordings[h].duration - offset, 0);
             source.start(start, offset, duration);
             this.audioBufferSources.push(source);
             grid.recordings[h].audioBufferSource = source;
@@ -42,10 +48,17 @@ export default class SoundController {
         const source = audioCtx.createBufferSource();
         source.buffer = recording.audioBuffer;
         source.connect(grid.tracks[recording.tracknumber].pannerNode);
-        var start = Math.max((recording.timeToStart - timeSpace.time() + audioCtx.currentTime), 0);
-        var offset = Math.max((timeSpace.time() - recording.timeToStart), 0);
-        var duration;
-        if (recording.duration){ duration = recording.duration; }
+        var start = Math.max(
+            recording.timeToStart
+            - timeSpace.time()
+            + recording.offset
+            + audioCtx.currentTime, 0);
+        var offset = Math.max(
+            timeSpace.time()
+            - recording.timeToStart
+            - recording.offset, 0)
+            + recording.offset;
+        var duration = Math.max(recording.duration - offset, 0);
         source.start(start, offset, duration);
         recording.audioBufferSource = source;
         this.audioBufferSources.push(source);
@@ -58,15 +71,5 @@ export default class SoundController {
     solo(gainNode) {
         gainNode.gain.setValueAtTime(gainNode.gainValue, audioCtx.currentTime);
     }
-
-
-    leftCut() {
-        //se aumenta offset por el dith dado source.start(start, offset + cantidad recortada);
-    }
-
-    rightCut() {
-        //se aumenta duración con source.start(start, offset, source.duration - cantidad recortada);
-    }
-
 
 }

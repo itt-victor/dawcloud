@@ -32,21 +32,21 @@ export default class Track {
         window[rcdName] = new Recording(recordingId, timeToStart, audioBuffer, this.tracknumber, offset, duration);
         grid.recordings.push(window[rcdName]);
         this.trackDOMElement.appendChild(window[rcdName].canvas);
-        drawZoomedwaveforms(window[rcdName]);
+        drawwaveforms(window[rcdName]);
         setTimeout(dragRecording(window[rcdName]), 20);
         setTimeout(removeRecording(window[rcdName]), 20);
     };
 }
 
-function drawZoomedwaveforms (recording) {
+function drawwaveforms (recording) {
     let zoom = 5;
 	let offset = recording.offset * timeSpace.zoom;
 	let duration = recording.duration * timeSpace.zoom;
 
     while (zoom <= 889) {
-        recording.offscreenCanvas[zoom] = ui_draw.drawRecording(recording, zoom);
-        recording.offscreenSelectedCanvas[zoom] = ui_draw.selectedRecording(recording, zoom);
+        recording.offCanvas[zoom] = ui_draw.drawRecording(recording, zoom);
+        recording.offSelectedCanvas[zoom] = ui_draw.selectedRecording(recording, zoom);
         zoom = Math.round(zoom * 1.25);
     }
-    ui_draw.printRecording(recording, recording.offscreenCanvas[timeSpace.zoom], offset, duration);
+    ui_draw.printRecording(recording, recording.offCanvas[timeSpace.zoom], offset, duration);
 }
