@@ -240,12 +240,12 @@ export function removeRecording(recording) {
 			let offset = grid.recordings[i].offset * timeSpace.zoom;
 			let duration = grid.recordings[i].duration * timeSpace.zoom;
             ui_draw.printRecording(grid.recordings[i],
-				grid.recordings[i].offscreenCanvas[timeSpace.zoom], offset, duration);
+				grid.recordings[i].offscreenCanvas[timeSpace.zoom], offset, 0);
         }
 		let offset = recording.offset * timeSpace.zoom;
 		let duration = recording.duration * timeSpace.zoom;
         ui_draw.printRecording(recording,
-			recording.offscreenCanvas[timeSpace.zoom], offset, duration);
+			recording.offscreenCanvas[timeSpace.zoom], offset, 0);
 
         window.addEventListener('keyup', function rra(a) {
             if (a.keyCode === 46) {
