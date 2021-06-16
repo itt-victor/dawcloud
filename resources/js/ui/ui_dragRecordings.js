@@ -19,8 +19,7 @@ export function dragRecording(recording) {
     var X = recording.timeToStart * timeSpace.zoom;
     var Y;
 	var offset = recording.offset * timeSpace.zoom;
-	var offsetReadOnly = (recording.timeToStart + recording.offset) * timeSpace.zoom;
-	var duration = 0;
+	var duration = recording.duration * timeSpace.zoom;
 	var durationReadOnly = (recording.timeToStart + recording.audioBuffer.duration) * timeSpace.zoom;
     var widths;
 
@@ -76,7 +75,7 @@ export function dragRecording(recording) {
             }
 
 			if (crop_right) {
-				recording.duration = duration;
+				recording.duration = duration / timeSpace.zoom;
 				crop_right = false;
 			}
         }, false);
@@ -86,14 +85,13 @@ export function dragRecording(recording) {
         recording.canvas.addEventListener("mousedown", function (evt) {
 
             let mousePos = onMousePos(grid.canvas, evt);
-			offsetReadOnly = (recording.timeToStart + recording.offset) * timeSpace.zoom;
-			durationReadOnly = (recording.timeToStart + recording.audioBuffer.duration) * timeSpace.zoom;
-            if (mousePos.x < offsetReadOnly + 3 && mousePos.x >  offsetReadOnly - 2) {
+			durationReadOnly = (recording.timeToStart + recording.duration) * timeSpace.zoom;
+            if (mousePos.x < offset + X + 3 && mousePos.x >  offset + X - 2) {
 				leftDelta = offset - mousePos.x;
                 crop_left = true;
                 drag = false;
 			} else if (mousePos.x < durationReadOnly + 3 && mousePos.x > durationReadOnly - 2) {
-				rightDelta = duration + mousePos.x;
+				rightDelta = duration - mousePos.x + X;
                 crop_right = true;
                 drag = false;
             }
@@ -101,9 +99,9 @@ export function dragRecording(recording) {
 
         recording.canvas.addEventListener("mousemove", function (evt) {
             let mousePos = onMousePos(grid.canvas, evt);
-            offsetReadOnly = (recording.timeToStart + recording.offset) * timeSpace.zoom;
-			durationReadOnly = (recording.timeToStart + recording.audioBuffer.duration) * timeSpace.zoom;
-			if (mousePos.x < offsetReadOnly + 3 && mousePos.x >  offsetReadOnly - 2) {
+			durationReadOnly = (recording.timeToStart + recording.duration) * timeSpace.zoom;
+			console.log(recording.duration);
+			if (mousePos.x < offset + X + 3 && mousePos.x >  offset + X - 2) {
 				this.style.cursor = 'w-resize';
 			}
 			else if (mousePos.x < durationReadOnly + 3 && mousePos.x > durationReadOnly - 2) {
@@ -113,11 +111,12 @@ export function dragRecording(recording) {
             }
             if (crop_left) {
                 offset = Math.max(mousePos.x + leftDelta, 0);
-				ui_draw.printRecording(recording, recording.offscreenCanvas[timeSpace.zoom], offset, 0);
+				ui_draw.printRecording(recording, recording.offscreenCanvas[timeSpace.zoom], offset, duration);
                 this.style.cursor = 'w-resize';
             }
 			if (crop_right) {
 				duration = Math.max(mousePos.x + leftDelta, 0);
+
 				cDelta = rightDelta - duration;
 				ui_draw.printRecording(recording, recording.offscreenCanvas[timeSpace.zoom], cDelta, duration);
 				this.style.cursor = 'w-resize';
