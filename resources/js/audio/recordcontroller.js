@@ -9,7 +9,7 @@ import { generateRecordingId } from '../utils';
 import { play, record, stop } from '../app_core';
 
 export default function recordController() {
-    if (navigator.mediaDevices.getUserMedia) {
+    if (window.navigator.mediaDevices.getUserMedia) {
         const constraints = { audio: true };
         let chunks = [];
         let startTime;
