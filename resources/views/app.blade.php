@@ -10,11 +10,11 @@
             <div id="buttonpad" class="buttonpad">
                 <div class="master_controls">
                     <button id="play-button" class="play-button btn btn-outline-info"><img width="30px" height="30px"
-                            src="storage/icons/play-icon.jpg"  /></button>
+                            src="icons/play-icon.jpg"  /></button>
                     <button id="stop-button" class="stop-button btn btn-outline-info"><img width="30px" height="30px"
-                            src="storage/icons/stop-icon.png" /></button>
+                            src="icons/stop-icon.png" /></button>
                     <button id="record-button" class="record-button btn btn-outline-info"><img width="30px" height="30px"
-                            src="storage/icons/record-icon.png"  /></button>
+                            src="icons/record-icon.png"  /></button>
                     <button id=metric_button class="btn btn-outline-info btn-metric"></button>
                     <button id="bpm_button" class="btn btn-outline-info btn-bpm"></button>
                 </div>
@@ -82,9 +82,9 @@
 
         <!--<div id="toolbox">
             <button id="normal_function" class="btn btn-outline-info"><img width="20px" height="20px"
-                src="storage/icons/normal_cursor.png"  /></button>
+                src="icons/normal_cursor.png"  /></button>
             <button id="cut_function" class="btn btn-outline-info"><img width="20px" height="20px"
-                src="storage/icons/cut_icon.svg"  /></button>
+                src="icons/cut_icon.svg"  /></button>
         </div>-->
 
         <section id="mixer" class="mixer">
@@ -126,7 +126,7 @@
             <div id="tracks" class="tracks">
 				<canvas id="cursor"></canvas>
                 <canvas id="layout"></canvas>
-				
+
 				<canvas id="canvas-grid"></canvas>
 
                 @include('layouts.track_canvas', ['number'=>'0'])
