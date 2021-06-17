@@ -274,7 +274,7 @@ function deleteProject() {
             const project = this.parentNode.id;
             dltConfirmation.classList.toggle('visible');
             delete_cancel.addEventListener('click', function (a) {
-                dltConfirmation.classList.toggle('visible');
+                dltConfirmation.classList.remove('visible');
             });
             delete_confirm.addEventListener('click', function () {
                 let form = new FormData();
@@ -290,7 +290,7 @@ function deleteProject() {
                     contentType: false,
                     success: function (data) {
                         console.log('Project deleted successfully');
-                        dltConfirmation.classList.toggle('visible');
+                        dltConfirmation.classList.remove('visible');
                         document.getElementById(project).remove();
                         },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
