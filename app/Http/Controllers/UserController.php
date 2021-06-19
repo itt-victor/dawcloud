@@ -20,7 +20,7 @@ class UserController extends Controller
     public function signup(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => ['required', 'unique:users,email', 'max:255'],
+            'email' => ['required', 'unique:users', 'max:255'],
             'user_name' => ['required', 'max:255'],
             'password' => ['required', Password::min(8)]
         ]);
@@ -49,18 +49,18 @@ class UserController extends Controller
     public function login(Request $request)
     {
 
-        $credentials = $request->validate([
+        $credentials = Validator::make($request->all(),[
             'email' => ['required', 'email'],
             'password' => ['required']
         ]);
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials->validate())) {
             $request->session()->regenerate();
             return redirect('app');
         }
 
         return back()->withErrors([
-            'email' => 'Something is wrong with the provided info...'
+            'email' => 'The provided info is not valid...',
         ]);
     }
 
