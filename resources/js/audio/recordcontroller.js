@@ -8,10 +8,12 @@ import { audioCtx } from '../app_core';
 import { generateRecordingId } from '../utils';
 import { play, record, stop } from '../app_core';
 
+export let chunks = [];
+
 export default function recordController() {
     if (navigator.mediaDevices.getUserMedia) {
         const constraints = { audio: true };
-        let chunks = [];
+        //let chunks = [];
         let startTime;
 
         let onSuccess = function (stream) {
@@ -19,13 +21,28 @@ export default function recordController() {
 
             record.onclick = function () {
                 mediaRecorder.ondataavailable = event => chunks.push(event.data);
-                mediaRecorder.start();
+                /*mediaRecorder.addEventListener('dataavailable', function (event) {
+                    let blob = new Blob([event.data], { 'type': 'audio/ogg; codecs=opus' });
+                    event.data.arrayBuffer().then( (arrayBuffer) =>
+                    //event.data.contentType = 'audio/ogg; codecs=opus';
+                    //blob.arrayBuffer().then(arrayBuffer => {
+                        console.log(arrayBuffer)
+                        audioCtx.decodeAudioData(arrayBuffer, (audioBuffer) => {
+                            ui_draw.draw2(audioBuffer, timeSpace.zoom);
+                        })
+                        );
+                   // });
+                });*/
+                mediaRecorder.start(10);
                 startTime = timeSpace.time();
-                if (soundStatuses.hasStopped === true && soundStatuses.isPlaying === false) {
+                if (soundStatuses.hasStopped === true
+                    && soundStatuses.isPlaying === false) {
                     cursor.play();
                     soundcontroller.playSound();
+                    soundStatuses.hasStopped = false;
+                    soundStatuses.isPlaying = true;
                 }
-                ui_draw.drawTrackWhileRecording();
+                ui_draw.drawTrackWhileRecording();  ///ESTO
                 console.log(mediaRecorder.state);
                 record.style.background = "red";
                 stop.disabled = false;
@@ -44,6 +61,12 @@ export default function recordController() {
                 }
             }
             stop.addEventListener('click', rStop);
+            document.addEventListener('keypress', function (e) {
+                if (e.key === ' ') {
+                    if (e.target == project_name) { return; }
+                    rStop();
+                }
+            });
 
             mediaRecorder.onstop = function recordSound() {
                 const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
@@ -51,7 +74,8 @@ export default function recordController() {
                 blob.arrayBuffer().then(arrayBuffer => {
                     audioCtx.decodeAudioData(arrayBuffer, (audioBuffer) => {
                         let track = document.querySelector('[data-selected]').id.charAt(6);
-                        grid.tracks[track].addRecord(generateRecordingId(), startTime, audioBuffer, 0, audioBuffer.duration);
+                        grid.tracks[track].addRecord(generateRecordingId(), startTime,
+                            audioBuffer, 0, audioBuffer.duration);
                     });
                 });
             }

@@ -1,5 +1,6 @@
 import { stop } from '../app_core';
 import { timeSpace } from '../timeSpace';
+import { chunks } from '../audio/recordcontroller';
 
 export var ui_draw = {
     drawTrackWhileRecording() {
@@ -30,7 +31,88 @@ export var ui_draw = {
             window.cancelAnimationFrame(interval);
             canvas.remove();
         });
+        document.addEventListener('keypress', function (e) {
+            if (e.key === ' ') {
+                if (e.target == project_name) { return; }
+                window.cancelAnimationFrame(interval);
+                canvas.remove();
+            }
+        });
+
     },
+/*
+    draw2(audioBuffer, zoom){
+        let track = document.querySelector('[data-selected]');
+        var canvas = document.createElement('canvas')
+        track.appendChild(canvas)
+        let canvasCtx = canvas.getContext('2d');
+        canvas.setAttribute("class", "recording");
+        //canvas.id = recording.id;
+        let width = audioBuffer.duration * (zoom + 0.15); //Ese 0.11 corrige descompensación
+        let height = 67;
+        canvas.width = width;
+        canvas.height = height;
+        canvasCtx.fillStyle = '#2ed9a5';
+        canvasCtx.beginPath();
+        canvasCtx.moveTo(0, 0);
+        canvasCtx.lineTo(width, 0);
+        canvasCtx.lineTo(width, 67);
+        canvasCtx.lineTo(0, 67);
+        canvasCtx.fill();
+        canvasCtx.closePath()
+        canvasCtx.strokeStyle = '#380166';
+        canvasCtx.strokeRect(0, 0, width, height);
+        canvasCtx.fillStyle = '#20453a';
+
+        if (audioBuffer.numberOfChannels === 2) {  //si es estereo..
+            var data = audioBuffer.getChannelData(0);
+            var step = Math.ceil(data.length / width);
+            var amp = height / 4;
+            for (var i = 0; i < width; i++) {
+                var min = 1.0;
+                var max = -1.0;
+                for (var j = 0; j < step; j++) {
+                    var datum = data[(i * step) + j];
+                    if (datum < min)
+                        min = datum;
+                    if (datum > max)
+                        max = datum;
+                }
+                canvasCtx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
+            }
+            var data = audioBuffer.getChannelData(1);
+            var step = Math.ceil(data.length / width);
+            var amp = height / 4;
+            for (var i = 0; i < width; i++) {
+                var min = 1.0;
+                var max = -1.0;
+                for (var j = 0; j < step; j++) {
+                    var datum = data[(i * step) + j];
+                    if (datum < min)
+                        min = datum;
+                    if (datum > max)
+                        max = datum;
+                }
+                canvasCtx.fillRect(i, (1 + min) * amp + height / 2, 1, Math.max(1, (max - min) * amp));
+            }
+        } else if (audioBuffer.numberOfChannels === 1) {  // si es mono..
+            var data = audioBuffer.getChannelData(0);
+            var step = Math.ceil(data.length / width);
+            var amp = height / 2;
+            for (var i = 0; i < width; i++) {
+                var min = 1.0;
+                var max = -1.0;
+                for (var j = 0; j < step; j++) {
+                    var datum = data[(i * step) + j];
+                    if (datum < min)
+                        min = datum;
+                    if (datum > max)
+                        max = datum;
+                }
+                canvasCtx.fillRect(i, (1 + min) * amp, 1, Math.max(1, (max - min) * amp));
+            }
+        }
+    },*/
 
     drawRecording(recording, zoom) {
         let canvas = recording.canvas;

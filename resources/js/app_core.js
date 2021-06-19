@@ -15,15 +15,15 @@ import recordcontroller from './audio/recordcontroller';
 export const play = document.querySelector('#play-button'),
     record = document.querySelector('#record-button'),
     stop = document.querySelector('#stop-button');
-export var soundStatuses = { isPlaying: false, hasStopped: true };
+export let soundStatuses = { isPlaying: false, hasStopped: true };
 
 stop.disabled = true;
 
 
 
-    /////////////////////////////////////
-    /////////////dawCloud///////////////
-    ////////////////////////////////////
+/////////////////////////////////////
+/////////////dawCloud///////////////
+////////////////////////////////////
 
 //se inicia audio context
 export const audioCtx = new (window.AudioContext ||
@@ -61,13 +61,25 @@ function appStart() {
     //prepara el grid
     grid.prepareGrid();
     grid.addTracks();
-	setTimeout(drawGrid, 0);
+    setTimeout(drawGrid, 0);
     //dibuja cursor inicial
     cursor.draw();
     //dibuja layout
     drawLayout();
+    //Eventos de reproducción
     play.addEventListener('click', ePlay);
     stop.addEventListener('click', eStop);
+    document.addEventListener('keypress', function (e) {
+        if (e.key === ' ') {
+            if (e.target == project_name) { return; }
+            e.preventDefault();
+            if(!soundStatuses.isPlaying && soundStatuses.hasStopped) {
+                ePlay();
+            } else if (!soundStatuses.hasStopped) {
+                eStop();
+            }
+        }
+    });
 
     /////////////
     recordcontroller();

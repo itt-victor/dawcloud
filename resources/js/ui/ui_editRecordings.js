@@ -32,7 +32,6 @@ export function editRecording(recording) {
         X = recording.timeToStart * timeSpace.zoom;
         sizes = selectTrackWidth(recording.tracknumber);
         let mousePos = onMousePos(grid.canvas, evt);
-        console.log(recording.tracknumber);
         if (mousePos.y < sizes.maxHeight &&
             mousePos.y > sizes.minHeight) {
             drag = true;

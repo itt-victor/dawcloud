@@ -41,9 +41,10 @@ var projectName;
 function saveProject() {
     if (saveWindow && projectNameNode) {
 
-        projectNameNode.addEventListener('keyup', function (e) {
+        projectNameNode.addEventListener('keypress', function (e) {
 
-            if (e.keyCode === 13) {
+            if (e.key === 'Enter') {
+                e.stopImmediatePropagation();
                 e.preventDefault();
                 let projectName = this.value;
                 saveWindow.style.display = 'none';

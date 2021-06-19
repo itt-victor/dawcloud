@@ -97,23 +97,37 @@ function zoom() {
         zDraw();
     }
     function zDraw() {
-        for (var i = 0; i < grid.recordings.length; i++) {
-            let offset = grid.recordings[i].offset * timeSpace.zoom;
-            let duration = grid.recordings[i].duration * timeSpace.zoom;
+        grid.recordings.forEach((recording) => {
+            let offset = recording.offset * timeSpace.zoom;
+            let duration = recording.duration * timeSpace.zoom;
             let offCanvas;
-            if (grid.recordings[i].canvas.selected) {
-                offCanvas = grid.recordings[i].offSelectedCanvas[timeSpace.zoom];
+            if (recording.canvas.selected) {
+                offCanvas = recording.offSelectedCanvas[timeSpace.zoom];
             } else {
-                offCanvas = grid.recordings[i].offCanvas[timeSpace.zoom];
+                offCanvas = recording.offCanvas[timeSpace.zoom];
             }
-            ui_draw.printRecording(grid.recordings[i], offCanvas, offset, duration);
-        }
+            ui_draw.printRecording(recording, offCanvas, offset, duration);
+        });
+
         drawGrid();
         drawLayout();
         cursor.moveAtZoom(oldZoom);
     }
     zoomIn.addEventListener('click', zIn);
     zoomOut.addEventListener('click', zOut);
+    document.addEventListener('keypress', function (e) {
+        if (e.key === 'h' || e.key === 'H') {
+            if (e.target == project_name) { return; }
+            zIn();
+        }
+    });
+    document.addEventListener('keypress', function (e) {
+        if (e.key === 'g' || e.key === 'G') {
+            if (e.target == project_name) { return; }
+            zOut();
+        }
+    });
+
 }
 zoom();
 
@@ -121,7 +135,7 @@ zoom();
 function setBpm() {
     const bpmButton = document.getElementById('bpm_button');
     let input;
-    bpmButton.innerHTML = (120 / timeSpace.bpm) + '  bpm';
+    bpmButton.innerHTML = Math.round(120 / timeSpace.bpm) + '  bpm';
     bpmButton.addEventListener('click', function (e) {
         e.stopPropagation();
         if (!document.getElementById('bpm_value')) {
@@ -136,15 +150,15 @@ function setBpm() {
         window.addEventListener('click', function br(a) {
             if (!a.target.contains(e.currentTarget)) {
                 input.remove();
-                bpmButton.innerHTML = (120 / timeSpace.bpm) + '  bpm';
+                bpmButton.innerHTML = Math.round(120 / timeSpace.bpm) + '  bpm';
                 this.removeEventListener('click', br);
             }
         });
-        input.addEventListener('keyup', function (o) {
-            if (o.keyCode === 13) {
+        input.addEventListener('keypress', function (o) {
+            if (o.key === 'Enter') {
                 o.preventDefault();
                 timeSpace.bpm = 120 / this.value;
-                bpmButton.innerHTML = this.value + '  bpm';
+                bpmButton.innerHTML = Math.round(120 / timeSpace.bpm) + '  bpm';
                 input.remove();
                 drawGrid();
                 drawLayout();
@@ -234,16 +248,14 @@ solo();
 //elimina la grabación
 export function removeRecording(recording) {
     recording.canvas.addEventListener('mousedown', function arrr(e) {
-        for (var i = 0; i < grid.recordings.length; i++) {
 
-            grid.recordings[i].canvas.selected = false;
-            let offset = grid.recordings[i].offset * timeSpace.zoom;
-            let duration = grid.recordings[i].duration * timeSpace.zoom;
-            ui_draw.printRecording(
-                grid.recordings[i],
-                grid.recordings[i].offCanvas[timeSpace.zoom],
+        grid.recordings.forEach((recording) => {
+            recording.canvas.selected = false;
+            let offset = recording.offset * timeSpace.zoom;
+            let duration = recording.duration * timeSpace.zoom;
+            ui_draw.printRecording(recording, recording.offCanvas[timeSpace.zoom],
                 offset, duration);
-        }
+        });
 
         this.selected = true;
         let offset = recording.offset * timeSpace.zoom;
@@ -254,16 +266,16 @@ export function removeRecording(recording) {
             offset, duration);
 
         window.addEventListener('keyup', function rra(a) {
-            if (a.keyCode === 46) {
+            if (a.key === 'Delete' && e.target.selected) {
                 a.preventDefault();
-                if (recording.audioBuffer) {
-                    if (!soundStatuses.hasStopped) {
-                        soundcontroller.stopSingleSound(recording);
-                    }
-                    recording.deleteRecording();
-                    grid.recordings.splice(grid.recordings.indexOf(recording), 1);
+
+                if (!soundStatuses.hasStopped) {
+                    soundcontroller.stopSingleSound(recording);
                 }
-                e.target.removeEventListener('click', arrr);
+                recording.deleteRecording();
+                grid.recordings.splice(grid.recordings.indexOf(recording), 1);
+
+                a.target.removeEventListener('click', arrr);
             }
         });
     });
