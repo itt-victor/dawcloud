@@ -115,10 +115,7 @@ export var ui_draw = {
     },*/
 
     drawRecording(recording, zoom) {
-        let canvas = recording.canvas;
         let offCanvas = document.createElement('canvas');
-        canvas.setAttribute("class", "recording");
-        canvas.id = recording.id;
         let width = recording.audioBuffer.duration * (zoom + 0.15); //Ese 0.11 corrige descompensación
         let height = 67;
         offCanvas.width = width;

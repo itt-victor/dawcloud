@@ -32,6 +32,8 @@ export default class Track {
         window[rcdName] = new Recording(recordingId, timeToStart, audioBuffer, this.tracknumber, offset, duration);
         grid.recordings.push(window[rcdName]);
         this.trackDOMElement.appendChild(window[rcdName].canvas);
+        window[rcdName].canvas.classList.add("recording");
+        window[rcdName].canvas.id = window[rcdName].id;
         drawwaveforms(window[rcdName]);
         setTimeout(editRecording(window[rcdName]), 20);
         setTimeout(removeRecording(window[rcdName]), 20);
