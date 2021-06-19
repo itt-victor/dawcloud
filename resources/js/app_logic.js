@@ -1,14 +1,11 @@
 
-import { soundcontroller } from './app_core';
-import { audioCtx } from './app_core'
+import { audioCtx, soundcontroller, soundStatuses, eStop, loading } from './app_core';
 import { grid } from './components/generalgrid';
 import drawGrid from './ui/ui_grid';
 import { timeSpace } from './timeSpace';
 import { ui_draw } from './ui/ui_draw';
 import drawLayout from './ui/ui_layout';
 import { cursor } from './components/cursor';
-import { soundStatuses } from './app_core';
-import { eStop } from './app_core';
 import { generateRecordingId } from './utils';
 
 //toggle registrarse para uruarios no registrados
@@ -61,6 +58,7 @@ function loadSong() {
     const button = document.getElementById('load_sound_hidden');
     if (button) {
         button.onchange = function () {
+            loading();
             eStop();
             var reader = new FileReader();
             reader.onload = function (e) {
@@ -247,36 +245,37 @@ solo();
 
 //elimina la grabación
 export function removeRecording(recording) {
-    recording.canvas.addEventListener('mousedown', function arrr(e) {
+    recording.canvas.addEventListener('mousedown', function selectRecording(e) {
+        e.stopPropagation;
+        if (!recording.canvas.selected) {
+            grid.recordings.forEach((recording) => {
+                recording.canvas.selected = false;
+                let offset = recording.offset * timeSpace.zoom;
+                let duration = recording.duration * timeSpace.zoom;
+                ui_draw.printRecording(recording, recording.offCanvas[timeSpace.zoom],
+                    offset, duration);
+            });
 
-        grid.recordings.forEach((recording) => {
-            recording.canvas.selected = false;
+            recording.canvas.selected = true;
             let offset = recording.offset * timeSpace.zoom;
             let duration = recording.duration * timeSpace.zoom;
-            ui_draw.printRecording(recording, recording.offCanvas[timeSpace.zoom],
+            ui_draw.printRecording(
+                recording,
+                recording.offSelectedCanvas[timeSpace.zoom],
                 offset, duration);
-        });
-
-        this.selected = true;
-        let offset = recording.offset * timeSpace.zoom;
-        let duration = recording.duration * timeSpace.zoom;
-        ui_draw.printRecording(
-            recording,
-            recording.offSelectedCanvas[timeSpace.zoom],
-            offset, duration);
-
-        window.addEventListener('keyup', function rra(a) {
-            if (a.key === 'Delete' && e.target.selected) {
+        }
+    });
+    window.addEventListener('keyup', function deleteRecording(a) {
+        if (recording.canvas) {
+            if (a.key === 'Delete' && recording.canvas.selected) {
                 a.preventDefault();
-
                 if (!soundStatuses.hasStopped) {
                     soundcontroller.stopSingleSound(recording);
                 }
                 recording.deleteRecording();
                 grid.recordings.splice(grid.recordings.indexOf(recording), 1);
-
-                a.target.removeEventListener('click', arrr);
             }
-        });
+        }
     });
+
 }

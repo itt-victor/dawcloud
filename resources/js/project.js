@@ -1,14 +1,12 @@
 var toWav = require('audiobuffer-to-wav')
 
-import { audioCtx } from './app_core';
+import { audioCtx, loading, eStop } from './app_core';
 import { timeSpace } from './timeSpace';
 import { grid } from './components/generalgrid';
 import drawLayout from './ui/ui_layout';
 import drawGrid from './ui/ui_grid';
 import { cursor } from './components/cursor';
 import { numbers } from './utils';
-import { loading } from './app_core';
-import { eStop } from './app_core';
 
 class Project {
     constructor(timeSpace, recordings, recordingId, tracksGainValues, trackspanValues, tracksY, masterGainValue, masterY) {
@@ -169,7 +167,6 @@ function loadProject() {
             loadWindow.style.display = 'none';
             loadWindow.style.visibility = 'hidden';
 
-            loading();
             eStop();
 
             $.ajax({
@@ -215,6 +212,7 @@ function loadProject() {
                         request.onload = function () {
                             let undecodedAudio = request.response;
                             audioCtx.decodeAudioData(undecodedAudio, (audioBuffer) => {
+                                if (i == 0) { loading();}
                                 let track = grid.tracks[project.recordings[i].tracknumber];
                                 track.addRecord(project.recordings[i].id, project.recordings[i].timeToStart,
 									audioBuffer, project.recordings[i].offset, project.recordings[i].duration);

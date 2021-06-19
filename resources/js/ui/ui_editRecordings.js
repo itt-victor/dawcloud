@@ -1,6 +1,5 @@
 import { grid } from '../components/generalgrid';
-import { soundcontroller } from '../app_core';
-import { soundStatuses } from '../app_core';
+import { soundcontroller, soundStatuses } from '../app_core';
 import { timeSpace } from '../timeSpace';
 import { ui_draw } from './ui_draw';
 import { cursor } from '../components/cursor';

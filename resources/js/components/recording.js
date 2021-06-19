@@ -16,7 +16,6 @@ export default class Recording {
     }
 
     deleteRecording(){
-        this.canvasCtx.clearRect(0, 0, 4000, 70);
         grid.tracks[this.tracknumber].trackDOMElement.removeChild(this.canvas);
         delete this.canvas;
         delete this.canvasCtx;
