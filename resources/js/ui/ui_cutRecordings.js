@@ -8,7 +8,6 @@ import { removeRecording } from '../app_logic';
 
 
 export let cut = false;
-
 export function cutRecording(recording) {
 
     let offset;
@@ -61,7 +60,6 @@ export function cutRecording(recording) {
             setTimeout(cutRecording(newRecording), 20);
             setTimeout(removeRecording(newRecording), 20);
         }
-
     });
 }
 
@@ -70,9 +68,7 @@ const normalButton = document.querySelector('#normal_function');
 
 cutButton.addEventListener('click', function () {
     cut = true;
-    //document.body.style.cursor = 'col-resize';
 });
 normalButton.addEventListener('click', function () {
     cut = false;
-    //document.body.style.cursor = 'default';
 });
