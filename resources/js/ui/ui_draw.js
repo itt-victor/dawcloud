@@ -184,7 +184,7 @@ export var ui_draw = {
     },
 
     printRecording(recording, offCanvas, offset, duration) {
-        let width = recording.audioBuffer.duration * (timeSpace.zoom + 0.15);
+        let width = recording.audioBuffer.duration * (timeSpace.zoom + 0.13);
         let height = 58;
         let x = recording.timeToStart * timeSpace.zoom;
         recording.canvas.width = width;

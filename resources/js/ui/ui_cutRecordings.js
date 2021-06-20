@@ -55,7 +55,7 @@ export function cutRecording(recording) {
             newRecording.canvas.classList.add("recording");
             newRecording.canvas.id = newRecording.id;
             ui_draw.printRecording(newRecording, offCanvas, offset, duration);
-            newRecording.canvas.style.left = (newRecording.timeToStart * timeSpace.zoom) + 0.15 + 'px';
+            newRecording.canvas.style.left = (newRecording.timeToStart * timeSpace.zoom) + 0.13 + 'px';
             setTimeout(editRecording(newRecording), 20);
             setTimeout(cutRecording(newRecording), 20);
             setTimeout(removeRecording(newRecording), 20);
