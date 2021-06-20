@@ -3,6 +3,7 @@ import { soundcontroller, soundStatuses } from '../app_core';
 import { timeSpace } from '../timeSpace';
 import { ui_draw } from './ui_draw';
 import { cursor } from '../components/cursor';
+import { cut } from './ui_cutRecordings';
 
 export function editRecording(recording) {
 
@@ -110,7 +111,10 @@ export function editRecording(recording) {
             offCanvas = recording.offCanvas[timeSpace.zoom];
         }
 
-        if (mousePos.x < offset + 3 && mousePos.x > offset - 2) {
+        if (cut) {
+            this.style.cursor = 'col-resize';
+        }
+        else if (mousePos.x < offset + 3 && mousePos.x > offset - 2) {
             this.style.cursor = 'w-resize';
         }
         else if (mousePos.x < duration + 3 && mousePos.x > duration - 3) {

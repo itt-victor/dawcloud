@@ -4,6 +4,7 @@ require('./audio/bouncecontroller');
 require('./components/timeLayout');
 require('./project');
 require('./components/mixer');
+require('./ui/ui_cutRecordings');
 
 import { grid } from './components/generalgrid';
 import drawGrid from './ui/ui_grid';

@@ -6,6 +6,7 @@ import { audioCtx } from '../app_core';
 import { editRecording } from '../ui/ui_editRecordings';
 import { removeRecording } from '../app_logic';
 import { timeSpace } from '../timeSpace';
+import {cutRecording } from '../ui/ui_cutRecordings';
 
 var rcdName;
 
@@ -37,6 +38,7 @@ export default class Track {
         window[rcdName].canvas.id = window[rcdName].id;
         drawwaveforms(window[rcdName]);
         setTimeout(editRecording(window[rcdName]), 20);
+        setTimeout(cutRecording(window[rcdName]), 20);
         setTimeout(removeRecording(window[rcdName]), 20);
     };
 }

@@ -1,52 +1,78 @@
 import { grid } from '../components/generalgrid';
-import { soundcontroller } from '../app_core';
-import { soundStatuses } from '../app_core';
+import { ui_draw } from './ui_draw';
 import { timeSpace } from '../timeSpace';
+import Recording from '../components/recording';
+import { editRecording } from './ui_editRecordings';
+import { generateRecordingId } from '../utils';
+import { removeRecording } from '../app_logic';
 
-export function cutRecording() {
 
-    var recording;
-    var duration;
-    var initialTime;
-    var cut = false;
+export let cut = false;
 
-    const cutButton = document.querySelector('#cut_function');
-    const normalButton = document.querySelector('#normal_function');
+export function cutRecording(recording) {
 
-    cutButton.addEventListener('click', function () {
-        document.body.style.cursor = 'text';
-        cut = true;
-    });
-    normalButton.addEventListener('click', function () {
-        document.body.style.cursor = 'default';
-        cut = false;
-    });
+    let offset;
+    let duration;
 
     function onMousePos(canvas, evt) {
-        var rect = canvas.getBoundingClientRect();
+        let rect = canvas.getBoundingClientRect();
         return {
             x: Math.round(evt.clientX - rect.left),
             y: Math.round(evt.clientY - rect.top)
         };
     }
 
-    for (var i = 0; i < grid.recordings.length; i++) {
+    recording.canvas.addEventListener("click", function (evt) {
 
-        if (grid.recordings[i].canvas != undefined) {
-            grid.recordings[i].canvas.addEventListener("click", function (evt) {
-
-                for (var i = 0; i < grid.recordings.length; i++) {
-                    if (cut) {
-                        if (evt.target.id === grid.recordings[i].id) {
-
-                            recording = grid.recordings[i];
-                            duration = evt.offsetX * timeSpace.zoom;
-                            recording.duration = duration;
-                            recording.canvas.width -= evt.offsetX;
-                        }
-                    }
-                }
-            });
+        let mousePos = onMousePos(this, evt);
+        let offCanvas;
+        if (this.selected) {
+            offCanvas = recording.offSelectedCanvas[timeSpace.zoom];
+        } else {
+            offCanvas = recording.offCanvas[timeSpace.zoom];
         }
-    }
+
+        if (cut) {
+            offset = recording.offset * timeSpace.zoom;
+            duration = mousePos.x;
+            recording.duration = duration / timeSpace.zoom;
+            ui_draw.printRecording(recording, offCanvas, offset, duration);
+
+            let newRecording = new Recording(
+                generateRecordingId(),
+                recording.timeToStart,
+                recording.audioBuffer,
+                recording.tracknumber,
+                recording.duration, //aquí es el offset
+                recording.audioBuffer.duration
+            );
+            newRecording.offCanvas = recording.offCanvas;
+            newRecording.offSelectedCanvas = recording.offSelectedCanvas;
+            offCanvas = newRecording.offSelectedCanvas[timeSpace.zoom];
+            offset = newRecording.offset * timeSpace.zoom;
+            duration = newRecording.duration * timeSpace.zoom;
+            grid.recordings.push(newRecording);
+            grid.tracks[newRecording.tracknumber].trackDOMElement.appendChild(newRecording.canvas);
+            newRecording.canvas.classList.add("recording");
+            newRecording.canvas.id = newRecording.id;
+            ui_draw.printRecording(newRecording, offCanvas, offset, duration);
+            newRecording.canvas.style.left = (newRecording.timeToStart * timeSpace.zoom) + 0.15 + 'px';
+            setTimeout(editRecording(newRecording), 20);
+            setTimeout(cutRecording(newRecording), 20);
+            setTimeout(removeRecording(newRecording), 20);
+        }
+
+    });
 }
+
+const cutButton = document.querySelector('#cut_function');
+const normalButton = document.querySelector('#normal_function');
+
+cutButton.addEventListener('click', function () {
+    cut = true;
+    //document.body.style.cursor = 'col-resize';
+});
+normalButton.addEventListener('click', function () {
+    cut = false;
+    //document.body.style.cursor = 'default';
+});
