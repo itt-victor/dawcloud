@@ -26,6 +26,10 @@ Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
 Route::get('/app', [AppController::class, 'app'])->name('app');
 
+Route::post('/savecache', [AppController::class, 'saveCache'])->name('saveCache');
+
+Route::get('/loadcache', [AppController::class, 'loadCache'])->name('loadCache');
+
 Route::get('/unsigned', [AppController::class, 'appUnsigned'])->name('appUnsigned');
 
 Route::post('/savesound', [AppController::class, 'saveSound'])->name('saveSound');

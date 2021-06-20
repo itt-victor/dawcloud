@@ -21,6 +21,19 @@ class AppController extends Controller
         }
 
         return view('app');
+
+    }
+
+    public function saveCache(Request $request)
+    {
+        $prueba = $request->input('data');
+        return response($prueba);
+    }
+
+    public function loadCache(Request $request)
+    {
+        $prueba = $request->all();
+        return $prueba;
     }
 
     public function appUnsigned(Request $request)

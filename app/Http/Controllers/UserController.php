@@ -43,7 +43,7 @@ class UserController extends Controller
 
         Auth::loginUsingId($user->id);
 
-        return redirect('app');
+        return redirect()->route('app');
     }
 
     public function login(Request $request)
@@ -56,7 +56,7 @@ class UserController extends Controller
 
         if (Auth::attempt($credentials->validate())) {
             $request->session()->regenerate();
-            return redirect('app');
+            return redirect()->route('app');
         }
 
         return back()->withErrors([
@@ -70,6 +70,6 @@ class UserController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('home');
     }
 }

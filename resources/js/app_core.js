@@ -88,6 +88,22 @@ function appStart() {
     window.onresize = function () {
     }
     window.onresize();
+    /*let what;
+    let form = new FormData();
+    form.append('data', grid);
+    const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
+    fetch('savecache', {
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        method: 'POST',
+        body: grid//form
+    })
+    .then(response => response)
+    .then(data => console.log(data));
+*/
+
 }
 
 //reproducir
