@@ -69,7 +69,6 @@ function changeTrackName() {
                     name.style.display = 'block';
                     input.style.display = 'none';
                     grid.tracks[trackId].name = input.value;
-                    console.log(grid.tracks)
                 }
             })
             window.addEventListener('click', function (a) {
