@@ -18,7 +18,10 @@ export function editRecording(recording) {
     var Y = 0;
     var offset = recording.offset * timeSpace.zoom;
     var duration = recording.duration * timeSpace.zoom;
+    //var offsetDelta = recording.offset * timeSpace.zoom;;
     var sizes;
+    var offCanvas;
+    var width;
 
     function onMousePos(canvas, evt) {
         var rect = canvas.getBoundingClientRect();
@@ -46,7 +49,7 @@ export function editRecording(recording) {
         sizes = selectTrackWidth(recording.tracknumber);
         if (drag) {
             X = mousePos.x + delta.x, Y = mousePos.y + delta.y;
-            if (X + offset < 0) { X = 0 - offset };
+            if (X /*+ offset*/ < 0) { X = 0 /*- offset*/ };
             recording.canvas.style.left = X + 'px';
             recording.timeToStart = X / timeSpace.zoom;
             if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
@@ -66,20 +69,6 @@ export function editRecording(recording) {
         }
     }, false);
 
-    window.addEventListener("mouseup", function (evt) {
-
-        drag = false;
-        if (crop_left) {
-            recording.offset = offset / timeSpace.zoom;
-            crop_left = false;
-        }
-
-        if (crop_right) {
-            recording.duration = duration / timeSpace.zoom;
-            crop_right = false;
-        }
-    }, false);
-
     //Recortar bordes de grabaciones
 
     recording.canvas.addEventListener("mousedown", function (evt) {
@@ -88,11 +77,22 @@ export function editRecording(recording) {
         offset = recording.offset * timeSpace.zoom;
         duration = recording.duration * timeSpace.zoom;
 
-        if (mousePos.x < offset + 3 && mousePos.x > offset - 2) {
+        if (this.selected) {
+            offCanvas = recording.offSelectedCanvas[timeSpace.zoom];
+        } else {
+            offCanvas = recording.offCanvas[timeSpace.zoom];
+        }
+
+        if (mousePos.x < 0 + 3 && mousePos.x > 0 - 2) {
+
+            width = offCanvas.width;
+            ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
+            this.style.left = parseInt(this.style.left) - offset + 'px';
+
             cropDelta = offset - mousePos.x;
             crop_left = true;
             drag = false;
-        } else if (mousePos.x < duration + 3 && mousePos.x > duration - 3) {
+        } else if (mousePos.x < this.width + 3 && mousePos.x > this.width - 3) {
             cropDelta = duration - mousePos.x;
             crop_right = true;
             drag = false;
@@ -104,7 +104,7 @@ export function editRecording(recording) {
         let mousePos = onMousePos(this, evt);
         offset = recording.offset * timeSpace.zoom;
         duration = recording.duration * timeSpace.zoom;
-        let offCanvas;
+
         if (this.selected) {
             offCanvas = recording.offSelectedCanvas[timeSpace.zoom];
         } else {
@@ -114,10 +114,10 @@ export function editRecording(recording) {
         if (cut) {
             this.style.cursor = 'col-resize';
         }
-        else if (mousePos.x < offset + 3 && mousePos.x > offset - 2) {
+        else if (mousePos.x < 0 + 3 && mousePos.x > 0 - 2) {
             this.style.cursor = 'w-resize';
         }
-        else if (mousePos.x < duration + 3 && mousePos.x > duration - 3) {
+        else if (mousePos.x < this.width + 3 && mousePos.x > this.width - 3) {
             this.style.cursor = 'w-resize';
         } else {
             this.style.cursor = 'default';
@@ -125,7 +125,9 @@ export function editRecording(recording) {
 
         if (crop_left) {
             offset = Math.max(mousePos.x + cropDelta, 0);
-            ui_draw.printRecording(recording, offCanvas, offset, duration);
+            //offsetDelta = Math.max(mousePos.x + cropDelta, 0);
+            width = offCanvas.width;
+            ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
             this.style.cursor = 'w-resize';
             if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false
                 && parseFloat(cursor.canvas.style.left) < offset + parseFloat(this.style.left)) {
@@ -135,7 +137,8 @@ export function editRecording(recording) {
         }
         if (crop_right) {
             duration = Math.max(mousePos.x + cropDelta, 0);
-            ui_draw.printRecording(recording, offCanvas, offset, duration);
+            width = offCanvas.width;
+            ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
             this.style.cursor = 'w-resize';
             if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false
                 && parseFloat(cursor.canvas.style.left) < duration + parseFloat(this.style.left)) {
@@ -144,6 +147,33 @@ export function editRecording(recording) {
             }
         }
     });
+
+    window.addEventListener("mouseup", function (evt) {
+
+        drag = false;
+        if (crop_left) {
+            recording.offset = offset / timeSpace.zoom;
+
+
+            width = Math.ceil(duration - offset);
+
+            if(width > offCanvas.width) { width = offCanvas.width; }
+            ui_draw.printRecording(width, recording, offCanvas, offset, duration);
+            recording.canvas.style.left = parseInt(recording.canvas.style.left) + offset + 'px';
+
+            crop_left = false;
+        }
+
+        if (crop_right) {
+            recording.duration = duration / timeSpace.zoom;
+
+            width = Math.ceil(duration - offset);
+            if(width > offCanvas.width) { width = offCanvas.width; }
+            ui_draw.printRecording(width, recording, offCanvas, offset, duration);
+
+            crop_right = false;
+        }
+    }, false);
 
 }
 

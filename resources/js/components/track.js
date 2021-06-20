@@ -53,5 +53,10 @@ function drawwaveforms(recording) {
         recording.offSelectedCanvas[zoom] = ui_draw.selectedRecording(recording, zoom);
         zoom = Math.round(zoom * 1.25);
     }
-    ui_draw.printRecording(recording, recording.offCanvas[timeSpace.zoom], offset, duration);
+    ui_draw.printRecording(
+        recording.offCanvas[timeSpace.zoom].width,
+        recording, recording.offCanvas[timeSpace.zoom],
+        offset,
+        duration
+    );
 }

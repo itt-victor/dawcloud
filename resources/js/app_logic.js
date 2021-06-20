@@ -137,7 +137,8 @@ function zoom() {
             } else {
                 offCanvas = recording.offCanvas[timeSpace.zoom];
             }
-            ui_draw.printRecording(recording, offCanvas, offset, duration);
+            let width = offCanvas.width;
+            ui_draw.printRecording(width, recording, offCanvas, offset, duration);
         });
 
         drawGrid();
@@ -289,17 +290,27 @@ export function removeRecording(recording) {
                 recording.canvas.selected = false;
                 let offset = recording.offset * timeSpace.zoom;
                 let duration = recording.duration * timeSpace.zoom;
-                ui_draw.printRecording(recording, recording.offCanvas[timeSpace.zoom],
-                    offset, duration);
+                let width = recording.offCanvas[timeSpace.zoom].width;
+                ui_draw.printRecording(
+                    width,
+                    recording,
+                    recording.offCanvas[timeSpace.zoom],
+                    offset,
+                    duration
+                );
             });
 
             recording.canvas.selected = true;
             let offset = recording.offset * timeSpace.zoom;
             let duration = recording.duration * timeSpace.zoom;
+            let width = recording.offSelectedCanvas[timeSpace.zoom].width;
             ui_draw.printRecording(
+                width,
                 recording,
                 recording.offSelectedCanvas[timeSpace.zoom],
-                offset, duration);
+                offset,
+                duration
+            );
         }
     });
     window.addEventListener('keyup', function deleteRecording(a) {
