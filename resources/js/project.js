@@ -9,10 +9,11 @@ import { cursor } from './components/cursor';
 import { numbers } from './utils';
 
 class Project {
-    constructor(timeSpace, recordings, recordingId, tracksGainValues, trackspanValues, tracksY, masterGainValue, masterY) {
+    constructor(timeSpace, recordings, recordingId, trackNames, tracksGainValues, trackspanValues, tracksY, masterGainValue, masterY) {
         this.timeSpace = timeSpace;
         this.recordings = recordings;
         this.recordingId = recordingId;
+        this.trackNames = trackNames;
         this.tracksGainValues = tracksGainValues;
         this.trackspanValues = trackspanValues;
         this.tracksY = tracksY;
@@ -24,6 +25,7 @@ class Project {
 const loadbtn = document.getElementById('load_project'),
     savebtn = document.getElementById('save_project'),
     bpmButton = document.getElementById('bpm_button'),
+    Names = document.querySelectorAll('.select'),
     closeProjects = document.querySelector('#projects-close'),
     closeSave = document.querySelector('#save-close'),
     saveWindow = document.getElementById('save_dialogue'),
@@ -48,12 +50,14 @@ function saveProject() {
                 saveWindow.style.display = 'none';
                 saveWindow.style.visibility = 'hidden';
 
+                var trackNames = Array(grid.howMany);
                 var tracksGainValues = [];
                 var trackspanValues = [];
                 var tracksY = [];
                 var masterGainValue;
                 var masterY;
                 if (!project === undefined) {
+                    trackNames = project.trackNames;
                     tracksGainValues = project.tracksGainValues;
                     trackspanValues = project.trackspanValues;
                     tracksY = project.tracksY;
@@ -71,6 +75,9 @@ function saveProject() {
                         if (trackspanValues[i] != grid.tracks[i].pannerNode.pannerValue) {
                             trackspanValues[i] = grid.tracks[i].pannerNode.pannerValue;
                         }
+                        if (trackNames[i] != grid.tracks[i].name) {
+                            trackNames[i] = grid.tracks[i].name;
+                        }
                     }
                     //gain master
                     if (masterGainValue != grid.gainNode.value) {
@@ -81,6 +88,7 @@ function saveProject() {
                     }
                 } else {
                     for (let i = 0; i < grid.tracks.length; i++) {
+                        trackNames[i] = grid.tracks[i].name;
                         tracksGainValues.push(grid.tracks[i].gainNode.gainValue);
                         tracksY.push(grid.tracks[i].fader.Y);
                         trackspanValues.push(grid.tracks[i].pannerNode.pannerValue);
@@ -91,13 +99,14 @@ function saveProject() {
 
                 //creo objeto proyecto
                 if (project === undefined) {
-                    project = new Project(timeSpace, grid.recordings, numbers.recordingId,
+                    project = new Project(timeSpace, grid.recordings, numbers.recordingId, trackNames,
                     tracksGainValues, trackspanValues, tracksY, masterGainValue, masterY);
                 }
                 else {
                     project.timeSpace = timeSpace;
                     project.recordings = grid.recordings;
                     project.recordingId = numbers.recordingId;
+                    project.trackNames = trackNames;
                     project.tracksGainValues = tracksGainValues;
                     project.trackspanValues = trackspanValues;
                     project.tracksY = tracksY;
@@ -159,9 +168,8 @@ function saveProject() {
 
 
 function loadProject() {
-
-    for (let h = 0; h < projects.length; h++) {
-        projects[h].addEventListener('dblclick', function ld(e) {
+    for (const projectBtn of projects) {
+        projectBtn.addEventListener('dblclick', function ld(e) {
             e.stopPropagation;
             projectName = this.id;
             loadWindow.style.display = 'none';
@@ -191,15 +199,17 @@ function loadProject() {
                     drawGrid();
 
                     //se elimina las pistas existentes si hubiesen
-                    for (let i = 0; i < grid.recordings.length; i++) {
-                        grid.recordings[i].canvasCtx.clearRect(0, 0, 4000, 70);
-                        grid.recordings[i].deleteRecording();
-                        delete grid.recordings[i].audioBuffer;
-                    }
+                    grid.recordings.forEach((recording) => {
+                        recording.canvasCtx.clearRect(0, 0, 4000, 70);
+                        recording.deleteRecording();
+                        delete recording.audioBuffer;
+                    });
                     grid.recordings = [];
-                    for (let i = 0; i < grid.tracks.length; i++) {
-                        grid.tracks[i].recordings = [];
-                    }
+
+                    //Se vacían los nombres de pista
+                    grid.tracks.forEach( track => {
+                        delete track.name;
+                    });
 
 					//Se imprime el proyecto en pantalla
 					projectTitle.innerHTML = projectName;
@@ -219,6 +229,13 @@ function loadProject() {
                             });
                         };
                         request.send();
+                    }
+                    //Se cargan los nombres de pista
+                    for (let i = 0; i < grid.tracks.length; i++) {
+                        grid.tracks[i].name = project.trackNames[i];
+                        if(grid.tracks[i].name){
+                            Names[i].innerHTML = grid.tracks[i].name;
+                        }
                     }
                     //Se cargan los volúmenes de los faders
                     for (let i = 0; i < grid.tracks.length; i++) {

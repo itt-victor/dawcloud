@@ -26,7 +26,7 @@ class AppController extends Controller
 
     public function saveCache(Request $request)
     {
-        $prueba = $request->input('data');
+        $prueba = $request->all();
         return response($prueba);
     }
 

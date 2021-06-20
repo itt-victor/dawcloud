@@ -5,14 +5,14 @@ import { chunks } from '../audio/recordcontroller';
 export var ui_draw = {
     drawTrackWhileRecording() {
         let width = 0;
-        let height = 67;
+        let height = 58;
         let x = timeSpace.space;
         let track = document.querySelector('[data-selected]');
         var canvas = document.createElement('canvas')
         track.appendChild(canvas)
         let canvasCtx = canvas.getContext('2d');
         canvas.width = 10000;
-        canvas.height = 70;
+        canvas.height = 60;
         canvasCtx.fillStyle = '#2ed9a5';
         let start = performance.now();
         let increase = 0;
@@ -117,7 +117,7 @@ export var ui_draw = {
     drawRecording(recording, zoom) {
         let offCanvas = document.createElement('canvas');
         let width = recording.audioBuffer.duration * (zoom + 0.15); //Ese 0.11 corrige descompensación
-        let height = 67;
+        let height = 58;
         offCanvas.width = width;
         offCanvas.height = height;
         let canvasCtx = offCanvas.getContext('2d');
@@ -125,8 +125,8 @@ export var ui_draw = {
         canvasCtx.beginPath();
         canvasCtx.moveTo(0, 0);
         canvasCtx.lineTo(width, 0);
-        canvasCtx.lineTo(width, 67);
-        canvasCtx.lineTo(0, 67);
+        canvasCtx.lineTo(width, 58);
+        canvasCtx.lineTo(0, 58);
         canvasCtx.fill();
         canvasCtx.closePath()
         canvasCtx.strokeStyle = '#380166';
@@ -187,7 +187,7 @@ export var ui_draw = {
     selectedRecording(recording, zoom) {
         let offCanvas = document.createElement('canvas');
         let width = recording.audioBuffer.duration * (zoom + 0.15);
-        let height = 67;
+        let height = 58;
         offCanvas.width = width;
         offCanvas.height = height;
         let canvasCtx = offCanvas.getContext('2d');
@@ -195,8 +195,8 @@ export var ui_draw = {
         canvasCtx.beginPath();
         canvasCtx.moveTo(0, 0);
         canvasCtx.lineTo(width, 0);
-        canvasCtx.lineTo(width, 67);
-        canvasCtx.lineTo(0, 67);
+        canvasCtx.lineTo(width, 58);
+        canvasCtx.lineTo(0, 58);
         canvasCtx.fill();
         canvasCtx.closePath();
         canvasCtx.strokeStyle = '#380166';
@@ -258,7 +258,7 @@ export var ui_draw = {
 
     printRecording(recording, offCanvas, offset, duration) {
         let width = recording.audioBuffer.duration * (timeSpace.zoom + 0.15);
-        let height = 67;
+        let height = 58;
         let x = recording.timeToStart * timeSpace.zoom;
         recording.canvas.width = width;
         recording.canvas.height = height;

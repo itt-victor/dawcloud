@@ -52,6 +52,39 @@ function selectTrack() {
 }
 selectTrack();
 
+//cambia nombre de la pista
+function changeTrackName() {
+    let names = document.querySelectorAll('.select');
+    for (let name of names) {
+        name.addEventListener('dblclick', function chng(e) {
+            let name = this;
+            this.style.display = 'none';
+            let input = name.parentNode.getElementsByTagName('input')[0];
+            input.style.display = 'block';
+            input.focus();
+            let trackId = this.parentNode.id.charAt(11);
+            window.addEventListener('keypress', function (i) {
+                if (i.key === 'Enter') {
+                    name.innerHTML = input.value;
+                    name.style.display = 'block';
+                    input.style.display = 'none';
+                    grid.tracks[trackId].name = input.value;
+                    console.log(grid.tracks)
+                }
+            })
+            window.addEventListener('click', function (a) {
+                if (a.target != input) {
+                    name.style.display = 'block';
+                    input.style.display = 'none';
+                }
+            })
+        });
+    }
+
+
+}
+changeTrackName();
+
 
 //Cargar una canción desde el pc del usuario
 function loadSong() {
@@ -78,8 +111,9 @@ setTimeout(loadSong, 0);
 
 //zoom
 function zoom() {
-    let zoomIn = document.getElementById("zoomin");
-    let zoomOut = document.getElementById("zoomout");
+    const zoomIn = document.getElementById("zoomin");
+    const zoomOut = document.getElementById("zoomout");
+    const inputs = document.querySelectorAll('input');
     let oldZoom;
 
     function zIn() {
@@ -115,13 +149,17 @@ function zoom() {
     zoomOut.addEventListener('click', zOut);
     document.addEventListener('keypress', function (e) {
         if (e.key === 'h' || e.key === 'H') {
-            if (e.target == project_name) { return; }
+            for (const input of inputs) {
+                if (e.target == input) { return; }
+            }
             zIn();
         }
     });
     document.addEventListener('keypress', function (e) {
         if (e.key === 'g' || e.key === 'G') {
-            if (e.target == project_name) { return; }
+            for (const input of inputs) {
+                if (e.target == input) { return; }
+            }
             zOut();
         }
     });

@@ -12,6 +12,7 @@ var rcdName;
 export default class Track {
     constructor(tracknumber, gainValue, pannerValue) {
         this.tracknumber = tracknumber;
+        this.name;
         this.trackDOMElement = document.getElementsByClassName('track')[this.tracknumber];
         this.pannerNode = audioCtx.createStereoPanner();
         this.pannerNode.pannerValue = pannerValue;
@@ -25,7 +26,7 @@ export default class Track {
         this.muteButton.toggle = false;
         this.fader = document.getElementById('fader_' + this.tracknumber);
         this.fader.Y = 20;
-        this.fader.parent = this;
+        //this.fader.parent = this;
     }
     addRecord(recordingId, timeToStart, audioBuffer, offset, duration) {
         rcdName = generateRecordingNumbers();

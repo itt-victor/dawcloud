@@ -15,12 +15,19 @@
                             src="icons/stop-icon.png" /></button>
                     <button id="record-button" class="record-button btn btn-outline-info"><img width="30px" height="30px"
                             src="icons/record-icon.png"  /></button>
+                    <button id="loop-button" class="loop-button btn btn-outline-info"><img width="30px" height="30px"
+                                src="icons/loop-icon.png"  /></button>
                     <button id=metric_button class="btn btn-outline-info btn-metric"></button>
                     <button id="bpm_button" class="btn btn-outline-info btn-bpm"></button>
+                    <button id="metronome-button" class="metronome-button btn btn-outline-info"><img width="30px" height="30px"
+                        src="icons/metronome-icon-18.jpg"  /></button>
                 </div>
             </div>
 
             <h1 id="page-title" class="h1 center"><a class="a_title" href="{{route('home')}}">daw Cloud</a></h1>
+@if (isset($prueba))
+<p>$prueba</p>
+@endif
 
 		    @if (!Auth::user())
             <div id="user_options">
@@ -106,7 +113,6 @@
             @include('layouts.panner', ['number'=> '5'])
             @include('layouts.panner', ['number'=> '6'])
             @include('layouts.panner', ['number'=> '7'])
-
         </section>
 
         <section class="sound-clips">

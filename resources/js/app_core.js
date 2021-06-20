@@ -70,10 +70,13 @@ function appStart() {
     play.addEventListener('click', ePlay);
     stop.addEventListener('click', eStop);
     document.addEventListener('keypress', function (e) {
+        const inputs = document.querySelectorAll('input');
         if (e.key === ' ') {
-            if (e.target == project_name) { return; }
+            for (const input of inputs) {
+                if (e.target == input) { return; }
+            }
             e.preventDefault();
-            if(!soundStatuses.isPlaying && soundStatuses.hasStopped) {
+            if (!soundStatuses.isPlaying && soundStatuses.hasStopped) {
                 ePlay();
             } else if (!soundStatuses.hasStopped) {
                 eStop();
@@ -88,9 +91,12 @@ function appStart() {
     window.onresize = function () {
     }
     window.onresize();
-    /*let what;
-    let form = new FormData();
+
+    /*let form = new FormData();
     form.append('data', grid);
+
+    let blob = new Blob([JSON.stringify(grid)],{type:'application/json'});
+
     const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
     fetch('savecache', {
         headers: {
@@ -98,12 +104,10 @@ function appStart() {
             'X-CSRF-TOKEN': csrfToken
         },
         method: 'POST',
-        body: grid//form
+        body: JSON.stringify(grid)
     })
-    .then(response => response)
-    .then(data => console.log(data));
-*/
-
+    .then(response => response.json())
+    .then(data => console.log(data));*/
 }
 
 //reproducir

@@ -144,10 +144,10 @@ export function editRecording(recording) {
 }
 
 function selectTrackWidth(tracknumber) {
-    var incremento = 70 * tracknumber;
+    var incremento = 60 * tracknumber;
     let widths = {
         minHeight: incremento,
-        maxHeight: incremento + 70,
+        maxHeight: incremento + 60,
         minWidth: 0.5,
         maxWidth: 1001.5
     }
