@@ -18,7 +18,6 @@ export function editRecording(recording) {
     var Y = 0;
     var offset = recording.offset * timeSpace.zoom;
     var duration = recording.duration * timeSpace.zoom;
-    //var offsetDelta = recording.offset * timeSpace.zoom;;
     var sizes;
     var offCanvas;
     var width;
@@ -38,18 +37,18 @@ export function editRecording(recording) {
         if (mousePos.y < sizes.maxHeight &&
             mousePos.y > sizes.minHeight) {
             drag = true;
-            delta.x = X - mousePos.x;
+            delta.x = X - mousePos.x + offset;
             delta.y = Y - mousePos.y;
         }
     }, false);
 
     window.addEventListener("mousemove", function a(evt) {
-        X = recording.timeToStart * timeSpace.zoom;
+        X = recording.timeToStart * timeSpace.zoom + offset;
         let mousePos = onMousePos(grid.canvas, evt);
         sizes = selectTrackWidth(recording.tracknumber);
         if (drag) {
             X = mousePos.x + delta.x, Y = mousePos.y + delta.y;
-            if (X /*+ offset*/ < 0) { X = 0 /*- offset*/ };
+            if (X < 0) { X = 0 };
             recording.canvas.style.left = X + 'px';
             recording.timeToStart = X / timeSpace.zoom;
             if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
@@ -87,13 +86,16 @@ export function editRecording(recording) {
 
             width = offCanvas.width;
             ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
-            this.style.left = parseInt(this.style.left) - offset + 'px';
 
-            cropDelta = offset - mousePos.x;
+            cropDelta = /*offset -*/ mousePos.x;
             crop_left = true;
             drag = false;
         } else if (mousePos.x < this.width + 3 && mousePos.x > this.width - 3) {
-            cropDelta = duration - mousePos.x;
+
+            //width = offCanvas.width;
+            //ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
+
+            cropDelta = duration - mousePos.x - offset;
             crop_right = true;
             drag = false;
         }
@@ -125,10 +127,10 @@ export function editRecording(recording) {
 
         if (crop_left) {
             offset = Math.max(mousePos.x + cropDelta, 0);
-            //offsetDelta = Math.max(mousePos.x + cropDelta, 0);
             width = offCanvas.width;
             ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
             this.style.cursor = 'w-resize';
+
             if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false
                 && parseFloat(cursor.canvas.style.left) < offset + parseFloat(this.style.left)) {
                 recording.offset = offset / timeSpace.zoom;
@@ -138,8 +140,9 @@ export function editRecording(recording) {
         if (crop_right) {
             duration = Math.max(mousePos.x + cropDelta, 0);
             width = offCanvas.width;
-            ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
+            ui_draw.printRecording(width, recording, offCanvas, offset, duration);
             this.style.cursor = 'w-resize';
+
             if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false
                 && parseFloat(cursor.canvas.style.left) < duration + parseFloat(this.style.left)) {
                 recording.duration = duration / timeSpace.zoom;
@@ -152,9 +155,8 @@ export function editRecording(recording) {
 
         drag = false;
         if (crop_left) {
+
             recording.offset = offset / timeSpace.zoom;
-
-
             width = Math.ceil(duration - offset);
 
             if(width > offCanvas.width) { width = offCanvas.width; }
@@ -165,11 +167,13 @@ export function editRecording(recording) {
         }
 
         if (crop_right) {
-            recording.duration = duration / timeSpace.zoom;
 
+            recording.duration = duration / timeSpace.zoom;
             width = Math.ceil(duration - offset);
+
             if(width > offCanvas.width) { width = offCanvas.width; }
             ui_draw.printRecording(width, recording, offCanvas, offset, duration);
+            recording.canvas.style.left = parseInt(recording.canvas.style.left) + offset + 'px';
 
             crop_right = false;
         }
