@@ -13,7 +13,7 @@ export let chunks = [];
 export default function recordController() {
     if (navigator.mediaDevices.getUserMedia) {
         const constraints = { audio: true };
-        //let chunks = [];
+        let chunks = [];
         let startTime;
 
         let onSuccess = function (stream) {
@@ -21,18 +21,6 @@ export default function recordController() {
 
             record.onclick = function () {
                 mediaRecorder.ondataavailable = event => chunks.push(event.data);
-                /*mediaRecorder.addEventListener('dataavailable', function (event) {
-                    let blob = new Blob([event.data], { 'type': 'audio/ogg; codecs=opus' });
-                    event.data.arrayBuffer().then( (arrayBuffer) =>
-                    //event.data.contentType = 'audio/ogg; codecs=opus';
-                    //blob.arrayBuffer().then(arrayBuffer => {
-                        console.log(arrayBuffer)
-                        audioCtx.decodeAudioData(arrayBuffer, (audioBuffer) => {
-                            ui_draw.draw2(audioBuffer, timeSpace.zoom);
-                        })
-                        );
-                   // });
-                });*/
                 mediaRecorder.start(10);
                 startTime = timeSpace.time();
                 if (soundStatuses.hasStopped === true
@@ -63,7 +51,7 @@ export default function recordController() {
             stop.addEventListener('click', rStop);
             document.addEventListener('keypress', function (e) {
                 if (e.key === ' ') {
-                    if (e.target == project_name) { return; }
+                    if (e.target == project_name) return;
                     rStop();
                 }
             });

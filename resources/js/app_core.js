@@ -73,15 +73,13 @@ function appStart() {
     document.addEventListener('keypress', function (e) {
         const inputs = document.querySelectorAll('input');
         if (e.key === ' ') {
-            for (const input of inputs) {
-                if (e.target == input) { return; }
-            }
+            for (const input of inputs)
+                if (e.target == input) return;
             e.preventDefault();
-            if (!soundStatuses.isPlaying && soundStatuses.hasStopped) {
+            if (!soundStatuses.isPlaying && soundStatuses.hasStopped)
                 ePlay();
-            } else if (!soundStatuses.hasStopped) {
+             else if (!soundStatuses.hasStopped)
                 eStop();
-            }
         }
     });
 

@@ -10,13 +10,9 @@ function exportSong() {
         let pannerValue;
         let ctxValue;
 
-        for (let i = 0; i < grid.recordings.length; i++) {
-            if (maxLength < (grid.recordings[i].audioBuffer.length
-                + (grid.recordings[i].timeToStart * 48000))) {
-                maxLength = grid.recordings[i].audioBuffer.length
-                    + (grid.recordings[i].timeToStart * 48000);
-            };
-        }
+        for (const recording of grid.recordings) //(let i = 0; i < grid.recordings.length; i++) {
+            if (maxLength < recording.audioBuffer.length + (recording.timeToStart * 48000))
+                maxLength = recording.audioBuffer.length + (recording.timeToStart * 48000);
 
         const offlineCtx = new OfflineAudioContext({
             numberOfChannels: 2,
@@ -34,30 +30,26 @@ function exportSong() {
             let gain = offlineCtx.createGain();
             pannerValue = grid.tracks[i].pannerNode.pannerValue;
 
-            if (pannerValue.startsWith('L')) {
+            if (pannerValue.startsWith('L'))
                 ctxValue = - + pannerValue.slice(1) / 100;
-                panner.pan.setValueAtTime(ctxValue, 0);
-            }
-            else if (pannerValue == 0 || pannerValue == 'C') {
+            else if (pannerValue == 0 || pannerValue == 'C')
                 ctxValue = 0;
-                panner.pan.setValueAtTime(ctxValue, 0);
-            }
-            else if (pannerValue.startsWith('R')) {
+            else if (pannerValue.startsWith('R'))
                 ctxValue = pannerValue.slice(1) / 100;
-                panner.pan.setValueAtTime(ctxValue, 0);
-            }
+
+			panner.pan.setValueAtTime(ctxValue, 0);
             gain.gain.setValueAtTime(grid.tracks[i].gainNode.gainValue, 0);
             panner.connect(gain);
             gain.connect(mastergain);
         }
 
-        for (let h = 0; h < grid.recordings.length; h++) {
+        for (const recording of grid.recordings) {
             const source = offlineCtx.createBufferSource();
-            source.buffer = grid.recordings[h].audioBuffer;
-            source.connect(pannerNodes[grid.recordings[h].tracknumber]);
-            let start = Math.max(grid.recordings[h].timeToStart + grid.recordings[h].offset, 0);
-			let offset = Math.max(grid.recordings[h].offset, 0);                    //ESTO FALTA DE MIRARLO BIEN
-			let duration = grid.recordings[h].duration - grid.recordings[h].offset;
+            source.buffer = recording.audioBuffer;
+            source.connect(pannerNodes[recording.tracknumber]);
+            let start = Math.max(recording.timeToStart + recording.offset, 0);
+			let offset = Math.max(recording.offset, 0);                    //ESTO FALTA DE MIRARLO BIEN
+			let duration = recording.duration - recording.offset;
             source.start(start, offset, duration);
         }
 
@@ -75,10 +67,7 @@ function exportSong() {
     }
 }
 
-let export_sound = document.getElementById('export_sound');
-if (export_sound) {
-    export_sound.addEventListener('click', exportSong);
-}
+if (export_sound) export_sound.addEventListener('click', exportSong);
 
 export function cropAudio(recording) {
 

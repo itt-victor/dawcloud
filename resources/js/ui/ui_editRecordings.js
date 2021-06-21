@@ -48,22 +48,21 @@ export function editRecording(recording) {
         sizes = selectTrackWidth(recording.tracknumber);
         if (drag) {
             X = mousePos.x + delta.x, Y = mousePos.y + delta.y;
-            if (X < 0) { X = 0 };
+            if (X < 0) X = 0;
             recording.canvas.style.left = X + 'px';
             recording.timeToStart = X / timeSpace.zoom;
-            if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false) {
+            if (soundStatuses.isPlaying == true && soundStatuses.hasStopped == false)
                 soundcontroller.playWhileDragging(recording);
-            }
             if (mousePos.y > sizes.maxHeight || mousePos.y < sizes.minHeight) {
                 let newTrack;
-                for (let i = 0; i < grid.tracks.length; i++) {
-                    sizes = selectTrackWidth(grid.tracks[i].tracknumber)
+				grid.tracks.forEach( (track) => {
+					sizes = selectTrackWidth(track.tracknumber)
                     if (mousePos.y > sizes.minHeight && mousePos.y < sizes.maxHeight) {
-                        newTrack = grid.tracks[i];
+                        newTrack = track;
                         newTrack.trackDOMElement.appendChild(recording.canvas);
                         recording.tracknumber = newTrack.tracknumber;
                     }
-                }
+				});
             }
         }
     }, false);
@@ -76,11 +75,9 @@ export function editRecording(recording) {
         offset = recording.offset * timeSpace.zoom;
         duration = recording.duration * timeSpace.zoom;
 
-        if (this.selected) {
-            offCanvas = recording.offSelectedCanvas[timeSpace.zoom];
-        } else {
-            offCanvas = recording.offCanvas[timeSpace.zoom];
-        }
+        offCanvas = (this.selected)
+		? recording.offSelectedCanvas[timeSpace.zoom]
+		: recording.offCanvas[timeSpace.zoom];
 
         if (mousePos.x < 0 + 3 && mousePos.x > 0 - 2) {
 
@@ -107,13 +104,11 @@ export function editRecording(recording) {
         offset = recording.offset * timeSpace.zoom;
         duration = recording.duration * timeSpace.zoom;
 
-        if (this.selected) {
-            offCanvas = recording.offSelectedCanvas[timeSpace.zoom];
-        } else {
-            offCanvas = recording.offCanvas[timeSpace.zoom];
-        }
+		offCanvas = (this.selected)
+		? recording.offSelectedCanvas[timeSpace.zoom]
+		: recording.offCanvas[timeSpace.zoom];
 
-        if (cut) {
+        /*if (cut) {
             this.style.cursor = 'col-resize';
         }
         else if (mousePos.x < 0 + 3 && mousePos.x > 0 - 2) {
@@ -123,7 +118,13 @@ export function editRecording(recording) {
             this.style.cursor = 'w-resize';
         } else {
             this.style.cursor = 'default';
-        }
+        }*/
+
+	    this.style.cursor = (cut) ? 'col-resize'
+		: (mousePos.x < 0 + 3 && mousePos.x > 0 - 2) ? 'w-resize'
+		: (mousePos.x < this.width + 3 && mousePos.x > this.width - 3) ? 'w-resize'
+		: 'default';
+
 
         if (crop_left) {
             offset = Math.max(mousePos.x + cropDelta, 0);

@@ -33,22 +33,25 @@ toggleSignUp();
 function selectTrack() {
     const tracks = document.getElementsByClassName("track");
     const trackNames = document.getElementsByClassName("track_name");
-    var index;
-    for (var i = 0; i < tracks.length; i++) {
-        tracks[i].addEventListener('mousedown', function (e) {
-            for (var i = 0; i < tracks.length; i++) {
-                tracks[i].removeAttribute('data-selected');
+    let index;
+    for (let track of tracks) {
+        track.addEventListener('mousedown', function (e) {
+            for (let unTrack of tracks) {
+                unTrack.removeAttribute('data-selected');
             }
             this.setAttribute('data-selected', '');
         })
-        trackNames[i].addEventListener('click', function (e) {
+	}
+	for (let name of trackNames) {
+        name.addEventListener('click', function (e) {
             index = this.id.charAt(11);
-            for (var i = 0; i < tracks.length; i++) {
-                tracks[i].removeAttribute('data-selected');
+            for (let track of tracks) {
+                track.removeAttribute('data-selected');
             }
             tracks[index].setAttribute('data-selected', '');
         })
     }
+
 }
 selectTrack();
 
@@ -92,7 +95,7 @@ function loadSong() {
         button.onchange = function () {
             loading();
             eStop();
-            var reader = new FileReader();
+            let reader = new FileReader();
             reader.onload = function (e) {
                 let trcknr = document.querySelector('[data-selected]').id.charAt(6);
                 audioCtx.decodeAudioData(e.target.result).then(function (buffer) {
@@ -118,25 +121,22 @@ function zoom() {
     function zIn() {
         oldZoom = timeSpace.zoom;
         timeSpace.zoom = Math.round(timeSpace.zoom * 1.25);
-        if (timeSpace.zoom >= 889) { timeSpace.zoom = 889 }
+        if (timeSpace.zoom >= 889) timeSpace.zoom = 889;
         zDraw();
     }
     function zOut() {
         oldZoom = timeSpace.zoom;
         timeSpace.zoom = Math.round(timeSpace.zoom / 1.25);
-        if (timeSpace.zoom <= 5) { timeSpace.zoom = 5 }
+        if (timeSpace.zoom <= 5) timeSpace.zoom = 5;
         zDraw();
     }
     function zDraw() {
         grid.recordings.forEach((recording) => {
             let offset = recording.offset * timeSpace.zoom;
             let duration = recording.duration * timeSpace.zoom;
-            let offCanvas;
-            if (recording.canvas.selected) {
-                offCanvas = recording.offSelectedCanvas[timeSpace.zoom];
-            } else {
-                offCanvas = recording.offCanvas[timeSpace.zoom];
-            }
+            let offCanvas = (recording.canvas.selected)
+			? recording.offSelectedCanvas[timeSpace.zoom]
+			: offCanvas = recording.offCanvas[timeSpace.zoom];
             let width = offCanvas.width;
             ui_draw.printRecording(width, recording, offCanvas, offset, duration);
         });
@@ -149,17 +149,15 @@ function zoom() {
     zoomOut.addEventListener('click', zOut);
     document.addEventListener('keypress', function (e) {
         if (e.key === 'h' || e.key === 'H') {
-            for (const input of inputs) {
-                if (e.target == input) { return; }
-            }
+            for (const input of inputs)
+				if (e.target == input) return;
             zIn();
         }
     });
     document.addEventListener('keypress', function (e) {
         if (e.key === 'g' || e.key === 'G') {
-            for (const input of inputs) {
-                if (e.target == input) { return; }
-            }
+            for (const input of inputs)
+                if (e.target == input) return;
             zOut();
         }
     });
@@ -226,11 +224,11 @@ metric();
 
 //mutea la pista
 function mute() {
-    const button = document.getElementsByClassName('track_mute');
-    const soloButton = document.getElementsByClassName('track_solo');
+    const buttons = document.getElementsByClassName('track_mute');
+    const soloButtons = document.getElementsByClassName('track_solo');
 
-    for (let a = 0; a < button.length; a++) {
-        button[a].addEventListener('click', function () {
+    for (const button of buttons) {
+        button.addEventListener('click', function () {
             this.classList.toggle('track_mute_on');
             if (!this.toggle) {
                 soundcontroller.mute(this.parent.gainNode);
@@ -239,8 +237,8 @@ function mute() {
                 soundcontroller.solo(this.parent.gainNode);
                 this.toggle = false;
             }
-            for (let b = 0; b < soloButton.length; b++) {
-                if (soloButton[b].toggle) {
+            for (const soloButton of soloButtons) {
+                if (soloButton.toggle) {
                     soundcontroller.mute(this.parent.gainNode);
                 }
             }

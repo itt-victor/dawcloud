@@ -19,8 +19,8 @@ export class Grid {
     prepareGrid() {
         this.gainNode = audioCtx.createGain();
         this.gainNode.connect(audioCtx.destination);
-        this.canvas.height = 70 * this.howMany;
-		this.canvas.style.height = 70 * this.howMany + 'px';
+        this.canvas.height = 60 * this.howMany;
+		this.canvas.style.height = 60 * this.howMany + 'px';
 		this.canvas.width = 10000;
         //default la 1a pista
         jQuery(".track:first").attr("data-selected", '');

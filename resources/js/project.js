@@ -247,22 +247,15 @@ function loadProject() {
                     }
                     //Se carga el panorama
                     for (let f = 0; f < panButtons.length; f++) {
-                        let ctxValue;
-                        grid.tracks[f].pannerNode.pannerValue = project.trackspanValues[f];
+						grid.tracks[f].pannerNode.pannerValue = project.trackspanValues[f];
                         panButtons[f].innerHTML = grid.tracks[f].pannerNode.pannerValue;
-                        if (grid.tracks[f].pannerNode.pannerValue.toString().startsWith('L')) {
-                            ctxValue = - + grid.tracks[f].pannerNode.pannerValue.slice(1) / 100;
-                            grid.tracks[f].pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
-                        }
-                        else if (grid.tracks[f].pannerNode.pannerValue == 0
-                            || grid.tracks[f].pannerNode.pannerValue.toString() == 'C') {
-                            ctxValue = 0;
-                            grid.tracks[f].pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
-                        }
-                        else if (grid.tracks[f].pannerNode.pannerValue.toString().startsWith('R')) {
-                            ctxValue = grid.tracks[f].pannerNode.pannerValue.slice(1) / 100;
-                            grid.tracks[f].pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
-                        }
+						let trackPanValue = grid.tracks[f].pannerNode.pannerValue;
+						let ctxValue;
+                        if (trackPanValue.toString().startsWith('L')) ctxValue = - + trackPanValue.slice(1) / 100;
+                        else if (trackPanValue == 0 || trackPanValue.toString() == 'C') ctxValue = 0;
+                        else if (trackPanValue.toString().startsWith('R')) ctxValue = trackPanValue.slice(1) / 100;
+
+						grid.tracks[f].pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
                     }
                     //Se carga el volumen master
                     grid.gainValue = project.masterGainValue;

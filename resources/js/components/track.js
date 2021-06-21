@@ -55,7 +55,8 @@ function drawwaveforms(recording) {
     }
     ui_draw.printRecording(
         recording.offCanvas[timeSpace.zoom].width,
-        recording, recording.offCanvas[timeSpace.zoom],
+        recording,
+		recording.offCanvas[timeSpace.zoom],
         offset,
         duration
     );

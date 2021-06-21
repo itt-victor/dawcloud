@@ -38,19 +38,18 @@ function setChannelGain() {
             if (drag[trckNr]) {
                 let mousePos = onMousePos(fader, evt);
                 Y = mousePos.y + delta.y
-                if (Y < 20) { Y = 20 };
-                if (Y > 260) { Y = 260 };
+                if (Y < 20) Y = 20;
+                if (Y > 260) Y = 260;
                 fader.Y = Y;
                 fader.firstChild.nextSibling.style.top = Y + 'px';
 
                 gainValue = Math.log10(1 / ((Y + 5) / 260));
-                if (gainValue > 1) { gainValue = 1 };
-                if (gainValue < 0) { gainValue = 0 };
+                if (gainValue > 1) gainValue = 1;
+                if (gainValue < 0) gainValue = 0;
                 gainNode.gainValue = gainValue;
 
-                if (!grid.tracks[trckNr].muteButton.toggle) {
+                if (!grid.tracks[trckNr].muteButton.toggle)
                     gainNode.gain.setValueAtTime(gainValue, audioCtx.currentTime);
-                }
             }
         }, false);
 
@@ -90,13 +89,13 @@ function setMasterGain() {
         if (drag) {
             Y = mousePos.y + delta.y
 
-            if (Y < 20) { Y = 20 };
-            if (Y > 260) { Y = 260 };
+            if (Y < 20) Y = 20;
+            if (Y > 260) Y = 260;
 
             fader.firstChild.style.top = Y + 'px';
             gainValue = Math.log10(1 / ((Y + 5) / 260));
-            if (gainValue > 1) { gainValue = 1 };
-            if (gainValue < 0) { gainValue = 0 };
+            if (gainValue > 1) gainValue = 1;
+            if (gainValue < 0) gainValue = 0;
 
             grid.gainValue = gainValue;
             grid.faderY = Y;
@@ -135,10 +134,10 @@ function setPan() {
                 }
             });
             newValue.addEventListener('keyup', function (o) {
-                if (o.keyCode === 13) {
+                if (o.key === 'Enter') {
                     o.preventDefault();
-                    grid.tracks[i].pannerNode.pannerValue = this.value.toUpperCase();
-                    e.target.innerHTML = this.value.toUpperCase();
+                    e.target.innerHTML = grid.tracks[i].pannerNode.pannerValue = this.value.toUpperCase();
+                    //e.target.innerHTML = this.value.toUpperCase();
                     let ctxValue;
                     if (this.value.toUpperCase().startsWith('L')) {
                         ctxValue = - + this.value.slice(1) / 100;
@@ -156,6 +155,7 @@ function setPan() {
                         newValue.remove();
                     } else {
                         newValue.setAttribute('placeholder', 'Invalid value!');
+						console.log('ggg');
                     }
                 }
             });
