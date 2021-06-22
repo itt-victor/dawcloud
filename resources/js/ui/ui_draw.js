@@ -204,10 +204,10 @@ export var ui_draw = {
         recording.canvas.width = width;
         recording.canvas.height = height;
         recording.canvasCtx.clearRect(0, 0, width, height);
-        //recording.canvasCtx.drawImage(offCanvas, 0, 0);
-        recording.canvasCtx.drawImage(offCanvas, offset, 0, duration, height, offset, 0, duration, height);
+        recording.canvasCtx.drawImage(offCanvas, 0, 0);
+        //recording.canvasCtx.drawImage(offCanvas, 0, 0, duration, height, offset, 0, duration, height);
         //recording.canvas.style.left = x + 'px';
-        //recording.canvasCtx.clearRect(0, 0, offset, height);
-        //recording.canvasCtx.clearRect(duration, 0, width - duration, height);
+        recording.canvasCtx.clearRect(0, 0, offset, height);
+        recording.canvasCtx.clearRect(duration, 0, width - duration, height);
     }
 }
