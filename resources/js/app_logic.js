@@ -82,8 +82,6 @@ function changeTrackName() {
             })
         });
     }
-
-
 }
 changeTrackName();
 
@@ -102,9 +100,8 @@ function loadSong() {
                     grid.tracks[trcknr].addRecord(generateRecordingId(), timeSpace.time(), buffer, 0, buffer.duration);
                 });
             }
-            if (button.files[0]) {
+            if (button.files[0])
                 reader.readAsArrayBuffer(button.files[0]);
-            }
         }
     }
 }
@@ -161,7 +158,6 @@ function zoom() {
             zOut();
         }
     });
-
 }
 zoom();
 
@@ -315,9 +311,8 @@ export function removeRecording(recording) {
         if (recording.canvas) {
             if (a.key === 'Delete' && recording.canvas.selected) {
                 a.preventDefault();
-                if (!soundStatuses.hasStopped) {
+                if (!soundStatuses.hasStopped)
                     soundcontroller.stopSingleSound(recording);
-                }
                 recording.deleteRecording();
                 grid.recordings.splice(grid.recordings.indexOf(recording), 1);
             }
