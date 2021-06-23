@@ -19,7 +19,7 @@ function setChannelGain() {
         };
     }
 
-    for (let track in grid.tracks) {
+    for (let track of grid.tracks) {
         track.fader.firstChild.nextSibling.addEventListener("mousedown", function (evt) {
             fader = this.parentNode;
             trckNr = fader.id.charAt(6);

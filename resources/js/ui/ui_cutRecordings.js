@@ -65,7 +65,15 @@ const normalButton = document.querySelector('#normal_function');
 
 cutButton.addEventListener('click', function () {
     cut = true;
+    this.style.background = "red";
+    this.disabled = true;
+    normalButton.style.background = "";
+    normalButton.disabled = false;
 });
 normalButton.addEventListener('click', function () {
     cut = false;
+    this.style.background = "red";
+    this.disabled = true;
+    cutButton.style.background = "";
+    cutButton.disabled = false;
 });

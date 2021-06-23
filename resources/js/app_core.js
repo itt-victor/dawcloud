@@ -1,10 +1,12 @@
 require('./bootstrap');
 require('./app_logic');
 require('./audio/bouncecontroller');
+require('./audio/metronome');
 require('./components/timeLayout');
 require('./project');
 require('./components/mixer');
 require('./ui/ui_cutRecordings');
+require('./ui/ui_snapToGrid');
 
 import { grid } from './components/generalgrid';
 import drawGrid from './ui/ui_grid';
@@ -15,11 +17,14 @@ import recordcontroller from './audio/recordcontroller';
 
 export const play = document.querySelector('#play-button'),
     record = document.querySelector('#record-button'),
-    stop = document.querySelector('#stop-button');
+    stop = document.querySelector('#stop-button'),
+    cutButton = document.querySelector('#cut_function'),
+    normalButton = document.querySelector('#normal_function');
 export let soundStatuses = { isPlaying: false, hasStopped: true };
 
 stop.disabled = true;
-
+normalButton.style.background = "red";
+normalButton.disabled = true;
 
 
 /////////////////////////////////////
@@ -78,7 +83,7 @@ function appStart() {
             e.preventDefault();
             if (!soundStatuses.isPlaying && soundStatuses.hasStopped)
                 ePlay();
-             else if (!soundStatuses.hasStopped)
+            else if (!soundStatuses.hasStopped)
                 eStop();
         }
     });
