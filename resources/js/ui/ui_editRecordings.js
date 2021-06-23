@@ -9,18 +9,18 @@ export function editRecording(recording) {
 
     //arrastrar grabaciones
 
-    var drag = false;
-    var crop_left = false;
-    var crop_right = false;
-    var delta = new Object();
-    var cropDelta = 0;
-    var X = recording.timeToStart * timeSpace.zoom;
-    var Y = 0;
-    var offset = recording.offset * timeSpace.zoom;
-    var duration = recording.duration * timeSpace.zoom;
-    var sizes;
-    var offCanvas;
-    var width;
+    var drag = false,
+        crop_left = false,
+        crop_right = false,
+        delta = new Object(),
+        //cropDelta = 0,
+        X = recording.timeToStart * timeSpace.zoom,
+        Y = 0,
+        offset = recording.offset * timeSpace.zoom,
+        duration = recording.duration * timeSpace.zoom,
+        sizes,
+        offCanvas,
+        width;
 
     function onMousePos(canvas, evt) {
         var rect = canvas.getBoundingClientRect();
@@ -85,7 +85,6 @@ export function editRecording(recording) {
             ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
             recording.canvas.style.left = (recording.timeToStart * timeSpace.zoom) + 'px';
 
-            cropDelta = offset;
             crop_left = true;
             drag = false;
         } else if (mousePos.x < this.width + 3 && mousePos.x > this.width - 3) {
@@ -94,7 +93,6 @@ export function editRecording(recording) {
             ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
             recording.canvas.style.left = (recording.timeToStart * timeSpace.zoom) + 'px';
 
-            cropDelta = duration - mousePos.x - offset;
             crop_right = true;
             drag = false;
         }
@@ -132,7 +130,7 @@ export function editRecording(recording) {
         if (crop_right) {
             duration = Math.max(mousePos.x, 0);
             width = offCanvas.width;
-            ui_draw.printRecording(width, recording, offCanvas, offset, duration);
+            ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
             this.style.cursor = 'w-resize';
             recording.duration = duration / timeSpace.zoom;
 
@@ -150,14 +148,12 @@ export function editRecording(recording) {
 
             recording.offset = offset / timeSpace.zoom;
             recording.duration = duration / timeSpace.zoom;
-
-            width = (crop_left) ? Math.ceil(duration - offset) : Math.ceil(duration);
-
+            width = Math.ceil(duration - offset);
             if (width > offCanvas.width) width = offCanvas.width;
+
             ui_draw.printRecording(width, recording, offCanvas, offset, duration);
 
-            crop_left = false;
-            crop_right = false;
+            crop_left = crop_right = false;
         }
     }, false);
 
