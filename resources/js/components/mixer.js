@@ -19,8 +19,8 @@ function setChannelGain() {
         };
     }
 
-    for (let i = 0; i < grid.tracks.length; i++) {
-        grid.tracks[i].fader.firstChild.nextSibling.addEventListener("mousedown", function (evt) {
+    for (let track in grid.tracks) {
+        track.fader.firstChild.nextSibling.addEventListener("mousedown", function (evt) {
             fader = this.parentNode;
             trckNr = fader.id.charAt(6);
             gainNode = grid.tracks[trckNr].gainNode;
@@ -137,7 +137,6 @@ function setPan() {
                 if (o.key === 'Enter') {
                     o.preventDefault();
                     e.target.innerHTML = grid.tracks[i].pannerNode.pannerValue = this.value.toUpperCase();
-                    //e.target.innerHTML = this.value.toUpperCase();
                     let ctxValue;
                     if (this.value.toUpperCase().startsWith('L')) {
                         ctxValue = - + this.value.slice(1) / 100;
@@ -155,7 +154,6 @@ function setPan() {
                         newValue.remove();
                     } else {
                         newValue.setAttribute('placeholder', 'Invalid value!');
-						console.log('ggg');
                     }
                 }
             });

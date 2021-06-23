@@ -117,7 +117,7 @@ export function editRecording(recording) {
 
 
         if (crop_left) {
-            offset = Math.max(mousePos.x /*- cropDelta*/, 0);
+            offset = Math.max(mousePos.x, 0);
             width = offCanvas.width;
             ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
             this.style.cursor = 'w-resize';
@@ -130,7 +130,7 @@ export function editRecording(recording) {
 
         }
         if (crop_right) {
-            duration = Math.max(mousePos.x /*- cropDelta*/, 0);
+            duration = Math.max(mousePos.x, 0);
             width = offCanvas.width;
             ui_draw.printRecording(width, recording, offCanvas, offset, duration);
             this.style.cursor = 'w-resize';
@@ -151,10 +151,10 @@ export function editRecording(recording) {
             recording.offset = offset / timeSpace.zoom;
             recording.duration = duration / timeSpace.zoom;
 
-            width = Math.ceil(duration - offset);
+            width = (crop_left) ? Math.ceil(duration - offset) : Math.ceil(duration);
+
             if (width > offCanvas.width) width = offCanvas.width;
             ui_draw.printRecording(width, recording, offCanvas, offset, duration);
-            //recording.canvas.style.left = parseInt(recording.canvas.style.left) + offset + 'px';
 
             crop_left = false;
             crop_right = false;

@@ -115,14 +115,14 @@ function saveProject() {
                 }
 
                 //Se convierten los audioBuffers en wav, se convierten a su vez en blob y se envían
-                for (let i = 0; i < grid.recordings.length; i++) {
-                    var blob = new window.Blob([new DataView(toWav(grid.recordings[i].audioBuffer))], {
+                for (const recording of grid.recordings) {
+                    let blob = new window.Blob([new DataView(toWav(recording.audioBuffer))], {
                         type: 'audio/wav'
                     });
 
-                    var formdata = new FormData();
+                    let formdata = new FormData();
                     formdata.append('audio-blob', blob);
-                    formdata.append('recording-id', grid.recordings[i].id);
+                    formdata.append('recording-id', recording.id);
                     formdata.append('project-name', projectName);
 
                     $.ajax({
@@ -222,7 +222,7 @@ function loadProject() {
                         request.onload = function () {
                             let undecodedAudio = request.response;
                             audioCtx.decodeAudioData(undecodedAudio, (audioBuffer) => {
-                                if (i == 0) { loading();}
+                                if (i == 0) loading();
                                 let track = grid.tracks[project.recordings[i].tracknumber];
                                 track.addRecord(project.recordings[i].id, project.recordings[i].timeToStart,
 									audioBuffer, project.recordings[i].offset, project.recordings[i].duration);
@@ -233,9 +233,8 @@ function loadProject() {
                     //Se cargan los nombres de pista
                     for (let i = 0; i < grid.tracks.length; i++) {
                         grid.tracks[i].name = project.trackNames[i];
-                        if(grid.tracks[i].name){
+                        if(grid.tracks[i].name)
                             Names[i].innerHTML = grid.tracks[i].name;
-                        }
                     }
                     //Se cargan los volúmenes de los faders
                     for (let i = 0; i < grid.tracks.length; i++) {

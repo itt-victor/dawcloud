@@ -10,9 +10,6 @@ import { removeRecording } from '../app_logic';
 export let cut = false;
 export function cutRecording(recording) {
 
-    let offset;
-    let duration;
-
     function onMousePos(canvas, evt) {
         let rect = canvas.getBoundingClientRect();
         return {
@@ -24,18 +21,17 @@ export function cutRecording(recording) {
     recording.canvas.addEventListener("click", function (evt) {
 
         let mousePos = onMousePos(this, evt);
-        let offCanvas;
-        if (this.selected) {
-            offCanvas = recording.offSelectedCanvas[timeSpace.zoom];
-        } else {
-            offCanvas = recording.offCanvas[timeSpace.zoom];
-        }
+        let offCanvas = (this.selected)
+            ? recording.offSelectedCanvas[timeSpace.zoom]
+            : recording.offCanvas[timeSpace.zoom];
 
         if (cut) {
-            offset = recording.offset * timeSpace.zoom;
-            duration = mousePos.x;
+
+            let offset = recording.offset * timeSpace.zoom;
+            let duration = mousePos.x;
+            let width = duration;
             recording.duration = duration / timeSpace.zoom;
-            ui_draw.printRecording(recording, offCanvas, offset, duration);
+            ui_draw.printRecording(width, recording, offCanvas, offset, duration);
 
             let newRecording = new Recording(
                 generateRecordingId(),
@@ -50,12 +46,13 @@ export function cutRecording(recording) {
             offCanvas = newRecording.offSelectedCanvas[timeSpace.zoom];
             offset = newRecording.offset * timeSpace.zoom;
             duration = newRecording.duration * timeSpace.zoom;
+            width = Math.ceil(duration - offset);
             grid.recordings.push(newRecording);
             grid.tracks[newRecording.tracknumber].trackDOMElement.appendChild(newRecording.canvas);
             newRecording.canvas.classList.add("recording");
             newRecording.canvas.id = newRecording.id;
-            ui_draw.printRecording(newRecording, offCanvas, offset, duration);
-            newRecording.canvas.style.left = (newRecording.timeToStart * timeSpace.zoom) + 0.13 + 'px';
+            ui_draw.printRecording(width, newRecording, offCanvas, offset, duration);
+            newRecording.canvas.style.left = (newRecording.timeToStart * timeSpace.zoom) + 0.13 + offset + 'px';
             setTimeout(editRecording(newRecording), 20);
             setTimeout(cutRecording(newRecording), 20);
             setTimeout(removeRecording(newRecording), 20);

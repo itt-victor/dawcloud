@@ -42,14 +42,14 @@ export function loading() {
     text.style.color = 'white';
     document.body.style.background = 'black';
     ventana.classList.toggle('visible');
-    if (signup) { signup.style.color = 'white'; }
+    if (signup) signup.style.color = 'white';
     setTimeout(function () {
-        if (signup) { signup.style.color = 'black'; }
+        if (signup) signup.style.color = 'black';
         ventana.classList.toggle('visible');
         document.body.style.background = '#b9edf1';
         text.style.color = 'black';
         document.body.style.transition = 'background 0.7s'
-        if (signup) { signup.style.transition = 'color 0.7s'; }
+        if (signup) signup.style.transition = 'color 0.7s';
         ventana.style.transition = 'display 0.7s, visibility 0.7s'
         text.style.transition = 'color 0.7s'
     }, 3500);

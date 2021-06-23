@@ -2,7 +2,6 @@ import Track from './track';
 import { generateTrackNumbers } from '../utils';
 import { audioCtx } from '../app_core';
 var trackName;
-var recordings;
 
 export class Grid {
 

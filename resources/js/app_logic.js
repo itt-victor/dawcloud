@@ -41,8 +41,8 @@ function selectTrack() {
             }
             this.setAttribute('data-selected', '');
         })
-	}
-	for (let name of trackNames) {
+    }
+    for (let name of trackNames) {
         name.addEventListener('click', function (e) {
             index = this.id.charAt(11);
             for (let track of tracks) {
@@ -132,8 +132,8 @@ function zoom() {
             let offset = recording.offset * timeSpace.zoom;
             let duration = recording.duration * timeSpace.zoom;
             let offCanvas = (recording.canvas.selected)
-			? recording.offSelectedCanvas[timeSpace.zoom]
-			: offCanvas = recording.offCanvas[timeSpace.zoom];
+                ? recording.offSelectedCanvas[timeSpace.zoom]
+                : offCanvas = recording.offCanvas[timeSpace.zoom];
             let width = offCanvas.width;
             ui_draw.printRecording(width, recording, offCanvas, offset, duration);
         });
@@ -147,7 +147,7 @@ function zoom() {
     document.addEventListener('keypress', function (e) {
         if (e.key === 'h' || e.key === 'H') {
             for (const input of inputs)
-				if (e.target == input) return;
+                if (e.target == input) return;
             zIn();
         }
     });
@@ -250,11 +250,15 @@ function solo() {
         button[a].addEventListener('click', function () {
             this.classList.toggle('track_solo_on');
             for (let b = 0; b < button.length; b++) {
-                if (!button[b].toggle) {
+                (!button[b].toggle) ?
+                    soundcontroller.mute(button[b].parent.gainNode) :
+                    soundcontroller.solo(button[b].parent.gainNode);
+
+                /*if (!button[b].toggle) {
                     soundcontroller.mute(button[b].parent.gainNode);
                 } else {
                     soundcontroller.solo(button[b].parent.gainNode);
-                }
+                }*/
             }
             if (!this.toggle) {
                 for (let b = 0; b < button.length; b++) {
