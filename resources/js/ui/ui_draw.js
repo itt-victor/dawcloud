@@ -43,9 +43,9 @@ export var ui_draw = {
 
     drawRecording(recording, zoom) {
         let offCanvas = document.createElement('canvas');
-        let width = recording.audioBuffer.duration * (zoom + 0.15); //Ese 0.11 corrige descompensación
+        let width = recording.audioBuffer.duration * (zoom + 0.15); //Ese 0.15 corrige descompensación
         let height = 58;
-        offCanvas.width = width;
+        offCanvas.width = recording.audioBuffer.duration * zoom;
         offCanvas.height = height;
         let canvasCtx = offCanvas.getContext('2d');
         canvasCtx.fillStyle = '#2ed9a5';
@@ -57,7 +57,8 @@ export var ui_draw = {
         canvasCtx.fill();
         canvasCtx.closePath()
         canvasCtx.strokeStyle = '#380166';
-        canvasCtx.strokeRect(0, 0, width, height);
+        canvasCtx.lineWidth = 2;
+        canvasCtx.strokeRect(0, 0, width -2, height);
         canvasCtx.fillStyle = '#20453a';
 
         if (recording.audioBuffer.numberOfChannels === 2) {  //si es estereo..
@@ -115,7 +116,7 @@ export var ui_draw = {
         let offCanvas = document.createElement('canvas');
         let width = recording.audioBuffer.duration * (zoom + 0.15);
         let height = 58;
-        offCanvas.width = width;
+        offCanvas.width = recording.audioBuffer.duration * zoom;
         offCanvas.height = height;
         let canvasCtx = offCanvas.getContext('2d');
         canvasCtx.fillStyle = '#20453a';
@@ -127,7 +128,7 @@ export var ui_draw = {
         canvasCtx.fill();
         canvasCtx.closePath();
         canvasCtx.strokeStyle = '#380166';
-        canvasCtx.strokeRect(0, 0, width, height);
+        canvasCtx.strokeRect(0, 0, width -2, height);
 
         if (recording.audioBuffer.numberOfChannels === 2) {  //si es estereo..
             var data = recording.audioBuffer.getChannelData(0);
@@ -199,7 +200,7 @@ export var ui_draw = {
 
     printRecordingCrop(width, recording, offCanvas, offset, duration) {
         let height = 58;
-        recording.canvas.width = width;
+        recording.canvas.width = width +2;
         recording.canvas.height = height;
         recording.canvasCtx.clearRect(0, 0, width, height);
         recording.canvasCtx.drawImage(offCanvas, 0, 0);

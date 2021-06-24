@@ -253,12 +253,6 @@ function solo() {
                 (!button[b].toggle) ?
                     soundcontroller.mute(button[b].parent.gainNode) :
                     soundcontroller.solo(button[b].parent.gainNode);
-
-                /*if (!button[b].toggle) {
-                    soundcontroller.mute(button[b].parent.gainNode);
-                } else {
-                    soundcontroller.solo(button[b].parent.gainNode);
-                }*/
             }
             if (!this.toggle) {
                 for (let b = 0; b < button.length; b++) {
@@ -288,7 +282,7 @@ export function removeRecording(recording) {
                 recording.canvas.selected = false;
                 let offset = recording.offset * timeSpace.zoom;
                 let duration = recording.duration * timeSpace.zoom;
-                let width = recording.offCanvas[timeSpace.zoom].width;
+                let width = Math.ceil(duration - offset) + 1;
                 ui_draw.printRecording(
                     width,
                     recording,
@@ -301,7 +295,7 @@ export function removeRecording(recording) {
             recording.canvas.selected = true;
             let offset = recording.offset * timeSpace.zoom;
             let duration = recording.duration * timeSpace.zoom;
-            let width = recording.offSelectedCanvas[timeSpace.zoom].width;
+            let width = Math.ceil(duration - offset) +1;
             ui_draw.printRecording(
                 width,
                 recording,

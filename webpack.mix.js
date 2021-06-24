@@ -16,4 +16,9 @@ mix.js('resources/js/app_core.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .sourceMaps()
     .disableSuccessNotifications()
-    .options({ processCssUrls: false });
+    .options({ processCssUrls: false })
+    .webpackConfig({
+        experiments : {
+            topLevelAwait: true
+        }
+    });

@@ -4,6 +4,10 @@ import { timeSpace } from '../timeSpace';
 import { ui_draw } from './ui_draw';
 import { cursor } from '../components/cursor';
 import { cut } from './ui_cutRecordings';
+import { snap } from './ui_snapToGrid';
+
+
+//import { snapSetUp } from './ui_snapToGrid';
 
 export function editRecording(recording) {
 
@@ -13,9 +17,9 @@ export function editRecording(recording) {
         crop_left = false,
         crop_right = false,
         delta = new Object(),
-        //cropDelta = 0,
         X = recording.timeToStart * timeSpace.zoom,
         Y = 0,
+        snapIncrement = 0,
         offset = recording.offset * timeSpace.zoom,
         duration = recording.duration * timeSpace.zoom,
         sizes,
@@ -32,6 +36,7 @@ export function editRecording(recording) {
 
     recording.canvas.addEventListener("mousedown", function (evt) {
         X = (recording.timeToStart + recording.offset) * timeSpace.zoom;
+        snapIncrement = X;
         sizes = selectTrackWidth(recording.tracknumber);
         let mousePos = onMousePos(grid.canvas, evt);
         if (mousePos.y < sizes.maxHeight &&
@@ -44,13 +49,23 @@ export function editRecording(recording) {
 
     window.addEventListener("mousemove", function a(evt) {
         X = (recording.timeToStart + recording.offset) * timeSpace.zoom;
+
         let mousePos = onMousePos(grid.canvas, evt);
         sizes = selectTrackWidth(recording.tracknumber);
         if (drag) {
             X = mousePos.x + delta.x, Y = mousePos.y + delta.y;
             if (X < 0) X = 0;
-            recording.canvas.style.left = X + 'px';
-            recording.timeToStart = (X / timeSpace.zoom) - recording.offset;
+            //snap al grid, en desarrollo
+            if (snap.toggle) {
+                if (X - snapIncrement > snap.setup -4) {
+                    recording.canvas.style.left =  -3 + X + snap.setup + 'px';
+                    recording.timeToStart = ((X + snap.setup) / timeSpace.zoom) - recording.offset;
+                    snapIncrement = X + snap.setup;
+                }
+            } else {
+                recording.canvas.style.left = X + 'px';
+                recording.timeToStart = (X / timeSpace.zoom) - recording.offset;
+            }
             if (soundStatuses.isPlaying && !soundStatuses.hasStopped)
                 soundcontroller.playWhileDragging(recording);
             if (mousePos.y > sizes.maxHeight || mousePos.y < sizes.minHeight) {

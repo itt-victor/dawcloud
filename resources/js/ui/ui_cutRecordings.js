@@ -26,16 +26,19 @@ export function cutRecording(recording) {
             : recording.offCanvas[timeSpace.zoom];
 
         if (cut) {
-
+            //Se modifica el recording existente (izquierda)
             let offset = recording.offset * timeSpace.zoom;
             let duration = mousePos.x;
-            let width = duration;
+            let width = Math.ceil(duration - offset);
             recording.duration = duration / timeSpace.zoom;
             ui_draw.printRecording(width, recording, offCanvas, offset, duration);
 
+            //Se genera info para el nuevo recording y se crea
+            let timeToStart = parseFloat(this.style.left) + (mousePos.x / timeSpace.zoom); //esto es raro
+
             let newRecording = new Recording(
                 generateRecordingId(),
-                recording.timeToStart,
+                timeToStart,
                 recording.audioBuffer,
                 recording.tracknumber,
                 recording.duration, //aquí es el offset
@@ -52,7 +55,7 @@ export function cutRecording(recording) {
             newRecording.canvas.classList.add("recording");
             newRecording.canvas.id = newRecording.id;
             ui_draw.printRecording(width, newRecording, offCanvas, offset, duration);
-            newRecording.canvas.style.left = (newRecording.timeToStart * timeSpace.zoom) + offset + 'px';
+            //newRecording.canvas.style.left = (newRecording.timeToStart * timeSpace.zoom) + 'px';
             setTimeout(editRecording(newRecording), 20);
             setTimeout(cutRecording(newRecording), 20);
             setTimeout(removeRecording(newRecording), 20);
