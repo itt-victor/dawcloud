@@ -19,9 +19,9 @@ export function editRecording(recording) {
         delta = new Object(),
         X = recording.timeToStart * timeSpace.zoom,
         Y = 0,
-        snapIncrement = 0,
         offset = recording.offset * timeSpace.zoom,
         duration = recording.duration * timeSpace.zoom,
+        bar,
         sizes,
         offCanvas,
         width;
@@ -36,8 +36,7 @@ export function editRecording(recording) {
 
     recording.canvas.addEventListener("mousedown", function (evt) {
         X = (recording.timeToStart + recording.offset) * timeSpace.zoom;
-        snapIncrement = X;
-        sizes = selectTrackWidth(recording.tracknumber);
+        sizes = selectTrackHeight(recording.tracknumber);
         let mousePos = onMousePos(grid.canvas, evt);
         if (mousePos.y < sizes.maxHeight &&
             mousePos.y > sizes.minHeight) {
@@ -45,33 +44,47 @@ export function editRecording(recording) {
             delta.x = X - mousePos.x;
             delta.y = Y - mousePos.y;
         }
+        if (snap.toggle) {
+            snap.setup = timeSpace.zoom * timeSpace.compas * timeSpace.bpm * timeSpace.snap;
+            bar = Math.ceil(X / snap.setup);
+        }
     }, false);
 
     window.addEventListener("mousemove", function a(evt) {
         X = (recording.timeToStart + recording.offset) * timeSpace.zoom;
 
         let mousePos = onMousePos(grid.canvas, evt);
-        sizes = selectTrackWidth(recording.tracknumber);
+        sizes = selectTrackHeight(recording.tracknumber);
         if (drag) {
             X = mousePos.x + delta.x, Y = mousePos.y + delta.y;
             if (X < 0) X = 0;
-            //snap al grid, en desarrollo
+
+            //snap al grid
             if (snap.toggle) {
-                if (X - snapIncrement > snap.setup -4) {
-                    recording.canvas.style.left =  -3 + X + snap.setup + 'px';
+                let barCount = Math.ceil(X / snap.setup);
+                let left = parseFloat(recording.canvas.style.left);
+
+                if (barCount > bar) {
+                    recording.canvas.style.left =  left + snap.setup + 'px';
                     recording.timeToStart = ((X + snap.setup) / timeSpace.zoom) - recording.offset;
-                    snapIncrement = X + snap.setup;
+                    bar++;
+                }
+                if (barCount < bar) {
+                    recording.canvas.style.left =  left - snap.setup + 'px';
+                    recording.timeToStart = ((X - snap.setup) / timeSpace.zoom) - recording.offset;
+                    bar--;
                 }
             } else {
                 recording.canvas.style.left = X + 'px';
                 recording.timeToStart = (X / timeSpace.zoom) - recording.offset;
             }
+
             if (soundStatuses.isPlaying && !soundStatuses.hasStopped)
                 soundcontroller.playWhileDragging(recording);
             if (mousePos.y > sizes.maxHeight || mousePos.y < sizes.minHeight) {
                 let newTrack;
                 grid.tracks.forEach((track) => {
-                    sizes = selectTrackWidth(track.tracknumber)
+                    sizes = selectTrackHeight(track.tracknumber)
                     if (mousePos.y > sizes.minHeight && mousePos.y < sizes.maxHeight) {
                         newTrack = track;
                         newTrack.trackDOMElement.appendChild(recording.canvas);
@@ -174,13 +187,11 @@ export function editRecording(recording) {
 
 }
 
-function selectTrackWidth(tracknumber) {
-    var incremento = 60 * tracknumber;
-    let widths = {
-        minHeight: incremento,
-        maxHeight: incremento + 60,
-        minWidth: 0.5,
-        maxWidth: 1001.5
+function selectTrackHeight(tracknumber) {
+    let Yincrement = 60 * tracknumber;
+    let heights = {
+        minHeight: Yincrement,
+        maxHeight: Yincrement + 60
     }
-    return widths;
+    return heights;
 }

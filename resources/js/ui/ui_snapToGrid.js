@@ -11,7 +11,6 @@ const selectSnap = document.querySelector('#snap_ratio');
 //let snap = false;
 selectSnap.onchange = () => {
     timeSpace.snap = parseFloat(selectSnap.value);
-    snap.setup = timeSpace.zoom * timeSpace.compas * timeSpace.bpm * timeSpace.snap;
 }
 
 button.addEventListener('click', function () {
