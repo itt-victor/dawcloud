@@ -81,6 +81,8 @@ export function editRecording(recording) {
 
             if (soundStatuses.isPlaying && !soundStatuses.hasStopped)
                 soundcontroller.playWhileDragging(recording);
+
+            //Cambiar de pista
             if (mousePos.y > sizes.maxHeight || mousePos.y < sizes.minHeight) {
                 let newTrack;
                 grid.tracks.forEach((track) => {
@@ -143,7 +145,10 @@ export function editRecording(recording) {
 
 
         if (crop_left) {
-            offset = Math.max(mousePos.x, 0);
+console.log(offset);
+            offset = (snap.toggle) ?
+                snap.setup * Math.round(mousePos.x / snap.setup) :
+                Math.max(mousePos.x, 0);
             width = offCanvas.width;
             ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
             this.style.cursor = 'w-resize';
@@ -156,7 +161,9 @@ export function editRecording(recording) {
 
         }
         if (crop_right) {
-            duration = Math.max(mousePos.x, 0);
+            duration = (snap.toggle) ?
+                snap.setup * Math.round(mousePos.x / snap.setup) :
+                Math.max(mousePos.x, 0);
             width = offCanvas.width;
             ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
             this.style.cursor = 'w-resize';

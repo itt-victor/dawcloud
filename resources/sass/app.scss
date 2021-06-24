@@ -233,7 +233,9 @@ body {
 }
 
 .sound-clips {
-    height: 590px;
+    height: 510px;
+    width: 1737px;
+    overflow-y: auto;
 }
 
 #layout {
@@ -246,7 +248,7 @@ body {
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
     overflow-x: hidden;
-    overflow-y: hidden;
+    /*overflow-y: hidden;*/
 }
 
 
@@ -270,6 +272,7 @@ body {
     width: 150px;
     position: absolute;
     left: 570px;
+    overflow-y: hidden;
 }
 
 #track_name_0 {
@@ -345,7 +348,7 @@ body {
     vertical-align: middle;
     background-color: darkgray;
     overflow-x: auto;
-    overflow-y: hidden;
+    /*overflow-y: auto;*/
 }
 
 .track {

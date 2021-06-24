@@ -23,11 +23,11 @@ window.addEventListener('mouseup', function () {
 
 function pointTime(event) {
     if (click) {
-        if (snap.toggle) {
-            let barCount = Math.round(event.offsetX / snap.setup);
-            timeSpace.space = snap.setup * barCount;
-        }
-        else timeSpace.space = Math.max(event.offsetX, 0);
+        if (snap.toggle)
+            timeSpace.space = snap.setup * Math.round(event.offsetX / snap.setup);
+        else
+            timeSpace.space = Math.max(event.offsetX, 0);
+
         cursor.moveAtClick();
         if (soundStatuses.isPlaying == true
             && soundStatuses.hasStopped == false) {

@@ -104,6 +104,7 @@
                     <img width="20px" height="20px" src="icons/grid-icon.png"></button>
                 <select id="snap_ratio" class="form-select">
                     <option value="1">1/1</option>
+                    <option value="0.5">1/2</option>
                     <option value="0.25">1/4</option>
                     <option value="0.125">1/8</option>
                     <option value="0.0625">1/16</option>
