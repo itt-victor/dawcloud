@@ -42,24 +42,21 @@ export default class Track {
     };
 }
 
-async function drawwaveforms(recording) {
-    let zoom = 5, zoomArray = [];
-	while (zoom <= 889) {
-		zoomArray.push(zoom);
-		zoom = Math.round(zoom * 1.25);
-	}
+function drawwaveforms(recording) {
+    let zoom = 5;
     let offset = recording.offset * timeSpace.zoom;
     let duration = recording.duration * timeSpace.zoom;
 
-	for (const zoom of zoomArray){
-		recording.offCanvas[zoom] = await ui_draw.drawRecordingAsync(recording, zoom);
-		recording.offSelectedCanvas[zoom] = await ui_draw.selectedRecordingAsync(recording, zoom);
-	}
-	ui_draw.printRecording(
-	    recording.offCanvas[timeSpace.zoom].width,
-	    recording,
+    while (zoom <= 889) {
+        recording.offCanvas[zoom] = ui_draw.drawRecording(recording, zoom);
+        recording.offSelectedCanvas[zoom] = ui_draw.selectedRecording(recording, zoom);
+        zoom = Math.round(zoom * 1.25);
+    }
+    ui_draw.printRecording(
+        recording.offCanvas[timeSpace.zoom].width,
+        recording,
 		recording.offCanvas[timeSpace.zoom],
-	    offset,
-	    duration
-	);
+        offset,
+        duration
+    );
 }
