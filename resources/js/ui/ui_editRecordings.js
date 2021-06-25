@@ -145,7 +145,6 @@ export function editRecording(recording) {
 
 
         if (crop_left) {
-console.log(offset);
             offset = (snap.toggle) ?
                 snap.setup * Math.round(mousePos.x / snap.setup) :
                 Math.max(mousePos.x, 0);
