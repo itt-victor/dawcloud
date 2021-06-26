@@ -66,7 +66,7 @@ function exportSong() {
         });
     }
 }
-
+const export_sound = document.querySelector('#export_sound');
 if (export_sound) export_sound.addEventListener('click', exportSong);
 
 export function cropAudio(recording) {
