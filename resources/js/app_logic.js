@@ -9,7 +9,7 @@ import { cursor } from './components/cursor';
 import { generateRecordingId } from './utils';
 
 //toggle registrarse para uruarios no registrados
-function toggleSignUp() {
+(function toggleSignUp() {
     let signup = document.querySelector('#signup_now');
     let signupReminder = document.querySelector('#signup_reminder');
     let xButton = document.querySelector('.x-button');
@@ -25,12 +25,10 @@ function toggleSignUp() {
             signupReminder.style.visibility = 'hidden';
         });
     }
-}
-toggleSignUp();
-
+})();
 
 //Seleccionar pista
-function selectTrack() {
+(function selectTrack() {
     const tracks = document.getElementsByClassName("track");
     const trackNames = document.getElementsByClassName("track_name");
     let index;
@@ -52,11 +50,10 @@ function selectTrack() {
         })
     }
 
-}
-selectTrack();
+})();
 
 //cambia nombre de la pista
-function changeTrackName() {
+(function changeTrackName() {
     let names = document.querySelectorAll('.select');
     for (let name of names) {
         name.addEventListener('dblclick', function chng(e) {
@@ -82,12 +79,10 @@ function changeTrackName() {
             })
         });
     }
-}
-changeTrackName();
-
+})();
 
 //Cargar una canción desde el pc del usuario
-function loadSong() {
+(function loadSong() {
     const button = document.getElementById('load_sound_hidden');
     if (button) {
         button.onchange = function () {
@@ -104,12 +99,10 @@ function loadSong() {
                 reader.readAsArrayBuffer(button.files[0]);
         }
     }
-}
-setTimeout(loadSong, 0);
-
+})();
 
 //zoom
-function zoom() {
+(function zoom() {
     const zoomIn = document.getElementById("zoomin");
     const zoomOut = document.getElementById("zoomout");
     const inputs = document.querySelectorAll('input');
@@ -158,11 +151,10 @@ function zoom() {
             zOut();
         }
     });
-}
-zoom();
+})();
 
 //establece el bpm
-function setBpm() {
+(function setBpm() {
     const bpmButton = document.getElementById('bpm_button');
     let input;
     bpmButton.innerHTML = Math.round(120 / timeSpace.bpm) + '  bpm';
@@ -195,11 +187,10 @@ function setBpm() {
             }
         });
     });
-}
-setBpm();
+})();
 
 //cambia el compás, ya se añadiran más
-function metric() {
+(function metric() {
     const metricButton = document.getElementById('metric_button');
     metricButton.innerHTML = '4/4';
     metricButton.addEventListener('click', function (e) {
@@ -215,11 +206,10 @@ function metric() {
             drawLayout()
         }
     });
-}
-metric();
+})();
 
 //mutea la pista
-function mute() {
+(function mute() {
     const buttons = document.getElementsByClassName('track_mute');
     const soloButtons = document.getElementsByClassName('track_solo');
 
@@ -240,11 +230,10 @@ function mute() {
             }
         });
     }
-}
-mute();
+})();
 
 //solea la pista
-function solo() {
+(function solo() {
     const button = document.getElementsByClassName('track_solo');
     for (let a = 0; a < button.length; a++) {
         button[a].addEventListener('click', function () {
@@ -270,8 +259,7 @@ function solo() {
             }
         });
     }
-}
-solo();
+})();
 
 //elimina la grabación
 export function removeRecording(recording) {
@@ -316,5 +304,4 @@ export function removeRecording(recording) {
             }
         }
     });
-
 }

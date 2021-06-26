@@ -33,12 +33,12 @@ const loadbtn = document.getElementById('load_project'),
     panButtons = document.getElementsByClassName('panner'),
     projects = document.getElementsByClassName('projects'),
     projectNameNode = document.getElementById('project_name'),
-	projectTitle = document.getElementById('project-n');
+    projectTitle = document.getElementById('project-n');
 
 var project;
 var projectName;
 
-function saveProject() {
+(function saveProject() {
     if (saveWindow && projectNameNode) {
 
         projectNameNode.addEventListener('keypress', function (e) {
@@ -100,7 +100,7 @@ function saveProject() {
                 //creo objeto proyecto
                 if (project === undefined) {
                     project = new Project(timeSpace, grid.recordings, numbers.recordingId, trackNames,
-                    tracksGainValues, trackspanValues, tracksY, masterGainValue, masterY);
+                        tracksGainValues, trackspanValues, tracksY, masterGainValue, masterY);
                 }
                 else {
                     project.timeSpace = timeSpace;
@@ -159,15 +159,15 @@ function saveProject() {
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                     }
                 });
-				//Se imprime el proyecto en pantalla
-				projectTitle.innerHTML = projectName;
+                //Se imprime el proyecto en pantalla
+                projectTitle.innerHTML = projectName;
             }
         });
     }
-}
+})();
 
 
-function loadProject() {
+(function loadProject() {
     for (const projectBtn of projects) {
         projectBtn.addEventListener('dblclick', function ld(e) {
             e.stopPropagation;
@@ -207,25 +207,27 @@ function loadProject() {
                     grid.recordings = [];
 
                     //Se vacían los nombres de pista
-                    grid.tracks.forEach( track => {
+                    grid.tracks.forEach(track => {
                         delete track.name;
                     });
 
-					//Se imprime el proyecto en pantalla
-					projectTitle.innerHTML = projectName;
+                    //Se imprime el proyecto en pantalla
+                    projectTitle.innerHTML = projectName;
+
+                    //Sale aviso de carga
+                    loading();
 
                     //Se cargan los audios
-                    for (let i = 0; i < project.recordings.length; i++) {
+                    for (const recording of project.recordings) {
                         const request = new XMLHttpRequest();
-                        request.open("GET", 'loadsound/' + projectName + '/' + project.recordings[i].id, true);
+                        request.open("GET", 'loadsound/' + projectName + '/' + recording.id, true);
                         request.responseType = "arraybuffer";
                         request.onload = function () {
                             let undecodedAudio = request.response;
                             audioCtx.decodeAudioData(undecodedAudio, (audioBuffer) => {
-                                if (i == 0) loading();
-                                let track = grid.tracks[project.recordings[i].tracknumber];
-                                track.addRecord(project.recordings[i].id, project.recordings[i].timeToStart,
-									audioBuffer, project.recordings[i].offset, project.recordings[i].duration);
+                                let track = grid.tracks[recording.tracknumber];
+                                track.addRecord(recording.id, recording.timeToStart,
+                                    audioBuffer, recording.offset, recording.duration);
                             });
                         };
                         request.send();
@@ -233,7 +235,7 @@ function loadProject() {
                     //Se cargan los nombres de pista
                     for (let i = 0; i < grid.tracks.length; i++) {
                         grid.tracks[i].name = project.trackNames[i];
-                        if(grid.tracks[i].name)
+                        if (grid.tracks[i].name)
                             Names[i].innerHTML = grid.tracks[i].name;
                     }
                     //Se cargan los volúmenes de los faders
@@ -246,15 +248,15 @@ function loadProject() {
                     }
                     //Se carga el panorama
                     for (let f = 0; f < panButtons.length; f++) {
-						grid.tracks[f].pannerNode.pannerValue = project.trackspanValues[f];
+                        grid.tracks[f].pannerNode.pannerValue = project.trackspanValues[f];
                         panButtons[f].innerHTML = grid.tracks[f].pannerNode.pannerValue;
-						let trackPanValue = grid.tracks[f].pannerNode.pannerValue;
-						let ctxValue;
+                        let trackPanValue = grid.tracks[f].pannerNode.pannerValue;
+                        let ctxValue;
                         if (trackPanValue.toString().startsWith('L')) ctxValue = - + trackPanValue.slice(1) / 100;
                         else if (trackPanValue == 0 || trackPanValue.toString() == 'C') ctxValue = 0;
                         else if (trackPanValue.toString().startsWith('R')) ctxValue = trackPanValue.slice(1) / 100;
 
-						grid.tracks[f].pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
+                        grid.tracks[f].pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
                     }
                     //Se carga el volumen master
                     grid.gainValue = project.masterGainValue;
@@ -269,24 +271,24 @@ function loadProject() {
             });
         });
     }
-}
+})();
 
-function deleteProject() {
-    for (let h = 0; h < projects.length; h++) {
+(function deleteProject() {
+    for (let project of projects) {
 
         const dltConfirmation = document.getElementsByClassName('delete_confirmation')[0],
             delete_cancel = document.getElementById('delete_cancel'),
             delete_confirm = document.getElementById('delete_confirm');
 
-        projects[h].childNodes[1].addEventListener('click', function dlt(e) {
-            const project = this.parentNode.id;
+        project.childNodes[1].addEventListener('click', function dlt(e) {
+            const projectName = this.parentNode.id;
             dltConfirmation.classList.toggle('visible');
             delete_cancel.addEventListener('click', function (a) {
                 dltConfirmation.classList.remove('visible');
             });
             delete_confirm.addEventListener('click', function () {
                 let form = new FormData();
-                form.append('project', project);
+                form.append('project', projectName);
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -299,20 +301,15 @@ function deleteProject() {
                     success: function (data) {
                         console.log('Project deleted successfully');
                         dltConfirmation.classList.remove('visible');
-                        document.getElementById(project).remove();
-                        },
+                        document.getElementById(projectName).remove();
+                    },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                     }
                 });
             });
         });
     }
-}
-
-loadProject();
-saveProject();
-deleteProject();
-
+})();
 
 if (loadbtn) {
     loadbtn.addEventListener('click', function (e) {
