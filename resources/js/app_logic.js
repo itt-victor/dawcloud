@@ -134,7 +134,7 @@ function zoom() {
             let offCanvas = (recording.canvas.selected)
                 ? recording.offSelectedCanvas[timeSpace.zoom]
                 : offCanvas = recording.offCanvas[timeSpace.zoom];
-            let width = Math.ceil(duration - offset);
+            let width = Math.ceil(duration - offset) + 1;
             ui_draw.printRecording(width, recording, offCanvas, offset, duration);
         });
 

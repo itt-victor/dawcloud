@@ -6,7 +6,8 @@ require('./components/timeLayout');
 require('./project');
 require('./components/mixer');
 require('./ui/ui_cutRecordings');
-require('./ui/ui_snapToGrid');
+//require('./ui/ui_snapToGrid');
+require('./components/gridselector');
 
 import { grid } from './components/generalgrid';
 import drawGrid from './ui/ui_grid';
