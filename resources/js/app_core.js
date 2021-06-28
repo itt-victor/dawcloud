@@ -1,12 +1,12 @@
 require('./bootstrap');
 require('./app_logic');
 require('./audio/bouncecontroller');
-require('./audio/metronome');
+require('./components/metronome');
 require('./components/timeLayout');
 require('./project');
 require('./components/mixer');
 require('./ui/ui_cutRecordings');
-require('./ui/ui_snapToGrid');
+require('./components/gridselector');
 
 import { grid } from './components/generalgrid';
 import drawGrid from './ui/ui_grid';
@@ -33,7 +33,7 @@ normalButton.disabled = true;
 
 //se inicia audio context
 export const audioCtx = new (window.AudioContext ||
-    window.webkitAudioContext);
+    window.webkitAudioContext)();
 
 
 //llamo al controlador de sonido
@@ -118,6 +118,7 @@ function appStart() {
 function ePlay() {
     cursor.play();
     soundcontroller.playSound();
+    soundcontroller.metronome();
     stop.disabled = false;
     play.disabled = true;
     soundStatuses.isPlaying = true;

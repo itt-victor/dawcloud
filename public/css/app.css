@@ -10243,6 +10243,12 @@ body {
   /*overflow-y: hidden;*/
 }
 
+#grid-selector {
+  position: absolute;
+  width: 10000px;
+  height: 510px;
+}
+
 #cursor {
   position: absolute;
   width: 2px;

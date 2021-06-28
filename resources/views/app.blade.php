@@ -150,6 +150,7 @@
             </div>
 
             <div id="tracks" class="tracks">
+                <canvas id="grid-selector"></canvas>
                 <canvas id="cursor"></canvas>
                 <canvas id="layout"></canvas>
 

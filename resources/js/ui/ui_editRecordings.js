@@ -7,8 +7,6 @@ import { cut } from './ui_cutRecordings';
 import { snap } from './ui_snapToGrid';
 
 
-//import { snapSetUp } from './ui_snapToGrid';
-
 export function editRecording(recording) {
 
     //arrastrar grabaciones
@@ -145,7 +143,6 @@ export function editRecording(recording) {
 
 
         if (crop_left) {
-console.log(offset);
             offset = (snap.toggle) ?
                 snap.setup * Math.round(mousePos.x / snap.setup) :
                 Math.max(mousePos.x, 0);

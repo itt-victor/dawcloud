@@ -1,14 +1,11 @@
 import Recording from './recording';
-import { generateRecordingNumbers } from '../utils';
 import { ui_draw } from '../ui/ui_draw';
 import { grid } from './generalgrid';
 import { audioCtx } from '../app_core';
 import { editRecording } from '../ui/ui_editRecordings';
 import { removeRecording } from '../app_logic';
 import { timeSpace } from '../timeSpace';
-import {cutRecording } from '../ui/ui_cutRecordings';
-
-var rcdName;
+import { cutRecording } from '../ui/ui_cutRecordings';
 
 export default class Track {
     constructor(tracknumber, gainValue, pannerValue) {
@@ -29,33 +26,36 @@ export default class Track {
         this.fader.Y = 20;
     }
     addRecord(recordingId, timeToStart, audioBuffer, offset, duration) {
-        rcdName = generateRecordingNumbers();
-        window[rcdName] = new Recording(recordingId, timeToStart, audioBuffer, this.tracknumber, offset, duration);
-        grid.recordings.push(window[rcdName]);
-        this.trackDOMElement.appendChild(window[rcdName].canvas);
-        window[rcdName].canvas.classList.add("recording");
-        window[rcdName].canvas.id = window[rcdName].id;
-        drawwaveforms(window[rcdName]);
-        setTimeout(editRecording(window[rcdName]), 20);
-        setTimeout(cutRecording(window[rcdName]), 20);
-        setTimeout(removeRecording(window[rcdName]), 20);
+        let recording = new Recording(recordingId, timeToStart, audioBuffer, this.tracknumber, offset, duration);
+        grid.recordings.push(recording);
+        this.trackDOMElement.appendChild(recording.canvas);
+        recording.canvas.classList.add("recording");
+        recording.canvas.id = recording.id;
+        drawwaveforms(recording);
+        setTimeout(editRecording(recording), 20);
+        setTimeout(cutRecording(recording), 20);
+        setTimeout(removeRecording(recording), 20);
     };
 }
 
 function drawwaveforms(recording) {
-    let zoom = 5;
+    let zoom = 5, zoomArray = [];
     let offset = recording.offset * timeSpace.zoom;
     let duration = recording.duration * timeSpace.zoom;
 
     while (zoom <= 889) {
-        recording.offCanvas[zoom] = ui_draw.drawRecording(recording, zoom);
-        recording.offSelectedCanvas[zoom] = ui_draw.selectedRecording(recording, zoom);
+        zoomArray.push(zoom);
         zoom = Math.round(zoom * 1.25);
     }
+    for (const zoom of zoomArray) {
+        recording.offCanvas[zoom] = ui_draw.drawRecording(recording, zoom);
+        recording.offSelectedCanvas[zoom] = ui_draw.selectedRecording(recording, zoom);
+    }
+
     ui_draw.printRecording(
         recording.offCanvas[timeSpace.zoom].width,
         recording,
-		recording.offCanvas[timeSpace.zoom],
+        recording.offCanvas[timeSpace.zoom],
         offset,
         duration
     );
