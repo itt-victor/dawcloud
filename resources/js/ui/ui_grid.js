@@ -2,15 +2,14 @@ import { grid } from '../components/generalgrid';
 import { timeSpace } from '../timeSpace';
 
 export default function drawGrid() {
-    let ctx = grid.canvas.getContext('2d')
-    let zoomSetUp = timeSpace.zoom * timeSpace.compas * timeSpace.bpm;
-    let compasDivision;
+    let ctx = grid.canvas.getContext('2d'),
+     	zoomSetUp = timeSpace.zoom * timeSpace.compas * timeSpace.bpm,
+     	compasDivision;
 
     ctx.globalAlpha = 1;
     ctx.fillStyle = "#8accd1";
-    ctx.clearRect(0, 0, grid.canvas.width, grid.canvas.height)
+    ctx.clearRect(0, 0, grid.canvas.width, grid.canvas.height);
     ctx.fillRect(0, 0, grid.canvas.width, grid.canvas.height);
-
     ctx.lineWidth = 0.6;
     ctx.globalCompositeOperation = 'darken';
 
@@ -40,6 +39,4 @@ export default function drawGrid() {
         ctx.closePath();
         ctx.stroke();
     }
-
-
 }

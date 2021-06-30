@@ -24,6 +24,14 @@ Route::post('/login', [UserController::class, 'login'])->name('login');
 
 Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
+Route::get('/forgot-password', [UserController::class, 'requestPassword'])->middleware('guest')->name('password.request');
+
+Route::post('/forgot-password', [UserController::class, 'recoverPassword'])->middleware('guest')->name('password.recover');
+
+Route::get('/reset-password/{token}', [UserController::class, 'sendPasswordLink'])->middleware('guest')->name('password.reset');
+
+Route::post('/reset-password', [UserController::class, 'resetPassword'])->middleware('guest')->name('password.update');
+
 Route::get('/app', [AppController::class, 'app'])->name('app');
 
 Route::post('/savecache', [AppController::class, 'saveCache'])->name('saveCache');
@@ -41,4 +49,3 @@ Route::get('/loadproject/{project}', [AppController::class, 'loadProject'])->nam
 Route::get('/loadsound/{project}/{recording}', [AppController::class, 'loadSound'])->name('loadSound');
 
 Route::post('/delete', [AppController::class, 'deleteProject'])->name('deleteProject');
-

@@ -27,11 +27,10 @@ export class Grid {
 
     addTracks() {
         for (var i = 0; i < this.howMany; i++) {
-            trackName = generateTrackNumbers();
-            window[trackName] = new Track(i, 1, 'C');
-            window[trackName].pannerNode.connect(window[trackName].gainNode);
-            window[trackName].gainNode.connect(this.gainNode);
-            grid.tracks.push(window[trackName]);
+            let track = new Track(i, 1, 'C');
+            track.pannerNode.connect(track.gainNode);
+            track.gainNode.connect(this.gainNode);
+            grid.tracks.push(track);
         }
     }
 }

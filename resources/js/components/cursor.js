@@ -18,11 +18,9 @@ export var cursor = {
         this.ctx.fillRect(0, 0, 5, this.canvas.height);
     },
     play: function () {
-        let start = performance.now();
-        let canvas = this.canvas;
-        let increase = 0;
-        let progress;
-        let fps;
+        let start = performance.now(), canvas = this.canvas,
+         	increase = 0, progress,	fps;
+
         function step(now) {
             progress = now - start;
             fps = Math.round(1000 / (progress / ++increase) * 100) / 100;

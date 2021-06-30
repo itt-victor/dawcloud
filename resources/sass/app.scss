@@ -27,7 +27,6 @@ body {
     border-radius: 10px;
     text-align: center;
     display: none;
-    visibility: hidden;
 }
 
 .top-row {
@@ -35,7 +34,7 @@ body {
     justify-content: space-between;
     width: 1600px;
     align-items: center;
-    margin-top: 50px;
+    margin-top: 20px;
     margin-bottom: 10px;
     margin-left: 140px;
 }
@@ -106,7 +105,6 @@ body {
 
 #signup_reminder {
 	display: none;
-	visibility: hidden;
 	left: 42%;
 	top: 270px;
 	display: flex;
@@ -137,6 +135,9 @@ body {
 	color: black;
 }
 
+#signup_reminder {
+	display: none;
+}
 #signup_reminder input {
 	width: 200px;
 	height: 35px;
@@ -408,7 +409,7 @@ div [data-selected] {
     border-radius: 7px;
     position: absolute;
     background-color: grey;
-    top: 300px;
+    top: 250px;
     left: 100px;
     display: flex;
     flex-wrap: wrap;
@@ -494,7 +495,6 @@ div [data-selected] {
     width: 350px;
     height: 150px;
     display: none;
-    visibility: hidden;
     z-index: 60;
     background-color: #d4cfcf;
     text-align: center;
@@ -554,7 +554,6 @@ div [data-selected] {
     right: 780px;
     width: 350px;
     display: none;
-    visibility: hidden;
     z-index: 60;
     background-color: #d4cfcf;
     text-align: center;
@@ -581,20 +580,18 @@ div [data-selected] {
 .delete_confirmation {
     margin-top: 10px;
     display: none;
-    visibility: hidden;
 }
 
 .visible {
     display: block;
-    visibility: visible;
 }
 .delete_confirmation button {
     margin-left: 10px;
     margin-right: 10px;
 }
 
-#load_project, #save_project, #load_sound, #log_out, #export_sound {
-    height: 45px;
+#load_project, #save_project, #load_sound, #log_out, #export_sound, #save_project_as {
+    height: 40px;
 	width: 220px;
 }
 
@@ -604,7 +601,6 @@ div [data-selected] {
 }
 
 input[type="file" i]{
-	visibility: hidden;
     display: none;
 }
 
@@ -636,12 +632,6 @@ input[type="file" i]{
 	background-color: #7a2332;
 	width: 50px;
 }
-
-
-
-
-
-
 
 
 
@@ -701,6 +691,43 @@ input[type="file" i]{
 	margin-bottom: 20px;
 }
 
+#forgotten_password {
+	cursor: pointer;
+	text-decoration: none;
+	font-weight: bold;
+	color:rgb(122, 35, 50);
+	margin-bottom: 10px;
+}
+#forgotten_password:hover{
+	text-decoration: none;
+}
+.recover_password_dialogue {
+	width: 600px;
+	height: 450px;
+	border: solid 1.3px #7a2332;
+	border-radius: 5px;
+	background-color: white;
+	display: none;
+	position: absolute;
+	text-align: center;
+}
+
+.x-button-6 {
+	position: absolute;
+	top: 10px;
+	right: 15px;
+	font-size: 30px;
+    cursor: pointer;
+    color: #595858;
+}
+.x-button-6:hover {
+	text-decoration: none;
+}
+
+.recover_password_text {
+	text-align: center;
+	margin-top: 20px;
+}
 
 .startunsigned {
     text-decoration: none;
@@ -714,6 +741,9 @@ input[type="file" i]{
     left: 41%;
     font-weight: 700;
     font-size: 20px;
+}
+.startunsigned:hover{
+	text-decoration: none;
 }
 
 .alert {

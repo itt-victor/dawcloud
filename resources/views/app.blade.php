@@ -27,9 +27,6 @@
             </div>
 
             <h1 id="page-title" class="h1 center"><a class="a_title" href="{{ route('home') }}">daw Cloud</a></h1>
-            @if (isset($prueba))
-                <p>$prueba</p>
-            @endif
 
             @if (!Auth::user())
                 <div id="user_options">
@@ -52,7 +49,8 @@
                         aria-haspopup="true" aria-expanded="false">Hello {{ Auth::user()->user_name }}</button>
                     <div class="dropdown-menu" aria-labelledby="user_welcome">
                         <button id="load_project" class="btn btn-outline-info dropdown-item">My projects</button>
-                        <button id="save_project" class="btn btn-outline-info dropdown-item">Save project</button>
+                        <button id="save_project" class="btn btn-outline-info dropdown-item">Save</button>
+						<button id="save_project_as" class="btn btn-outline-info dropdown-item">Save as</button>
                         <label id="load_sound" for="load_sound_hidden"
                             class="btn btn-outline-info dropdown-item">Import</label>
                         <input type="file" id="load_sound_hidden" class="btn btn-outline-info dropdown-item"
@@ -62,7 +60,7 @@
                                 out</a></button>
                     </div>
                     <div id="load_dialogue">
-                        @if (!empty($projects[0]))
+                        @if (isset($projects))
                             <p class="dummy-space2"><span class="x-button2" id="projects-close">&#10006;</span></p>
                             @foreach ($projects as $project)
                                 <a class="projects btn" id="{{ $project }}">{{ $project }}

@@ -3,28 +3,24 @@ import { ui_draw } from '../ui/ui_draw';
 import { cursor } from '../components/cursor';
 import { timeSpace } from '../timeSpace';
 import { soundcontroller } from '../app_core';
-import { soundStatuses } from '../app_core';
+import { isPlaying } from '../app_core';
 import { audioCtx } from '../app_core';
 import { generateRecordingId } from '../utils';
 import { play, record, stop } from '../app_core';
 
-export let chunks = [];
-
 export default function recordController() {
     if (navigator.mediaDevices.getUserMedia) {
         const constraints = { audio: true };
-        let chunks = [];
-        let startTime;
+        let chunks = [], startTime;
 
         let onSuccess = function (stream) {
             const mediaRecorder = new MediaRecorder(stream);
 
-            record.onclick = function () {
+            record.onclick = () => {
                 mediaRecorder.ondataavailable = event => chunks.push(event.data);
                 mediaRecorder.start(10);
                 startTime = timeSpace.time();
-                if (soundStatuses.hasStopped === true
-                    && soundStatuses.isPlaying === false) {
+                if (!isPlaying) {
                     cursor.play();
                     soundcontroller.playSound();
                     soundStatuses.hasStopped = false;
@@ -49,18 +45,18 @@ export default function recordController() {
                 }
             }
             stop.addEventListener('click', rStop);
-            document.addEventListener('keypress', function (e) {
+            document.addEventListener('keypress', e => {
                 if (e.key === ' ') {
                     if (e.target == project_name) return;
                     rStop();
                 }
             });
 
-            mediaRecorder.onstop = function recordSound() {
+            mediaRecorder.onstop = () => {
                 const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
                 chunks = [];
                 blob.arrayBuffer().then(arrayBuffer => {
-                    audioCtx.decodeAudioData(arrayBuffer, (audioBuffer) => {
+                    audioCtx.decodeAudioData(arrayBuffer, audioBuffer => {
                         let track = document.querySelector('[data-selected]').id.charAt(6);
                         grid.tracks[track].addRecord(generateRecordingId(), startTime,
                             audioBuffer, 0, audioBuffer.duration);

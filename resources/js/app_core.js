@@ -20,7 +20,7 @@ export const play = document.querySelector('#play-button'),
     stop = document.querySelector('#stop-button'),
     cutButton = document.querySelector('#cut_function'),
     normalButton = document.querySelector('#normal_function');
-export let soundStatuses = { isPlaying: false, hasStopped: true };
+export let isPlaying = false;
 
 stop.disabled = true;
 normalButton.style.background = "red";
@@ -81,10 +81,7 @@ function appStart() {
             for (const input of inputs)
                 if (e.target == input) return;
             e.preventDefault();
-            if (!soundStatuses.isPlaying && soundStatuses.hasStopped)
-                ePlay();
-            else if (!soundStatuses.hasStopped)
-                eStop();
+            isPlaying ? eStop() : ePlay();
         }
     });
 
@@ -121,9 +118,7 @@ function ePlay() {
     soundcontroller.metronome();
     stop.disabled = false;
     play.disabled = true;
-    soundStatuses.isPlaying = true;
-    soundStatuses.hasStopped = false;
-    return true;
+    isPlaying = true;
 }
 
 //stop
@@ -132,8 +127,7 @@ export function eStop() {
     soundcontroller.stopSound();
     play.disabled = false;
     stop.disabled = true;
-    soundStatuses.hasStopped = true;
-    soundStatuses.isPlaying = false;
+    isPlaying = false;
 }
 
 

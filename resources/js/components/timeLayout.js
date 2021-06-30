@@ -1,6 +1,6 @@
 import { timeSpace } from '../timeSpace';
 import { cursor } from './cursor';
-import { soundStatuses } from '../app_core';
+import { isPlaying } from '../app_core';
 import { soundcontroller } from '../app_core';
 import { snap } from '../ui/ui_snapToGrid';
 
@@ -8,7 +8,7 @@ import { snap } from '../ui/ui_snapToGrid';
 const timeLayout = document.querySelector('#layout');
 let click = false;
 
-timeLayout.addEventListener('mousedown', function (e) {
+timeLayout.addEventListener('mousedown', e => {
     click = true;
     if (snap.toggle)
         snap.setup = timeSpace.zoom * timeSpace.compas * timeSpace.bpm * timeSpace.snap;
@@ -17,25 +17,18 @@ timeLayout.addEventListener('mousedown', function (e) {
 
 timeLayout.addEventListener('mousemove', pointTime);
 
-window.addEventListener('mouseup', function () {
-    click = false;
-});
+window.addEventListener('mouseup', () => click = false);
 
 function pointTime(event) {
     if (click) {
-        if (snap.toggle)
-            timeSpace.space = snap.setup * Math.round(event.offsetX / snap.setup);
-        else
-            timeSpace.space = Math.max(event.offsetX, 0);
+        timeSpace.space = (snap.toggle)
+            ? snap.setup * Math.round(event.offsetX / snap.setup)
+			: Math.max(event.offsetX, 0);
 
         cursor.moveAtClick();
-        if (soundStatuses.isPlaying == true
-            && soundStatuses.hasStopped == false) {
+        if (isPlaying) {
             soundcontroller.stopSound();
             setTimeout(soundcontroller.playSound(), 10);
         }
     }
 }
-
-
-

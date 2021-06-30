@@ -18,23 +18,23 @@ export function cutRecording(recording) {
         };
     }
 
-    recording.canvas.addEventListener("click", function (evt) {
+    recording.canvas.addEventListener("click", evt => {
 
-        let mousePos = onMousePos(this, evt);
-        let offCanvas = (this.selected)
+        let mousePos = onMousePos(evt.target, evt),
+        	offCanvas = (evt.target.selected)
             ? recording.offSelectedCanvas[timeSpace.zoom]
             : recording.offCanvas[timeSpace.zoom];
 
         if (cut) {
             //Se modifica el recording existente (izquierda)
-            let offset = recording.offset * timeSpace.zoom;
-            let duration = mousePos.x;
-            let width = Math.ceil(duration - offset);
+            let offset = recording.offset * timeSpace.zoom,
+            	duration = mousePos.x,
+            	width = Math.ceil(duration - offset);
             recording.duration = duration / timeSpace.zoom;
             ui_draw.printRecording(width, recording, offCanvas, offset, duration);
 
             //Se genera info para el nuevo recording y se crea
-            let timeToStart = parseFloat(this.style.left) + (mousePos.x / timeSpace.zoom); //esto es raro
+            let timeToStart = (parseFloat(evt.target.style.left) + mousePos.x) / timeSpace.zoom; //esto es raro
 
             let newRecording = new Recording(
                 generateRecordingId(),
@@ -54,7 +54,7 @@ export function cutRecording(recording) {
             grid.tracks[newRecording.tracknumber].trackDOMElement.appendChild(newRecording.canvas);
             newRecording.canvas.classList.add("recording");
             newRecording.canvas.id = newRecording.id;
-            ui_draw.printRecording(width, newRecording, offCanvas, offset, duration);
+            ui_draw.printCutRecording(width, newRecording, offCanvas, offset, duration);
             //newRecording.canvas.style.left = (newRecording.timeToStart * timeSpace.zoom) + 'px';
             setTimeout(editRecording(newRecording), 20);
             setTimeout(cutRecording(newRecording), 20);
@@ -63,8 +63,8 @@ export function cutRecording(recording) {
     });
 }
 
-const cutButton = document.querySelector('#cut_function');
-const normalButton = document.querySelector('#normal_function');
+const cutButton = document.querySelector('#cut_function'),
+ 	normalButton = document.querySelector('#normal_function');
 
 cutButton.addEventListener('click', function () {
     cut = true;

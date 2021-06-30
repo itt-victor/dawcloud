@@ -5,13 +5,12 @@ export let snap = {
     toggle : false
 };
 
-const button = document.querySelector('#snap-button');
-const selectSnap = document.querySelector('#snap_ratio');
+const button = document.querySelector('#snap-button'),
+      selectSnap = document.querySelector('#snap_ratio');
 
 //let snap = false;
-selectSnap.onchange = () => {
-    timeSpace.snap = parseFloat(selectSnap.value);
-}
+selectSnap.onchange = () => timeSpace.snap = parseFloat(selectSnap.value);
+
 
 button.addEventListener('click', function () {
     if (!snap.toggle) {
@@ -22,4 +21,3 @@ button.addEventListener('click', function () {
         snap.toggle = false;
     }
 });
-

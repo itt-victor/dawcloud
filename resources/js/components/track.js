@@ -39,9 +39,9 @@ export default class Track {
 }
 
 function drawwaveforms(recording) {
-    let zoom = 5, zoomArray = [];
-    let offset = recording.offset * timeSpace.zoom;
-    let duration = recording.duration * timeSpace.zoom;
+    let zoom = 5, zoomArray = [],
+     	offset = recording.offset * timeSpace.zoom,
+     	duration = recording.duration * timeSpace.zoom;
 
     while (zoom <= 889) {
         zoomArray.push(zoom);

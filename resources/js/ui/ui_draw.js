@@ -4,22 +4,19 @@ import { chunks } from '../audio/recordcontroller';
 
 export var ui_draw = {
     drawTrackWhileRecording() {
-        let width = 0;
-        let height = 58;
-        let x = timeSpace.space;
-        let track = document.querySelector('[data-selected]');
-        var canvas = document.createElement('canvas')
-        track.appendChild(canvas)
+        let width = 0, height = 58,
+         	x = timeSpace.space,
+	        track = document.querySelector('[data-selected]'),
+	        canvas = document.createElement('canvas');
+        track.appendChild(canvas);
         let canvasCtx = canvas.getContext('2d');
         canvas.width = 10000;
         canvas.height = 60;
         canvasCtx.fillStyle = '#2ed9a5';
-        let start = performance.now();
-        let increase = 0;
-        let progress;
-        let fps;
-        let interval;
-        function step(now) {
+        let start = performance.now(), increase = 0,
+			progress, fps, interval;
+
+		function step(now) {
             progress = now - start;
             fps = Math.round(1000 / (progress / ++increase) * 100) / 100;
             width += timeSpace.zoom * 1 / fps;
@@ -27,13 +24,13 @@ export var ui_draw = {
             interval = requestAnimationFrame(step);
         }
         interval = requestAnimationFrame(step);
-        stop.addEventListener('click', function () {
+        stop.addEventListener('click', () => {
             window.cancelAnimationFrame(interval);
             canvas.remove();
         });
-        document.addEventListener('keypress', function (e) {
+        document.addEventListener('keypress', e => {
             if (e.key === ' ') {
-                if (e.target == project_name) { return; }
+                if (e.target == project_name) return;
                 window.cancelAnimationFrame(interval);
                 canvas.remove();
             }
@@ -42,9 +39,9 @@ export var ui_draw = {
     },
 
     drawRecording(recording, zoom) {
-        let offCanvas = document.createElement('canvas');
-        let width = recording.audioBuffer.duration * (zoom + 0.15); //Ese 0.15 corrige descompensación
-        let height = 58;
+        let offCanvas = document.createElement('canvas'),
+         	width = recording.audioBuffer.duration * (zoom + 0.15), //Ese 0.15 corrige descompensación
+         	height = 58;
         offCanvas.width = recording.audioBuffer.duration * zoom;
         offCanvas.height = height;
         let canvasCtx = offCanvas.getContext('2d');
@@ -113,9 +110,9 @@ export var ui_draw = {
     },
 
     selectedRecording(recording, zoom) {
-        let offCanvas = document.createElement('canvas');
-        let width = recording.audioBuffer.duration * (zoom + 0.15);
-        let height = 58;
+        let offCanvas = document.createElement('canvas'),
+         	width = recording.audioBuffer.duration * (zoom + 0.15),
+         	height = 58;
         offCanvas.width = recording.audioBuffer.duration * zoom;
         offCanvas.height = height;
         let canvasCtx = offCanvas.getContext('2d');
@@ -185,17 +182,12 @@ export var ui_draw = {
     },
 
     printRecording(width, recording, offCanvas, offset, duration) {
-        //let width = recording.audioBuffer.duration * (timeSpace.zoom + 0.13);
-        let height = 58;
-        let x = (recording.timeToStart * timeSpace.zoom) + offset;
+        let height = 58, x = (recording.timeToStart * timeSpace.zoom) + offset;
         recording.canvas.width = width;
         recording.canvas.height = height;
         recording.canvasCtx.clearRect(0, 0, width, height);
-        //recording.canvasCtx.drawImage(offCanvas, 0, 0);
         recording.canvasCtx.drawImage(offCanvas, offset, 0, duration, height, 0, 0, duration, height);
         recording.canvas.style.left = x + 'px';
-        //recording.canvasCtx.clearRect(0, 0, offset, height);
-        //recording.canvasCtx.clearRect(duration, 0, width - duration, height);
     },
 
     printRecordingCrop(width, recording, offCanvas, offset, duration) {
@@ -206,5 +198,14 @@ export var ui_draw = {
         recording.canvasCtx.drawImage(offCanvas, 0, 0);
         recording.canvasCtx.clearRect(0, 0, offset, height);
         recording.canvasCtx.clearRect(duration, 0, width - duration, height);
+    },
+
+	printCutRecording(width, recording, offCanvas, offset, duration) {
+        let height = 58, x = (recording.timeToStart * timeSpace.zoom);
+        recording.canvas.width = width;
+        recording.canvas.height = height;
+        recording.canvasCtx.clearRect(0, 0, width, height);
+        recording.canvasCtx.drawImage(offCanvas, offset, 0, duration, height, 0, 0, duration, height);
+        recording.canvas.style.left = x + 'px';
     }
 }

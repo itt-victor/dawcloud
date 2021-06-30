@@ -6,9 +6,7 @@ import { timeSpace } from '../timeSpace';
 function exportSong() {
 
     if (grid.recordings.length > 0) {
-        let maxLength = 0;
-        let pannerValue;
-        let ctxValue;
+        let maxLength = 0, pannerValue, ctxValue;
 
         for (const recording of grid.recordings) //(let i = 0; i < grid.recordings.length; i++) {
             if (maxLength < recording.audioBuffer.length + (recording.timeToStart * 48000))
@@ -24,11 +22,11 @@ function exportSong() {
         mastergain.connect(offlineCtx.destination);
         let pannerNodes = [];
 
-        for (let i = 0; i < grid.tracks.length; i++) {
+        for (const track of grid.tracks) {
             let panner = offlineCtx.createStereoPanner();
             pannerNodes.push(panner);
             let gain = offlineCtx.createGain();
-            pannerValue = grid.tracks[i].pannerNode.pannerValue;
+            pannerValue = track.pannerNode.pannerValue;
 
             if (pannerValue.startsWith('L'))
                 ctxValue = - + pannerValue.slice(1) / 100;
@@ -38,7 +36,7 @@ function exportSong() {
                 ctxValue = pannerValue.slice(1) / 100;
 
 			panner.pan.setValueAtTime(ctxValue, 0);
-            gain.gain.setValueAtTime(grid.tracks[i].gainNode.gainValue, 0);
+            gain.gain.setValueAtTime(track.gainNode.gainValue, 0);
             panner.connect(gain);
             gain.connect(mastergain);
         }
@@ -47,16 +45,16 @@ function exportSong() {
             const source = offlineCtx.createBufferSource();
             source.buffer = recording.audioBuffer;
             source.connect(pannerNodes[recording.tracknumber]);
-            let start = Math.max(recording.timeToStart + recording.offset, 0);
-			let offset = Math.max(recording.offset, 0);                    //ESTO FALTA DE MIRARLO BIEN
-			let duration = recording.duration - recording.offset;
+            let start = Math.max(recording.timeToStart + recording.offset, 0),
+			 	offset = Math.max(recording.offset, 0),                   //ESTO FALTA DE MIRARLO BIEN
+			 	duration = recording.duration - recording.offset;
             source.start(start, offset, duration);
         }
 
-        offlineCtx.startRendering().then(function (renderedBuffer) {
+        offlineCtx.startRendering().then(renderedBuffer => {
             let filename = 'project.wav'
             const a = document.createElement('a');
-            var blob = new window.Blob([new DataView(toWav(renderedBuffer))], {
+            let blob = new window.Blob([new DataView(toWav(renderedBuffer))], {
                 type: 'audio/wav'
             });
             a.href = URL.createObjectURL(blob);
@@ -84,7 +82,7 @@ export function cropAudio(recording) {
     let offset = Math.max(recording.offset, 0);
     source.start(0, offset);
 
-    offlineCtx.startRendering().then(function (renderedBuffer) {
+    offlineCtx.startRendering().then(renderedBuffer => {
         console.log('algo');
     });
 }
