@@ -44,10 +44,12 @@
                     </form>
                 </div>
             @else
+                <div class="img-container"><img class="avatar" src="storage/users/avatars/{{Auth::user()->avatar}}"></div>
                 <div id="user_options">
                     <button id="user_welcome" type="button" class="btn dropdown-toggle" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">Hello {{ Auth::user()->user_name }}</button>
                     <div class="dropdown-menu" aria-labelledby="user_welcome">
+                        <a href="{{ route('profile') }}" id="my_profile" class="btn btn-outline-info dropdown-item">My profile</a>
                         <button id="load_project" class="btn btn-outline-info dropdown-item">My projects</button>
                         <button id="save_project" class="btn btn-outline-info dropdown-item">Save</button>
 						<button id="save_project_as" class="btn btn-outline-info dropdown-item">Save as</button>
@@ -60,7 +62,7 @@
                                 out</a></button>
                     </div>
                     <div id="load_dialogue">
-                        @if (isset($projects))
+                        @if (isset($projects[0]))
                             <p class="dummy-space2"><span class="x-button2" id="projects-close">&#10006;</span></p>
                             @foreach ($projects as $project)
                                 <a class="projects btn" id="{{ $project }}">{{ $project }}

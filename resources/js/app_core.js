@@ -1,5 +1,5 @@
 require('./bootstrap');
-require('./app_logic');
+require('./actions');
 require('./audio/bouncecontroller');
 require('./components/metronome');
 require('./components/timeLayout');
@@ -20,7 +20,7 @@ export const play = document.querySelector('#play-button'),
     stop = document.querySelector('#stop-button'),
     cutButton = document.querySelector('#cut_function'),
     normalButton = document.querySelector('#normal_function');
-export let isPlaying = false;
+export let is = { playing : false};
 
 stop.disabled = true;
 normalButton.style.background = "red";
@@ -81,7 +81,7 @@ function appStart() {
             for (const input of inputs)
                 if (e.target == input) return;
             e.preventDefault();
-            isPlaying ? eStop() : ePlay();
+            is.playing ? eStop() : ePlay();
         }
     });
 
@@ -118,7 +118,7 @@ function ePlay() {
     soundcontroller.metronome();
     stop.disabled = false;
     play.disabled = true;
-    isPlaying = true;
+    is.playing = true;
 }
 
 //stop
@@ -127,7 +127,7 @@ export function eStop() {
     soundcontroller.stopSound();
     play.disabled = false;
     stop.disabled = true;
-    isPlaying = false;
+    is.playing = false;
 }
 
 

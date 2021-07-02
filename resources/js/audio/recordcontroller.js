@@ -3,7 +3,7 @@ import { ui_draw } from '../ui/ui_draw';
 import { cursor } from '../components/cursor';
 import { timeSpace } from '../timeSpace';
 import { soundcontroller } from '../app_core';
-import { isPlaying } from '../app_core';
+import { is } from '../app_core';
 import { audioCtx } from '../app_core';
 import { generateRecordingId } from '../utils';
 import { play, record, stop } from '../app_core';
@@ -20,11 +20,10 @@ export default function recordController() {
                 mediaRecorder.ondataavailable = event => chunks.push(event.data);
                 mediaRecorder.start(10);
                 startTime = timeSpace.time();
-                if (!isPlaying) {
+                if (!is.playing) {
                     cursor.play();
                     soundcontroller.playSound();
-                    soundStatuses.hasStopped = false;
-                    soundStatuses.isPlaying = true;
+                    is.playing = true;
                 }
                 ui_draw.drawTrackWhileRecording();  ///ESTO
                 console.log(mediaRecorder.state);

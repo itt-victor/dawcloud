@@ -29,7 +29,7 @@
 			<div class="recover_password_dialogue">
 				<p class="recover_password_text">Forgot your password? Do not worry. <br>Write your email and we will send you a link to generate a new one.
 					<a href="{{ route('home')}}" class="x-button-6">&#10006;</a></p>
-				<form id="recover_password_form" method="POST" action="{{ route('password.recover') }}">
+				<form id="recover_password_form" method="POST" action="{{ route('password.email') }}">
 					@csrf
 					<label for="login_email">Email</label>
 					<input type="email" name="email" autocomplete="off">
@@ -40,15 +40,13 @@
         <a href="{{ route('appUnsigned') }}"
             id="startunsigned" name="startunsigned" class="startunsigned">Start daw Cloud without account</a>
 
-			@if(isset($status))
-			<div class="alert alert-danger">
-				<ul>
-                	@foreach ($status->all() as $status)
-                	<li>{{ $status }}</li>
-                	@endforeach
-            	</ul>
-			</div>
-			@endif
+		@if(session('status'))
+		<div class="alert alert-success">
+			<ul>
+                <li>{{ session('status') }}</li>
+            </ul>
+		</div>
+		@endif
 
 		@if ($errors->any())
         <div class="alert alert-danger">

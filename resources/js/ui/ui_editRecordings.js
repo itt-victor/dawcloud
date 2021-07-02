@@ -1,5 +1,5 @@
 import { grid } from '../components/generalgrid';
-import { soundcontroller, isPlaying } from '../app_core';
+import { soundcontroller, is } from '../app_core';
 import { timeSpace } from '../timeSpace';
 import { ui_draw } from './ui_draw';
 import { cursor } from '../components/cursor';
@@ -77,7 +77,7 @@ export function editRecording(recording) {
                 recording.timeToStart = (X / timeSpace.zoom) - recording.offset;
             }
 
-            if (isPlaying) soundcontroller.playWhileDragging(recording);
+            if (is.playing) soundcontroller.playWhileDragging(recording);
 
             //Cambiar de pista
             if (mousePos.y > sizes.maxHeight || mousePos.y < sizes.minHeight) {
@@ -148,7 +148,7 @@ export function editRecording(recording) {
             evt.target.style.cursor = 'w-resize';
             recording.offset = offset / timeSpace.zoom;
 
-            if (isPlaying && parseFloat(cursor.canvas.style.left) < offset + parseFloat(evt.target.style.left))
+            if (is.playing && parseFloat(cursor.canvas.style.left) < offset + parseFloat(evt.target.style.left))
                 soundcontroller.playWhileDragging(recording);
         }
         if (crop_right) {
@@ -160,7 +160,7 @@ export function editRecording(recording) {
             evt.target.style.cursor = 'w-resize';
             recording.duration = duration / timeSpace.zoom;
 
-            if (isPlaying && parseFloat(cursor.canvas.style.left) < duration + parseFloat(evt.target.style.left))
+            if (is.playing && parseFloat(cursor.canvas.style.left) < duration + parseFloat(evt.target.style.left))
                 soundcontroller.playWhileDragging(recording);
         }
     });

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AppController;
+use App\Http\Controllers\ProfileController;
 
 
 /*
@@ -26,13 +27,19 @@ Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
 Route::get('/forgot-password', [UserController::class, 'requestPassword'])->middleware('guest')->name('password.request');
 
-Route::post('/forgot-password', [UserController::class, 'recoverPassword'])->middleware('guest')->name('password.recover');
+Route::post('/forgot-password', [UserController::class, 'recoverPassword'])->middleware('guest')->name('password.email');
 
 Route::get('/reset-password/{token}', [UserController::class, 'sendPasswordLink'])->middleware('guest')->name('password.reset');
 
 Route::post('/reset-password', [UserController::class, 'resetPassword'])->middleware('guest')->name('password.update');
 
-Route::get('/app', [AppController::class, 'app'])->name('app');
+Route::get('/verify-email', [UserController::class, 'verificationNotice'])->middleware('auth')->name('verification.notice');
+
+Route::post('/verification-notification', [UserController::class, 'resendVerificationEmail'])->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+Route::get('/email/verify/{id}/{hash}', [UserController::class, 'verifyEmail'])->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::get('/app', [AppController::class, 'app'])->name('app')->middleware('verified');
 
 Route::post('/savecache', [AppController::class, 'saveCache'])->name('saveCache');
 
@@ -49,3 +56,5 @@ Route::get('/loadproject/{project}', [AppController::class, 'loadProject'])->nam
 Route::get('/loadsound/{project}/{recording}', [AppController::class, 'loadSound'])->name('loadSound');
 
 Route::post('/delete', [AppController::class, 'deleteProject'])->name('deleteProject');
+
+Route::get('/profile', [ProfileController::class, 'profileView'])->name('profile');

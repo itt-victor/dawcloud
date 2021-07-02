@@ -10,6 +10,8 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Password as PasswordFacade;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 use App\Models\User;
 
@@ -44,9 +46,11 @@ class UserController extends Controller
             'password' => Hash::make($password)
 		]);
 
-        Auth::loginUsingId($user->id);
+        event(new Registered($user));
 
-        return redirect()->route('app');
+        //Auth::loginUsingId($user->id);
+
+        return redirect()->route('verification.notice');
     }
 
     public function login(Request $request)
@@ -76,7 +80,7 @@ class UserController extends Controller
         return redirect()->route('home');
     }
 
-	public function requestPassword(Request $request)
+	public function requestPassword()
 	{
 		return view('home');
 	}
@@ -90,7 +94,7 @@ class UserController extends Controller
     	);
 
     	return $status === PasswordFacade::RESET_LINK_SENT
-            ? back()->with(['status' => __($status)])
+            ? redirect()->route('home')->with(['status' => __($status)])
             : back()->withErrors(['email' => __($status)]);
 	}
 
@@ -107,7 +111,7 @@ class UserController extends Controller
 	   		'password' => 'required|min:8|confirmed',
         ]);
 
-   		$status = Password::reset(
+   		$status = PasswordFacade::reset(
 	   		$request->only('email', 'password', 'password_confirmation', 'token'),
 	   		function ($user, $password) {
 			   	$user->forceFill([
@@ -120,8 +124,27 @@ class UserController extends Controller
 	   		}
    		);
 
-   		return $status === Password::PASSWORD_RESET
-			? redirect()->route('login')->with('status', __($status))
+   		return $status === PasswordFacade::PASSWORD_RESET
+			? redirect()->route('home')->with('status', __($status))
 			: back()->withErrors(['email' => [__($status)]]);
 	}
+
+    public function verificationNotice()
+    {
+        return view('verifyEmail');
+    }
+
+    public function resendVerificationEmail(Request $request)
+    {
+        $request->user()->sendEmailVerificationNotification();
+
+        return back()->with('message', 'Verification link sent!');
+    }
+
+    public function verifyEmail(EmailVerificationRequest $request)
+    {
+        $request->fulfill();
+
+        return redirect()->route('app');
+    }
 }

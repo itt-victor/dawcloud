@@ -22,7 +22,9 @@ class CreateUsers extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
-
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('avatar')->default('default.png');
+        });
     }
 
     /**

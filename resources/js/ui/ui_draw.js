@@ -1,6 +1,5 @@
 import { stop } from '../app_core';
 import { timeSpace } from '../timeSpace';
-import { chunks } from '../audio/recordcontroller';
 
 export var ui_draw = {
     drawTrackWhileRecording() {

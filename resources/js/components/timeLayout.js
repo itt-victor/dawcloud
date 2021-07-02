@@ -1,6 +1,6 @@
 import { timeSpace } from '../timeSpace';
 import { cursor } from './cursor';
-import { isPlaying } from '../app_core';
+import { is } from '../app_core';
 import { soundcontroller } from '../app_core';
 import { snap } from '../ui/ui_snapToGrid';
 
@@ -26,7 +26,7 @@ function pointTime(event) {
 			: Math.max(event.offsetX, 0);
 
         cursor.moveAtClick();
-        if (isPlaying) {
+        if (is.playing) {
             soundcontroller.stopSound();
             setTimeout(soundcontroller.playSound(), 10);
         }

@@ -501,6 +501,14 @@ div [data-selected] {
 	border-radius: 8px;
 }
 
+.avatar{
+    max-width: 40px;
+    background-color: transparent;
+}
+.img-container {
+    margin-right: 10px;
+}
+
 #project_name {
     border-radius: 5px;
     width: 220px;
@@ -590,9 +598,14 @@ div [data-selected] {
     margin-right: 10px;
 }
 
-#load_project, #save_project, #load_sound, #log_out, #export_sound, #save_project_as {
+#load_project, #save_project, #load_sound, #log_out, #export_sound, #save_project_as, #my_profile {
     height: 40px;
 	width: 220px;
+}
+
+#my_profile{
+    vertical-align: middle;
+    line-height: 1.9;
 }
 
 #load_sound {
@@ -712,6 +725,20 @@ input[type="file" i]{
 	text-align: center;
 }
 
+.verify_email_dialogue {
+    width: 600px;
+	height: 250px;
+	border: solid 1.3px #7a2332;
+	border-radius: 5px;
+	background-color: white;
+	/*display: none;*/
+	position: relative;
+    left: 50%;
+    margin-top: 50px;
+    margin-left: -300px;
+	text-align: center;
+}
+
 .x-button-6 {
 	position: absolute;
 	top: 10px;
@@ -725,6 +752,11 @@ input[type="file" i]{
 }
 
 .recover_password_text {
+	text-align: center;
+	margin-top: 20px;
+}
+
+.verify_email_text {
 	text-align: center;
 	margin-top: 20px;
 }

@@ -4,7 +4,7 @@ import { timeSpace } from '../timeSpace';
 import Recording from '../components/recording';
 import { editRecording } from './ui_editRecordings';
 import { generateRecordingId } from '../utils';
-import { removeRecording } from '../app_logic';
+import { removeRecording } from '../actions';
 
 
 export let cut = false;

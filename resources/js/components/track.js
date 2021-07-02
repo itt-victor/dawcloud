@@ -3,7 +3,7 @@ import { ui_draw } from '../ui/ui_draw';
 import { grid } from './generalgrid';
 import { audioCtx } from '../app_core';
 import { editRecording } from '../ui/ui_editRecordings';
-import { removeRecording } from '../app_logic';
+import { removeRecording } from '../actions';
 import { timeSpace } from '../timeSpace';
 import { cutRecording } from '../ui/ui_cutRecordings';
 
