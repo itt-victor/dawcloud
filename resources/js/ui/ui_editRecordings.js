@@ -63,12 +63,12 @@ export function editRecording(recording) {
                 let left = parseFloat(recording.canvas.style.left);
 
                 if (barCount > bar) {
-                    recording.canvas.style.left =  left + snap.setup + 'px';
+                    recording.canvas.style.left = left + snap.setup + 'px';
                     recording.timeToStart = ((X + snap.setup) / timeSpace.zoom) - recording.offset;
                     bar++;
                 }
                 if (barCount < bar) {
-                    recording.canvas.style.left =  left - snap.setup + 'px';
+                    recording.canvas.style.left = left - snap.setup + 'px';
                     recording.timeToStart = ((X - snap.setup) / timeSpace.zoom) - recording.offset;
                     bar--;
                 }
@@ -165,7 +165,7 @@ export function editRecording(recording) {
         }
     });
 
-    window.addEventListener("mouseup", evt => {
+    window.addEventListener("mouseup", () => {
 
         drag = false;
         if (crop_left || crop_right) {

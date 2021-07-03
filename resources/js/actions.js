@@ -80,7 +80,7 @@ import { generateRecordingId } from './utils';
 (function loadSong() {
     const button = document.getElementById('load_sound_hidden');
     if (button) {
-        button.onchange = () => {
+        button.onchange = a => {
             loading(); eStop();
             let reader = new FileReader();
             reader.onload = e => {
@@ -89,8 +89,8 @@ import { generateRecordingId } from './utils';
 					grid.tracks[trcknr].addRecord(generateRecordingId(), timeSpace.time(), buffer, 0, buffer.duration)
                 );
             }
-            if (button.files.length > 0)
-                reader.readAsArrayBuffer(button.files[button.files.length -1]);
+            if (a.target.files.length > 0)
+                reader.readAsArrayBuffer(a.target.files[a.target.files.length -1]);
         }
     }
 })();
@@ -124,8 +124,7 @@ import { generateRecordingId } from './utils';
             	width = Math.ceil(duration - offset) + 1;
             ui_draw.printRecording(width, recording, offCanvas, offset, duration);
         });
-        drawGrid();
-        drawLayout();
+        drawGrid(); drawLayout();
         cursor.moveAtZoom(oldZoom);
     }
     zoomIn.addEventListener('click', zIn);
@@ -200,7 +199,7 @@ import { generateRecordingId } from './utils';
 //mutea la pista
 (function mute() {
     const buttons = document.getElementsByClassName('track_mute'),
-     	soloButtons = document.getElementsByClassName('track_solo');
+          soloButtons = document.getElementsByClassName('track_solo');
 
     for (const button of buttons) {
         button.addEventListener('click', function () {

@@ -17,6 +17,8 @@ use App\Http\Controllers\ProfileController;
 |
 */
 
+Route::view('/test', 'test')->name('test');
+
 Route::get('/', [UserController::class, 'home'])->name('home');
 
 Route::post('/signup', [UserController::class, 'signup'])->name('signup');
@@ -57,4 +59,6 @@ Route::get('/loadsound/{project}/{recording}', [AppController::class, 'loadSound
 
 Route::post('/delete', [AppController::class, 'deleteProject'])->name('deleteProject');
 
-Route::get('/profile', [ProfileController::class, 'profileView'])->name('profile');
+Route::get('/profile', [ProfileController::class, 'profileView'])->name('profile')->middleware('verified');
+
+Route::post('/profile/change-image', [ProfileController::class, 'changeImage'])->name('changeImage');

@@ -48,9 +48,7 @@ class UserController extends Controller
 
         event(new Registered($user));
 
-        //Auth::loginUsingId($user->id);
-
-        return redirect()->route('verification.notice');
+        return back()->with('status', __('Last step! We have send a confirmation link to your email adress.'));
     }
 
     public function login(Request $request)

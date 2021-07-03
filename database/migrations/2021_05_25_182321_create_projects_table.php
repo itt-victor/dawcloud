@@ -18,12 +18,14 @@ class CreateProjectsTable extends Migration
             $table->string('project_name');
             $table->json('json_data');
             $table->timestamps();
-        });
-
-        Schema::table('projects', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
         });
+
+        /*Schema::table('projects', function (Blueprint $table) {
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+        });*/
     }
 
     /**

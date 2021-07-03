@@ -10769,3 +10769,46 @@ input[type=file i] {
 .alert {
   top: 150px;
 }
+
+#profile-container {
+  margin-top: 20px;
+}
+
+/*#profile-container .row {
+    justify-content: center;
+}*/
+.profile-img-container {
+  width: 100%;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+}
+
+.profile-img {
+  max-width: 100%;
+  min-height: 100%;
+  border-radius: 50%;
+}
+
+.profile-options {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.change-avatar {
+  width: 200px;
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  margin-left: -100px;
+  visibility: hidden;
+}
+
+.info-container {
+  background-color: white;
+}
+
+#input_image {
+  display: none;
+}
