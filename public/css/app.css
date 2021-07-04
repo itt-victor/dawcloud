@@ -10495,6 +10495,7 @@ div [data-selected] {
 .avatar {
   max-width: 40px;
   background-color: transparent;
+  border-radius: 50%;
 }
 
 .img-container {
@@ -10782,6 +10783,7 @@ input[type=file i] {
   border-radius: 50%;
   cursor: pointer;
   position: relative;
+  margin-bottom: 15px;
 }
 
 .profile-img {
@@ -10807,8 +10809,32 @@ input[type=file i] {
 
 .info-container {
   background-color: white;
+  border-radius: 5px;
 }
 
 #input_image {
   display: none;
+}
+
+.profile-projects, .personal-info-container, .delete-account-container {
+  display: none;
+}
+
+.back-to-app {
+  color: #7a2332;
+}
+
+.back-to-app:hover {
+  color: #7a2332;
+  text-decoration: none;
+}
+
+.back-to-app:active {
+  text-decoration: underline;
+}
+
+.back-arrow {
+  position: relative;
+  left: 10px;
+  font-size: 20px;
 }

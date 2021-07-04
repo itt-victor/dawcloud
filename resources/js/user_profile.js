@@ -1,29 +1,29 @@
 
 const picContainer = document.querySelector('.profile-img-container');
 const changePicBtn = document.querySelector('.change-avatar');
-const imageInput = document.querySelector('#input_image');
-const csrf_token = document.head.querySelector('[name="csrf-token"]').content;
+const projects = document.querySelector('.profile-projects');
+const personalInfo = document.querySelector('.personal-info-container');
+const deleteContainer = document.querySelector('.delete-account-container');
+const projectsBtn = document.querySelector('.my-projects');
+const personalInfoBtn = document.querySelector('.personal-info');
+const dltAccountBtn = document.querySelector('.dlt-account');
 let profileImage = document.querySelector('.profile-img');
+
+const visible = element => element.style.display = 'initial';
+const invisible = element => element.style.display = 'none';
+
 
 picContainer.addEventListener('mouseenter', () => changePicBtn.style.visibility = 'visible');
 picContainer.addEventListener('mouseleave', () => changePicBtn.style.visibility = 'hidden');
 
-//cambiar profile pic
-(function changeAvatar() {
-    imageInput.addEventListener('change', e => {
-        const image_blob = new Blob([e.target.files[0]], { type: 'image/*' });
-        const objectURL = URL.createObjectURL(image_blob)
-        profileImage.src = objectURL;
+projectsBtn.addEventListener('click', () => {
+    visible(projects); invisible(personalInfo); invisible(deleteContainer);
+});
+personalInfoBtn.addEventListener('click', () => {
+    visible(personalInfo); invisible(projects); invisible(deleteContainer);
+});
+dltAccountBtn.addEventListener('click', () => {
+    visible(deleteContainer); invisible(personalInfo); invisible(projects);
+});
 
-        let form = new FormData();
-        form.append('image', e.target.files[0]);
-        fetch('profile/change-image', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': csrf_token
-            },
-            type: 'multipart/form-data',
-            body: form
-        });
-    });
-})();
+

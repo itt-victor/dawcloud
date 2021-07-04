@@ -41,7 +41,7 @@ Route::post('/verification-notification', [UserController::class, 'resendVerific
 
 Route::get('/email/verify/{id}/{hash}', [UserController::class, 'verifyEmail'])->middleware(['auth', 'signed'])->name('verification.verify');
 
-Route::get('/app', [AppController::class, 'app'])->name('app')->middleware('verified');
+Route::get('/app', [AppController::class, 'app'])->name('app')->middleware('verified', 'auth');
 
 Route::post('/savecache', [AppController::class, 'saveCache'])->name('saveCache');
 
@@ -59,6 +59,8 @@ Route::get('/loadsound/{project}/{recording}', [AppController::class, 'loadSound
 
 Route::post('/delete', [AppController::class, 'deleteProject'])->name('deleteProject');
 
-Route::get('/profile', [ProfileController::class, 'profileView'])->name('profile')->middleware('verified');
+Route::get('/profile', [ProfileController::class, 'profileView'])->name('profile')->middleware('verified', 'auth');
 
 Route::post('/profile/change-image', [ProfileController::class, 'changeImage'])->name('changeImage');
+
+Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('updateProfile');

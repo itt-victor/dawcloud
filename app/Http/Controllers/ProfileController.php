@@ -30,10 +30,24 @@ class ProfileController extends Controller
 
     public function changeImage(Request $request)
     {
-        $path = $request->image->store('public/users/avatars');
+        $path = $request->file('image')->store('public/users/avatars');
         $currentuser = User::find(Auth::user()->id);
         $currentuser->avatar = basename($path);
         $currentuser->save();
 
+        return back();
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $currentuser = User::find(Auth::user()->id);
+        foreach ($request->input() as $field => $value) {
+            if(!empty($value) and $field != '_token') {
+                $currentuser->$field = $value;
+                $currentuser->save();
+            }
+        }
+
+        return back();
     }
 }
