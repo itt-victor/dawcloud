@@ -49,7 +49,7 @@
                     <button id="user_welcome" type="button" class="btn dropdown-toggle" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">Hello {{ Auth::user()->user_name }}</button>
                     <div class="dropdown-menu" aria-labelledby="user_welcome">
-                        <a href="{{ route('profile') }}" id="my_profile" class="btn btn-outline-info dropdown-item">My profile</a>
+                        <!--<a href="{{ route('profile') }}" id="my_profile" class="btn btn-outline-info dropdown-item">My profile</a>-->
                         <button id="load_project" class="btn btn-outline-info dropdown-item">My projects</button>
                         <button id="save_project" class="btn btn-outline-info dropdown-item">Save</button>
 						<button id="save_project_as" class="btn btn-outline-info dropdown-item">Save as</button>
@@ -83,13 +83,10 @@
                         <input id="project_name" type="text">
                     </div>
                 </div>
+                <a href="{{ route('profile') }}" id="my_profile"><img  class="config-icon" src="icons/config-icon.png"></a>
                 <span id="project-n" class="project-n"></span>
             @endif
 
-            <div class="zoom-btn">
-                <button id="zoomin" type="button" class="btn btn-outline-info">+</button>
-                <button id="zoomout" type="button" class="btn btn-outline-info">-</button>
-            </div>
         </div>
 
         <div class="second-row">
@@ -109,6 +106,10 @@
                     <option value="0.125">1/8</option>
                     <option value="0.0625">1/16</option>
                 </select>
+            </div>
+            <div class="zoom-btn">
+                <button id="zoomin" type="button" class="btn btn-outline-info">+</button>
+                <button id="zoomout" type="button" class="btn btn-outline-info">-</button>
             </div>
         </div>
 

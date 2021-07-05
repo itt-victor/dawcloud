@@ -222,6 +222,7 @@ body {
     width: 200px;
     text-align: center;
     height: 39px;
+    justify-self: end;
 }
 
 #zoomin, #zoomout {
@@ -231,6 +232,10 @@ body {
     font-weight: 800;
     height: 39px;
     width: 39px;
+}
+
+#snap-button {
+    margin-left: 5px;
 }
 
 .sound-clips {
@@ -515,6 +520,14 @@ div [data-selected] {
     width: 220px;
 }
 
+.config-icon {
+    margin-left: 10px;
+    /*margin-top: 10px;*/
+    align-self: center;
+    max-width: 30px;
+    background-color: transparent;
+}
+
 .x-button2 {
     font-size: 30px;
     position: relative;
@@ -526,7 +539,7 @@ div [data-selected] {
 .x-button3 {
     font-size: 15px;
     position: absolute;
-    left: 310px;
+    left: 295px;
     cursor: pointer;
     color: #595858;
 }
@@ -599,7 +612,7 @@ div [data-selected] {
     margin-right: 10px;
 }
 
-#load_project, #save_project, #load_sound, #log_out, #export_sound, #save_project_as, #my_profile {
+#load_project, #save_project, #load_sound, #log_out, #export_sound, #save_project_as {
     height: 40px;
 	width: 220px;
 }
@@ -838,8 +851,12 @@ input[type="file" i]{
     display: none;
 }
 
-.profile-projects, .personal-info-container, .delete-account-container {
+.profile-projects, .configuration-container {
     display: none;
+}
+
+.projects {
+    position: relative;
 }
 
 .back-to-app {
@@ -859,4 +876,9 @@ input[type="file" i]{
     left: 10px;
     font-size: 20px;
 
+}
+
+.personal-info-container > form {
+    display: flex;
+    flex-direction: column;
 }
