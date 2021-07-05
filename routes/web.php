@@ -4,8 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Storage;
-
 
 
 /*
@@ -67,8 +65,3 @@ Route::post('/profile/change-image', [ProfileController::class, 'changeImage'])-
 
 Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('updateProfile');
 
-
-Route::get('/.well-known/pki-validation/{file}', function($file){
-    $file = Storage::get('public/FAC2447E41DEB4DC30294C5C7D413D49.txt');
-    return $file;
-});
