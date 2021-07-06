@@ -2,10 +2,10 @@ import { grid } from './generalgrid';
 import { audioCtx } from '../app_core';
 
 
-function setChannelGain() {
+const setChannelGain = () => {
     let fader, gainNode, track, trckNr, Y,
-     	drag = Array(8).fill(false),
-     	delta = new Object();
+        drag = Array(8).fill(false),
+        delta = new Object();
 
     function onMousePos(context, evt) {
         let rect = context.getBoundingClientRect();
@@ -54,11 +54,11 @@ function setChannelGain() {
 }
 setTimeout(setChannelGain, 500);
 
-function setMasterGain() {
+const setMasterGain = () => {
     let fader = document.getElementById('master_fader'),
-     	gain = grid.gainNode, gainValue, Y,
-     	drag = false,
-     	delta = new Object();
+        gain = grid.gainNode, gainValue, Y,
+        drag = false,
+        delta = new Object();
 
     function onMousePos(context, evt) {
         let rect = context.getBoundingClientRect();
@@ -97,10 +97,9 @@ function setMasterGain() {
 
     window.addEventListener("mouseup", () => drag = false);
 }
-
 setTimeout(setMasterGain, 500);
 
-function setPan() {
+const setPan = () => {
     const panButton = document.getElementsByClassName('panner');
     let newValue;
     let trackNR;
@@ -125,23 +124,27 @@ function setPan() {
             newValue.addEventListener('keyup', function (o) {
                 if (o.key === 'Enter') {
                     o.preventDefault();
-                    e.target.innerHTML = grid.tracks[i].pannerNode.pannerValue = this.value.toUpperCase();
                     let ctxValue;
-                    if (this.value.toUpperCase().startsWith('L')) {
-                        ctxValue = - + this.value.slice(1) / 100;
+                    const execPan = () => {
                         grid.tracks[trackNR].pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
                         newValue.remove();
+                        e.target.innerHTML = grid.tracks[i].pannerNode.pannerValue = this.value.toUpperCase();
+                    }
+                    if (this.value.toUpperCase().startsWith('L')) {
+                        ctxValue = - + this.value.slice(1) / 100;
+                        if (ctxValue <= -1) ctxValue = -1;
+                        execPan();
                     }
                     else if (this.value == 0 || this.value.toUpperCase() == 'C') {
                         ctxValue = 0;
-                        grid.tracks[trackNR].pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
-                        newValue.remove();
+                        execPan();
                     }
                     else if (this.value.toUpperCase().startsWith('R')) {
                         ctxValue = this.value.slice(1) / 100;
-                        grid.tracks[trackNR].pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
-                        newValue.remove();
+                        if (ctxValue >= 1) ctxValue = 1;
+                        execPan();
                     } else {
+                        newValue.value = '';
                         newValue.setAttribute('placeholder', 'Invalid value!');
                     }
                 }

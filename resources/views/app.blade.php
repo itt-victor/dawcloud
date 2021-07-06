@@ -11,14 +11,14 @@
 
             <div id="buttonpad" class="buttonpad">
                 <div class="master_controls">
-                    <button id="play-button" class="play-button btn btn-outline-info"><img width="30px" height="30px"
-                            src="icons/play-icon.jpg" /></button>
+                    <button id="loop-button" class="loop-button btn btn-outline-info"><img width="30px" height="30px"
+                        src="icons/loop-icon.png" /></button>
                     <button id="stop-button" class="stop-button btn btn-outline-info"><img width="30px" height="30px"
                             src="icons/stop-icon.png" /></button>
+                    <button id="play-button" class="play-button btn btn-outline-info"><img width="30px" height="30px"
+                            src="icons/play-icon.jpg" /></button>
                     <button id="record-button" class="record-button btn btn-outline-info"><img width="30px" height="30px"
                             src="icons/record-icon.png" /></button>
-                    <button id="loop-button" class="loop-button btn btn-outline-info"><img width="30px" height="30px"
-                            src="icons/loop-icon.png" /></button>
                     <button id=metric_button class="btn btn-outline-info btn-metric"></button>
                     <button id="bpm_button" class="btn btn-outline-info btn-bpm"></button>
                     <button id="metronome-button" class="metronome-button btn btn-outline-info"><img width="30px"
@@ -40,26 +40,26 @@
                         <input type="text" class="" name="user_name" autocomplete="off">
                         <label for="signup_password">Password</label>
                         <input type="password" class="" name="password" autocomplete="off">
-                        <button id="register2" type="submit">Sign Up!</button>
+                        <button id="register2" type="submit" class="btn btn-outline-info">Sign Up!</button>
                     </form>
                 </div>
             @else
-                <div class="img-container"><img class="avatar" src="storage/users/avatars/{{Auth::user()->avatar}}"></div>
+                <div class="img-container"><img class="avatar" src="storage/users/avatars/{{ Auth::user()->avatar }}">
+                </div>
                 <div id="user_options">
                     <button id="user_welcome" type="button" class="btn dropdown-toggle" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">Hello {{ Auth::user()->user_name }}</button>
                     <div class="dropdown-menu" aria-labelledby="user_welcome">
-                        <!--<a href="{{ route('profile') }}" id="my_profile" class="btn btn-outline-info dropdown-item">My profile</a>-->
                         <button id="load_project" class="btn btn-outline-info dropdown-item">My projects</button>
                         <button id="save_project" class="btn btn-outline-info dropdown-item">Save</button>
-						<button id="save_project_as" class="btn btn-outline-info dropdown-item">Save as</button>
+                        <button id="save_project_as" class="btn btn-outline-info dropdown-item">Save as</button>
                         <label id="load_sound" for="load_sound_hidden"
                             class="btn btn-outline-info dropdown-item">Import</label>
                         <input type="file" id="load_sound_hidden" class="btn btn-outline-info dropdown-item"
                             accept="audio/wav, audio/mp3" />
                         <button id="export_sound" class="btn btn-outline-info dropdown-item">Export</button>
-                        <button id="log_out" class="btn btn-outline-info dropdown-item"><a href="{{ route('logout') }}">Log
-                                out</a></button>
+                        <button id="log_out" class="btn btn-outline-info dropdown-item"><a
+                                href="{{ route('logout') }}">Log out</a></button>
                     </div>
                     <div id="load_dialogue">
                         @if (isset($projects[0]))
@@ -83,7 +83,7 @@
                         <input id="project_name" type="text">
                     </div>
                 </div>
-                <a href="{{ route('profile') }}" id="my_profile"><img  class="config-icon" src="icons/config-icon.png"></a>
+                <a href="{{ route('profile') }}" id="my_profile"><img class="config-icon" src="icons/config-icon.png"></a>
                 <span id="project-n" class="project-n"></span>
             @endif
 
@@ -92,9 +92,9 @@
         <div class="second-row">
             <div id="toolbox">
                 <button id="normal_function" class="btn btn-outline-info"><img width="20px" height="20px"
-                    src="icons/normal_cursor.png"  /></button>
+                        src="icons/normal_cursor.png" /></button>
                 <button id="cut_function" class="btn btn-outline-info"><img width="20px" height="20px"
-                    src="icons/cut_icon.svg"  /></button>
+                        src="icons/cut_icon.svg" /></button>
             </div>
             <div class="snap-to-grid">
                 <button id="snap-button" class="btn btn-outline-info">
@@ -168,6 +168,24 @@
             </div>
         </section>
     </div>
+
+    @if (session('status'))
+        <div class="alert alert-success">
+            <ul>
+                <li>{{ session('status') }}</li>
+            </ul>
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
 @endsection
 

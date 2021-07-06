@@ -10084,12 +10084,10 @@ body {
 }
 
 #signup_now {
-  right: 500px;
-  top: 50px;
+  margin-bottom: 0;
   text-align: center;
   width: 170px;
   cursor: pointer;
-  position: absolute;
 }
 
 #signup_now:hover {
@@ -10252,8 +10250,8 @@ body {
 
 #grid-selector {
   position: absolute;
-  width: 10000px;
   height: 510px;
+  z-index: 99999999;
 }
 
 #cursor {
@@ -10516,7 +10514,7 @@ div [data-selected] {
   margin-left: 10px;
   /*margin-top: 10px;*/
   align-self: center;
-  max-width: 30px;
+  max-width: 25px;
   background-color: transparent;
 }
 
@@ -10788,9 +10786,18 @@ input[type=file i] {
   margin-top: 20px;
 }
 
-/*#profile-container .row {
-    justify-content: center;
-}*/
+.profile-form {
+  width: 400px;
+}
+
+.profile-form > input {
+  margin-bottom: 10px;
+}
+
+.profile-form > label {
+  margin-bottom: 0;
+}
+
 .profile-img-container {
   width: 100%;
   border-radius: 50%;
@@ -10859,4 +10866,18 @@ input[type=file i] {
 .personal-info-container > form {
   display: flex;
   flex-direction: column;
+}
+
+.configuration-container {
+  flex-direction: column;
+}
+
+.delete-dialogue {
+  width: 300px;
+  height: 200px;
+  display: none;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  margin-left: -150px;
 }

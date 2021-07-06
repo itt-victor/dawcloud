@@ -9,7 +9,7 @@ import { cursor } from './components/cursor';
 import { generateRecordingId } from './utils';
 
 //toggle registrarse para uruarios no registrados
-(function toggleSignUp() {
+const toggleSignUp = (() => {
     let signup = document.querySelector('#signup_now');
     let signupReminder = document.querySelector('#signup_reminder');
     let xButton = document.querySelector('.x-button');
@@ -26,7 +26,7 @@ import { generateRecordingId } from './utils';
 })();
 
 //Seleccionar pista
-(function selectTrack() {
+const selectTrack = (() => {
     const tracks = document.getElementsByClassName("track");
     const trackNames = document.getElementsByClassName("track_name");
     for (let track of tracks) {
@@ -48,7 +48,7 @@ import { generateRecordingId } from './utils';
 })();
 
 //cambia nombre de la pista
-(function changeTrackName() {
+const changeTrackName = (() => {
     let names = document.querySelectorAll('.select');
     for (let name of names) {
         name.addEventListener('dblclick', e => {
@@ -77,7 +77,7 @@ import { generateRecordingId } from './utils';
 })();
 
 //Cargar una canción desde el pc del usuario
-(function loadSong() {
+const loadSong = (() => {
     const button = document.getElementById('load_sound_hidden');
     if (button) {
         button.onchange = a => {
@@ -96,7 +96,7 @@ import { generateRecordingId } from './utils';
 })();
 
 //zoom
-(function zoom() {
+const zoom = (() => {
     const zoomIn = document.getElementById("zoomin"),
     	zoomOut = document.getElementById("zoomout"),
     	inputs = document.querySelectorAll('input');
@@ -146,7 +146,7 @@ import { generateRecordingId } from './utils';
 })();
 
 //establece el bpm
-(function setBpm() {
+const setBpm = (() => {
     const bpmButton = document.getElementById('bpm_button');
     let input;
     bpmButton.innerHTML = Math.round(120 / timeSpace.bpm) + '  bpm';
@@ -181,7 +181,7 @@ import { generateRecordingId } from './utils';
 })();
 
 //cambia el compás, ya se añadiran más
-(function metric() {
+const metric = (() => {
     const metricButton = document.getElementById('metric_button');
     metricButton.innerHTML = '4/4';
     metricButton.addEventListener('click', ()=> {
@@ -197,7 +197,7 @@ import { generateRecordingId } from './utils';
 })();
 
 //mutea la pista
-(function mute() {
+const mute = (() => {
     const buttons = document.getElementsByClassName('track_mute'),
           soloButtons = document.getElementsByClassName('track_solo');
 
@@ -219,7 +219,7 @@ import { generateRecordingId } from './utils';
 })();
 
 //solea la pista
-(function solo() {
+const solo = (() => {
     const button = document.getElementsByClassName('track_solo');
     for (const btn of button) {
         btn.addEventListener('click', function () {
@@ -244,7 +244,7 @@ import { generateRecordingId } from './utils';
 })();
 
 //elimina la grabación
-export function removeRecording(recording) {
+export const removeRecording = recording => {
     recording.canvas.addEventListener('mousedown', e => {
         e.stopPropagation;
         if (!recording.canvas.selected) {

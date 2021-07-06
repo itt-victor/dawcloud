@@ -39,7 +39,7 @@ const loadbtn = document.getElementById('load_project'),
 var project;
 var projectName;
 
-(function saveProject() {
+const saveProject =(() => {
     if (saveWindow && projectNameNode && savebtn) {
         projectNameNode.addEventListener('keypress', save);
 		savebtn.addEventListener('click', (e) =>{
@@ -167,7 +167,7 @@ var projectName;
 })();
 
 
-(function loadProject() {
+const loadProject = (() => {
     for (const projectBtn of projects) {
         projectBtn.addEventListener('dblclick', function ld(e) {
             e.stopPropagation;
@@ -267,7 +267,7 @@ var projectName;
     }
 })();
 
-(function deleteProject() {
+const deleteProject = (() => {
     for (let project of projects) {
 
         const dltConfirmation = document.getElementsByClassName('delete_confirmation')[0],

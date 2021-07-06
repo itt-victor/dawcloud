@@ -46,6 +46,7 @@ class UserController extends Controller
             'password' => Hash::make($password)
 		]);
 
+        Auth::loginUsingId($user->id);
         event(new Registered($user));
 
         return back()->with('status', __('Last step! We have send a confirmation link to your email adress.'));
@@ -53,19 +54,18 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
-
-        $credentials = Validator::make($request->all(),[
-            'email' => ['required', 'email'],
+        $credentials = $request->validate([
+            'email' => ['required', 'email', 'exists:users'],
             'password' => ['required']
         ]);
 
-        if (Auth::attempt($credentials->validate())) {
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->route('app');
         }
 
         return back()->withErrors([
-            'email' => 'The provided info is not valid...',
+            'password' => 'The provided password is not valid...',
         ]);
     }
 

@@ -8,7 +8,7 @@ function exportSong() {
     if (grid.recordings.length > 0) {
         let maxLength = 0, pannerValue, ctxValue;
 
-        for (const recording of grid.recordings) //(let i = 0; i < grid.recordings.length; i++) {
+        for (const recording of grid.recordings)
             if (maxLength < recording.audioBuffer.length + (recording.timeToStart * 48000))
                 maxLength = recording.audioBuffer.length + (recording.timeToStart * 48000);
 

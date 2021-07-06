@@ -33,9 +33,8 @@ export default class SoundController {
     }
 
     stopSound() {
-        for (const audioBufferSource of this.audioBufferSources) {
+        for (const audioBufferSource of this.audioBufferSources)
             audioBufferSource.stop();
-        }
         this.audioBufferSources = [];
     }
 
@@ -77,30 +76,14 @@ export default class SoundController {
             let increment = timeSpace.bpm / 2;
             while (metronome) {
                 const oscillator1 = audioCtx.createOscillator();
-                const oscillator2 = audioCtx.createOscillator();
-                const oscillator3 = audioCtx.createOscillator();
-                const oscillator4 = audioCtx.createOscillator();
+
                 oscillator1.type = 'sine';
-                oscillator1.frequency.setValueAtTime(440, audioCtx.currentTime);
+                oscillator1.frequency.value = (beatNumber % 4 == 0) ? 1000 : 800;
                 oscillator1.connect(audioCtx.destination);
-                oscillator2.type = 'sine';
-                oscillator2.frequency.setValueAtTime(220, audioCtx.currentTime);
-                oscillator2.connect(audioCtx.destination);
-                oscillator3.type = 'sine';
-                oscillator3.frequency.setValueAtTime(220, audioCtx.currentTime);
-                oscillator3.connect(audioCtx.destination);
-                oscillator4.type = 'sine';
-                oscillator4.frequency.setValueAtTime(220, audioCtx.currentTime);
-                oscillator4.connect(audioCtx.destination);
+
                 oscillator1.start();
                 oscillator1.stop(audioCtx.currentTime + 0.1);
-                oscillator2.start(audioCtx.currentTime + increment);
-                oscillator2.stop(audioCtx.currentTime + 0.1 + increment);
-                console.log(increment);
-                oscillator3.start(audioCtx.currentTime + (increment*2));
-                oscillator3.stop(audioCtx.currentTime + 0.1 + (increment*2));
-                oscillator4.start(audioCtx.currentTime + (increment*3));
-                oscillator4.stop(audioCtx.currentTime + 0.1 + (increment*3));
+
                 increment *= 2;
             }
         }

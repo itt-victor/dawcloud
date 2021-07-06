@@ -8,7 +8,7 @@ export var cursor = {
     interval,
     draw: function () {
         this.canvas.width = 5;
-        this.canvas.height = 70 * grid.howMany + 30;
+        this.canvas.height = 60 * grid.howMany + 30;
         this.canvas.style.left = 0;
         this.canvas.style.zIndex = '10';
         this.ctx = this.canvas.getContext('2d');

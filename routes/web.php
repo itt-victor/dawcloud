@@ -63,5 +63,8 @@ Route::get('/profile', [ProfileController::class, 'profileView'])->name('profile
 
 Route::post('/profile/change-image', [ProfileController::class, 'changeImage'])->name('changeImage');
 
-Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('updateProfile');
+Route::post('/profile/update-profile', [ProfileController::class, 'updateProfile'])->name('updateProfile');
 
+Route::post('/profile/update-user', [ProfileController::class, 'updateUser'])->name('updateUser');
+
+Route::delete('/profile/delete-account', [ProfileController::class, 'deleteAccount'])->name('deleteAccount');

@@ -7,8 +7,11 @@ const personalInfo = document.querySelector('.personal-info-container');
 const configurationBtn = document.querySelector('.configuration');
 const projectsBtn = document.querySelector('.my-projects');
 const personalInfoBtn = document.querySelector('.personal-info');
-//const dltAccountBtn = document.querySelector('.dlt-account');
+const dltAccountBtn = document.querySelector('.dlt-account');
+const deleteDialogue = document.querySelector('.delete-dialogue');
+const cancelDelete = document.querySelector('.cancel-dlt');
 let profileImage = document.querySelector('.profile-img');
+
 
 const visible = element => element.style.display = 'initial';
 const invisible = element => element.style.display = 'none';
@@ -26,5 +29,5 @@ personalInfoBtn.addEventListener('click', () => {
 configurationBtn.addEventListener('click', () => {
     visible(configurationContainer); invisible(personalInfo); invisible(projects);
 });
-
-
+dltAccountBtn.addEventListener('click', () => visible(deleteDialogue));
+cancelDelete.addEventListener('click', () => invisible(deleteDialogue));
