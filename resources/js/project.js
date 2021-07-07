@@ -225,7 +225,7 @@ export const storeFile = recording => {
                         let fader = track.fader;
                         track.gainNode.gainValue = project.tracksGainValues[i];
                         fader.Y = project.tracksY[i];
-                        fader.firstChild.nextSibling.style.top = project.tracksY[i] + 'px';
+                        fader.querySelector('a').style.top = project.tracksY[i] + 'px';
                         track.gainNode.gain.setValueAtTime(track.gainNode.gainValue, audioCtx.currentTime);
                     }
                     //Se carga el panorama
