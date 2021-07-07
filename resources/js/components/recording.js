@@ -3,6 +3,7 @@ import { grid } from './generalgrid';
 export default class Recording {
     constructor(id, timeToStart, audioBuffer, tracknumber, offset, duration) {
         this.id = id;
+        this.filename;
         this.tracknumber = tracknumber;
         this.timeToStart = timeToStart;
         this.offset = offset;

@@ -7,9 +7,10 @@ import { ui_draw } from './ui/ui_draw';
 import drawLayout from './ui/ui_layout';
 import { cursor } from './components/cursor';
 import { generateRecordingId } from './utils';
+import { storeFile } from './project';
 
-//toggle registrarse para uruarios no registrados
-const toggleSignUp = (() => {
+//SIGN UP REMINDER
+(() => {
     let signup = document.querySelector('#signup_now');
     let signupReminder = document.querySelector('#signup_reminder');
     let xButton = document.querySelector('.x-button');
@@ -25,8 +26,8 @@ const toggleSignUp = (() => {
     }
 })();
 
-//Seleccionar pista
-const selectTrack = (() => {
+//SELECT TRACK
+(() => {
     const tracks = document.getElementsByClassName("track");
     const trackNames = document.getElementsByClassName("track_name");
     for (let track of tracks) {
@@ -47,8 +48,8 @@ const selectTrack = (() => {
 
 })();
 
-//cambia nombre de la pista
-const changeTrackName = (() => {
+//CHANGE TRACK NAME
+(() => {
     let names = document.querySelectorAll('.select');
     for (let name of names) {
         name.addEventListener('dblclick', e => {
@@ -76,8 +77,8 @@ const changeTrackName = (() => {
     }
 })();
 
-//Cargar una canción desde el pc del usuario
-const loadSong = (() => {
+//IMPORT AUDIO
+(() => {
     const button = document.getElementById('load_sound_hidden');
     if (button) {
         button.onchange = a => {
@@ -85,36 +86,29 @@ const loadSong = (() => {
             let reader = new FileReader();
             reader.onload = e => {
                 let trcknr = document.querySelector('[data-selected]').id.charAt(6);
-                audioCtx.decodeAudioData(e.target.result).then(buffer =>
-					grid.tracks[trcknr].addRecord(generateRecordingId(), timeSpace.time(), buffer, 0, buffer.duration)
-                );
+                audioCtx.decodeAudioData(e.target.result).then(buffer => {
+					let recording = grid.tracks[trcknr].addRecord(
+                        generateRecordingId(),
+                        timeSpace.time(),
+                        buffer, 0,
+                        buffer.duration
+                    );
+                    storeFile(recording);
+                });
             }
             if (a.target.files.length > 0)
                 reader.readAsArrayBuffer(a.target.files[a.target.files.length -1]);
         }
     }
 })();
-
-//zoom
-const zoom = (() => {
+//ZOOM
+(() => {
     const zoomIn = document.getElementById("zoomin"),
     	zoomOut = document.getElementById("zoomout"),
     	inputs = document.querySelectorAll('input');
     let oldZoom;
 
-    function zIn() {
-        oldZoom = timeSpace.zoom;
-        timeSpace.zoom = Math.round(timeSpace.zoom * 1.25);
-        if (timeSpace.zoom >= 889) timeSpace.zoom = 889;
-        zDraw();
-    }
-    function zOut() {
-        oldZoom = timeSpace.zoom;
-        timeSpace.zoom = Math.round(timeSpace.zoom / 1.25);
-        if (timeSpace.zoom <= 5) timeSpace.zoom = 5;
-        zDraw();
-    }
-    function zDraw() {
+    const zDraw = () => {
         grid.recordings.forEach(recording => {
             let offset = recording.offset * timeSpace.zoom,
             	duration = recording.duration * timeSpace.zoom,
@@ -126,7 +120,22 @@ const zoom = (() => {
         });
         drawGrid(); drawLayout();
         cursor.moveAtZoom(oldZoom);
-    }
+    };
+
+    const zIn = () => {
+        oldZoom = timeSpace.zoom;
+        timeSpace.zoom = Math.round(timeSpace.zoom * 1.25);
+        if (timeSpace.zoom >= 889) timeSpace.zoom = 889;
+        zDraw();
+    };
+
+    const zOut = () => {
+        oldZoom = timeSpace.zoom;
+        timeSpace.zoom = Math.round(timeSpace.zoom / 1.25);
+        if (timeSpace.zoom <= 5) timeSpace.zoom = 5;
+        zDraw();
+    };
+
     zoomIn.addEventListener('click', zIn);
     zoomOut.addEventListener('click', zOut);
     document.addEventListener('keypress', e => {
@@ -145,8 +154,8 @@ const zoom = (() => {
     });
 })();
 
-//establece el bpm
-const setBpm = (() => {
+//SET BPM
+(() => {
     const bpmButton = document.getElementById('bpm_button');
     let input;
     bpmButton.innerHTML = Math.round(120 / timeSpace.bpm) + '  bpm';
@@ -180,8 +189,8 @@ const setBpm = (() => {
     });
 })();
 
-//cambia el compás, ya se añadiran más
-const metric = (() => {
+//TIME SIGNATURE (4/4 3/4)
+(() => {
     const metricButton = document.getElementById('metric_button');
     metricButton.innerHTML = '4/4';
     metricButton.addEventListener('click', ()=> {
@@ -196,8 +205,8 @@ const metric = (() => {
     });
 })();
 
-//mutea la pista
-const mute = (() => {
+//MUTE
+(() => {
     const buttons = document.getElementsByClassName('track_mute'),
           soloButtons = document.getElementsByClassName('track_solo');
 
@@ -218,8 +227,8 @@ const mute = (() => {
     }
 })();
 
-//solea la pista
-const solo = (() => {
+//SOLO
+(() => {
     const button = document.getElementsByClassName('track_solo');
     for (const btn of button) {
         btn.addEventListener('click', function () {
@@ -285,4 +294,4 @@ export const removeRecording = recording => {
             }
         }
     });
-}
+};

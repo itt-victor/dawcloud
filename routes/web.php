@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\AppController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProfileController;
 
 
@@ -41,23 +41,21 @@ Route::post('/verification-notification', [UserController::class, 'resendVerific
 
 Route::get('/email/verify/{id}/{hash}', [UserController::class, 'verifyEmail'])->middleware(['auth', 'signed'])->name('verification.verify');
 
-Route::get('/app', [AppController::class, 'app'])->name('app')->middleware('verified', 'auth');
+Route::get('/app', [ProjectController::class, 'app'])->name('app')->middleware('verified', 'auth');
 
-Route::post('/savecache', [AppController::class, 'saveCache'])->name('saveCache');
+Route::get('/unsigned', [ProjectController::class, 'appUnsigned'])->name('appUnsigned');
 
-Route::get('/loadcache', [AppController::class, 'loadCache'])->name('loadCache');
+Route::post('/new-project', [ProjectController::class, 'newProject'])->name('newProject');
 
-Route::get('/unsigned', [AppController::class, 'appUnsigned'])->name('appUnsigned');
+Route::post('/savesound', [ProjectController::class, 'saveSound'])->name('saveSound');
 
-Route::post('/savesound', [AppController::class, 'saveSound'])->name('saveSound');
+Route::post('/saveproject', [ProjectController::class, 'saveProject'])->name('saveProject');
 
-Route::post('/saveproject', [AppController::class, 'saveProject'])->name('saveProject');
+Route::get('/loadproject/{project}', [ProjectController::class, 'loadProject'])->name('loadProject');
 
-Route::get('/loadproject/{project}', [AppController::class, 'loadProject'])->name('loadProject');
+Route::get('/loadsound/{filename}', [ProjectController::class, 'loadSound'])->name('loadSound');
 
-Route::get('/loadsound/{project}/{recording}', [AppController::class, 'loadSound'])->name('loadSound');
-
-Route::post('/delete', [AppController::class, 'deleteProject'])->name('deleteProject');
+Route::post('/delete', [ProjectController::class, 'deleteProject'])->name('deleteProject');
 
 Route::get('/profile', [ProfileController::class, 'profileView'])->name('profile')->middleware('verified', 'auth');
 

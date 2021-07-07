@@ -2,11 +2,9 @@ import { grid } from '../components/generalgrid';
 import { ui_draw } from '../ui/ui_draw';
 import { cursor } from '../components/cursor';
 import { timeSpace } from '../timeSpace';
-import { soundcontroller } from '../app_core';
-import { is } from '../app_core';
-import { audioCtx } from '../app_core';
+import { soundcontroller, audioCtx, play, record, stop, is } from '../app_core';
+import { storeFile } from '../project';
 import { generateRecordingId } from '../utils';
-import { play, record, stop } from '../app_core';
 
 export default function recordController() {
     if (navigator.mediaDevices.getUserMedia) {
@@ -57,8 +55,9 @@ export default function recordController() {
                 blob.arrayBuffer().then(arrayBuffer => {
                     audioCtx.decodeAudioData(arrayBuffer, audioBuffer => {
                         let track = document.querySelector('[data-selected]').id.charAt(6);
-                        grid.tracks[track].addRecord(generateRecordingId(), startTime,
+                        let recording = grid.tracks[track].addRecord(generateRecordingId(), startTime,
                             audioBuffer, 0, audioBuffer.duration);
+                            storeFile(recording);
                     });
                 });
             }

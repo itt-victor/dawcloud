@@ -14,6 +14,7 @@ import drawLayout from './ui/ui_layout';
 import { cursor } from './components/cursor';
 import SoundController from './audio/soundcontroller';
 import recordcontroller from './audio/recordcontroller';
+import { sessionProgress } from './project';
 
 export const play = document.querySelector('#play-button'),
     record = document.querySelector('#record-button'),
@@ -40,7 +41,7 @@ export const audioCtx = new (window.AudioContext ||
 export var soundcontroller = new SoundController(audioCtx);
 
 //Animación de tiempo de carga
-export function loading() {
+export const loading = () => {
     let text = document.querySelector('.a_title');
     let ventana = document.querySelector('.loading');
     let signup = document.querySelector('#signup_now');
@@ -58,11 +59,9 @@ export function loading() {
         ventana.style.transition = 'display 0.7s, visibility 0.7s'
         text.style.transition = 'color 0.7s'
     }, 3500);
-}
+};
 
-//loading();
-
-function appStart() {
+const appStart = () => {
 
     //prepara el grid
     grid.prepareGrid();
@@ -89,27 +88,10 @@ function appStart() {
     recordcontroller();
     ////////////
 
-    window.onresize = function () {
-    }
-    window.onresize();
+    //Guarda en sesión el progreso cada 10 minutos
+    setInterval(sessionProgress, 600000);
 
-    /*let form = new FormData();
-    form.append('data', grid);
-
-    let blob = new Blob([JSON.stringify(grid)],{type:'application/json'});
-
-    const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
-    fetch('savecache', {
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken
-        },
-        method: 'POST',
-        body: JSON.stringify(grid)
-    })
-    .then(response => response.json())
-    .then(data => console.log(data));*/
-}
+};
 
 //reproducir
 function ePlay() {

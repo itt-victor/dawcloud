@@ -1,5 +1,5 @@
 
-export var timeSpace = {
+export const timeSpace = {
     space: 0,
     time: function () {
         var time = this.space / this.zoom;

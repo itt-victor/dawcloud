@@ -9,7 +9,8 @@ import { cursor } from './components/cursor';
 import { numbers } from './utils';
 
 class Project {
-    constructor(timeSpace, recordings, recordingId, trackNames, tracksGainValues, trackspanValues, tracksY, masterGainValue, masterY) {
+    constructor(timeSpace, recordings, recordingId, trackNames,
+        tracksGainValues, trackspanValues, tracksY, masterGainValue, masterY) {
         this.timeSpace = timeSpace;
         this.recordings = recordings;
         this.recordingId = recordingId;
@@ -24,8 +25,9 @@ class Project {
 
 const loadbtn = document.getElementById('load_project'),
     savebtn = document.getElementById('save_project'),
-	saveAsBtn = document.getElementById('save_project_as'),
+    saveAsBtn = document.getElementById('save_project_as'),
     bpmButton = document.getElementById('bpm_button'),
+    metricButton = document.getElementById('metric_button'),
     Names = document.querySelectorAll('.select'),
     closeProjects = document.querySelector('#projects-close'),
     closeSave = document.querySelector('#save-close'),
@@ -39,68 +41,70 @@ const loadbtn = document.getElementById('load_project'),
 var project;
 var projectName;
 
-const saveProject =(() => {
+//STORE DATA IN SESSION
+export const sessionProgress = () => {
+    fetch('new-project', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.head.querySelector('[name="csrf-token"]').content
+        },
+    });
+};
+
+//STORE NEW AUDIO FILES
+export const storeFile = recording => {
+    const blob = new window.Blob([new DataView(toWav(recording.audioBuffer))], {type: 'audio/wav'});
+    let formData = new FormData();
+    formData.append('audio-file', blob);
+    formData.append('recording_id', recording.id);
+    formData.append('filename', recording.filename);
+    if(projectName) formData.append('project_name', projectName);
+    fetch('savesound', {
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': document.head.querySelector('[name="csrf-token"]').content },
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => recording.filename = data);
+};
+
+//SAVE PROJECT
+(() => {
     if (saveWindow && projectNameNode && savebtn) {
         projectNameNode.addEventListener('keypress', save);
-		savebtn.addEventListener('click', (e) =>{
+        savebtn.addEventListener('click', (e) => {
 
-			if (projectTitle.innerHTML != '') projectName = projectTitle.innerHTML;
+            if (projectTitle.innerHTML != '') projectName = projectTitle.innerHTML;
 
-			if(!projectName) {
-				saveWindow.style.display = 'block';
-		        saveWindow.style.visibility = 'visible';
-		        projectNameNode.focus();
-			} else {
-				document.querySelector('.dropdown-menu').classList.remove('show');
-				save(e);
-			}
-		});
+            if (!projectName) {
+                saveWindow.style.display = 'block';
+                //saveWindow.style.visibility = 'visible';
+                projectNameNode.focus();
+            } else {
+                document.querySelector('.dropdown-menu').classList.remove('show');
+                save(e);
+            }
+        });
 
-		function save(e) {
+        function save(e) {
             if (e.key === 'Enter' || e.type == 'click') {
                 e.stopImmediatePropagation();
                 e.preventDefault();
 
                 if (!projectName) projectName = e.target.value;
                 saveWindow.style.display = 'none';
-                saveWindow.style.visibility = 'hidden';
 
-                var trackNames = Array(grid.howMany), tracksGainValues = [], trackspanValues = [],
-					tracksY = [], masterGainValue, masterY;
-                if (!project === undefined) {
-                    trackNames = project.trackNames;
-                    tracksGainValues = project.tracksGainValues;
-                    trackspanValues = project.trackspanValues;
-                    tracksY = project.tracksY;
-                    masterGainValue = project.masterGainValue;
-                    masterY = project.masterY;
+                let trackNames = Array(grid.howMany), tracksGainValues = [], trackspanValues = [],
+                    tracksY = [], masterGainValue, masterY;
 
-                    //Se guardan los valores de gain y pan de cada pista, comparando si estos hubiesen cambiado
-                    for (let i = 0; i < grid.tracks.length; i++) {
-                        if (tracksGainValues[i] != grid.tracks[i].gainNode.gainValue)
-                            tracksGainValues[i] = grid.tracks[i].gainNode.gainValue;
-                        if (tracksY[i] != grid.tracks[i].fader.Y)
-                            tracksY[i] = grid.tracks[i].fader.Y;
-                        if (trackspanValues[i] != grid.tracks[i].pannerNode.pannerValue)
-                            trackspanValues[i] = grid.tracks[i].pannerNode.pannerValue;
-                        if (trackNames[i] != grid.tracks[i].name)
-                            trackNames[i] = grid.tracks[i].name;
-                    }
-                    //gain master
-                    if (masterGainValue != grid.gainNode.value)
-                        masterGainValue = grid.gainValue;
-                    if (masterY != grid.faderY)
-                        masterY = grid.faderY;
-                } else {
-                    for (let i = 0; i < grid.tracks.length; i++) {
-                        trackNames[i] = grid.tracks[i].name;
-                        tracksGainValues.push(grid.tracks[i].gainNode.gainValue);
-                        tracksY.push(grid.tracks[i].fader.Y);
-                        trackspanValues.push(grid.tracks[i].pannerNode.pannerValue);
-                    }
-                    masterGainValue = grid.gainValue;
-                    masterY = grid.faderY;
+                for (const[i, track] of grid.tracks.entries()) {
+                    trackNames[i] = track.name;
+                    tracksGainValues.push(track.gainNode.gainValue);
+                    tracksY.push(track.fader.Y);
+                    trackspanValues.push(track.pannerNode.pannerValue);
                 }
+                masterGainValue = grid.gainValue;
+                masterY = grid.faderY;
 
                 //creo objeto proyecto
                 if (project === undefined)
@@ -118,30 +122,11 @@ const saveProject =(() => {
                     project.masterY = masterY;
                 }
 
-                //Se convierten los audioBuffers en wav, se convierten a su vez en blob y se envían
-                for (const recording of grid.recordings) {
-                    let blob = new window.Blob([new DataView(toWav(recording.audioBuffer))], {
-                        type: 'audio/wav'
-                    });
+                //Se envían los audios al servidor
+                for (const recording of grid.recordings) storeFile(recording);
 
-                    let formdata = new FormData();
-                    formdata.append('audio-blob', blob);
-                    formdata.append('recording-id', recording.id);
-                    formdata.append('project-name', projectName);
-
-                    $.ajax({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        type: 'POST',
-                        url: 'savesound',
-                        data: formdata,
-                        processData: false,
-                        contentType: false
-                    });
-                }
                 //Se envía el proyecto en JSON
-                var projectForm = new FormData();
+                let projectForm = new FormData();
                 projectForm.append('project-name', projectName);
                 projectForm.append('project', JSON.stringify(project));
                 $.ajax({
@@ -167,13 +152,13 @@ const saveProject =(() => {
 })();
 
 
-const loadProject = (() => {
+//LOAD PROJECT
+(() => {
     for (const projectBtn of projects) {
         projectBtn.addEventListener('dblclick', function ld(e) {
             e.stopPropagation;
             projectName = this.id;
             loadWindow.style.display = 'none';
-            loadWindow.style.visibility = 'hidden';
 
             eStop();
 
@@ -192,12 +177,14 @@ const loadProject = (() => {
                     timeSpace.bpm = project.timeSpace.bpm;
                     timeSpace.compas = project.timeSpace.compas;
                     bpmButton.innerHTML = (120 / timeSpace.bpm) + '  bpm';
+                    metricButton.innerHTML = (timeSpace.compas == 2) ? '4/4' : '3/4';
+
                     cursor.canvas.style.left = timeSpace.space + 'px';
                     numbers.recordingId = project.recordingId;
 
-                    drawLayout(), drawGrid(), loading();
+                    drawLayout(); drawGrid(); loading();
 
-                    //se elimina las pistas existentes si hubiesen
+                    //se eliminan las pistas existentes si hubiesen
                     grid.recordings.forEach((recording) => {
                         recording.canvasCtx.clearRect(0, 0, 4000, 70);
                         recording.deleteRecording();
@@ -216,7 +203,7 @@ const loadProject = (() => {
                     //Se cargan los audios
                     for (const recording of project.recordings) {
                         const request = new XMLHttpRequest();
-                        request.open("GET", 'loadsound/' + projectName + '/' + recording.id, true);
+                        request.open("GET", 'loadsound/' + recording.filename, true);
                         request.responseType = "arraybuffer";
                         request.onload = () => {
                             audioCtx.decodeAudioData(request.response, audioBuffer => {
@@ -228,29 +215,29 @@ const loadProject = (() => {
                         request.send();
                     }
                     //Se cargan los nombres de pista
-                    for (let i = 0; i < grid.tracks.length; i++) {
-                        grid.tracks[i].name = project.trackNames[i];
-                        if (grid.tracks[i].name)
-                            Names[i].innerHTML = grid.tracks[i].name;
+                    for (const[i, track] of grid.tracks.entries()) {
+                        track.name = project.trackNames[i];
+                        if (track.name)
+                            Names[i].innerHTML = track.name;
                     }
                     //Se cargan los volúmenes de los faders
-                    for (let i = 0; i < grid.tracks.length; i++) {
-                        let fader = grid.tracks[i].fader;
-                        grid.tracks[i].gainNode.gainValue = project.tracksGainValues[i];
+                    for (const[i, track] of grid.tracks.entries()) {
+                        let fader = track.fader;
+                        track.gainNode.gainValue = project.tracksGainValues[i];
                         fader.Y = project.tracksY[i];
                         fader.firstChild.nextSibling.style.top = project.tracksY[i] + 'px';
-                        grid.tracks[i].gainNode.gain.setValueAtTime(grid.tracks[i].gainNode.gainValue, audioCtx.currentTime);
+                        track.gainNode.gain.setValueAtTime(track.gainNode.gainValue, audioCtx.currentTime);
                     }
                     //Se carga el panorama
-                    for (let f = 0; f < panButtons.length; f++) {
-                        grid.tracks[f].pannerNode.pannerValue = project.trackspanValues[f];
-                        panButtons[f].innerHTML = grid.tracks[f].pannerNode.pannerValue;
-                        let trackPanValue = grid.tracks[f].pannerNode.pannerValue, ctxValue;
+                    for (const[i, track] of grid.tracks.entries()) {
+                        track.pannerNode.pannerValue = project.trackspanValues[i];
+                        panButtons[i].innerHTML = track.pannerNode.pannerValue;
+                        let trackPanValue = track.pannerNode.pannerValue, ctxValue;
                         if (trackPanValue.toString().startsWith('L')) ctxValue = - + trackPanValue.slice(1) / 100;
                         else if (trackPanValue == 0 || trackPanValue.toString() == 'C') ctxValue = 0;
                         else if (trackPanValue.toString().startsWith('R')) ctxValue = trackPanValue.slice(1) / 100;
 
-                        grid.tracks[f].pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
+                        track.pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
                     }
                     //Se carga el volumen master
                     grid.gainValue = project.masterGainValue;
@@ -267,7 +254,8 @@ const loadProject = (() => {
     }
 })();
 
-const deleteProject = (() => {
+//DELETE PROJECT
+(() => {
     for (let project of projects) {
 
         const dltConfirmation = document.getElementsByClassName('delete_confirmation')[0],
@@ -277,10 +265,10 @@ const deleteProject = (() => {
         project.childNodes[1].addEventListener('click', function dlt(e) {
             const projectName = this.parentNode.id;
             dltConfirmation.classList.toggle('visible');
-            delete_cancel.addEventListener('click', ()=> {
+            delete_cancel.addEventListener('click', () => {
                 dltConfirmation.classList.remove('visible');
             });
-            delete_confirm.addEventListener('click', ()=> {
+            delete_confirm.addEventListener('click', () => {
                 let form = new FormData();
                 form.append('project', projectName);
                 $.ajax({

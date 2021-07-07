@@ -35,6 +35,8 @@ export default class Track {
         setTimeout(editRecording(recording), 20);
         setTimeout(cutRecording(recording), 20);
         setTimeout(removeRecording(recording), 20);
+
+        return recording;
     };
 }
 

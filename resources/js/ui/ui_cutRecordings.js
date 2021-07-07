@@ -6,7 +6,6 @@ import { editRecording } from './ui_editRecordings';
 import { generateRecordingId } from '../utils';
 import { removeRecording } from '../actions';
 
-
 export let cut = false;
 export function cutRecording(recording) {
 

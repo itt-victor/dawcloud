@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Project extends Model
+class Recording extends Model
 {
 	use HasFactory;
 
@@ -15,19 +15,14 @@ class Project extends Model
      * @var array
      */
     protected $fillable = [
-        'project_name',
-        'json_data',
-        'user_id',
+        'recording_id',
+        'file_name',
+        'project_id',
     ];
 
-	public function user()
+	public function project()
 	{
-		return $this->belongsTo(User::class);
+		return $this->belongsTo(Project::class);
 	}
-
-    public function recordings()
-    {
-        return $this->hasMany(Recording::class);
-    }
 
 }

@@ -1,7 +1,7 @@
 import { stop } from '../app_core';
 import { timeSpace } from '../timeSpace';
 
-export var ui_draw = {
+export const ui_draw = {
     drawTrackWhileRecording() {
         let width = 0, height = 58,
          	x = timeSpace.space,

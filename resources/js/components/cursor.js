@@ -3,7 +3,7 @@ import { timeSpace } from '../timeSpace';
 
 var interval;
 
-export var cursor = {
+export const cursor = {
     canvas: document.getElementById("cursor"),
     interval,
     draw: function () {

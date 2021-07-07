@@ -7,8 +7,9 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Project;
+use App\Models\Recording;
 
-class AppController extends Controller
+class ProjectController extends Controller
 {
 
     public function app()
@@ -21,19 +22,6 @@ class AppController extends Controller
         }
 
         return view('app');
-
-    }
-
-    public function saveCache(Request $request)
-    {
-        $prueba = $request->all();
-        return response($prueba);
-    }
-
-    public function loadCache(Request $request)
-    {
-        $prueba = $request->all();
-        return $prueba;
     }
 
     public function appUnsigned(Request $request)
@@ -45,19 +33,31 @@ class AppController extends Controller
         return view('app');
     }
 
+    public function newProject(Request $request)
+    {
+
+    }
+
     public function saveSound(Request $request)
     {
-        $sound = $request->file('audio-blob');
-        $id = $request->input('recording-id');
-        $projectname = $request->input('project-name');
-        $filename = 'public/projects/' . Auth::user()->email . '/' . $projectname . '/' . $id . '.wav';
+        $file_name = Recording::firstWhere('file_name', $request->input('filename'))
+            ? $request->input('filename')
+            : basename($request->file('audio-file')->store('public/recordings'));
 
-        Storage::makeDirectory('public/projects/' . Auth::user()->email . '/' . $projectname);
+        $recording_id = $request->input('recording_id');
 
-        if (Storage::exists($filename)) {
-            Storage::delete($filename);
-        }
-        Storage::put($filename, file_get_contents($sound));
+        $project_id = $request->has('project_name')
+            ? Project::where('project_name', $request->input('project_name'))
+                ->pluck('id')
+                ->first()
+            : null;
+
+        Recording::updateOrCreate(
+            ['recording_id' => $recording_id, 'file_name' => $file_name],
+            ['project_id' => $project_id]
+        );
+
+        return $file_name;
     }
 
     public function saveProject(Request $request)
@@ -81,17 +81,25 @@ class AppController extends Controller
         return $project_data;
     }
 
-    public function loadSound($project_name, $recording)
+    public function loadSound($file_name)
     {
-        $file = Storage::get('public/projects/' . Auth::user()->email . '/' . $project_name . '/' . $recording . '.wav');
+        $file = Storage::get('public/recordings/' . $file_name);
         return response($file);
     }
 
     public function deleteProject(Request $request)
     {
         $project_name = $request->input('project');
+        $project_id = Project::where('project_name', $project_name)
+                    ->pluck('id')
+                    ->first();
+        $recordings = Recording::where('project_id', $project_id)
+                    ->get();
 
-        Storage::deleteDirectory('public/projects/' . Auth::user()->email . '/' . $project_name);
+        foreach ($recordings as $recording) {
+            Storage::delete('public/recordings/'. $recording->file_name);
+            $recording->delete();
+        }
 
         Project::where('user_id', Auth::user()->id)
             ->where('project_name', $project_name)
