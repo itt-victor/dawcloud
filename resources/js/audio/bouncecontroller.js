@@ -28,12 +28,12 @@ function exportSong() {
             let gain = offlineCtx.createGain();
             pannerValue = track.pannerNode.pannerValue;
 
-            if (pannerValue.startsWith('L'))
-                ctxValue = - + pannerValue.slice(1) / 100;
-            else if (pannerValue == 0 || pannerValue == 'C')
-                ctxValue = 0;
-            else if (pannerValue.startsWith('R'))
-                ctxValue = pannerValue.slice(1) / 100;
+            pannerValue.startsWith('L')
+                && (ctxValue = - + pannerValue.slice(1) / 100);
+            pannerValue == 0 || pannerValue == 'C'
+                && (ctxValue = 0);
+            pannerValue.startsWith('R')
+                && (ctxValue = pannerValue.slice(1) / 100);
 
 			panner.pan.setValueAtTime(ctxValue, 0);
             gain.gain.setValueAtTime(track.gainNode.gainValue, 0);

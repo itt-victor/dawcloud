@@ -21,7 +21,7 @@ export const play = document.querySelector('#play-button'),
     stop = document.querySelector('#stop-button'),
     cutButton = document.querySelector('#cut_function'),
     normalButton = document.querySelector('#normal_function');
-export let is = { playing : false};
+export const is = { playing: false };
 
 stop.disabled = true;
 normalButton.style.background = "red";
@@ -38,7 +38,7 @@ export const audioCtx = new (window.AudioContext ||
 
 
 //llamo al controlador de sonido
-export var soundcontroller = new SoundController(audioCtx);
+export const soundcontroller = new SoundController(audioCtx);
 
 //Animación de tiempo de carga
 export const loading = () => {

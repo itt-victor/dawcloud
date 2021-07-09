@@ -87,7 +87,7 @@ import { storeFile } from './project';
             reader.onload = e => {
                 let trcknr = document.querySelector('[data-selected]').id.charAt(6);
                 audioCtx.decodeAudioData(e.target.result).then(buffer => {
-					let recording = grid.tracks[trcknr].addRecord(
+                    let recording = grid.tracks[trcknr].addRecord(
                         generateRecordingId(),
                         timeSpace.time(),
                         buffer, 0,
@@ -97,25 +97,25 @@ import { storeFile } from './project';
                 });
             }
             if (a.target.files.length > 0)
-                reader.readAsArrayBuffer(a.target.files[a.target.files.length -1]);
+                reader.readAsArrayBuffer(a.target.files[a.target.files.length - 1]);
         }
     }
 })();
 //ZOOM
 (() => {
     const zoomIn = document.getElementById("zoomin"),
-    	zoomOut = document.getElementById("zoomout"),
-    	inputs = document.querySelectorAll('input');
+        zoomOut = document.getElementById("zoomout"),
+        inputs = document.querySelectorAll('input');
     let oldZoom;
 
     const zDraw = () => {
         grid.recordings.forEach(recording => {
             let offset = recording.offset * timeSpace.zoom,
-            	duration = recording.duration * timeSpace.zoom,
-             	offCanvas = (recording.canvas.selected)
-                	? recording.offSelectedCanvas[timeSpace.zoom]
-                	: recording.offCanvas[timeSpace.zoom],
-            	width = Math.ceil(duration - offset) + 1;
+                duration = recording.duration * timeSpace.zoom,
+                offCanvas = (recording.canvas.selected)
+                    ? recording.offSelectedCanvas[timeSpace.zoom]
+                    : recording.offCanvas[timeSpace.zoom],
+                width = Math.ceil(duration - offset) + 1;
             ui_draw.printRecording(width, recording, offCanvas, offset, duration);
         });
         drawGrid(); drawLayout();
@@ -140,15 +140,13 @@ import { storeFile } from './project';
     zoomOut.addEventListener('click', zOut);
     document.addEventListener('keypress', e => {
         if (e.key === 'h' || e.key === 'H') {
-            for (const input of inputs)
-                if (e.target == input) return;
+            for (const input of inputs) if (e.target == input) return;
             zIn();
         }
     });
     document.addEventListener('keypress', e => {
         if (e.key === 'g' || e.key === 'G') {
-            for (const input of inputs)
-                if (e.target == input) return;
+            for (const input of inputs) if (e.target == input) return;
             zOut();
         }
     });
@@ -193,7 +191,7 @@ import { storeFile } from './project';
 (() => {
     const metricButton = document.getElementById('metric_button');
     metricButton.innerHTML = '4/4';
-    metricButton.addEventListener('click', ()=> {
+    metricButton.addEventListener('click', () => {
         if (metricButton.textContent == '4/4') {
             metricButton.innerHTML = '3/4';
             timeSpace.compas = 1.5;
@@ -201,14 +199,14 @@ import { storeFile } from './project';
             metricButton.innerHTML = '4/4';
             timeSpace.compas = 2;
         }
-		drawGrid(); drawLayout();
+        drawGrid(); drawLayout();
     });
 })();
 
 //MUTE
 (() => {
     const buttons = document.getElementsByClassName('track_mute'),
-          soloButtons = document.getElementsByClassName('track_solo');
+        soloButtons = document.getElementsByClassName('track_solo');
 
     for (const button of buttons) {
         button.addEventListener('click', function () {
@@ -257,11 +255,11 @@ export const removeRecording = recording => {
     recording.canvas.addEventListener('mousedown', e => {
         e.stopPropagation;
         if (!recording.canvas.selected) {
-            grid.recordings.forEach( recording => {
+            grid.recordings.forEach(recording => {
                 recording.canvas.selected = false;
                 let offset = recording.offset * timeSpace.zoom,
-                	duration = recording.duration * timeSpace.zoom,
-                	width = Math.ceil(duration - offset) + 1;
+                    duration = recording.duration * timeSpace.zoom,
+                    width = Math.ceil(duration - offset) + 1;
                 ui_draw.printRecording(
                     width,
                     recording,
@@ -273,8 +271,8 @@ export const removeRecording = recording => {
 
             recording.canvas.selected = true;
             let offset = recording.offset * timeSpace.zoom,
-            	duration = recording.duration * timeSpace.zoom,
-            	width = Math.ceil(duration - offset) +1;
+                duration = recording.duration * timeSpace.zoom,
+                width = Math.ceil(duration - offset) + 1;
             ui_draw.printRecording(
                 width,
                 recording,

@@ -16,7 +16,7 @@ class ProjectController extends Controller
     {
         if (Auth::check()) {
             $projects = Project::where('user_id', Auth::user()->id)
-				->pluck('project_name');
+                ->pluck('project_name');
 
             return view('app', ['projects' => $projects]);
         }
@@ -35,7 +35,6 @@ class ProjectController extends Controller
 
     public function newProject(Request $request)
     {
-
     }
 
     public function saveSound(Request $request)
@@ -48,8 +47,8 @@ class ProjectController extends Controller
 
         $project_id = $request->has('project_name')
             ? Project::where('project_name', $request->input('project_name'))
-                ->pluck('id')
-                ->first()
+            ->pluck('id')
+            ->first()
             : null;
 
         Recording::updateOrCreate(
@@ -65,18 +64,18 @@ class ProjectController extends Controller
         $projectname = $request->input('project-name');
         $project_data = $request->input('project');
 
-		Project::updateOrCreate(
-			['user_id' => Auth::user()->id, 'project_name' => $projectname],
-			['json_data' => $project_data]
-		);
+        Project::updateOrCreate(
+            ['user_id' => Auth::user()->id, 'project_name' => $projectname],
+            ['json_data' => $project_data]
+        );
     }
 
     public function loadProject($project_name)
     {
         $project_data = Project::where('user_id', Auth::user()->id)
-            			->where('project_name', $project_name)
-            			->pluck('json_data')
-            			->first();
+            ->where('project_name', $project_name)
+            ->pluck('json_data')
+            ->first();
 
         return $project_data;
     }
@@ -91,13 +90,13 @@ class ProjectController extends Controller
     {
         $project_name = $request->input('project');
         $project_id = Project::where('project_name', $project_name)
-                    ->pluck('id')
-                    ->first();
+            ->pluck('id')
+            ->first();
         $recordings = Recording::where('project_id', $project_id)
-                    ->get();
+            ->get();
 
         foreach ($recordings as $recording) {
-            Storage::delete('public/recordings/'. $recording->file_name);
+            Storage::delete('public/recordings/' . $recording->file_name);
             $recording->delete();
         }
 

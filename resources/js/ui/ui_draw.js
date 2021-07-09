@@ -4,18 +4,18 @@ import { timeSpace } from '../timeSpace';
 export const ui_draw = {
     drawTrackWhileRecording() {
         let width = 0, height = 58,
-         	x = timeSpace.space,
-	        track = document.querySelector('[data-selected]'),
-	        canvas = document.createElement('canvas');
+            x = timeSpace.space,
+            track = document.querySelector('[data-selected]'),
+            canvas = document.createElement('canvas');
         track.appendChild(canvas);
         let canvasCtx = canvas.getContext('2d');
         canvas.width = 10000;
         canvas.height = 60;
         canvasCtx.fillStyle = '#2ed9a5';
         let start = performance.now(), increase = 0,
-			progress, fps, interval;
+            progress, fps, interval;
 
-		function step(now) {
+        function step(now) {
             progress = now - start;
             fps = Math.round(1000 / (progress / ++increase) * 100) / 100;
             width += timeSpace.zoom * 1 / fps;
@@ -39,8 +39,8 @@ export const ui_draw = {
 
     drawRecording(recording, zoom) {
         let offCanvas = document.createElement('canvas'),
-         	width = recording.audioBuffer.duration * (zoom + 0.15), //Ese 0.15 corrige descompensación
-         	height = 58;
+            width = recording.audioBuffer.duration * (zoom + 0.15), //Ese 0.15 corrige descompensación
+            height = 58;
         offCanvas.width = recording.audioBuffer.duration * zoom;
         offCanvas.height = height;
         let canvasCtx = offCanvas.getContext('2d');
@@ -54,7 +54,7 @@ export const ui_draw = {
         canvasCtx.closePath()
         canvasCtx.strokeStyle = '#380166';
         canvasCtx.lineWidth = 2;
-        canvasCtx.strokeRect(0, 0, width -2, height);
+        canvasCtx.strokeRect(0, 0, width - 2, height);
         canvasCtx.fillStyle = '#20453a';
 
         if (recording.audioBuffer.numberOfChannels === 2) {  //si es estereo..
@@ -110,8 +110,8 @@ export const ui_draw = {
 
     selectedRecording(recording, zoom) {
         let offCanvas = document.createElement('canvas'),
-         	width = recording.audioBuffer.duration * (zoom + 0.15),
-         	height = 58;
+            width = recording.audioBuffer.duration * (zoom + 0.15),
+            height = 58;
         offCanvas.width = recording.audioBuffer.duration * zoom;
         offCanvas.height = height;
         let canvasCtx = offCanvas.getContext('2d');
@@ -124,7 +124,7 @@ export const ui_draw = {
         canvasCtx.fill();
         canvasCtx.closePath();
         canvasCtx.strokeStyle = '#380166';
-        canvasCtx.strokeRect(0, 0, width -2, height);
+        canvasCtx.strokeRect(0, 0, width - 2, height);
 
         if (recording.audioBuffer.numberOfChannels === 2) {  //si es estereo..
             var data = recording.audioBuffer.getChannelData(0);
@@ -191,7 +191,7 @@ export const ui_draw = {
 
     printRecordingCrop(width, recording, offCanvas, offset, duration) {
         let height = 58;
-        recording.canvas.width = width +2;
+        recording.canvas.width = width + 2;
         recording.canvas.height = height;
         recording.canvasCtx.clearRect(0, 0, width, height);
         recording.canvasCtx.drawImage(offCanvas, 0, 0);
@@ -199,7 +199,7 @@ export const ui_draw = {
         recording.canvasCtx.clearRect(duration, 0, width - duration, height);
     },
 
-	printCutRecording(width, recording, offCanvas, offset, duration) {
+    printCutRecording(width, recording, offCanvas, offset, duration) {
         let height = 58, x = (recording.timeToStart * timeSpace.zoom);
         recording.canvas.width = width;
         recording.canvas.height = height;

@@ -13,8 +13,8 @@ export default function drawGrid() {
     ctx.lineWidth = 0.6;
     ctx.globalCompositeOperation = 'darken';
 
-    if (timeSpace.compas == 2) compasDivision = 4;
-    else if (timeSpace.compas == 1.5) compasDivision = 3;
+    timeSpace.compas == 2 && (compasDivision = 4);
+    timeSpace.compas == 1.5 && (compasDivision = 3);
 
     for (let i = 0; i < grid.canvas.width; i += (zoomSetUp / compasDivision)) {
 

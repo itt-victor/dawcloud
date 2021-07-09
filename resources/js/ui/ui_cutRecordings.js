@@ -19,16 +19,16 @@ export function cutRecording(recording) {
 
     recording.canvas.addEventListener("click", evt => {
 
-        let mousePos = onMousePos(evt.target, evt),
-        	offCanvas = (evt.target.selected)
-            ? recording.offSelectedCanvas[timeSpace.zoom]
-            : recording.offCanvas[timeSpace.zoom];
+        let mousePos = onMousePos(evt.target, evt);
+        let offCanvas = (evt.target.selected)
+                ? recording.offSelectedCanvas[timeSpace.zoom]
+                : recording.offCanvas[timeSpace.zoom];
 
         if (cut) {
             //Se modifica el recording existente (izquierda)
             let offset = recording.offset * timeSpace.zoom,
-            	duration = mousePos.x,
-            	width = Math.ceil(duration - offset);
+                duration = mousePos.x,
+                width = Math.ceil(duration - offset);
             recording.duration = duration / timeSpace.zoom;
             ui_draw.printRecording(width, recording, offCanvas, offset, duration);
 
@@ -63,7 +63,7 @@ export function cutRecording(recording) {
 }
 
 const cutButton = document.querySelector('#cut_function'),
- 	normalButton = document.querySelector('#normal_function');
+    normalButton = document.querySelector('#normal_function');
 
 cutButton.addEventListener('click', function () {
     cut = true;

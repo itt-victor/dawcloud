@@ -75,14 +75,14 @@ export default class SoundController {
         if (metronome) {
             let increment = timeSpace.bpm / 2;
             while (metronome) {
-                const oscillator1 = audioCtx.createOscillator();
+                const oscillator = audioCtx.createOscillator();
 
-                oscillator1.type = 'sine';
-                oscillator1.frequency.value = (beatNumber % 4 == 0) ? 1000 : 800;
-                oscillator1.connect(audioCtx.destination);
+                oscillator.type = 'sine';
+                oscillator.frequency.value = (beatNumber % 4 == 0) ? 1000 : 800;
+                oscillator.connect(audioCtx.destination);
 
-                oscillator1.start();
-                oscillator1.stop(audioCtx.currentTime + 0.1);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.1);
 
                 increment *= 2;
             }

@@ -22,8 +22,8 @@ export default function drawLayout() {
         }
 
         layoutCtx.lineWidth = 0.4;
-        if (timeSpace.compas == 2) compasDivision = 4;
-        else if (timeSpace.compas == 1.5) compasDivision = 3;
+        timeSpace.compas == 2 && (compasDivision = 4);
+        timeSpace.compas == 1.5 && (compasDivision = 3);
 
         for (let i = 0; i < layout.width; i += (zoomSetUp / compasDivision)) {
             layoutCtx.beginPath();
