@@ -60,16 +60,15 @@ export function editRecording(recording) {
             //snap al grid
             if (snap.toggle) {
                 let barCount = Math.ceil(X / snap.setup);
-                let left = parseFloat(recording.canvas.style.left);
 
                 if (barCount > bar) {
-                    recording.canvas.style.left = `${left + snap.setup}px`;
-                    recording.timeToStart = ((X + snap.setup) / timeSpace.zoom) - recording.offset;
+                    recording.canvas.style.left = `${barCount * snap.setup}px`;
+                    recording.timeToStart = ((barCount * snap.setup) / timeSpace.zoom) - recording.offset;
                     bar++;
                 }
                 if (barCount < bar) {
-                    recording.canvas.style.left = `${left - snap.setup}px`;
-                    recording.timeToStart = ((X - snap.setup) / timeSpace.zoom) - recording.offset;
+                    recording.canvas.style.left = `${barCount * snap.setup}px`;
+                    recording.timeToStart = ((barCount * snap.setup) / timeSpace.zoom) - recording.offset;
                     bar--;
                 }
             } else {

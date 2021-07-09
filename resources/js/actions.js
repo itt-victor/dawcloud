@@ -6,6 +6,7 @@ import { timeSpace } from './timeSpace';
 import { ui_draw } from './ui/ui_draw';
 import drawLayout from './ui/ui_layout';
 import { cursor } from './components/cursor';
+import { gridSelector } from './components/gridselector';
 import { generateRecordingId } from './utils';
 import { storeFile } from './project';
 
@@ -101,6 +102,7 @@ import { storeFile } from './project';
         }
     }
 })();
+
 //ZOOM
 (() => {
     const zoomIn = document.getElementById("zoomin"),
@@ -120,6 +122,8 @@ import { storeFile } from './project';
         });
         drawGrid(); drawLayout();
         cursor.moveAtZoom(oldZoom);
+        gridSelector.drawGridSelector(timeSpace.getStartMark, timeSpace.getEndMark);
+        gridSelector.drawMarksatZoom(oldZoom);
     };
 
     const zIn = () => {
