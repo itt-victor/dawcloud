@@ -151,6 +151,8 @@
             </div>
 
             <div id="tracks" class="tracks">
+                <canvas id="start-mark"></canvas>
+                <canvas id="end-mark"></canvas>
                 <canvas id="grid-selector"></canvas>
                 <canvas id="cursor"></canvas>
                 <canvas id="layout"></canvas>

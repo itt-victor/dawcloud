@@ -10251,7 +10251,15 @@ body {
 #grid-selector {
   position: absolute;
   height: 510px;
-  z-index: 99999999;
+  z-index: 999;
+  pointer-events: none;
+}
+
+#start-mark, #end-mark {
+  position: absolute;
+  height: 15px;
+  z-index: 9999999;
+  cursor: pointer;
 }
 
 #cursor {
@@ -10489,7 +10497,7 @@ div [data-selected] {
   width: 350px;
   height: 150px;
   display: none;
-  z-index: 60;
+  z-index: 9999;
   background-color: #d4cfcf;
   text-align: center;
   border-radius: 8px;
@@ -10512,7 +10520,6 @@ div [data-selected] {
 
 .config-icon {
   margin-left: 10px;
-  /*margin-top: 10px;*/
   align-self: center;
   max-width: 25px;
   background-color: transparent;
@@ -10566,7 +10573,7 @@ div [data-selected] {
   right: 780px;
   width: 350px;
   display: none;
-  z-index: 60;
+  z-index: 9999;
   background-color: #d4cfcf;
   text-align: center;
   border-radius: 8px;
@@ -10626,6 +10633,7 @@ input[type=file i] {
   height: 136px;
   background-color: transparent;
   border: none;
+  z-index: 9999;
 }
 
 #log_out a {

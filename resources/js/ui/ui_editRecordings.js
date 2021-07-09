@@ -11,7 +11,7 @@ export function editRecording(recording) {
 
     //arrastrar grabaciones
 
-    var drag = false,
+    let drag = false,
         crop_left = false,
         crop_right = false,
         delta = new Object(),
@@ -32,7 +32,7 @@ export function editRecording(recording) {
         };
     }
 
-    recording.canvas.addEventListener("mousedown", evt => {
+    recording.canvas.addEventListener('mousedown', evt => {
         X = (recording.timeToStart + recording.offset) * timeSpace.zoom;
         sizes = selectTrackHeight(recording.tracknumber);
         let mousePos = onMousePos(grid.canvas, evt);
@@ -48,14 +48,14 @@ export function editRecording(recording) {
         }
     }, false);
 
-    window.addEventListener("mousemove", evt => {
+    window.addEventListener('mousemove', evt => {
         X = (recording.timeToStart + recording.offset) * timeSpace.zoom;
 
         let mousePos = onMousePos(grid.canvas, evt);
         sizes = selectTrackHeight(recording.tracknumber);
         if (drag) {
             X = mousePos.x + delta.x, Y = mousePos.y + delta.y;
-            if (X < 0) X = 0;
+            X < 0 && (X = 0);
 
             //snap al grid
             if (snap.toggle) {
@@ -63,17 +63,17 @@ export function editRecording(recording) {
                 let left = parseFloat(recording.canvas.style.left);
 
                 if (barCount > bar) {
-                    recording.canvas.style.left = left + snap.setup + 'px';
+                    recording.canvas.style.left = `${left + snap.setup}px`;
                     recording.timeToStart = ((X + snap.setup) / timeSpace.zoom) - recording.offset;
                     bar++;
                 }
                 if (barCount < bar) {
-                    recording.canvas.style.left = left - snap.setup + 'px';
+                    recording.canvas.style.left = `${left - snap.setup}px`;
                     recording.timeToStart = ((X - snap.setup) / timeSpace.zoom) - recording.offset;
                     bar--;
                 }
             } else {
-                recording.canvas.style.left = X + 'px';
+                recording.canvas.style.left = `${X}px`;
                 recording.timeToStart = (X / timeSpace.zoom) - recording.offset;
             }
 
@@ -96,7 +96,7 @@ export function editRecording(recording) {
 
     //Recortar bordes de grabaciones
 
-    recording.canvas.addEventListener("mousedown", evt => {
+    recording.canvas.addEventListener('mousedown', evt => {
 
         let mousePos = onMousePos(evt.target, evt);
         offset = recording.offset * timeSpace.zoom;
@@ -110,7 +110,7 @@ export function editRecording(recording) {
 
             width = offCanvas.width;
             ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
-            recording.canvas.style.left = (recording.timeToStart * timeSpace.zoom) + 'px';
+            recording.canvas.style.left = `${recording.timeToStart * timeSpace.zoom}px`;
             crop_left = true;
             drag = false;
 
@@ -118,7 +118,7 @@ export function editRecording(recording) {
 
             width = offCanvas.width;
             ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
-            recording.canvas.style.left = (recording.timeToStart * timeSpace.zoom) + 'px';
+            recording.canvas.style.left = `${recording.timeToStart * timeSpace.zoom}px`;
             crop_right = true;
             drag = false;
         }
