@@ -103,7 +103,7 @@ const setPan = () => {
     const panButton = document.getElementsByClassName('panner');
     let newValue;
     let trackNR;
-    for (const[i, track] of grid.tracks) {
+    for (let i = 0; i < panButton.length; i++) {
         panButton[i].addEventListener('click', function (e) {
             trackNR = this.id.charAt(7);
             e.stopPropagation();
@@ -117,7 +117,7 @@ const setPan = () => {
             window.addEventListener('click', function br(a) {
                 if (!a.target.contains(e.currentTarget)) {
                     newValue.remove();
-                    newValue.innerHTML = track.pannerValue;
+                    newValue.innerHTML = grid.tracks[i].pannerValue;
                     this.removeEventListener('click', br);
                 }
             });
@@ -128,7 +128,7 @@ const setPan = () => {
                     const execPan = () => {
                         grid.tracks[trackNR].pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
                         newValue.remove();
-                        e.target.innerHTML = track.pannerNode.pannerValue = this.value.toUpperCase();
+                        e.target.innerHTML = grid.tracks[i].pannerNode.pannerValue = this.value.toUpperCase();
                     }
                     if (this.value.toUpperCase().startsWith('L')) {
                         ctxValue = - + this.value.slice(1) / 100;

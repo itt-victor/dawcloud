@@ -64,8 +64,8 @@ export const storeFile = recording => {
         headers: { 'X-CSRF-TOKEN': document.head.querySelector('[name="csrf-token"]').content },
         body: formData
     })
-        .then(response => response.text())
-        .then(data => recording.filename = data);
+        .then( response => response.text())
+        .then( data => !recording.filename && (recording.filename = data));
 };
 
 //SAVE PROJECT
@@ -81,70 +81,70 @@ export const storeFile = recording => {
                 projectNameNode.focus();
             } else {
                 document.querySelector('.dropdown-menu').classList.remove('show');
-                if (e.key === 'Enter' || e.type == 'click') save(e);
+                save(e);
             }
         });
 
         function save(e) {
+            if (e.key === 'Enter' || e.type == 'click') {
+                e.stopImmediatePropagation();
+                e.preventDefault();
 
-            e.stopImmediatePropagation();
-            e.preventDefault();
+                if (!projectName) projectName = e.target.value;
+                saveWindow.style.display = 'none';
 
-            if (!projectName) projectName = e.target.value;
-            saveWindow.style.display = 'none';
+                let trackNames = Array(grid.howMany), tracksGainValues = [], trackspanValues = [],
+                    tracksY = [], masterGainValue, masterY;
 
-            let trackNames = Array(grid.howMany), tracksGainValues = [], trackspanValues = [],
-                tracksY = [], masterGainValue, masterY;
-
-            for (const [i, track] of grid.tracks.entries()) {
-                trackNames[i] = track.name;
-                tracksGainValues.push(track.gainNode.gainValue);
-                tracksY.push(track.fader.Y);
-                trackspanValues.push(track.pannerNode.pannerValue);
-            }
-            masterGainValue = grid.gainValue;
-            masterY = grid.faderY;
-
-            //creo objeto proyecto
-            if (project === undefined)
-                project = new Project(timeSpace, grid.recordings, numbers.recordingId, trackNames,
-                    tracksGainValues, trackspanValues, tracksY, masterGainValue, masterY);
-            else {
-                project.timeSpace = timeSpace;
-                project.recordings = grid.recordings;
-                project.recordingId = numbers.recordingId;
-                project.trackNames = trackNames;
-                project.tracksGainValues = tracksGainValues;
-                project.trackspanValues = trackspanValues;
-                project.tracksY = tracksY;
-                project.masterGainValue = masterGainValue;
-                project.masterY = masterY;
-            }
-
-            //Se envían los audios al servidor
-            for (const recording of grid.recordings) storeFile(recording);
-
-            //Se envía el proyecto en JSON
-            let projectForm = new FormData();
-            projectForm.append('project-name', projectName);
-            projectForm.append('project', JSON.stringify(project));
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: 'POST',
-                url: 'saveproject',
-                data: projectForm,
-                processData: false,
-                contentType: false,
-                success: function (data) {
-                    console.log('Project saved successfully');
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                for (const [i, track] of grid.tracks.entries()) {
+                    trackNames[i] = track.name;
+                    tracksGainValues.push(track.gainNode.gainValue);
+                    tracksY.push(track.fader.Y);
+                    trackspanValues.push(track.pannerNode.pannerValue);
                 }
-            });
-            //Se imprime el proyecto en pantalla
-            projectTitle.innerHTML = projectName;
+                masterGainValue = grid.gainValue;
+                masterY = grid.faderY;
+
+                //Se envían los audios al servidor
+                for (const recording of grid.recordings) storeFile(recording);
+
+                //creo objeto proyecto
+                if (project === undefined)
+                    project = new Project(timeSpace, grid.recordings, numbers.recordingId, trackNames,
+                        tracksGainValues, trackspanValues, tracksY, masterGainValue, masterY);
+                else {
+                    project.timeSpace = timeSpace;
+                    project.recordings = grid.recordings;
+                    project.recordingId = numbers.recordingId;
+                    project.trackNames = trackNames;
+                    project.tracksGainValues = tracksGainValues;
+                    project.trackspanValues = trackspanValues;
+                    project.tracksY = tracksY;
+                    project.masterGainValue = masterGainValue;
+                    project.masterY = masterY;
+                }
+
+                //Se envía el proyecto en JSON
+                let projectForm = new FormData();
+                projectForm.append('project-name', projectName);
+                projectForm.append('project', JSON.stringify(project));
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: 'POST',
+                    url: 'saveproject',
+                    data: projectForm,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        console.log('Project saved successfully');
+                    },
+                    error: () => console.log('There has been an error!')
+                });
+                //Se imprime el proyecto en pantalla
+                projectTitle.innerHTML = projectName;
+            }
         };
     }
 })();
@@ -200,18 +200,21 @@ export const storeFile = recording => {
 
                     //Se cargan los audios
                     for (const recording of project.recordings) {
+
                         const request = new XMLHttpRequest();
                         request.open("GET", 'loadsound/' + recording.filename, true);
                         request.responseType = "arraybuffer";
                         request.onload = () => {
                             audioCtx.decodeAudioData(request.response, audioBuffer => {
                                 let track = grid.tracks[recording.tracknumber];
-                                track.addRecord(recording.id, recording.timeToStart,
+                                let newrecording = track.addRecord(recording.id, recording.timeToStart,
                                     audioBuffer, recording.offset, recording.duration);
+                                    newrecording.filename = recording.filename;
                             });
                         };
                         request.send();
                     }
+
                     //Se cargan los nombres de pista
                     for (const [i, track] of grid.tracks.entries()) {
                         track.name = project.trackNames[i];
@@ -246,9 +249,7 @@ export const storeFile = recording => {
                     document.querySelector('#master_fader > a').style.top = grid.faderY + 'px';
                     console.log('Project loaded successfully');
                 },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    console.log(errorThrown);
-                }
+                error: () => console.log('There has been an error!')
             });
         });
     }
@@ -285,8 +286,7 @@ export const storeFile = recording => {
                         dltConfirmation.classList.remove('visible');
                         document.getElementById(projectName).remove();
                     },
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    }
+                    error: () => console.log('There has been an error!')
                 });
             });
         });
