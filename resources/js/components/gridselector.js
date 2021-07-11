@@ -113,56 +113,37 @@ const runEvents = (() => {
 
             if (snap.toggle) {
                 let barCount = Math.ceil(X.start / snap.setup);
-                if (barCount > bar) {
-                    X.start = barCount * snap.setup;
-                    X.start >= X.end - 15 && (X.start = X.end);
-                    timeSpace.setStartMark = X.start;
-                    gridSelector.startMark.style.left = `${X.start}px`;
-                    gridSelector.drawGridSelector(X.start, timeSpace.getEndMark);
-                    bar++;
-                }
-                if (barCount < bar) {
-                    X.start = barCount * snap.setup;
-                    X.start <= 0 && (X.start = 0);
-                    X.start >= X.end - 15 && (X.start = X.end);
-                    timeSpace.setStartMark = X.start;
-                    gridSelector.startMark.style.left = `${X.start}px`;
-                    gridSelector.drawGridSelector(X.start, timeSpace.getEndMark);
-                    bar--;
-                }
-            } else {
-                X.start <= 0 && (X.start = 0);
-                X.start >= X.end && (X.start = X.end);
-                timeSpace.setStartMark = X.start;
-                gridSelector.startMark.style.left = `${X.start}px`;
-                gridSelector.drawGridSelector(X.start, timeSpace.getEndMark);
+                if (barCount > bar) bar++;
+                if (barCount < bar) bar--;
+                X.start = barCount * snap.setup;
             }
+
+            X.start >= X.end - 15 && (X.start = X.end);
+            X.start <= 0 && (X.start = 0);
+            X.start >= X.end && (X.start = X.end);
+            timeSpace.setStartMark = X.start;
+            gridSelector.startMark.style.left = `${X.start}px`;
+            gridSelector.drawGridSelector(X.start, timeSpace.getEndMark);
         }
         if (dragEnd) {
             X.end = mousePos.x - delta;
 
             if (snap.toggle) {
                 let barCount = Math.ceil(X.end / snap.setup);
-                if (barCount > bar) {
-                    X.end = barCount * snap.setup;
-                    timeSpace.setEndMark = X.end;
-                    gridSelector.endMark.style.left = `${X.end - 15}px`;
-                    gridSelector.drawGridSelector(timeSpace.getStartMark, X.end);
-                    bar++;
+                if (barCount > bar) bar++;
+                if (barCount < bar) bar--;
+                X.end = barCount * snap.setup;
+
+                if (X.end <= 0) {
+                    X.end = 0;
+                    gridSelector.drawStartMark(gridSelector.endMark);
+                    endNotZeroed = false;
                 }
-                if (barCount < bar) {
-                    X.end = barCount * snap.setup;
-                    if (X.end <= 0) {
-                        X.end = 0;
-                        gridSelector.drawStartMark(gridSelector.endMark);
-                        endNotZeroed = false;
-                    }
-                    if (X.end <= X.start + 15) return;
-                    timeSpace.setEndMark = X.end;
-                    gridSelector.endMark.style.left = `${X.end - 15}px`;
-                    gridSelector.drawGridSelector(timeSpace.getStartMark, X.end);
-                    bar--;
-                }
+                if (X.end <= X.start + 15) return;
+
+                timeSpace.setEndMark = X.end;
+                gridSelector.endMark.style.left = `${X.end - 15}px`;
+                gridSelector.drawGridSelector(timeSpace.getStartMark, X.end);
             } else {
                 X.end <= 0 && (X.end = 0);
                 X.end <= X.start && (X.end = X.start);

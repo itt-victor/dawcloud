@@ -38,8 +38,8 @@ const loadbtn = document.getElementById('load_project'),
     projectNameNode = document.getElementById('project_name'),
     projectTitle = document.getElementById('project-n');
 
-var project;
-var projectName;
+let project;
+let projectName;
 
 //STORE DATA IN SESSION
 export const sessionProgress = () => {
@@ -54,7 +54,7 @@ export const sessionProgress = () => {
 //STORE NEW AUDIO FILES
 export const storeFile = recording => {
     const blob = new window.Blob([new DataView(toWav(recording.audioBuffer))], { type: 'audio/wav' });
-    let formData = new FormData();
+    const formData = new FormData();
     formData.append('audio-file', blob);
     formData.append('recording_id', recording.id);
     formData.append('filename', recording.filename);
@@ -125,7 +125,7 @@ export const storeFile = recording => {
                 }
 
                 //Se envía el proyecto en JSON
-                let projectForm = new FormData();
+                const projectForm = new FormData();
                 projectForm.append('project-name', projectName);
                 projectForm.append('project', JSON.stringify(project));
                 $.ajax({
@@ -270,7 +270,7 @@ export const storeFile = recording => {
                 dltConfirmation.classList.remove('visible');
             });
             delete_confirm.addEventListener('click', () => {
-                let form = new FormData();
+                const form = new FormData();
                 form.append('project', projectName);
                 $.ajax({
                     headers: {

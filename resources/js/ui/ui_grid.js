@@ -2,9 +2,9 @@ import { grid } from '../components/generalgrid';
 import { timeSpace } from '../timeSpace';
 
 export default function drawGrid() {
-    let ctx = grid.canvas.getContext('2d'),
-     	zoomSetUp = timeSpace.zoom * timeSpace.compas * timeSpace.bpm,
-     	compasDivision;
+    const ctx = grid.canvas.getContext('2d');
+    let zoomSetUp = timeSpace.zoom * timeSpace.compas * timeSpace.bpm;
+    let compasDivision;
 
     ctx.globalAlpha = 1;
     ctx.fillStyle = "#8accd1";

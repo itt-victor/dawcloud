@@ -1,6 +1,6 @@
 import { timeSpace } from '../timeSpace';
 
-export let snap = {
+export const snap = {
     setup : timeSpace.zoom * timeSpace.compas * timeSpace.bpm * timeSpace.snap,
     toggle : false
 };

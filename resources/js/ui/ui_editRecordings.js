@@ -25,7 +25,7 @@ export function editRecording(recording) {
         width;
 
     function onMousePos(canvas, evt) {
-        var rect = canvas.getBoundingClientRect();
+        const rect = canvas.getBoundingClientRect();
         return {
             x: Math.round(evt.clientX - rect.left),
             y: Math.round(evt.clientY - rect.top)
@@ -35,7 +35,7 @@ export function editRecording(recording) {
     recording.canvas.addEventListener('mousedown', evt => {
         X = (recording.timeToStart + recording.offset) * timeSpace.zoom;
         sizes = selectTrackHeight(recording.tracknumber);
-        let mousePos = onMousePos(grid.canvas, evt);
+        const mousePos = onMousePos(grid.canvas, evt);
         if (mousePos.y < sizes.maxHeight &&
             mousePos.y > sizes.minHeight) {
             drag = true;
@@ -51,7 +51,7 @@ export function editRecording(recording) {
     window.addEventListener('mousemove', evt => {
         X = (recording.timeToStart + recording.offset) * timeSpace.zoom;
 
-        let mousePos = onMousePos(grid.canvas, evt);
+        const mousePos = onMousePos(grid.canvas, evt);
         sizes = selectTrackHeight(recording.tracknumber);
         if (drag) {
             X = mousePos.x + delta.x, Y = mousePos.y + delta.y;
@@ -60,17 +60,10 @@ export function editRecording(recording) {
             //snap al grid
             if (snap.toggle) {
                 let barCount = Math.ceil(X / snap.setup);
-
-                if (barCount > bar) {
-                    recording.canvas.style.left = `${barCount * snap.setup}px`;
-                    recording.timeToStart = ((barCount * snap.setup) / timeSpace.zoom) - recording.offset;
-                    bar++;
-                }
-                if (barCount < bar) {
-                    recording.canvas.style.left = `${barCount * snap.setup}px`;
-                    recording.timeToStart = ((barCount * snap.setup) / timeSpace.zoom) - recording.offset;
-                    bar--;
-                }
+                recording.canvas.style.left = `${barCount * snap.setup}px`;
+                recording.timeToStart = ((barCount * snap.setup) / timeSpace.zoom) - recording.offset;
+                if (barCount > bar) bar++;
+                if (barCount < bar) bar--;
             } else {
                 recording.canvas.style.left = `${X}px`;
                 recording.timeToStart = (X / timeSpace.zoom) - recording.offset;
@@ -97,7 +90,7 @@ export function editRecording(recording) {
 
     recording.canvas.addEventListener('mousedown', evt => {
 
-        let mousePos = onMousePos(evt.target, evt);
+        const mousePos = onMousePos(evt.target, evt);
         offset = recording.offset * timeSpace.zoom;
         duration = recording.duration * timeSpace.zoom;
 
@@ -125,7 +118,7 @@ export function editRecording(recording) {
 
     recording.canvas.addEventListener("mousemove", evt => {
 
-        let mousePos = onMousePos(evt.target, evt);
+        const mousePos = onMousePos(evt.target, evt);
         offset = recording.offset * timeSpace.zoom;
         duration = recording.duration * timeSpace.zoom;
 
@@ -183,7 +176,7 @@ export function editRecording(recording) {
 
 function selectTrackHeight(tracknumber) {
     let Yincrement = 60 * tracknumber;
-    let heights = {
+    const heights = {
         minHeight: Yincrement,
         maxHeight: Yincrement + 60
     }

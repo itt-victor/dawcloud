@@ -25,7 +25,7 @@ export const cursor = {
             progress = now - start;
             fps = Math.round(1000 / (progress / ++increase) * 100) / 100;
             timeSpace.space += timeSpace.zoom * 1/fps;
-            canvas.style.left = timeSpace.space + 'px';
+            canvas.style.left = `${timeSpace.space}px`;
             interval = requestAnimationFrame(step);
         }
         interval = requestAnimationFrame(step);
@@ -37,10 +37,10 @@ export const cursor = {
 
     moveAtZoom: function (oldZoom) {
         timeSpace.space *=  (timeSpace.zoom / oldZoom);
-        this.canvas.style.left = timeSpace.space + 'px';
+        this.canvas.style.left = `${timeSpace.space}px`;
     },
 
     moveAtClick: function () {
-        this.canvas.style.left = timeSpace.space + 'px';
+        this.canvas.style.left = `${timeSpace.space}px`;
     }
 }

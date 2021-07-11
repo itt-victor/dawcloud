@@ -41,17 +41,17 @@ export default class Track {
 }
 
 function drawwaveforms(recording) {
-    let zoom = 5, zoomArray = [],
-        offset = recording.offset * timeSpace.zoom,
-        duration = recording.duration * timeSpace.zoom;
+    const zoomArray = []; let zoom = 5;
+    const offset = recording.offset * timeSpace.zoom;
+    const duration = recording.duration * timeSpace.zoom;
 
     while (zoom <= 889) {
         zoomArray.push(zoom);
         zoom = Math.round(zoom * 1.25);
     }
     for (const zoom of zoomArray) {
-        recording.offCanvas[zoom] = ui_draw.drawRecording(recording, zoom);
-        recording.offSelectedCanvas[zoom] = ui_draw.selectedRecording(recording, zoom);
+        recording.offCanvas[zoom] = ui_draw.drawRecording(recording, zoom, false);
+        recording.offSelectedCanvas[zoom] = ui_draw.drawRecording(recording, zoom, true);
     }
 
     ui_draw.printRecording(

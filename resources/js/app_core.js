@@ -20,8 +20,8 @@ export const play = document.querySelector('#play-button'),
     record = document.querySelector('#record-button'),
     stop = document.querySelector('#stop-button'),
     cutButton = document.querySelector('#cut_function'),
-    normalButton = document.querySelector('#normal_function');
-export const is = { playing: false };
+    normalButton = document.querySelector('#normal_function'),
+    is = { playing: false };
 
 stop.disabled = true;
 normalButton.style.background = "red";
@@ -42,9 +42,9 @@ export const soundcontroller = new SoundController(audioCtx);
 
 //Animación de tiempo de carga
 export const loading = () => {
-    let text = document.querySelector('.a_title');
-    let ventana = document.querySelector('.loading');
-    let signup = document.querySelector('#signup_now');
+    const text = document.querySelector('.a_title');
+    const ventana = document.querySelector('.loading');
+    const signup = document.querySelector('#signup_now');
     text.style.color = 'white';
     document.body.style.background = 'black';
     ventana.classList.toggle('visible');

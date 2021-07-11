@@ -54,7 +54,7 @@ function exportSong() {
         offlineCtx.startRendering().then(renderedBuffer => {
             let filename = 'project.wav'
             const a = document.createElement('a');
-            let blob = new window.Blob([new DataView(toWav(renderedBuffer))], {
+            const blob = new window.Blob([new DataView(toWav(renderedBuffer))], {
                 type: 'audio/wav'
             });
             a.href = URL.createObjectURL(blob);

@@ -12,9 +12,9 @@ import { storeFile } from './project';
 
 //SIGN UP REMINDER
 (() => {
-    let signup = document.querySelector('#signup_now');
-    let signupReminder = document.querySelector('#signup_reminder');
-    let xButton = document.querySelector('.x-button');
+    const signup = document.querySelector('#signup_now');
+    const signupReminder = document.querySelector('#signup_reminder');
+    const xButton = document.querySelector('.x-button');
     if (signup) {
         signup.addEventListener('click', () => {
             signupReminder.style.display = 'flex';
@@ -31,17 +31,17 @@ import { storeFile } from './project';
 (() => {
     const tracks = document.getElementsByClassName("track");
     const trackNames = document.getElementsByClassName("track_name");
-    for (let track of tracks) {
+    for (const track of tracks) {
         track.addEventListener('mousedown', e => {
-            for (let unTrack of tracks)
+            for (const unTrack of tracks)
                 unTrack.removeAttribute('data-selected');
             e.currentTarget.setAttribute('data-selected', '');
         });
     }
-    for (let name of trackNames) {
+    for (const name of trackNames) {
         name.addEventListener('click', e => {
             let index = e.currentTarget.id.charAt(11);
-            for (let track of tracks)
+            for (const track of tracks)
                 track.removeAttribute('data-selected');
             tracks[index].setAttribute('data-selected', '');
         });
@@ -52,11 +52,11 @@ import { storeFile } from './project';
 //CHANGE TRACK NAME
 (() => {
     let names = document.querySelectorAll('.select');
-    for (let name of names) {
+    for (const name of names) {
         name.addEventListener('dblclick', e => {
             let name = e.target;
             name.style.display = 'none';
-            let input = name.parentNode.getElementsByTagName('input')[0];
+            const input = name.parentNode.getElementsByTagName('input')[0];
             input.style.display = 'block';
             input.focus();
             let trackId = name.parentNode.id.charAt(11);
@@ -84,11 +84,11 @@ import { storeFile } from './project';
     if (button) {
         button.onchange = a => {
             loading(); eStop();
-            let reader = new FileReader();
+            const reader = new FileReader();
             reader.onload = e => {
                 let trcknr = document.querySelector('[data-selected]').id.charAt(6);
                 audioCtx.decodeAudioData(e.target.result).then(buffer => {
-                    let recording = grid.tracks[trcknr].addRecord(
+                    const recording = grid.tracks[trcknr].addRecord(
                         generateRecordingId(),
                         timeSpace.time(),
                         buffer, 0,
@@ -112,7 +112,7 @@ import { storeFile } from './project';
 
     const zDraw = () => {
         grid.recordings.forEach(recording => {
-            let offset = recording.offset * timeSpace.zoom,
+            const offset = recording.offset * timeSpace.zoom,
                 duration = recording.duration * timeSpace.zoom,
                 offCanvas = (recording.canvas.selected)
                     ? recording.offSelectedCanvas[timeSpace.zoom]
@@ -147,8 +147,6 @@ import { storeFile } from './project';
             for (const input of inputs) if (e.target == input) return;
             zIn();
         }
-    });
-    document.addEventListener('keypress', e => {
         if (e.key === 'g' || e.key === 'G') {
             for (const input of inputs) if (e.target == input) return;
             zOut();
@@ -261,7 +259,7 @@ export const removeRecording = recording => {
         if (!recording.canvas.selected) {
             grid.recordings.forEach(recording => {
                 recording.canvas.selected = false;
-                let offset = recording.offset * timeSpace.zoom,
+                const offset = recording.offset * timeSpace.zoom,
                     duration = recording.duration * timeSpace.zoom,
                     width = Math.ceil(duration - offset) + 1;
                 ui_draw.printRecording(
@@ -274,7 +272,7 @@ export const removeRecording = recording => {
             });
 
             recording.canvas.selected = true;
-            let offset = recording.offset * timeSpace.zoom,
+            const offset = recording.offset * timeSpace.zoom,
                 duration = recording.duration * timeSpace.zoom,
                 width = Math.ceil(duration - offset) + 1;
             ui_draw.printRecording(
