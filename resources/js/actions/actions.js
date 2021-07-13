@@ -92,7 +92,8 @@ import { storeFile } from '../project';
                         generateRecordingId(),
                         timeSpace.time(),
                         buffer, 0,
-                        buffer.duration
+                        buffer.duration,
+                        false
                     );
                     storeFile(recording);
                 });

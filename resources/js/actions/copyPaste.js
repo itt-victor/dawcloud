@@ -1,35 +1,52 @@
 import { grid } from '../components/generalgrid';
-import { soundcontroller, is } from '../app_core';
+import { generateRecordingId } from '../utils';
 import { timeSpace } from '../timeSpace';
 import { ui_draw } from '../ui/ui_draw';
-import { cursor } from '../components/cursor';
-import { cut } from './cutRecordings';
-import { snap } from '../ui/ui_snapToGrid';
 
 export const copyPaste = recording => {
 
     const keysPressed = {};
 
-    recording.canvas.addEventListener('click', e => {
-        if (recording.canvas.selected){
+    recording.canvas.addEventListener('click', () => {
+        if (!recording.copy) {
             document.addEventListener('keydown', event => {
                 if (event.ctrlKey) keysPressed[event.key] = true;
                 if (event.key === 'c' || event.key === 'C') keysPressed[event.key] = true;
                 if (event.key === 'v' || event.key === 'V') keysPressed[event.key] = true;
                 if (keysPressed.Control && keysPressed.c) {
-                    for (const recording of grid.recordings) delete recording.copy;
+                    for (const recording of grid.recordings) recording.copy = false;
                     recording.copy = true;
                 }
-                if (keysPressed.Control && keysPressed.v) {
-                    if (recording.copy) {
-                        const trcknr = document.querySelector('[data-selected]');
+                if (recording.copy) {
+                    if (keysPressed.Control && keysPressed.v) {
+                        const trcknr = document.querySelector('[data-selected]').id.charAt(6);
                         console.log(trcknr);
-                        //const newRecording = grid.tracks[trcknr].addRecording
+                        const newRecording = grid.tracks[trcknr].addRecord(
+                            generateRecordingId(),
+                            timeSpace.time(),
+                            recording.audioBuffer,
+                            recording.offset,
+                            recording.duration,
+                            true
+                        );
+                        newRecording.filename = recording.filename;
+                        newRecording.offCanvas = recording.offCanvas;
+                        newRecording.offSelectedCanvas = recording.offSelectedCanvas;
+                        ui_draw.printRecording(
+                            newRecording.offCanvas[timeSpace.zoom].width,
+                            newRecording,
+                            newRecording.offCanvas[timeSpace.zoom],
+                            newRecording.offset,
+                            newRecording.duration
+                        );
+
+                        delete keysPressed.Ctrl; delete keysPressed.c; delete keysPressed.v;
+
                     }
                 }
             });
             document.addEventListener('keyup', event => {
-                delete keysPressed.Ctrl, keysPressed.c, keysPressed.v;
+                delete keysPressed.Ctrl; delete keysPressed.c; delete keysPressed.v;
             });
         }
     });

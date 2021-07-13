@@ -26,13 +26,13 @@ export default class Track {
         this.fader = document.getElementById('fader_' + this.tracknumber);
         this.fader.Y = 20;
     }
-    addRecord(recordingId, timeToStart, audioBuffer, offset, duration) {
+    addRecord(recordingId, timeToStart, audioBuffer, offset, duration, copy) {
         let recording = new Recording(recordingId, timeToStart, audioBuffer, this.tracknumber, offset, duration);
         grid.recordings.push(recording);
         this.trackDOMElement.appendChild(recording.canvas);
         recording.canvas.classList.add("recording");
         recording.canvas.id = recording.id;
-        drawwaveforms(recording);
+        if (!copy) drawwaveforms(recording);
         setTimeout(editRecording(recording), 20);
         setTimeout(cutRecording(recording), 20);
         setTimeout(copyPaste(recording), 20);

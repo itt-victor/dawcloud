@@ -208,7 +208,7 @@ export const storeFile = recording => {
                             audioCtx.decodeAudioData(request.response, audioBuffer => {
                                 let track = grid.tracks[recording.tracknumber];
                                 let newrecording = track.addRecord(recording.id, recording.timeToStart,
-                                    audioBuffer, recording.offset, recording.duration);
+                                    audioBuffer, recording.offset, recording.duration, false);
                                     newrecording.filename = recording.filename;
                             });
                         };
