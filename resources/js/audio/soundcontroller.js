@@ -15,17 +15,17 @@ export default class SoundController {
             const source = audioCtx.createBufferSource();
             source.buffer = recording.audioBuffer;
             source.connect(grid.tracks[recording.tracknumber].pannerNode);
-            let start = Math.max(
+            const start = Math.max(
                 recording.timeToStart
                 - timeSpace.time()
                 + recording.offset
                 + audioCtx.currentTime, 0);
-            let offset = Math.max(
+            const offset = Math.max(
                 timeSpace.time()
                 - recording.timeToStart
                 - recording.offset, 0)
                 + recording.offset;
-            let duration = Math.max(recording.duration - offset, 0);
+            const duration = Math.max(recording.duration - offset, 0);
             source.start(start, offset, duration);
             this.audioBufferSources.push(source);
             recording.audioBufferSource = source;
@@ -47,17 +47,17 @@ export default class SoundController {
         const source = audioCtx.createBufferSource();
         source.buffer = recording.audioBuffer;
         source.connect(grid.tracks[recording.tracknumber].pannerNode);
-        let start = Math.max(
+        const start = Math.max(
             recording.timeToStart
             - timeSpace.time()
             + recording.offset
             + audioCtx.currentTime, 0);
-        let offset = Math.max(
+        const offset = Math.max(
             timeSpace.time()
             - recording.timeToStart
             - recording.offset, 0)
             + recording.offset;
-        let duration = Math.max(recording.duration - offset, 0);
+        const duration = Math.max(recording.duration - offset, 0);
         source.start(start, offset, duration);
         recording.audioBufferSource = source;
         this.audioBufferSources.push(source);

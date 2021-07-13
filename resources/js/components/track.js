@@ -2,10 +2,11 @@ import Recording from './recording';
 import { ui_draw } from '../ui/ui_draw';
 import { grid } from './generalgrid';
 import { audioCtx } from '../app_core';
-import { editRecording } from '../ui/ui_editRecordings';
-import { removeRecording } from '../actions';
+import { editRecording } from '../actions/editRecordings';
+import { copyPaste } from '../actions/copyPaste';
+import { removeRecording } from '../actions/actions';
 import { timeSpace } from '../timeSpace';
-import { cutRecording } from '../ui/ui_cutRecordings';
+import { cutRecording } from '../actions/cutRecordings';
 
 export default class Track {
     constructor(tracknumber, gainValue, pannerValue) {
@@ -34,6 +35,7 @@ export default class Track {
         drawwaveforms(recording);
         setTimeout(editRecording(recording), 20);
         setTimeout(cutRecording(recording), 20);
+        setTimeout(copyPaste(recording), 20);
         setTimeout(removeRecording(recording), 20);
 
         return recording;

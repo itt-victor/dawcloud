@@ -1,13 +1,13 @@
 import { grid } from '../components/generalgrid';
 import { soundcontroller, is } from '../app_core';
 import { timeSpace } from '../timeSpace';
-import { ui_draw } from './ui_draw';
+import { ui_draw } from '../ui/ui_draw';
 import { cursor } from '../components/cursor';
-import { cut } from './ui_cutRecordings';
-import { snap } from './ui_snapToGrid';
+import { cut } from './cutRecordings';
+import { snap } from '../ui/ui_snapToGrid';
 
 
-export function editRecording(recording) {
+export const editRecording = recording => {
 
     //arrastrar grabaciones
 

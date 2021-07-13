@@ -60,7 +60,7 @@ const setMasterGain = () => {
         drag = false,
         delta = new Object();
 
-    function onMousePos(context, evt) {
+    const onMousePos = (context, evt) => {
         let rect = context.getBoundingClientRect();
         return {
             x: Math.round(evt.clientX - rect.left),

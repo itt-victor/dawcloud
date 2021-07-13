@@ -1,14 +1,14 @@
 
-import { audioCtx, soundcontroller, is, eStop, loading } from './app_core';
-import { grid } from './components/generalgrid';
-import drawGrid from './ui/ui_grid';
-import { timeSpace } from './timeSpace';
-import { ui_draw } from './ui/ui_draw';
-import drawLayout from './ui/ui_layout';
-import { cursor } from './components/cursor';
-import { gridSelector } from './components/gridselector';
-import { generateRecordingId } from './utils';
-import { storeFile } from './project';
+import { audioCtx, soundcontroller, is, eStop, loading } from '../app_core';
+import { grid } from '../components/generalgrid';
+import drawGrid from '../ui/ui_grid';
+import { timeSpace } from '../timeSpace';
+import { ui_draw } from '../ui/ui_draw';
+import drawLayout from '../ui/ui_layout';
+import { cursor } from '../components/cursor';
+import { gridSelector } from '../components/gridselector';
+import { generateRecordingId } from '../utils';
+import { storeFile } from '../project';
 
 //SIGN UP REMINDER
 (() => {

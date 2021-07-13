@@ -1,11 +1,11 @@
 require('./bootstrap');
-require('./actions');
+require('./actions/actions');
 require('./audio/bouncecontroller');
 require('./components/metronome');
 require('./components/timeLayout');
 require('./project');
 require('./components/mixer');
-require('./ui/ui_cutRecordings');
+require('./actions/cutRecordings');
 require('./components/gridselector');
 
 import { grid } from './components/generalgrid';

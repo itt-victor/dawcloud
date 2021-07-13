@@ -174,10 +174,10 @@ export const storeFile = recording => {
                     timeSpace.zoom = project.timeSpace.zoom;
                     timeSpace.bpm = project.timeSpace.bpm;
                     timeSpace.compas = project.timeSpace.compas;
-                    bpmButton.innerHTML = (120 / timeSpace.bpm) + '  bpm';
+                    bpmButton.innerHTML = `${120 / timeSpace.bpm}  bpm`;
                     metricButton.innerHTML = (timeSpace.compas == 2) ? '4/4' : '3/4';
 
-                    cursor.canvas.style.left = timeSpace.space + 'px';
+                    cursor.canvas.style.left = `${timeSpace.space}px`;
                     numbers.recordingId = project.recordingId;
 
                     drawLayout(); drawGrid(); loading();
@@ -225,7 +225,7 @@ export const storeFile = recording => {
                         let fader = track.fader;
                         track.gainNode.gainValue = project.tracksGainValues[i];
                         fader.Y = project.tracksY[i];
-                        fader.querySelector('a').style.top = project.tracksY[i] + 'px';
+                        fader.querySelector('a').style.top = `${project.tracksY[i]}px`;
                         track.gainNode.gain.setValueAtTime(track.gainNode.gainValue, audioCtx.currentTime);
                     }
                     //Se carga el panorama
@@ -246,7 +246,7 @@ export const storeFile = recording => {
                     grid.gainValue = project.masterGainValue;
                     grid.gainNode.gain.setValueAtTime(grid.gainValue, audioCtx.currentTime);
                     grid.faderY = project.masterY;
-                    document.querySelector('#master_fader > a').style.top = grid.faderY + 'px';
+                    document.querySelector('#master_fader > a').style.top = `${grid.faderY}px`;
                     console.log('Project loaded successfully');
                 },
                 error: () => console.log('There has been an error!')
@@ -266,9 +266,7 @@ export const storeFile = recording => {
         project.childNodes[1].addEventListener('click', function dlt(e) {
             const projectName = this.parentNode.id;
             dltConfirmation.classList.toggle('visible');
-            delete_cancel.addEventListener('click', () => {
-                dltConfirmation.classList.remove('visible');
-            });
+            delete_cancel.addEventListener('click', () => dltConfirmation.classList.remove('visible'));
             delete_confirm.addEventListener('click', () => {
                 const form = new FormData();
                 form.append('project', projectName);

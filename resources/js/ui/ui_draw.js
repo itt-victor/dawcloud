@@ -9,13 +9,12 @@ export const ui_draw = {
             canvas = document.createElement('canvas');
         track.appendChild(canvas);
         const canvasCtx = canvas.getContext('2d');
-        canvas.width = 10000;
-        canvas.height = 60;
+        canvas.width = 10000; canvas.height = 60;
         canvasCtx.fillStyle = '#2ed9a5';
         let start = performance.now(), increase = 0,
             progress, fps, interval;
 
-        function step(now) {
+        const step = now => {
             progress = now - start;
             fps = Math.round(1000 / (progress / ++increase) * 100) / 100;
             width += timeSpace.zoom * 1 / fps;

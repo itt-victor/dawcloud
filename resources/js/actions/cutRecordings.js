@@ -1,15 +1,15 @@
 import { grid } from '../components/generalgrid';
-import { ui_draw } from './ui_draw';
+import { ui_draw } from '../ui/ui_draw';
 import { timeSpace } from '../timeSpace';
 import Recording from '../components/recording';
-import { editRecording } from './ui_editRecordings';
+import { editRecording } from './editRecordings';
 import { generateRecordingId } from '../utils';
-import { removeRecording } from '../actions';
+import { removeRecording } from './actions';
 
 export let cut = false;
-export function cutRecording(recording) {
+export const cutRecording = recording => {
 
-    function onMousePos(canvas, evt) {
+    const onMousePos = (canvas, evt) => {
         let rect = canvas.getBoundingClientRect();
         return {
             x: Math.round(evt.clientX - rect.left),
