@@ -20,7 +20,6 @@ export const copyPaste = recording => {
                 if (recording.copy) {
                     if (keysPressed.Control && keysPressed.v) {
                         const trcknr = document.querySelector('[data-selected]').id.charAt(6);
-                        console.log(trcknr);
                         const newRecording = grid.tracks[trcknr].addRecord(
                             generateRecordingId(),
                             timeSpace.time(),
@@ -36,8 +35,8 @@ export const copyPaste = recording => {
                             newRecording.offCanvas[timeSpace.zoom].width,
                             newRecording,
                             newRecording.offCanvas[timeSpace.zoom],
-                            newRecording.offset,
-                            newRecording.duration
+                            newRecording.offset * timeSpace.zoom,
+                            newRecording.duration * timeSpace.zoom
                         );
 
                         delete keysPressed.Ctrl; delete keysPressed.c; delete keysPressed.v;

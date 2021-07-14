@@ -14,7 +14,9 @@ import drawLayout from './ui/ui_layout';
 import { cursor } from './components/cursor';
 import SoundController from './audio/soundcontroller';
 import recordcontroller from './audio/recordcontroller';
-import { sessionProgress } from './project';
+//import { sessionProgress } from './project';
+//import { generateRecordingId } from './utils';
+//import { timeSpace } from './timeSpace';
 
 export const play = document.querySelector('#play-button'),
     record = document.querySelector('#record-button'),
@@ -61,6 +63,22 @@ export const loading = () => {
     }, 3500);
 };
 
+/*function song(){
+    const trcknr = document.querySelector('[data-selected]').id.charAt(6);
+    fetch('storage/recordings/1.mp3')
+    .then(response => response.arrayBuffer())
+    .then(arrayBuffer => audioCtx.decodeAudioData(arrayBuffer))
+    .then(buffer =>
+        grid.tracks[trcknr].addRecord(
+            generateRecordingId(),
+            timeSpace.time(),
+            buffer, 0,
+            buffer.duration,
+            false
+        )
+    );
+}*/
+
 const appStart = () => {
 
     //prepara el grid
@@ -89,8 +107,8 @@ const appStart = () => {
     ////////////
 
     //Guarda en sesión el progreso cada 10 minutos
-    setInterval(sessionProgress, 600000);
-
+    //setInterval(sessionProgress, 600000);
+    //song();
 };
 
 //reproducir
