@@ -5,7 +5,7 @@ import { ui_draw } from '../ui/ui_draw';
 import { cursor } from '../components/cursor';
 import { cut } from './cutRecordings';
 import { snap } from '../ui/ui_snapToGrid';
-
+import { onMousePos } from '../utils';
 
 export const editRecording = recording => {
 
@@ -13,24 +13,13 @@ export const editRecording = recording => {
 
     let drag = false,
         crop_left = false,
-        crop_right = false,
-        delta = new Object(),
-        X = recording.timeToStart * timeSpace.zoom,
+        crop_right = false;
+    const delta = new Object();
+    let X = recording.timeToStart * timeSpace.zoom,
         Y = 0,
         offset = recording.offset * timeSpace.zoom,
         duration = recording.duration * timeSpace.zoom,
-        bar,
-        sizes,
-        offCanvas,
-        width;
-
-    function onMousePos(canvas, evt) {
-        const rect = canvas.getBoundingClientRect();
-        return {
-            x: Math.round(evt.clientX - rect.left),
-            y: Math.round(evt.clientY - rect.top)
-        };
-    }
+        bar, sizes, offCanvas, width;
 
     recording.canvas.addEventListener('mousedown', evt => {
         X = (recording.timeToStart + recording.offset) * timeSpace.zoom;

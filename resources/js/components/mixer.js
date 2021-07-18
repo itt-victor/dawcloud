@@ -1,19 +1,12 @@
 import { grid } from './generalgrid';
 import { audioCtx } from '../app_core';
+import { onMousePos } from '../utils';
 
 
 const setChannelGain = () => {
-    let fader, gainNode, trckNr, Y,
-        drag = Array(8).fill(false),
-        delta = new Object();
-
-    function onMousePos(context, evt) {
-        let rect = context.getBoundingClientRect();
-        return {
-            x: Math.round(evt.clientX - rect.left),
-            y: Math.round(evt.clientY - rect.top)
-        };
-    }
+    let fader, gainNode, trckNr, Y;
+    const drag = Array(8).fill(false),
+          delta = new Object();
 
     for (const track of grid.tracks) {
         track.fader.querySelector('a').addEventListener("mousedown", evt => {
@@ -21,7 +14,7 @@ const setChannelGain = () => {
             trckNr = fader.id.charAt(6);
             gainNode = grid.tracks[trckNr].gainNode;
             Y = fader.Y;
-            let mousePos = onMousePos(fader, evt);
+            const mousePos = onMousePos(fader, evt);
             if (mousePos.y <= 280 &&
                 mousePos.y >= 20) {
                 drag[trckNr] = true;
@@ -32,7 +25,7 @@ const setChannelGain = () => {
         window.addEventListener("mousemove", evt => {
             let gainValue;
             if (drag[trckNr]) {
-                let mousePos = onMousePos(fader, evt);
+                const mousePos = onMousePos(fader, evt);
                 Y = mousePos.y + delta.y
                 if (Y < 20) Y = 20;
                 if (Y > 260) Y = 260;
@@ -55,21 +48,14 @@ const setChannelGain = () => {
 setTimeout(setChannelGain, 500);
 
 const setMasterGain = () => {
-    let fader = document.getElementById('master_fader'),
-        gain = grid.gainNode, gainValue, Y,
-        drag = false,
-        delta = new Object();
+    const fader = document.getElementById('master_fader');
+    let gain = grid.gainNode, gainValue, Y,
+        drag = false;
+    const delta = new Object();
 
-    const onMousePos = (context, evt) => {
-        let rect = context.getBoundingClientRect();
-        return {
-            x: Math.round(evt.clientX - rect.left),
-            y: Math.round(evt.clientY - rect.top)
-        };
-    }
     fader.firstChild.addEventListener("mousedown", evt => {
         Y = grid.faderY;
-        let mousePos = onMousePos(fader, evt);
+        const mousePos = onMousePos(fader, evt);
         if (mousePos.y <= 280 &&
             mousePos.y >= 20) {
             drag = true;
@@ -78,7 +64,7 @@ const setMasterGain = () => {
     }, false);
 
     window.addEventListener("mousemove", evt => {
-        let mousePos = onMousePos(fader, evt);
+        const mousePos = onMousePos(fader, evt);
         if (drag) {
             Y = mousePos.y + delta.y;
             if (Y < 20) Y = 20;
@@ -148,7 +134,6 @@ const setPan = () => {
                         newValue.setAttribute('placeholder', 'Invalid value!');
                     }
                 }
-                console.log(grid.tracks);
             });
         });
     }

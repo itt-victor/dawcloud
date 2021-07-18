@@ -3,24 +3,18 @@ import { ui_draw } from '../ui/ui_draw';
 import { timeSpace } from '../timeSpace';
 import Recording from '../components/recording';
 import { editRecording } from './editRecordings';
+import { copyPaste } from './copyPaste';
 import { generateRecordingId } from '../utils';
 import { removeRecording } from './actions';
+import { onMousePos } from '../utils';
 
 export let cut = false;
 export const cutRecording = recording => {
 
-    const onMousePos = (canvas, evt) => {
-        let rect = canvas.getBoundingClientRect();
-        return {
-            x: Math.round(evt.clientX - rect.left),
-            y: Math.round(evt.clientY - rect.top)
-        };
-    }
-
     recording.canvas.addEventListener("click", evt => {
 
-        let mousePos = onMousePos(evt.target, evt);
-        let offCanvas = (evt.target.selected)
+        const mousePos = onMousePos(evt.target, evt);
+        const offCanvas = (evt.target.selected)
                 ? recording.offSelectedCanvas[timeSpace.zoom]
                 : recording.offCanvas[timeSpace.zoom];
 
@@ -57,6 +51,7 @@ export const cutRecording = recording => {
             //newRecording.canvas.style.left = (newRecording.timeToStart * timeSpace.zoom) + 'px';
             setTimeout(editRecording(newRecording), 20);
             setTimeout(cutRecording(newRecording), 20);
+            setTimeout(copyPaste(recording), 20);
             setTimeout(removeRecording(newRecording), 20);
         }
     });

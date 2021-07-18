@@ -1,7 +1,7 @@
 import { grid } from './generalgrid';
 import { timeSpace } from '../timeSpace';
 import { snap } from '../ui/ui_snapToGrid';
-
+import { onMousePos } from '../utils';
 
 export const gridSelector = {
     gridShade: document.querySelector('#grid-selector'),
@@ -68,17 +68,9 @@ const runEvents = (() => {
     gridSelector.drawStartMark(gridSelector.startMark);
     gridSelector.drawStartMark(gridSelector.endMark);
 
-    const onMousePos = (canvas, evt) => {
-        let rect = canvas.getBoundingClientRect();
-        return {
-            x: Math.round(evt.clientX - rect.left),
-            y: Math.round(evt.clientY - rect.top)
-        };
-    }
-
     gridSelector.startMark.addEventListener('mousedown', e => {
         dragStart = true;
-        let mousePos = onMousePos(grid.canvas, e);
+        const mousePos = onMousePos(grid.canvas, e);
         X.start = timeSpace.getStartMark;
         delta = mousePos.x - X.start;
         if (snap.toggle) {
@@ -89,7 +81,7 @@ const runEvents = (() => {
 
     gridSelector.endMark.addEventListener('mousedown', e => {
         dragEnd = true;
-        let mousePos = onMousePos(grid.canvas, e);
+        const mousePos = onMousePos(grid.canvas, e);
         X.end = timeSpace.getEndMark;
         delta = mousePos.x - X.end + 15;
         if (snap.toggle) {
@@ -99,7 +91,7 @@ const runEvents = (() => {
     });
 
     window.addEventListener('mousemove', e => {
-        let mousePos = onMousePos(grid.canvas, e);
+        const mousePos = onMousePos(grid.canvas, e);
 
         if (!endNotZeroed) {
             if (X.end != 0) {

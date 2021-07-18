@@ -40,7 +40,7 @@ export const copyPaste = recording => {
                         );
 
                         delete keysPressed.Ctrl; delete keysPressed.c; delete keysPressed.v;
-
+                        recording.copy = false;
                     }
                 }
             });

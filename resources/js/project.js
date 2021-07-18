@@ -9,8 +9,8 @@ import { cursor } from './components/cursor';
 import { numbers } from './utils';
 
 class Project {
-    constructor(timeSpace, recordings, recordingId, trackNames,
-        tracksGainValues, trackspanValues, tracksY, masterGainValue, masterY) {
+    constructor({ timeSpace, recordings, recordingId, trackNames, tracksGainValues,
+        trackspanValues, tracksY, masterGainValue, masterY }) {
         this.timeSpace = timeSpace;
         this.recordings = recordings;
         this.recordingId = recordingId;
@@ -36,7 +36,8 @@ const loadbtn = document.getElementById('load_project'),
     panButtons = document.getElementsByClassName('panner'),
     projects = document.getElementsByClassName('projects'),
     projectNameNode = document.getElementById('project_name'),
-    projectTitle = document.getElementById('project-n');
+    projectTitle = document.getElementById('project-n'),
+    token = { 'X-CSRF-TOKEN': document.head.querySelector('[name="csrf-token"]').content };
 
 let project;
 let projectName;
@@ -61,11 +62,11 @@ export const storeFile = recording => {
     if (projectName) formData.append('project_name', projectName);
     fetch('savesound', {
         method: 'POST',
-        headers: { 'X-CSRF-TOKEN': document.head.querySelector('[name="csrf-token"]').content },
+        headers: token,
         body: formData
     })
-        .then( response => response.text())
-        .then( data => !recording.filename && (recording.filename = data));
+        .then(response => response.text())
+        .then(data => !recording.filename && (recording.filename = data));
 };
 
 //SAVE PROJECT
@@ -93,53 +94,47 @@ export const storeFile = recording => {
                 if (!projectName) projectName = e.target.value;
                 saveWindow.style.display = 'none';
 
-                let trackNames = Array(grid.howMany), tracksGainValues = [], trackspanValues = [],
-                    tracksY = [], masterGainValue, masterY;
+                const cache = {
+                    trackNames: Array(grid.howMany),
+                    tracksGainValues: [],
+                    trackspanValues: [],
+                    tracksY: [],
+                    masterGainValue: grid.gainValue,
+                    masterY: grid.faderY,
+                    timeSpace,
+                    recordings: grid.recordings,
+                    recordingId: numbers.recordingId,
 
-                for (const [i, track] of grid.tracks.entries()) {
-                    trackNames[i] = track.name;
-                    tracksGainValues.push(track.gainNode.gainValue);
-                    tracksY.push(track.fader.Y);
-                    trackspanValues.push(track.pannerNode.pannerValue);
+                    fill() {
+                        for (const [i, track] of grid.tracks.entries()) {
+                            this.trackNames[i] = track.name;
+                            this.tracksGainValues.push(track.gainNode.gainValue);
+                            this.tracksY.push(track.fader.Y);
+                            this.trackspanValues.push(track.pannerNode.pannerValue);
+                        }
+                    }
                 }
-                masterGainValue = grid.gainValue;
-                masterY = grid.faderY;
+                cache.fill();
 
                 //Se envían los audios al servidor
                 for (const recording of grid.recordings) storeFile(recording);
 
                 //creo objeto proyecto
-                if (project === undefined)
-                    project = new Project(timeSpace, grid.recordings, numbers.recordingId, trackNames,
-                        tracksGainValues, trackspanValues, tracksY, masterGainValue, masterY);
-                else {
-                    project.timeSpace = timeSpace;
-                    project.recordings = grid.recordings;
-                    project.recordingId = numbers.recordingId;
-                    project.trackNames = trackNames;
-                    project.tracksGainValues = tracksGainValues;
-                    project.trackspanValues = trackspanValues;
-                    project.tracksY = tracksY;
-                    project.masterGainValue = masterGainValue;
-                    project.masterY = masterY;
-                }
+                if (project === undefined) project = new Project(cache);
+                else Object.assign(project, cache);
 
                 //Se envía el proyecto en JSON
                 const projectForm = new FormData();
                 projectForm.append('project-name', projectName);
                 projectForm.append('project', JSON.stringify(project));
                 $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
+                    headers: token,
                     type: 'POST',
                     url: 'saveproject',
                     data: projectForm,
                     processData: false,
                     contentType: false,
-                    success: function (data) {
-                        console.log('Project saved successfully');
-                    },
+                    success: data => console.log('Project saved successfully'),
                     error: () => console.log('There has been an error!')
                 });
                 //Se imprime el proyecto en pantalla
@@ -161,22 +156,21 @@ export const storeFile = recording => {
             eStop();
 
             $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
+                headers: token,
                 type: 'GET',
                 url: 'loadproject/' + projectName,
                 dataType: 'json',
-                success: function (response, request) {
+                success: (response, request) => {
+
                     project = response;
 
                     timeSpace.space = project.timeSpace.space;
                     timeSpace.zoom = project.timeSpace.zoom;
                     timeSpace.bpm = project.timeSpace.bpm;
                     timeSpace.compas = project.timeSpace.compas;
+
                     bpmButton.innerHTML = `${120 / timeSpace.bpm}  bpm`;
                     metricButton.innerHTML = (timeSpace.compas == 2) ? '4/4' : '3/4';
-
                     cursor.canvas.style.left = `${timeSpace.space}px`;
                     numbers.recordingId = project.recordingId;
 
@@ -209,7 +203,7 @@ export const storeFile = recording => {
                                 let track = grid.tracks[recording.tracknumber];
                                 let newrecording = track.addRecord(recording.id, recording.timeToStart,
                                     audioBuffer, recording.offset, recording.duration, false);
-                                    newrecording.filename = recording.filename;
+                                newrecording.filename = recording.filename;
                             });
                         };
                         request.send();
@@ -271,9 +265,7 @@ export const storeFile = recording => {
                 const form = new FormData();
                 form.append('project', projectName);
                 $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
+                    headers: token,
                     type: 'POST',
                     url: 'delete',
                     data: form,
