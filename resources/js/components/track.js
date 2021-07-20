@@ -50,10 +50,10 @@ export default class Track {
         recording.canvas.classList.add("recording");
         recording.canvas.id = recording.id;
         if (!copy) drawwaveforms(recording);
-        setTimeout(editRecording(recording), 20);
-        setTimeout(cutRecording(recording), 20);
-        setTimeout(copyPaste(recording), 20);
-        setTimeout(removeRecording(recording), 20);
+        editRecording(recording);
+        cutRecording(recording);
+        copyPaste(recording);
+        removeRecording(recording);
 
         return recording;
     };

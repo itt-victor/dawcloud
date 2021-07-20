@@ -7,7 +7,6 @@ import drawLayout from '../ui/ui_layout';
 import { cursor } from '../components/cursor';
 import { gridSelector } from '../components/gridselector';
 import { generateRecordingId } from '../utils';
-import { storeFile } from '../project';
 
 //SIGN UP REMINDER
 (() => {
@@ -87,14 +86,13 @@ import { storeFile } from '../project';
             reader.onload = e => {
                 let trcknr = document.querySelector('[data-selected]').id.charAt(6);
                 audioCtx.decodeAudioData(e.target.result).then(buffer => {
-                    const recording = grid.tracks[trcknr].addRecord(
+                    /* const recording =  */grid.tracks[trcknr].addRecord(
                         generateRecordingId(),
                         timeSpace.time(),
                         buffer, 0,
                         buffer.duration,
                         false
                     );
-                    //storeFile(recording);
                 });
             }
             if (a.target.files.length > 0)
@@ -158,7 +156,7 @@ import { storeFile } from '../project';
 (() => {
     const bpmButton = document.getElementById('bpm_button');
     let input;
-    bpmButton.innerHTML = Math.round(120 / timeSpace.bpm) + '  bpm';
+    bpmButton.innerHTML = `${Math.round(120 / timeSpace.bpm)}  bpm`;
     bpmButton.addEventListener('click', e => {
         e.stopPropagation();
         if (!document.getElementById('bpm_value')) {
@@ -173,7 +171,7 @@ import { storeFile } from '../project';
         window.addEventListener('click', function br(a) {
             if (!a.target.contains(e.currentTarget)) {
                 input.remove();
-                bpmButton.innerHTML = Math.round(120 / timeSpace.bpm) + '  bpm';
+                bpmButton.innerHTML = `${Math.round(120 / timeSpace.bpm)}  bpm`;
                 this.removeEventListener('click', br);
             }
         });
@@ -181,7 +179,7 @@ import { storeFile } from '../project';
             if (o.key === 'Enter') {
                 o.preventDefault();
                 timeSpace.bpm = 120 / o.target.value;
-                bpmButton.innerHTML = Math.round(120 / timeSpace.bpm) + '  bpm';
+                bpmButton.innerHTML = `${Math.round(120 / timeSpace.bpm)}  bpm`;
                 input.remove();
                 drawGrid(); drawLayout();
             }
@@ -238,8 +236,9 @@ import { storeFile } from '../project';
                     soundcontroller.mute(btn.parent.gainNode) :
                     soundcontroller.solo(btn.parent.gainNode);
             if (!this.toggle) {
-                for (let btn of button)
+                for (let btn of button) {
                     soundcontroller.mute(btn.parent.gainNode);
+                }
                 soundcontroller.solo(this.parent.gainNode);
                 this.toggle = true;
             } else {

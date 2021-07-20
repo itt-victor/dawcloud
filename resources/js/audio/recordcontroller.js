@@ -53,9 +53,9 @@ export default function recordController() {
                 blob.arrayBuffer().then(arrayBuffer =>
                     audioCtx.decodeAudioData(arrayBuffer, audioBuffer => {
                         const track = document.querySelector('[data-selected]').id.charAt(6);
-                        const recording = grid.tracks[track].addRecord(generateRecordingId(), startTime,
+                        const latency = 0.150; //LATENCIA, HAY QUE MIRAR ESTO BIEN
+                        grid.tracks[track].addRecord(generateRecordingId(), startTime - latency,
                             audioBuffer, 0, audioBuffer.duration);
-                            //storeFile(recording);
                     })
                 );
             }

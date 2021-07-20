@@ -4,14 +4,13 @@ require('./audio/bouncecontroller');
 require('./components/metronome');
 require('./components/timeLayout');
 require('./project');
-require('./components/mixer');
+//require('./components/mixer');
 require('./actions/cutRecordings');
 require('./components/gridselector');
 
-
-//import { grid } from './components/generalgrid';
 import { Grid } from './components/generalgrid';
 import drawGrid from './ui/ui_grid';
+import { mixer } from './components/mixer';
 import drawLayout from './ui/ui_layout';
 import { cursor } from './components/cursor';
 import SoundController from './audio/soundcontroller';
@@ -37,15 +36,14 @@ normalButton.disabled = true;
 ////////////////////////////////////
 
 //se inicia audio context
-export const audioCtx = new (window.AudioContext ||
-    window.webkitAudioContext)();
+export const audioCtx = new window.AudioContext ||
+    window.webkitAudioContext;
 
 //llamo al controlador de sonido
 export const soundcontroller = new SoundController(audioCtx);
 
 //Se genera el objeto grid
 export const grid = new Grid();
-
 
 //Animación de tiempo de carga
 export const loading = () => {
@@ -56,7 +54,7 @@ export const loading = () => {
     document.body.style.background = 'black';
     ventana.classList.toggle('visible');
     if (signup) signup.style.color = 'white';
-    setTimeout(function () {
+    setTimeout(() => {
         if (signup) signup.style.color = 'black';
         ventana.classList.toggle('visible');
         document.body.style.background = '#b9edf1';
@@ -86,11 +84,15 @@ export const loading = () => {
 
 const appStart = () => {
 
-    setTimeout(drawGrid, 0);
+    //Se carga el mixer
+    mixer.exec();
+    //Se dibuja el grid
+    drawGrid();
     //dibuja cursor inicial
     cursor.draw();
     //dibuja layout
     drawLayout();
+
     //Eventos de reproducción
     play.addEventListener('click', ePlay);
     stop.addEventListener('click', eStop);
