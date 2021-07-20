@@ -1,6 +1,7 @@
 const toWav = require('audiobuffer-to-wav')
 
-import { audioCtx, grid, loading, eStop } from './app_core';
+import { audioCtx, grid, soundcontroller } from './app_core';
+import { loading } from './actions/actions';
 import { timeSpace } from './timeSpace';
 import drawLayout from './ui/ui_layout';
 import drawGrid from './ui/ui_grid';
@@ -154,7 +155,7 @@ export const storeAudios = async () => {
             projectName = this.id;
             loadWindow.style.display = 'none';
 
-            eStop();
+            soundcontroller.eStop();
 
             fetch(`loadproject/${projectName}`).then(response => {
 

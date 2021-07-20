@@ -140,7 +140,7 @@ export const mixer = {
         }
     },
 
-    exec: function() {
+    exe() {
         this.setChannelGain();
         this.setMasterGain();
         this.setPan();

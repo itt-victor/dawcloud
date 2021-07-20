@@ -52,100 +52,99 @@ export const gridSelector = {
     drawMarksatZoom(oldzoom) {
         this.startMark.style.left = `${parseFloat(this.startMark.style.left) * timeSpace.zoom / oldzoom}px`;
         this.endMark.style.left = `${parseFloat(this.endMark.style.left) * timeSpace.zoom / oldzoom}px`;
+    },
+
+    exe() {
+
+        let X = { start: 0, end: 0 };
+        let delta;
+        let dragStart = false;
+        let dragEnd = false;
+        let endNotZeroed = false;
+        let bar;
+
+
+        this.drawStartMark(this.startMark);
+        this.drawStartMark(this.endMark);
+
+        this.startMark.addEventListener('mousedown', e => {
+            dragStart = true;
+            const mousePos = onMousePos(grid.canvas, e);
+            X.start = timeSpace.getStartMark;
+            delta = mousePos.x - X.start;
+            if (snap.toggle) {
+                snap.setup = timeSpace.zoom * timeSpace.compas * timeSpace.bpm * timeSpace.snap;
+                bar = Math.ceil(X.start / snap.setup);
+            }
+        });
+
+        this.endMark.addEventListener('mousedown', e => {
+            dragEnd = true;
+            const mousePos = onMousePos(grid.canvas, e);
+            X.end = timeSpace.getEndMark;
+            delta = mousePos.x - X.end + 15;
+            if (snap.toggle) {
+                snap.setup = timeSpace.zoom * timeSpace.compas * timeSpace.bpm * timeSpace.snap;
+                bar = Math.round(X.end / snap.setup);
+            }
+        });
+
+        window.addEventListener('mousemove', e => {
+            const mousePos = onMousePos(grid.canvas, e);
+
+            if (!endNotZeroed) {
+                if (X.end != 0) {
+                    endNotZeroed = true;
+                    this.drawendMark(this.endMark);
+                }
+            }
+
+            if (dragStart) {
+                X.start = mousePos.x - delta;
+
+                if (snap.toggle) {
+                    let barCount = Math.ceil(X.start / snap.setup);
+                    if (barCount > bar) bar++;
+                    if (barCount < bar) bar--;
+                    X.start = barCount * snap.setup;
+                }
+
+                X.start >= X.end - 15 && (X.start = X.end);
+                X.start <= 0 && (X.start = 0);
+                X.start >= X.end && (X.start = X.end);
+                timeSpace.setStartMark = X.start;
+                this.startMark.style.left = `${X.start}px`;
+                this.drawGridSelector(X.start, timeSpace.getEndMark);
+            }
+            if (dragEnd) {
+                X.end = mousePos.x - delta;
+
+                if (snap.toggle) {
+                    let barCount = Math.ceil(X.end / snap.setup);
+                    if (barCount > bar) bar++;
+                    if (barCount < bar) bar--;
+                    X.end = barCount * snap.setup;
+
+                    if (X.end <= 0) {
+                        X.end = 0;
+                        this.drawStartMark(this.endMark);
+                        endNotZeroed = false;
+                    }
+                    if (X.end <= X.start + 15) return;
+
+                    timeSpace.setEndMark = X.end;
+                    this.endMark.style.left = `${X.end - 15}px`;
+                    this.drawGridSelector(timeSpace.getStartMark, X.end);
+                } else {
+                    X.end <= 0 && (X.end = 0);
+                    X.end <= X.start && (X.end = X.start);
+                    timeSpace.setEndMark = X.end + 15;
+                    this.endMark.style.left = `${X.end}px`;
+                    this.drawGridSelector(timeSpace.getStartMark, X.end + 15);
+                }
+            }
+        });
+
+        window.addEventListener('mouseup', () => dragStart = dragEnd = false);
     }
 }
-
-const runEvents = (() => {
-
-    let X = { start: 0, end: 0 };
-    let delta;
-    let dragStart = false;
-    let dragEnd = false;
-    let endNotZeroed = false;
-    let bar;
-
-
-    gridSelector.drawStartMark(gridSelector.startMark);
-    gridSelector.drawStartMark(gridSelector.endMark);
-
-    gridSelector.startMark.addEventListener('mousedown', e => {
-        dragStart = true;
-        const mousePos = onMousePos(grid.canvas, e);
-        X.start = timeSpace.getStartMark;
-        delta = mousePos.x - X.start;
-        if (snap.toggle) {
-            snap.setup = timeSpace.zoom * timeSpace.compas * timeSpace.bpm * timeSpace.snap;
-            bar = Math.ceil(X.start / snap.setup);
-        }
-    });
-
-    gridSelector.endMark.addEventListener('mousedown', e => {
-        dragEnd = true;
-        const mousePos = onMousePos(grid.canvas, e);
-        X.end = timeSpace.getEndMark;
-        delta = mousePos.x - X.end + 15;
-        if (snap.toggle) {
-            snap.setup = timeSpace.zoom * timeSpace.compas * timeSpace.bpm * timeSpace.snap;
-            bar = Math.round(X.end / snap.setup);
-        }
-    });
-
-    window.addEventListener('mousemove', e => {
-        const mousePos = onMousePos(grid.canvas, e);
-
-        if (!endNotZeroed) {
-            if (X.end != 0) {
-                endNotZeroed = true;
-                gridSelector.drawendMark(gridSelector.endMark);
-            }
-        }
-
-        if (dragStart) {
-            X.start = mousePos.x - delta;
-
-            if (snap.toggle) {
-                let barCount = Math.ceil(X.start / snap.setup);
-                if (barCount > bar) bar++;
-                if (barCount < bar) bar--;
-                X.start = barCount * snap.setup;
-            }
-
-            X.start >= X.end - 15 && (X.start = X.end);
-            X.start <= 0 && (X.start = 0);
-            X.start >= X.end && (X.start = X.end);
-            timeSpace.setStartMark = X.start;
-            gridSelector.startMark.style.left = `${X.start}px`;
-            gridSelector.drawGridSelector(X.start, timeSpace.getEndMark);
-        }
-        if (dragEnd) {
-            X.end = mousePos.x - delta;
-
-            if (snap.toggle) {
-                let barCount = Math.ceil(X.end / snap.setup);
-                if (barCount > bar) bar++;
-                if (barCount < bar) bar--;
-                X.end = barCount * snap.setup;
-
-                if (X.end <= 0) {
-                    X.end = 0;
-                    gridSelector.drawStartMark(gridSelector.endMark);
-                    endNotZeroed = false;
-                }
-                if (X.end <= X.start + 15) return;
-
-                timeSpace.setEndMark = X.end;
-                gridSelector.endMark.style.left = `${X.end - 15}px`;
-                gridSelector.drawGridSelector(timeSpace.getStartMark, X.end);
-            } else {
-                X.end <= 0 && (X.end = 0);
-                X.end <= X.start && (X.end = X.start);
-                timeSpace.setEndMark = X.end + 15;
-                gridSelector.endMark.style.left = `${X.end}px`;
-                gridSelector.drawGridSelector(timeSpace.getStartMark, X.end + 15);
-            }
-        }
-    });
-
-    window.addEventListener('mouseup', () => dragStart = dragEnd = false);
-
-})();

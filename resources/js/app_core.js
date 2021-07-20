@@ -4,20 +4,16 @@ require('./audio/bouncecontroller');
 require('./components/metronome');
 require('./components/timeLayout');
 require('./project');
-//require('./components/mixer');
 require('./actions/cutRecordings');
-require('./components/gridselector');
 
 import { Grid } from './components/generalgrid';
 import drawGrid from './ui/ui_grid';
 import { mixer } from './components/mixer';
 import drawLayout from './ui/ui_layout';
 import { cursor } from './components/cursor';
+import { gridSelector } from './components/gridselector';
 import SoundController from './audio/soundcontroller';
 import recordController from './audio/recordcontroller';
-//import { sessionProgress } from './project';
-//import { generateRecordingId } from './utils';
-//import { timeSpace } from './timeSpace';
 
 export const play = document.querySelector('#play-button'),
     record = document.querySelector('#record-button'),
@@ -27,7 +23,7 @@ export const play = document.querySelector('#play-button'),
     is = { playing: false };
 
 stop.disabled = true;
-normalButton.style.background = "red";
+normalButton.style.background = 'red';
 normalButton.disabled = true;
 
 
@@ -45,58 +41,25 @@ export const soundcontroller = new SoundController(audioCtx);
 //Se genera el objeto grid
 export const grid = new Grid();
 
-//Animación de tiempo de carga
-export const loading = () => {
-    const text = document.querySelector('.a_title');
-    const ventana = document.querySelector('.loading');
-    const signup = document.querySelector('#signup_now');
-    text.style.color = 'white';
-    document.body.style.background = 'black';
-    ventana.classList.toggle('visible');
-    if (signup) signup.style.color = 'white';
-    setTimeout(() => {
-        if (signup) signup.style.color = 'black';
-        ventana.classList.toggle('visible');
-        document.body.style.background = '#b9edf1';
-        text.style.color = 'black';
-        document.body.style.transition = 'background 0.7s'
-        if (signup) signup.style.transition = 'color 0.7s';
-        ventana.style.transition = 'display 0.7s, visibility 0.7s'
-        text.style.transition = 'color 0.7s'
-    }, 3500);
-};
-
-/*function song(){
-    const trcknr = document.querySelector('[data-selected]').id.charAt(6);
-    fetch('storage/recordings/1.mp3')
-    .then(response => response.arrayBuffer())
-    .then(arrayBuffer => audioCtx.decodeAudioData(arrayBuffer))
-    .then(buffer =>
-        grid.tracks[trcknr].addRecord(
-            generateRecordingId(),
-            timeSpace.time(),
-            buffer, 0,
-            buffer.duration,
-            false
-        )
-    );
-}*/
-
 const appStart = () => {
 
     //Se carga el mixer
-    mixer.exec();
+    mixer.exe();
     //Se dibuja el grid
     drawGrid();
     //dibuja cursor inicial
     cursor.draw();
     //dibuja layout
     drawLayout();
+    //Se carga el selector de grid
+    gridSelector.exe();
+    //se carga el controlador de grabación
+    recordController();
 
     //Eventos de reproducción
     play.addEventListener('click', ePlay);
     stop.addEventListener('click', eStop);
-    document.addEventListener('keypress', function (e) {
+    document.addEventListener('keypress', e => {
         const inputs = document.querySelectorAll('input');
         if (e.key === ' ') {
             for (const input of inputs)
@@ -105,17 +68,8 @@ const appStart = () => {
             is.playing ? eStop() : ePlay();
         }
     });
-
-    /////////////
-    recordController();
-    ////////////
-
-    //Guarda en sesión el progreso cada 10 minutos
-    //setInterval(sessionProgress, 600000);
-    //song();
 };
 
-//reproducir
 function ePlay() {
     cursor.play();
     soundcontroller.playSound();
@@ -125,7 +79,7 @@ function ePlay() {
     is.playing = true;
 }
 
-//stop
+
 export function eStop() {
     cursor.stop();
     soundcontroller.stopSound();
@@ -133,7 +87,6 @@ export function eStop() {
     stop.disabled = true;
     is.playing = false;
 }
-
 
 ///////////
 appStart();

@@ -5,10 +5,6 @@ import { metronome } from '../components/metronome';
 export default class SoundController {
 
     audioBufferSources = [];
-    /* constructor(audioCtx) {
-        this.audioCtx = audioCtx;
-        this.audioBufferSources = [];
-    } */
 
     playSound() {
         for (const recording of grid.recordings) {

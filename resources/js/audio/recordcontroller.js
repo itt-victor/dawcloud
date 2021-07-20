@@ -15,7 +15,8 @@ export default function recordController() {
             record.onclick = () => {
                 mediaRecorder.ondataavailable = event => chunks.push(event.data);
                 mediaRecorder.start();
-                startTime = timeSpace.time();
+                console.log(audioCtx.currentTime);
+                startTime = audioCtx.currentTime;//timeSpace.time();
                 if (!is.playing) {
                     cursor.play();
                     soundcontroller.playSound();

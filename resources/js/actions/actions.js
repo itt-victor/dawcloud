@@ -1,5 +1,4 @@
-
-import { audioCtx, soundcontroller, grid, is, eStop, loading } from '../app_core';
+import { audioCtx, soundcontroller, grid, is, eStop } from '../app_core';
 import drawGrid from '../ui/ui_grid';
 import { timeSpace } from '../timeSpace';
 import { ui_draw } from '../ui/ui_draw';
@@ -7,6 +6,27 @@ import drawLayout from '../ui/ui_layout';
 import { cursor } from '../components/cursor';
 import { gridSelector } from '../components/gridselector';
 import { generateRecordingId } from '../utils';
+
+//Animación de tiempo de carga
+export const loading = () => {
+    const text = document.querySelector('.a_title');
+    const ventana = document.querySelector('.loading');
+    const signup = document.querySelector('#signup_now');
+    text.style.color = 'white';
+    document.body.style.background = 'black';
+    ventana.classList.toggle('visible');
+    if (signup) signup.style.color = 'white';
+    setTimeout(() => {
+        if (signup) signup.style.color = 'black';
+        ventana.classList.toggle('visible');
+        document.body.style.background = '#b9edf1';
+        text.style.color = 'black';
+        document.body.style.transition = 'background 0.7s'
+        if (signup) signup.style.transition = 'color 0.7s';
+        ventana.style.transition = 'display 0.7s, visibility 0.7s'
+        text.style.transition = 'color 0.7s'
+    }, 3500);
+};
 
 //SIGN UP REMINDER
 (() => {
@@ -86,7 +106,7 @@ import { generateRecordingId } from '../utils';
             reader.onload = e => {
                 let trcknr = document.querySelector('[data-selected]').id.charAt(6);
                 audioCtx.decodeAudioData(e.target.result).then(buffer => {
-                    /* const recording =  */grid.tracks[trcknr].addRecord(
+                    grid.tracks[trcknr].addRecord(
                         generateRecordingId(),
                         timeSpace.time(),
                         buffer, 0,
