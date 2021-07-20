@@ -1,7 +1,6 @@
 import Recording from './recording';
 import { ui_draw } from '../ui/ui_draw';
-import { grid } from './generalgrid';
-import { audioCtx } from '../app_core';
+import { grid, audioCtx } from '../app_core';
 import { editRecording } from '../actions/editRecordings';
 import { copyPaste } from '../actions/copyPaste';
 import { removeRecording } from '../actions/actions';
@@ -9,14 +8,32 @@ import { timeSpace } from '../timeSpace';
 import { cutRecording } from '../actions/cutRecordings';
 
 export default class Track {
-    constructor(tracknumber, gainValue, pannerValue) {
+
+    _tracknumber;
+    get tracknumber() {
+        return this._tracknumber;
+    }
+    set tracknumber(value) {
+        this._tracknumber = value;
+    }
+
+    _name;
+    get name() {
+        return this._name;
+    }
+    set name(value) {
+        this._name = value;
+    }
+
+    trackDOMElement;
+    pannerNode = audioCtx.createStereoPanner();
+    gainNode = audioCtx.createGain();
+
+    constructor(tracknumber) {
         this.tracknumber = tracknumber;
-        this.name;
         this.trackDOMElement = document.getElementsByClassName('track')[this.tracknumber];
-        this.pannerNode = audioCtx.createStereoPanner();
-        this.pannerNode.pannerValue = pannerValue;
-        this.gainNode = audioCtx.createGain();
-        this.gainNode.gainValue = gainValue;
+        this.pannerNode.pannerValue = 'C';
+        this.gainNode.gainValue = 1;
         this.soloButton = document.getElementById('solo_' + this.tracknumber);
         this.soloButton.parent = this;
         this.soloButton.toggle = false;

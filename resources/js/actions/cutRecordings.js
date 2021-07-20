@@ -1,4 +1,5 @@
-import { grid } from '../components/generalgrid';
+//import { grid } from '../components/generalgrid';
+import { grid } from '../app_core';
 import { ui_draw } from '../ui/ui_draw';
 import { timeSpace } from '../timeSpace';
 import Recording from '../components/recording';

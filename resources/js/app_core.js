@@ -9,12 +9,13 @@ require('./actions/cutRecordings');
 require('./components/gridselector');
 
 
-import { grid } from './components/generalgrid';
+//import { grid } from './components/generalgrid';
+import { Grid } from './components/generalgrid';
 import drawGrid from './ui/ui_grid';
 import drawLayout from './ui/ui_layout';
 import { cursor } from './components/cursor';
 import SoundController from './audio/soundcontroller';
-import recordcontroller from './audio/recordcontroller';
+import recordController from './audio/recordcontroller';
 //import { sessionProgress } from './project';
 //import { generateRecordingId } from './utils';
 //import { timeSpace } from './timeSpace';
@@ -39,9 +40,12 @@ normalButton.disabled = true;
 export const audioCtx = new (window.AudioContext ||
     window.webkitAudioContext)();
 
-
 //llamo al controlador de sonido
 export const soundcontroller = new SoundController(audioCtx);
+
+//Se genera el objeto grid
+export const grid = new Grid();
+
 
 //Animación de tiempo de carga
 export const loading = () => {
@@ -82,9 +86,6 @@ export const loading = () => {
 
 const appStart = () => {
 
-    //prepara el grid
-    grid.prepareGrid();
-    grid.addTracks();
     setTimeout(drawGrid, 0);
     //dibuja cursor inicial
     cursor.draw();
@@ -104,7 +105,7 @@ const appStart = () => {
     });
 
     /////////////
-    recordcontroller();
+    recordController();
     ////////////
 
     //Guarda en sesión el progreso cada 10 minutos

@@ -1,6 +1,5 @@
 import { timeSpace } from '../timeSpace';
-import { grid } from '../components/generalgrid';
-import { audioCtx } from '../app_core';
+import { grid, audioCtx } from '../app_core';
 import { metronome } from '../components/metronome';
 
 export default class SoundController {

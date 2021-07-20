@@ -1,9 +1,7 @@
-import { grid } from '../components/generalgrid';
 import { ui_draw } from '../ui/ui_draw';
 import { cursor } from '../components/cursor';
 import { timeSpace } from '../timeSpace';
-import { soundcontroller, audioCtx, play, record, stop, is } from '../app_core';
-import { storeFile } from '../project';
+import { soundcontroller, audioCtx, grid, play, record, stop, is } from '../app_core';
 import { generateRecordingId } from '../utils';
 
 export default function recordController() {
@@ -11,12 +9,12 @@ export default function recordController() {
         const constraints = { audio: true };
         let chunks = [], startTime;
 
-        let onSuccess = function (stream) {
+        let onSuccess = stream => {
             const mediaRecorder = new MediaRecorder(stream);
 
             record.onclick = () => {
                 mediaRecorder.ondataavailable = event => chunks.push(event.data);
-                mediaRecorder.start(10);
+                mediaRecorder.start();
                 startTime = timeSpace.time();
                 if (!is.playing) {
                     cursor.play();
@@ -31,7 +29,7 @@ export default function recordController() {
                 play.disabled = true;
             }
 
-            function rStop() {
+            const rStop = () => {
                 if (mediaRecorder.state == 'recording') {
                     mediaRecorder.stop();
                     console.log(mediaRecorder.state);
@@ -52,17 +50,17 @@ export default function recordController() {
             mediaRecorder.onstop = () => {
                 const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
                 chunks = [];
-                blob.arrayBuffer().then(arrayBuffer => {
+                blob.arrayBuffer().then(arrayBuffer =>
                     audioCtx.decodeAudioData(arrayBuffer, audioBuffer => {
                         const track = document.querySelector('[data-selected]').id.charAt(6);
                         const recording = grid.tracks[track].addRecord(generateRecordingId(), startTime,
                             audioBuffer, 0, audioBuffer.duration);
-                            storeFile(recording);
-                    });
-                });
+                            //storeFile(recording);
+                    })
+                );
             }
         }
-        let onError = function (err) {
+        let onError = err => {
             console.log('The following error occured: ' + err);
         }
         navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError);

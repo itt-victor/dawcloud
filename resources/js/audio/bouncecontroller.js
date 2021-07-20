@@ -1,9 +1,10 @@
-var toWav = require('audiobuffer-to-wav');
-import { grid } from '../components/generalgrid';
-import { timeSpace } from '../timeSpace';
+const toWav = require('audiobuffer-to-wav');
+import { grid } from '../app_core';
 
 
-function exportSong() {
+const exportSong = () => {
+
+    const projectTitle = document.getElementById('project-n');
 
     if (grid.recordings.length > 0) {
         let maxLength = 0, pannerValue, ctxValue;
@@ -18,14 +19,14 @@ function exportSong() {
             sampleRate: 48000,
         });
 
-        let mastergain = offlineCtx.createGain();
+        const mastergain = offlineCtx.createGain();
         mastergain.connect(offlineCtx.destination);
         let pannerNodes = [];
 
         for (const track of grid.tracks) {
-            let panner = offlineCtx.createStereoPanner();
+            const panner = offlineCtx.createStereoPanner();
             pannerNodes.push(panner);
-            let gain = offlineCtx.createGain();
+            const gain = offlineCtx.createGain();
             pannerValue = track.pannerNode.pannerValue;
 
             pannerValue.startsWith('L')
@@ -45,14 +46,16 @@ function exportSong() {
             const source = offlineCtx.createBufferSource();
             source.buffer = recording.audioBuffer;
             source.connect(pannerNodes[recording.tracknumber]);
-            let start = Math.max(recording.timeToStart + recording.offset, 0),
+            const start = Math.max(recording.timeToStart + recording.offset, 0),
 			 	offset = Math.max(recording.offset, 0),                   //ESTO FALTA DE MIRARLO BIEN
 			 	duration = recording.duration - recording.offset;
             source.start(start, offset, duration);
         }
 
         offlineCtx.startRendering().then(renderedBuffer => {
-            let filename = 'project.wav'
+            let filename;
+            if (projectTitle.innerHTML != '') filename = `${projectTitle.innerHTML}.wav`;
+            else filename = 'project.wav';
             const a = document.createElement('a');
             const blob = new window.Blob([new DataView(toWav(renderedBuffer))], {
                 type: 'audio/wav'
@@ -66,23 +69,3 @@ function exportSong() {
 }
 const export_sound = document.querySelector('#export_sound');
 if (export_sound) export_sound.addEventListener('click', exportSong);
-
-export function cropAudio(recording) {
-
-    let length = recording.audioBuffer.length - (recording.offset * 48000);
-    const offlineCtx = new OfflineAudioContext({
-        numberOfChannels: 2,
-        length: length,
-        sampleRate: 48000,
-    });
-
-    const source = offlineCtx.createBufferSource();
-    source.buffer = recording.audioBuffer;
-    source.connect(offlineCtx.destination);
-    let offset = Math.max(recording.offset, 0);
-    source.start(0, offset);
-
-    offlineCtx.startRendering().then(renderedBuffer => {
-        console.log('algo');
-    });
-}

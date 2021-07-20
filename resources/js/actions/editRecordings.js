@@ -1,4 +1,5 @@
-import { grid } from '../components/generalgrid';
+//import { grid } from '../components/generalgrid';
+import { grid } from '../app_core';
 import { soundcontroller, is } from '../app_core';
 import { timeSpace } from '../timeSpace';
 import { ui_draw } from '../ui/ui_draw';

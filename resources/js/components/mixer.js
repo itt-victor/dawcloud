@@ -1,5 +1,4 @@
-import { grid } from './generalgrid';
-import { audioCtx } from '../app_core';
+import { grid, audioCtx } from '../app_core';
 import { onMousePos } from '../utils';
 
 

@@ -1,11 +1,10 @@
-import { grid } from './generalgrid';
+import { grid } from '../app_core';
 import { timeSpace } from '../timeSpace';
 
-var interval;
+let interval;
 
 export const cursor = {
     canvas: document.getElementById("cursor"),
-    interval,
     draw: function () {
         this.canvas.width = 5;
         this.canvas.height = 60 * grid.howMany + 30;

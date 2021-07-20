@@ -1,6 +1,5 @@
 
-import { audioCtx, soundcontroller, is, eStop, loading } from '../app_core';
-import { grid } from '../components/generalgrid';
+import { audioCtx, soundcontroller, grid, is, eStop, loading } from '../app_core';
 import drawGrid from '../ui/ui_grid';
 import { timeSpace } from '../timeSpace';
 import { ui_draw } from '../ui/ui_draw';
@@ -95,7 +94,7 @@ import { storeFile } from '../project';
                         buffer.duration,
                         false
                     );
-                    storeFile(recording);
+                    //storeFile(recording);
                 });
             }
             if (a.target.files.length > 0)

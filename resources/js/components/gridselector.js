@@ -1,4 +1,4 @@
-import { grid } from './generalgrid';
+import { grid } from '../app_core';
 import { timeSpace } from '../timeSpace';
 import { snap } from '../ui/ui_snapToGrid';
 import { onMousePos } from '../utils';

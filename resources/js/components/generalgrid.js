@@ -3,34 +3,52 @@ import { audioCtx } from '../app_core';
 
 export class Grid {
 
-    constructor( gainValue, tracks, recordings) {
-        this.howMany = document.querySelectorAll('.track').length;
-        this.canvas = document.getElementById('canvas-grid');
-        this.gainNode;
-        this.gainValue = gainValue;
-        this.faderY = 20;
-        this.tracks = tracks;
-        this.recordings = recordings;
+    _howMany = document.querySelectorAll('.track').length;
+    get howMany() {
+        return this._howMany;
+    }
+    set howMany(value) {
+        this._howMany = value;
     }
 
-    prepareGrid() {
-        this.gainNode = audioCtx.createGain();
+    _gainValue;
+    get gainValue() {
+        return this._gainValue;
+    }
+    set gainValue(value) {
+        this._gainValue = value;
+    }
+
+    _faderY;
+    get faderY() {
+        return this._faderY;
+    }
+    set faderY(value) {
+        this._faderY = value;
+    }
+
+    canvas = document.getElementById('canvas-grid');
+    gainNode = audioCtx.createGain();
+    tracks = [];
+    recordings = [];
+
+    constructor() {
+
         this.gainNode.connect(audioCtx.destination);
         this.canvas.height = 60 * this.howMany;
 		this.canvas.style.height = `${60 * this.howMany}px`;
 		this.canvas.width = 10000;
         //default la 1a pista
         document.querySelector('.track').setAttribute('data-selected', '');
-    }
+        this.gainValue = 1;
+        this.faderY = 20;
 
-    addTracks() {
-        for (var i = 0; i < this.howMany; i++) {
-            let track = new Track(i, 1, 'C');
+        for (let i = 0; i < this.howMany; i++) {
+            const track = new Track(i);
             track.pannerNode.connect(track.gainNode);
             track.gainNode.connect(this.gainNode);
-            grid.tracks.push(track);
+            this.tracks.push(track);
         }
     }
 }
-//La creo
-export const grid = new Grid(1, [], []);
+

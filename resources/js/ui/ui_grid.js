@@ -1,4 +1,5 @@
-import { grid } from '../components/generalgrid';
+//import { grid } from '../components/generalgrid';
+import { grid } from '../app_core';
 import { timeSpace } from '../timeSpace';
 
 export default function drawGrid() {

@@ -1,7 +1,6 @@
 import { timeSpace } from '../timeSpace';
 import { cursor } from './cursor';
-import { is } from '../app_core';
-import { soundcontroller } from '../app_core';
+import { soundcontroller, is } from '../app_core';
 import { snap } from '../ui/ui_snapToGrid';
 
 //Interacción con el layout de tiempo
