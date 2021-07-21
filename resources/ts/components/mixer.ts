@@ -1,20 +1,22 @@
 import { grid, audioCtx } from '../app_core';
 import { onMousePos } from '../utils';
+import Track from './track';
 
 export const mixer = {
 
     //GANANCIA DE CADA PISTA
     setChannelGain : () => {
-        let fader, gainNode, trckNr, Y;
+        let fader: HTMLElement, gainNode: Track["gainNode"], gainValue: number, trckNr: number, Y;
         const drag = Array(8).fill(false),
-            delta = { y: 0 };
+            delta = {y: 0};
 
         for (const track of grid.tracks) {
-            track.fader.querySelector('a').addEventListener("mousedown", evt => {
-                fader = evt.target.parentNode;
-                trckNr = fader.id.charAt(6);
+            (track.fader.querySelector('a') as HTMLElement).addEventListener("mousedown", function (evt) {
+                fader = this.parentNode as HTMLElement;
+                trckNr = parseInt(fader.id.charAt(6));
                 gainNode = grid.tracks[trckNr].gainNode;
-                Y = fader.Y;
+                gainValue = grid.tracks[trckNr].gainValue;
+                Y = grid.tracks[trckNr].Y;
                 const mousePos = onMousePos(fader, evt);
                 if (mousePos.y <= 280 &&
                     mousePos.y >= 20) {
@@ -30,15 +32,15 @@ export const mixer = {
                     Y = mousePos.y + delta.y
                     if (Y < 20) Y = 20;
                     if (Y > 260) Y = 260;
-                    fader.Y = Y;
-                    fader.querySelector('a').style.top = `${Y}px`;
+                    grid.tracks[trckNr].Y = Y;
+                    (fader.querySelector('a') as HTMLElement).style.top = `${Y}px`;
 
                     gainValue = Math.log10(1 / ((Y + 5) / 260));
                     if (gainValue > 1) gainValue = 1;
                     if (gainValue < 0) gainValue = 0;
-                    gainNode.gainValue = gainValue;
+                    gainValue = gainValue;
 
-                    if (!grid.tracks[trckNr].muteButton.toggle)
+                    if (!grid.tracks[trckNr].muteToggle)
                         gainNode.gain.setValueAtTime(gainValue, audioCtx.currentTime);
                 }
             }, false);
@@ -49,12 +51,12 @@ export const mixer = {
 
     //MASTER GAIN
     setMasterGain : () => {
-        const fader = document.getElementById('master_fader');
+        const fader = document.getElementById('master_fader') as HTMLElement;
         let gain = grid.gainNode, gainValue, Y,
             drag = false;
-        const delta = { y: 0 };
+        const delta = {y: 0};
 
-        fader.firstChild.addEventListener("mousedown", evt => {
+        (fader.firstChild as HTMLElement).addEventListener("mousedown", evt => {
             Y = grid.faderY;
             const mousePos = onMousePos(fader, evt);
             if (mousePos.y <= 280 &&
@@ -71,7 +73,7 @@ export const mixer = {
                 if (Y < 20) Y = 20;
                 if (Y > 260) Y = 260;
 
-                fader.firstChild.style.top = `${Y}px`;
+                (fader.firstChild as HTMLElement).style.top = `${Y}px`;
                 gainValue = Math.log10(1 / ((Y + 5) / 260));
                 if (gainValue > 1) gainValue = 1;
                 if (gainValue < 0) gainValue = 0;
@@ -88,11 +90,11 @@ export const mixer = {
     //PANORAMA DE CADA PISTA
     setPan : () => {
         const panButton = document.querySelectorAll('.panner');
-        let newValue;
-        let trackNR;
+        let newValue: HTMLInputElement;
+        let trackNR: number;
         for (const [i, track] of grid.tracks.entries()) {
-            panButton[i].addEventListener('click', function (e) {
-                trackNR = this.id.charAt(7);
+            (panButton[i] as HTMLButtonElement).addEventListener('click', function (e) {
+                trackNR = parseInt(this.id.charAt(7));
                 e.stopPropagation();
                 if (!document.getElementById('pan-value')) {
                     newValue = document.createElement('input');
@@ -102,7 +104,7 @@ export const mixer = {
                     newValue.focus();
                 }
                 window.addEventListener('click', function br(a) {
-                    if (!a.target.contains(e.currentTarget)) {
+                    if (!(a.target as HTMLElement).contains(e.currentTarget as HTMLElement)) {
                         newValue.remove();
                         newValue.innerHTML = track.pannerValue;
                         this.removeEventListener('click', br);
@@ -111,18 +113,18 @@ export const mixer = {
                 newValue.addEventListener('keyup', function (o) {
                     if (o.key === 'Enter') {
                         o.preventDefault();
-                        let ctxValue;
+                        let ctxValue: number;
                         const execPan = () => {
                             grid.tracks[trackNR].pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
                             newValue.remove();
-                            e.target.innerHTML = track.pannerNode.pannerValue = this.value.toUpperCase();
+                            (e.target as HTMLElement).innerHTML = track.pannerValue = this.value.toUpperCase();
                         }
                         if (this.value.toUpperCase().startsWith('L')) {
                             ctxValue = - + parseFloat(this.value.slice(1)) / 100;
                             if (ctxValue <= -1) ctxValue = -1;
                             execPan();
                         }
-                        else if (this.value == 0 || this.value.toUpperCase() == 'C') {
+                        else if (parseInt(this.value) == 0 || this.value.toUpperCase() == 'C') {
                             ctxValue = 0;
                             execPan();
                         }

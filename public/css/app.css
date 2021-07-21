@@ -10005,6 +10005,10 @@ h3 {
 body {
   background-color: #b9edf1;
   height: auto;
+  -moz-user-select: -moz-none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .loading {

@@ -5,9 +5,10 @@ export const snap = {
     toggle : false
 };
 
-const button = document.querySelector('#snap-button'),
-      selectSnap = document.querySelector('#snap_ratio');
+const button = document.querySelector('#snap-button') as HTMLButtonElement,
+      selectSnap = document.querySelector('#snap_ratio') as HTMLButtonElement;
 
+//let snap = false;
 selectSnap.onchange = () => timeSpace.snap = parseFloat(selectSnap.value);
 
 

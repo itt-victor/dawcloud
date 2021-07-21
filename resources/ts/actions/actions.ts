@@ -6,12 +6,13 @@ import drawLayout from '../ui/ui_layout';
 import { cursor } from '../components/cursor';
 import { gridSelector } from '../components/gridselector';
 import { generateRecordingId } from '../utils';
+import Recording from '../components/recording';
 
 //Animación de tiempo de carga
 export const loading = () => {
-    const text = document.querySelector('.a_title');
-    const ventana = document.querySelector('.loading');
-    const signup = document.querySelector('#signup_now');
+    const text = document.querySelector('.a_title') as HTMLElement;
+    const ventana = document.querySelector('.loading') as HTMLElement;
+    const signup = document.querySelector('#signup_now') as HTMLElement;
     text.style.color = 'white';
     document.body.style.background = 'black';
     ventana.classList.toggle('visible');
@@ -30,9 +31,9 @@ export const loading = () => {
 
 //SIGN UP REMINDER
 (() => {
-    const signup = document.querySelector('#signup_now');
-    const signupReminder = document.querySelector('#signup_reminder');
-    const xButton = document.querySelector('.x-button');
+    const signup = document.querySelector('#signup_now') as HTMLElement;
+    const signupReminder = document.querySelector('#signup_reminder') as HTMLElement;
+    const xButton = document.querySelector('.x-button') as HTMLElement;
     if (signup) {
         signup.addEventListener('click', () => {
             signupReminder.style.display = 'flex';
@@ -47,18 +48,18 @@ export const loading = () => {
 
 //SELECT TRACK
 (() => {
-    const tracks = document.getElementsByClassName("track");
-    const trackNames = document.getElementsByClassName("track_name");
+    const tracks = document.getElementsByClassName("track") as HTMLCollection;
+    const trackNames = document.getElementsByClassName("track_name") as HTMLCollection;
     for (const track of tracks) {
         track.addEventListener('mousedown', e => {
             for (const unTrack of tracks)
                 unTrack.removeAttribute('data-selected');
-            e.currentTarget.setAttribute('data-selected', '');
+            (e.currentTarget as HTMLElement).setAttribute('data-selected', '');
         });
     }
     for (const name of trackNames) {
         name.addEventListener('click', e => {
-            let index = e.currentTarget.id.charAt(11);
+            const index = parseInt((e.currentTarget as HTMLElement).id.charAt(11));
             for (const track of tracks)
                 track.removeAttribute('data-selected');
             tracks[index].setAttribute('data-selected', '');
@@ -69,16 +70,15 @@ export const loading = () => {
 
 //CHANGE TRACK NAME
 (() => {
-    let names = document.querySelectorAll('.select');
+    const names = document.querySelectorAll('.select');
     for (const name of names) {
         name.addEventListener('dblclick', e => {
-            let name = e.target;
+            let name = e.target as HTMLElement;
             name.style.display = 'none';
-            const input = name.parentNode.getElementsByTagName('input')[0];
+            const input = name.parentNode?.querySelector('[input]') as HTMLInputElement;
             input.style.display = 'block';
-            input.setAttribute('autocomplete', 'naaaaah');
             input.focus();
-            let trackId = name.parentNode.id.charAt(11);
+            const trackId = parseInt((name.parentNode as HTMLElement).id.charAt(11));
             window.addEventListener('keypress', i => {
                 if (i.key === 'Enter') {
                     name.innerHTML = input.value;
@@ -101,12 +101,12 @@ export const loading = () => {
 (() => {
     const button = document.getElementById('load_sound_hidden');
     if (button) {
-        button.onchange = a => {
+        button.onchange = (a: Event) => {
             loading(); eStop();
             const reader = new FileReader();
             reader.onload = e => {
-                let trcknr = document.querySelector('[data-selected]').id.charAt(6);
-                audioCtx.decodeAudioData(e.target.result).then(buffer => {
+                let trcknr = parseInt((document.querySelector('[data-selected]') as HTMLElement).id.charAt(6));
+                audioCtx.decodeAudioData((e.target as FileReader).result as ArrayBuffer).then(buffer => {
                     grid.tracks[trcknr].addRecord(
                         generateRecordingId(),
                         timeSpace.time(),
@@ -116,24 +116,27 @@ export const loading = () => {
                     );
                 });
             }
-            if (a.target.files.length > 0)
-                reader.readAsArrayBuffer(a.target.files[a.target.files.length - 1]);
+            if (((a.target as HTMLInputElement & EventTarget).files as FileList).length > 0)
+                reader.readAsArrayBuffer(((
+                    (a.target as HTMLInputElement & EventTarget).files as FileList)
+                    [((a.target as HTMLInputElement & EventTarget).files as FileList).length - 1])
+                );
         }
     }
 })();
 
 //ZOOM
 (() => {
-    const zoomIn = document.getElementById("zoomin"),
-        zoomOut = document.getElementById("zoomout"),
-        inputs = document.querySelectorAll('input');
-    let oldZoom;
+    const zoomIn = document.getElementById("zoomin") as HTMLElement;
+    const zoomOut = document.getElementById("zoomout") as HTMLElement;
+    const inputs = document.querySelectorAll('input') as NodeList;
+    let oldZoom: number;
 
     const zDraw = () => {
         grid.recordings.forEach(recording => {
             const offset = recording.offset * timeSpace.zoom,
                 duration = recording.duration * timeSpace.zoom,
-                offCanvas = (recording.canvas.selected)
+                offCanvas = (recording.selected)
                     ? recording.offSelectedCanvas[timeSpace.zoom]
                     : recording.offCanvas[timeSpace.zoom],
                 width = Math.ceil(duration - offset) + 1;
@@ -175,8 +178,8 @@ export const loading = () => {
 
 //SET BPM
 (() => {
-    const bpmButton = document.getElementById('bpm_button');
-    let input;
+    const bpmButton = document.getElementById('bpm_button') as HTMLButtonElement;
+    let input : HTMLInputElement;
     bpmButton.innerHTML = `${Math.round(120 / timeSpace.bpm)}  bpm`;
     bpmButton.addEventListener('click', e => {
         e.stopPropagation();
@@ -190,16 +193,16 @@ export const loading = () => {
             input.focus();
         }
         window.addEventListener('click', function br(a) {
-            if (!a.target.contains(e.currentTarget)) {
+            if (!(a.target as HTMLElement).contains(e.currentTarget as HTMLElement)) {
                 input.remove();
                 bpmButton.innerHTML = `${Math.round(120 / timeSpace.bpm)}  bpm`;
                 this.removeEventListener('click', br);
             }
         });
-        input.addEventListener('keypress', o => {
+        input.addEventListener('keypress', function(o) {
             if (o.key === 'Enter') {
                 o.preventDefault();
-                timeSpace.bpm = 120 / o.target.value;
+                timeSpace.bpm = 120 / parseInt(this.value);
                 bpmButton.innerHTML = `${Math.round(120 / timeSpace.bpm)}  bpm`;
                 input.remove();
                 drawGrid(); drawLayout();
@@ -210,7 +213,7 @@ export const loading = () => {
 
 //TIME SIGNATURE (4/4 3/4)
 (() => {
-    const metricButton = document.getElementById('metric_button');
+    const metricButton = document.getElementById('metric_button') as HTMLElement;
     metricButton.innerHTML = '4/4';
     metricButton.addEventListener('click', () => {
         if (metricButton.textContent == '4/4') {
@@ -223,14 +226,14 @@ export const loading = () => {
         drawGrid(); drawLayout();
     });
 })();
-
+/*
 //MUTE
 (() => {
-    const buttons = document.getElementsByClassName('track_mute'),
+     const buttons = document.getElementsByClassName('track_mute'),
         soloButtons = document.getElementsByClassName('track_solo');
 
-    for (const button of buttons) {
-        button.addEventListener('click', function () {
+    for (const track of grid.tracks) {
+        track.muteButton.addEventListener('click', function () {
             this.classList.toggle('track_mute_on');
             if (!this.toggle) {
                 soundcontroller.mute(this.parent.gainNode);
@@ -239,8 +242,8 @@ export const loading = () => {
                 soundcontroller.solo(this.parent.gainNode);
                 this.toggle = false;
             }
-            for (const soloButton of soloButtons)
-                if (soloButton.toggle)
+            for (const track of grid.tracks)
+                if (track.soloToggle)
                     soundcontroller.mute(this.parent.gainNode);
         });
     }
@@ -270,15 +273,15 @@ export const loading = () => {
             }
         });
     }
-})();
+})(); */
 
 //elimina la grabación
-export const removeRecording = recording => {
+export const removeRecording = (recording: Recording) => {
     recording.canvas.addEventListener('mousedown', e => {
         e.stopPropagation;
-        if (!recording.canvas.selected) {
+        if (!recording.selected) {
             grid.recordings.forEach(recording => {
-                recording.canvas.selected = false;
+                recording.selected = false;
                 const offset = recording.offset * timeSpace.zoom,
                     duration = recording.duration * timeSpace.zoom,
                     width = Math.ceil(duration - offset) + 1;
@@ -291,7 +294,7 @@ export const removeRecording = recording => {
                 );
             });
 
-            recording.canvas.selected = true;
+            recording.selected = true;
             const offset = recording.offset * timeSpace.zoom,
                 duration = recording.duration * timeSpace.zoom,
                 width = Math.ceil(duration - offset) + 1;
@@ -306,7 +309,7 @@ export const removeRecording = recording => {
     });
     window.addEventListener('keyup', a => {
         if (recording.canvas) {
-            if (a.key === 'Delete' && recording.canvas.selected) {
+            if (a.key === 'Delete' && recording.selected) {
                 a.preventDefault();
                 if (is.playing) soundcontroller.stopSingleSound(recording);
                 recording.deleteRecording();

@@ -7,20 +7,24 @@ import { cursor } from '../components/cursor';
 import { cut } from './cutRecordings';
 import { snap } from '../ui/ui_snapToGrid';
 import { onMousePos } from '../utils';
+import Recording from '../components/recording';
 
-export const editRecording = recording => {
+export const editRecording = (recording: Recording) => {
 
     //arrastrar grabaciones
 
     let drag = false,
         crop_left = false,
         crop_right = false;
-    const delta = {x: 0, y: 0};
+    const delta = { x: 0, y: 0 };
     let X = recording.timeToStart * timeSpace.zoom,
         Y = 0,
         offset = recording.offset * timeSpace.zoom,
         duration = recording.duration * timeSpace.zoom,
-        bar, sizes, offCanvas, width;
+        bar: number,
+        sizes,
+        offCanvas: HTMLCanvasElement,
+        width;
 
     recording.canvas.addEventListener('mousedown', evt => {
         X = (recording.timeToStart + recording.offset) * timeSpace.zoom;
@@ -78,13 +82,13 @@ export const editRecording = recording => {
 
     //Recortar bordes de grabaciones
 
-    recording.canvas.addEventListener('mousedown', evt => {
+    recording.canvas.addEventListener('mousedown', function (evt) {
 
-        const mousePos = onMousePos(evt.target, evt);
+        const mousePos = onMousePos(evt.target as HTMLCanvasElement, evt);
         offset = recording.offset * timeSpace.zoom;
         duration = recording.duration * timeSpace.zoom;
 
-        offCanvas = (evt.target.selected)
+        offCanvas = (recording.selected)
             ? recording.offSelectedCanvas[timeSpace.zoom]
             : recording.offCanvas[timeSpace.zoom];
 
@@ -96,7 +100,7 @@ export const editRecording = recording => {
             crop_left = true;
             drag = false;
 
-        } else if (mousePos.x < evt.target.width + 3 && mousePos.x > evt.target.width - 3) {
+        } else if (mousePos.x < this.width + 3 && mousePos.x > this.width - 3) {
 
             width = offCanvas.width;
             ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
@@ -106,19 +110,19 @@ export const editRecording = recording => {
         }
     });
 
-    recording.canvas.addEventListener("mousemove", evt => {
+    recording.canvas.addEventListener("mousemove", function (evt) {
 
-        const mousePos = onMousePos(evt.target, evt);
+        const mousePos = onMousePos(this, evt);
         offset = recording.offset * timeSpace.zoom;
         duration = recording.duration * timeSpace.zoom;
 
-        offCanvas = (evt.target.selected)
+        offCanvas = (recording.selected)
             ? recording.offSelectedCanvas[timeSpace.zoom]
             : recording.offCanvas[timeSpace.zoom];
 
-        evt.target.style.cursor = (cut) ? 'col-resize'
+        this.style.cursor = (cut) ? 'col-resize'
             : (mousePos.x < 0 + 3 && mousePos.x > 0 - 2) ? 'w-resize'
-                : (mousePos.x < evt.target.width + 3 && mousePos.x > evt.target.width - 3) ? 'w-resize'
+                : (mousePos.x < this.width + 3 && mousePos.x > this.width - 3) ? 'w-resize'
                     : 'default';
 
         if (crop_left) {
@@ -127,10 +131,10 @@ export const editRecording = recording => {
                 Math.max(mousePos.x, 0);
             width = offCanvas.width;
             ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
-            evt.target.style.cursor = 'w-resize';
+            this.style.cursor = 'w-resize';
             recording.offset = offset / timeSpace.zoom;
 
-            if (is.playing && parseFloat(cursor.canvas.style.left) < offset + parseFloat(evt.target.style.left))
+            if (is.playing && parseFloat(cursor.canvas.style.left) < offset + parseFloat(this.style.left))
                 soundcontroller.playWhileDragging(recording);
         }
         if (crop_right) {
@@ -139,10 +143,10 @@ export const editRecording = recording => {
                 Math.max(mousePos.x, 0);
             width = offCanvas.width;
             ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
-            evt.target.style.cursor = 'w-resize';
+            this.style.cursor = 'w-resize';
             recording.duration = duration / timeSpace.zoom;
 
-            if (is.playing && parseFloat(cursor.canvas.style.left) < duration + parseFloat(evt.target.style.left))
+            if (is.playing && parseFloat(cursor.canvas.style.left) < duration + parseFloat(this.style.left))
                 soundcontroller.playWhileDragging(recording);
         }
     });
@@ -164,7 +168,7 @@ export const editRecording = recording => {
 
 }
 
-function selectTrackHeight(tracknumber) {
+function selectTrackHeight(tracknumber: number) {
     let Yincrement = 60 * tracknumber;
     const heights = {
         minHeight: Yincrement,

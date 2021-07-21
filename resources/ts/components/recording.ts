@@ -1,41 +1,46 @@
 import { grid } from "../app_core";
 import { timeSpace } from "../timeSpace";
-import { ui_draw } from '../ui/ui_draw';
+import { ui_draw } from "../ui/ui_draw";
 
 export default class Recording {
 
-    _id;
-    get id() {
+    private readonly _id: string;
+    public get id() {
         return this._id;
     }
-    set id(value) {
-        this._id = value;
+    private _tracknumber: number;
+    public get tracknumber() {
+        return this._tracknumber;
+    }
+    public set tracknumber(value) {
+        this._tracknumber = value;
     }
 
-    _filename;
-    get filename() {
+    private _filename: string | undefined;
+    public get filename() {
         return this._filename;
     }
-    set filename(value) {
+    public set filename(value) {
         this._filename = value;
     }
 
-    _audioBufferSource;
-    get audioBufferSource() {
-        return this._audioBufferSource;
-    }
-    set audioBufferSource(value) {
-        this._audioBufferSource = value;
-    }
+    timeToStart: number;
+    offset: number;
+    duration: number;
+    audioBuffer: AudioBuffer;
+    audioBufferSource: AudioBufferSourceNode | undefined;
 
-    canvas = document.createElement('canvas');
-    canvasCtx = this.canvas.getContext('2d');
-    offCanvas = {};
-    offSelectedCanvas = {};
+    canvas: HTMLCanvasElement = document.createElement('canvas');
+    canvasCtx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
+    offCanvas: { [zoom: number]: HTMLCanvasElement; } = {};
+    offSelectedCanvas: { [zoom: number]: HTMLCanvasElement; } = {};
 
-    constructor(id, timeToStart, audioBuffer, tracknumber, offset, duration) {
-        this.id = id;
-        this.tracknumber = tracknumber;
+    copy!: boolean;
+    selected!: boolean;
+
+    constructor(id: string, timeToStart: number, audioBuffer: AudioBuffer, tracknumber: number, offset: number, duration: number) {
+        this._id = id;
+        this._tracknumber = tracknumber;
         this.timeToStart = timeToStart;
         this.offset = offset;
         this.duration = duration;
@@ -67,9 +72,13 @@ export default class Recording {
 
     deleteRecording() {
         grid.tracks[this.tracknumber].trackDOMElement.removeChild(this.canvas);
-        delete this.canvas;
-        delete this.canvasCtx;
-        delete this.audioBuffer;
+        this.canvas.remove();
+        /* delete this.canvasCtx;
+        delete this.audioBuffer; */
         delete this.audioBufferSource;
     }
 }
+/*
+interface OffCanvas {
+    [index: number]: HTMLCanvasElement
+} */

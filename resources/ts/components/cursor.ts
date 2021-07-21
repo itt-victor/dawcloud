@@ -1,46 +1,46 @@
 import { grid } from '../app_core';
 import { timeSpace } from '../timeSpace';
 
+let interval: number;
 
 export const cursor = {
-    canvas: document.getElementById("cursor"),
-    interval: undefined,
+    canvas: document.getElementById("cursor") as HTMLCanvasElement,
 
-    draw () {
+    draw: function () {
         this.canvas.width = 5;
         this.canvas.height = 60 * grid.howMany + 30;
-        this.canvas.style.left = 0;
+        this.canvas.style.left = '0';
         this.canvas.style.zIndex = '10';
-        const ctx = this.canvas.getContext('2d');
+        const ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D;
         ctx.fillStyle = 'black';
         ctx.globalCompositeOperation = 'destination-over';
         ctx.globalAlpha = 0.8;
         ctx.fillRect(0, 0, 5, this.canvas.height);
     },
-    play () {
+    play: function () {
         let start = performance.now(), canvas = this.canvas,
          	increase = 0, progress,	fps;
 
-        const step = now => {
+        function step(now: number) {
             progress = now - start;
             fps = Math.round(1000 / (progress / ++increase) * 100) / 100;
             timeSpace.space += timeSpace.zoom * 1/fps;
             canvas.style.left = `${timeSpace.space}px`;
-            this.interval = requestAnimationFrame(step);
+            interval = requestAnimationFrame(step);
         }
-        this.interval = requestAnimationFrame(step);
+        interval = requestAnimationFrame(step);
     },
 
-    stop () {
-        window.cancelAnimationFrame(this.interval);
+    stop: function () {
+        window.cancelAnimationFrame(interval);
     },
 
-    moveAtZoom (oldZoom) {
+    moveAtZoom: function (oldZoom: number) {
         timeSpace.space *=  (timeSpace.zoom / oldZoom);
         this.canvas.style.left = `${timeSpace.space}px`;
     },
 
-    moveAtClick () {
+    moveAtClick: function () {
         this.canvas.style.left = `${timeSpace.space}px`;
     }
 }

@@ -7,15 +7,16 @@ import { generateRecordingId } from '../utils';
 export default function recordController() {
     if (navigator.mediaDevices.getUserMedia) {
         const constraints = { audio: true };
-        let chunks = [], startTime;
+        let chunks: any[] = [], startTime: number;
 
-        let onSuccess = stream => {
+        let onSuccess = (stream: any) => {
             const mediaRecorder = new MediaRecorder(stream);
 
             record.onclick = () => {
-                mediaRecorder.ondataavailable = event => chunks.push(event.data);
+                mediaRecorder.ondataavailable = (event: { data: any; }) => chunks.push(event.data);
                 mediaRecorder.start();
-                startTime = timeSpace.time();
+                console.log(audioCtx.currentTime);
+                startTime = audioCtx.currentTime;//timeSpace.time();
                 if (!is.playing) {
                     cursor.play();
                     soundcontroller.playSound();
@@ -41,6 +42,7 @@ export default function recordController() {
             }
             stop.addEventListener('click', rStop);
             document.addEventListener('keypress', e => {
+                const project_name = document.querySelector('#project-n');
                 if (e.key === ' ') {
                     if (e.target == project_name) return;
                     rStop();
@@ -52,15 +54,15 @@ export default function recordController() {
                 chunks = [];
                 blob.arrayBuffer().then(arrayBuffer =>
                     audioCtx.decodeAudioData(arrayBuffer, audioBuffer => {
-                        const track = document.querySelector('[data-selected]').id.charAt(6);
+                        const track = parseInt((document.querySelector('[data-selected]')as HTMLElement).id.charAt(6));
                         const latency = 0.150; //LATENCIA, HAY QUE MIRAR ESTO BIEN
                         grid.tracks[track].addRecord(generateRecordingId(), startTime - latency,
-                            audioBuffer, 0, audioBuffer.duration);
+                            audioBuffer, 0, audioBuffer.duration, false);
                     })
                 );
             }
         }
-        let onError = err => {
+        let onError = (err: string) => {
             console.log('The following error occured: ' + err);
         }
         navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError);
