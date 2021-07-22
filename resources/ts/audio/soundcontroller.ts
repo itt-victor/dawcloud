@@ -1,6 +1,7 @@
 import { timeSpace } from '../timeSpace';
 import { grid, audioCtx } from '../app_core';
 import Recording from '../components/recording';
+import Track from '../components/track';
 //import { metronome } from '../components/metronome';
 
 export default class SoundController {
@@ -64,9 +65,9 @@ export default class SoundController {
         gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
     }
 
-    /* solo(gainNode: GainNode) {
-        gainNode.gain.setValueAtTime(gainNode.gainValue, audioCtx.currentTime);
-    } */
+    solo(track: Track) {
+        track.gainNode.gain.setValueAtTime(track.gainValue, audioCtx.currentTime);
+    }
 /*
     metronome() {
         if (metronome) {

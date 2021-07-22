@@ -178,8 +178,8 @@ export const storeAudios = async () => {
                 return response.json();
 
             }).then(response => {
-
                 project = response;
+                console.log(project);
 
                 timeSpace.space = project.timeSpace.space;
                 timeSpace.zoom = project.timeSpace.zoom;
@@ -210,21 +210,22 @@ export const storeAudios = async () => {
                 projectTitle.innerHTML = projectName;
 
                 //Se cargan los audios
-                for (const recording of project.recordings) {
-                    fetch(`loadsound/${recording.filename}`)
+                for (const recording of response.recordings) {
+
+                    fetch(`loadsound/${recording._filename}`)
                         .then(response => response.arrayBuffer())
                         .then(arrayBuffer => {
                             audioCtx.decodeAudioData(arrayBuffer, audioBuffer => {
-                                const track = grid.tracks[recording.tracknumber];
+                                const track = grid.tracks[recording._tracknumber];
                                 const newrecording = track.addRecord(
-                                    recording.id,
+                                    recording._id,
                                     recording.timeToStart,
                                     audioBuffer,
                                     recording.offset,
                                     recording.duration,
                                     false
                                 );
-                                newrecording.filename = recording.filename;
+                                newrecording.filename = recording._filename;
                             });
                         });
                 }

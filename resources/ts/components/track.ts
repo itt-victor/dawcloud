@@ -17,7 +17,7 @@ export default class Track {
     trackDOMElement: Element;
     soloButton: HTMLButtonElement;
     soloToggle!: boolean;
-    muteButton: HTMLButtonElement;
+    muteButton!: HTMLButtonElement;
     muteToggle!: boolean;
     fader : HTMLElement;
     Y: number;
@@ -76,4 +76,3 @@ export default class Track {
         return recording;
     };
 }
-

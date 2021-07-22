@@ -75,7 +75,7 @@ export const loading = () => {
         name.addEventListener('dblclick', e => {
             let name = e.target as HTMLElement;
             name.style.display = 'none';
-            const input = name.parentNode?.querySelector('[input]') as HTMLInputElement;
+            const input = (name.parentNode as HTMLElement).querySelector('input') as HTMLInputElement;
             input.style.display = 'block';
             input.focus();
             const trackId = parseInt((name.parentNode as HTMLElement).id.charAt(11));
@@ -119,7 +119,7 @@ export const loading = () => {
             if (((a.target as HTMLInputElement & EventTarget).files as FileList).length > 0)
                 reader.readAsArrayBuffer(((
                     (a.target as HTMLInputElement & EventTarget).files as FileList)
-                    [((a.target as HTMLInputElement & EventTarget).files as FileList).length - 1])
+                [((a.target as HTMLInputElement & EventTarget).files as FileList).length - 1])
                 );
         }
     }
@@ -179,7 +179,7 @@ export const loading = () => {
 //SET BPM
 (() => {
     const bpmButton = document.getElementById('bpm_button') as HTMLButtonElement;
-    let input : HTMLInputElement;
+    let input: HTMLInputElement;
     bpmButton.innerHTML = `${Math.round(120 / timeSpace.bpm)}  bpm`;
     bpmButton.addEventListener('click', e => {
         e.stopPropagation();
@@ -199,7 +199,7 @@ export const loading = () => {
                 this.removeEventListener('click', br);
             }
         });
-        input.addEventListener('keypress', function(o) {
+        input.addEventListener('keypress', function (o) {
             if (o.key === 'Enter') {
                 o.preventDefault();
                 timeSpace.bpm = 120 / parseInt(this.value);
@@ -226,54 +226,59 @@ export const loading = () => {
         drawGrid(); drawLayout();
     });
 })();
-/*
+
 //MUTE
 (() => {
-     const buttons = document.getElementsByClassName('track_mute'),
-        soloButtons = document.getElementsByClassName('track_solo');
+    const muteButtons = document.getElementsByClassName('track_mute') as HTMLCollectionOf<HTMLButtonElement>;
+    //soloButtons = document.getElementsByClassName('track_solo') as HTMLCollectionOf<HTMLButtonElement>;
 
-    for (const track of grid.tracks) {
-        track.muteButton.addEventListener('click', function () {
+    for (const muteButton of muteButtons) {
+        muteButton.addEventListener('click', function () {
+            const trck = grid.tracks[parseInt(this.id.charAt(5))];
             this.classList.toggle('track_mute_on');
-            if (!this.toggle) {
-                soundcontroller.mute(this.parent.gainNode);
-                this.toggle = true;
-            } else if (this.toggle) {
-                soundcontroller.solo(this.parent.gainNode);
-                this.toggle = false;
+            if (!trck.muteToggle) {
+                soundcontroller.mute(trck.gainNode);
+                trck.muteToggle = true;
+            } else if (trck.muteToggle) {
+                soundcontroller.solo(trck);
+                trck.muteToggle = false;
             }
             for (const track of grid.tracks)
                 if (track.soloToggle)
-                    soundcontroller.mute(this.parent.gainNode);
+                    soundcontroller.mute(trck.gainNode);
         });
     }
 })();
 
 //SOLO
 (() => {
-    const button = document.getElementsByClassName('track_solo');
-    for (const btn of button) {
-        btn.addEventListener('click', function () {
+    const parentTrack = (element: HTMLElement) => grid.tracks[parseInt(element.id.charAt(5))];
+    const soloButtons = document.getElementsByClassName('track_solo') as HTMLCollectionOf<HTMLButtonElement>;
+    for (const soloButton of soloButtons) {
+        soloButton.addEventListener('click', function () {
+
             this.classList.toggle('track_solo_on');
-            for (let btn of button)
-                (!btn.toggle) ?
-                    soundcontroller.mute(btn.parent.gainNode) :
-                    soundcontroller.solo(btn.parent.gainNode);
-            if (!this.toggle) {
-                for (let btn of button) {
-                    soundcontroller.mute(btn.parent.gainNode);
+            parentTrack(this).soloToggle = (parentTrack(this).soloToggle) ? false : true;
+
+            for (const btn of soloButtons) {
+                if (parentTrack(btn).soloToggle) {
+                    grid.solo = true;
+                    break;
                 }
-                soundcontroller.solo(this.parent.gainNode);
-                this.toggle = true;
-            } else {
-                for (let btn of button)
-                    if (!btn.parent.muteButton.toggle)
-                        soundcontroller.solo(btn.parent.gainNode);
-                this.toggle = false;
+                else grid.solo = false;
+            }
+            for (const btn of soloButtons) {
+                if (grid.solo) {
+                    (parentTrack(btn).soloToggle) ?
+                        soundcontroller.solo(parentTrack(btn)) :
+                        soundcontroller.mute(parentTrack(btn).gainNode);
+                }
+                else if (parentTrack(btn).muteToggle) return;
+                else    soundcontroller.solo(parentTrack(btn));
             }
         });
     }
-})(); */
+})();
 
 //elimina la grabación
 export const removeRecording = (recording: Recording) => {

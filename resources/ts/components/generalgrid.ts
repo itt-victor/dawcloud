@@ -32,6 +32,7 @@ export class Grid {
     gainNode = audioCtx.createGain();
     tracks : Track[] = [];
     recordings : Array<Recording> = [];
+    solo: boolean;
 
     constructor() {
 
@@ -43,6 +44,7 @@ export class Grid {
         (document.querySelector('.track') as HTMLInputElement).setAttribute('data-selected', '');
         this._gainValue = 1;
         this._faderY = 20;
+        this.solo = false;
 
         for (let i = 0; i < this.howMany; i++) {
             const track = new Track(i);

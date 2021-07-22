@@ -15,8 +15,7 @@ export default function recordController() {
             record.onclick = () => {
                 mediaRecorder.ondataavailable = (event: { data: any; }) => chunks.push(event.data);
                 mediaRecorder.start();
-                console.log(audioCtx.currentTime);
-                startTime = audioCtx.currentTime;//timeSpace.time();
+                startTime = timeSpace.time();
                 if (!is.playing) {
                     cursor.play();
                     soundcontroller.playSound();
@@ -24,7 +23,7 @@ export default function recordController() {
                 }
                 ui_draw.drawTrackWhileRecording();  ///ESTO
                 console.log(mediaRecorder.state);
-                record.style.background = "red";
+                record.style.background = 'red';
                 stop.disabled = false;
                 record.disabled = true;
                 play.disabled = true;
@@ -54,7 +53,7 @@ export default function recordController() {
                 chunks = [];
                 blob.arrayBuffer().then(arrayBuffer =>
                     audioCtx.decodeAudioData(arrayBuffer, audioBuffer => {
-                        const track = parseInt((document.querySelector('[data-selected]')as HTMLElement).id.charAt(6));
+                        const track = parseInt((document.querySelector('[data-selected]') as HTMLElement).id.charAt(6));
                         const latency = 0.150; //LATENCIA, HAY QUE MIRAR ESTO BIEN
                         grid.tracks[track].addRecord(generateRecordingId(), startTime - latency,
                             audioBuffer, 0, audioBuffer.duration, false);
