@@ -7,18 +7,7 @@ import { snap } from '../ui/ui_snapToGrid';
 const timeLayout = document.querySelector('#layout') as HTMLCanvasElement;
 let click = false;
 
-timeLayout.addEventListener('mousedown', e => {
-    click = true;
-    if (snap.toggle)
-        snap.setup = timeSpace.zoom * timeSpace.compas * timeSpace.bpm * timeSpace.snap;
-    pointTime(e);
-});
-
-timeLayout.addEventListener('mousemove', pointTime);
-
-window.addEventListener('mouseup', () => click = false);
-
-function pointTime(event: MouseEvent) {
+const pointTime = (event: MouseEvent) => {
     if (click) {
         timeSpace.space = (snap.toggle)
             ? snap.setup * Math.round(event.offsetX / snap.setup)
@@ -31,3 +20,12 @@ function pointTime(event: MouseEvent) {
         }
     }
 }
+
+timeLayout.addEventListener('mousedown', e => {
+    click = true;
+    if (snap.toggle) snap.setup = timeSpace.zoom * timeSpace.compas * timeSpace.bpm * timeSpace.snap;
+    pointTime(e);
+});
+
+timeLayout.addEventListener('mousemove', pointTime);
+window.addEventListener('mouseup', () => click = false);
