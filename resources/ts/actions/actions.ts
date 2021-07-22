@@ -34,16 +34,8 @@ export const loading = () => {
     const signup = document.querySelector('#signup_now') as HTMLElement;
     const signupReminder = document.querySelector('#signup_reminder') as HTMLElement;
     const xButton = document.querySelector('.x-button') as HTMLElement;
-    if (signup) {
-        signup.addEventListener('click', () => {
-            signupReminder.style.display = 'flex';
-        });
-    }
-    if (xButton) {
-        xButton.addEventListener('click', () => {
-            signupReminder.style.display = 'none';
-        });
-    }
+    if (signup)  signup.addEventListener('click', () => signupReminder.style.display = 'flex');
+    if (xButton) xButton.addEventListener('click', () => signupReminder.style.display = 'none');
 })();
 
 //SELECT TRACK
@@ -60,8 +52,7 @@ export const loading = () => {
     for (const name of trackNames) {
         name.addEventListener('click', e => {
             const index = parseInt((e.currentTarget as HTMLElement).id.charAt(11));
-            for (const track of tracks)
-                track.removeAttribute('data-selected');
+            for (const track of tracks) track.removeAttribute('data-selected');
             tracks[index].setAttribute('data-selected', '');
         });
     }
