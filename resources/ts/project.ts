@@ -1,17 +1,30 @@
 const toWav = require('audiobuffer-to-wav')
 
-import { audioCtx, grid, soundcontroller } from './app_core';
+import { audioCtx, grid, eStop } from './app_core';
 import { loading } from './actions/actions';
-import { timeSpace } from './timeSpace';
+import { timeSpace, TimeSpace } from './timeSpace';
 import drawLayout from './ui/ui_layout';
 import drawGrid from './ui/ui_grid';
 import { cursor } from './components/cursor';
 import { numbers } from './utils';
+import Recording from './components/recording';
 
 class Project {
 
+    timeSpace: TimeSpace;
+    recordings: Array<Recording>;
+    recordingId: number;
+    trackNames: Array<string>;
+    tracksGainValues: Array<number>;
+    trackspanValues: Array<string>;
+    tracksY: Array<number>;
+    masterGainValue: number;
+    masterY: number;
+
+    fill?: ()=> void;
+
     constructor({ timeSpace, recordings, recordingId, trackNames, tracksGainValues,
-        trackspanValues, tracksY, masterGainValue, masterY }) {
+                trackspanValues, tracksY, masterGainValue, masterY }: Project) {
         this.timeSpace = timeSpace;
         this.recordings = recordings;
         this.recordingId = recordingId;
@@ -24,24 +37,24 @@ class Project {
     }
 }
 
-const loadbtn = document.getElementById('load_project'),
-    savebtn = document.getElementById('save_project'),
-    saveAsBtn = document.getElementById('save_project_as'),
-    bpmButton = document.getElementById('bpm_button'),
-    metricButton = document.getElementById('metric_button'),
-    Names = document.querySelectorAll('.select'),
-    closeProjects = document.querySelector('#projects-close'),
-    closeSave = document.querySelector('#save-close'),
-    saveWindow = document.getElementById('save_dialogue'),
-    loadWindow = document.getElementById('load_dialogue'),
-    panButtons = document.getElementsByClassName('panner'),
-    projects = document.getElementsByClassName('projects'),
-    projectNameNode = document.getElementById('project_name'),
-    projectTitle = document.getElementById('project-n'),
-    token = { 'X-CSRF-TOKEN': document.head.querySelector('[name="csrf-token"]').content };
+const loadbtn = document.getElementById('load_project') as HTMLElement,
+    savebtn = document.getElementById('save_project') as HTMLElement,
+    saveAsBtn = document.getElementById('save_project_as') as HTMLElement,
+    bpmButton = document.getElementById('bpm_button') as HTMLElement,
+    metricButton = document.getElementById('metric_button') as HTMLElement,
+    names = document.querySelectorAll('.select') as NodeList,
+    closeProjects = document.querySelector('#projects-close') as HTMLElement,
+    closeSave = document.querySelector('#save-close') as HTMLElement,
+    saveWindow = document.getElementById('save_dialogue') as HTMLElement,
+    loadWindow = document.getElementById('load_dialogue') as HTMLElement,
+    panButtons = document.getElementsByClassName('panner') as HTMLCollection,
+    projects = document.getElementsByClassName('projects')  as HTMLCollection,
+    projectNameNode = document.getElementById('project_name')  as HTMLElement,
+    projectTitle = document.getElementById('project-n')  as HTMLElement,
+    token = { 'X-CSRF-TOKEN': (document.head.querySelector('[name="csrf-token"]') as HTMLMetaElement).content };
 
-let project;
-let projectName;
+let project: Project;
+let projectName: string;
 
 //STORE DATA IN SESSION
 /* export const sessionProgress = () => {
@@ -84,23 +97,23 @@ export const storeAudios = async () => {
                 saveWindow.style.display = 'block';
                 projectNameNode.focus();
             } else {
-                document.querySelector('.dropdown-menu').classList.remove('show');
+                (document.querySelector('.dropdown-menu') as HTMLElement).classList.remove('show');
                 save(e);
             }
         });
 
-        async function save(e) {
-            if (e.key === 'Enter' || e.type == 'click') {
+        async function save(e: MouseEvent | KeyboardEvent) {
+            if ((e as KeyboardEvent).key === 'Enter' || e.type == 'click') {
                 e.stopImmediatePropagation();
                 e.preventDefault();
 
-                if (!projectName) projectName = e.target.value;
+                if (!projectName) projectName = (e.target as HTMLInputElement).value;
                 saveWindow.style.display = 'none';
 
                 //Se envían los audios al servidor
                 await storeAudios();
 
-                const cache = {
+                const cache: Project = {
                     trackNames: Array(grid.howMany),
                     tracksGainValues: [],
                     trackspanValues: [],
@@ -114,13 +127,13 @@ export const storeAudios = async () => {
                     fill() {
                         for (const [i, track] of grid.tracks.entries()) {
                             this.trackNames[i] = track.name;
-                            this.tracksGainValues.push(track.gainNode.gainValue);
-                            this.tracksY.push(track.fader.Y);
-                            this.trackspanValues.push(track.pannerNode.pannerValue);
+                            this.tracksGainValues.push(track.gainValue);
+                            this.tracksY.push(track.Y);
+                            this.trackspanValues.push(track.pannerValue);
                         }
                     }
                 }
-                cache.fill();
+                if (cache.fill) cache.fill();
 
                 //creo objeto proyecto
                 if (project === undefined) project = new Project(cache);
@@ -150,12 +163,12 @@ export const storeAudios = async () => {
 //LOAD PROJECT
 (() => {
     for (const projectBtn of projects) {
-        projectBtn.addEventListener('dblclick', function ld(e) {
+        (projectBtn as HTMLButtonElement).addEventListener('dblclick', function ld(e) {
             e.stopPropagation;
             projectName = this.id;
             loadWindow.style.display = 'none';
 
-            soundcontroller.eStop();
+            eStop();
 
             fetch(`loadproject/${projectName}`).then(response => {
 
@@ -184,13 +197,13 @@ export const storeAudios = async () => {
                 grid.recordings.forEach((recording) => {
                     recording.canvasCtx.clearRect(0, 0, 4000, 70);
                     recording.deleteRecording();
-                    delete recording.audioBuffer;
+                    //delete recording.audioBuffer;   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 });
                 grid.recordings = [];
 
                 //Se vacían los nombres de pista
                 grid.tracks.forEach(track => {
-                    delete track.name;
+                    //delete track.name;               !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 });
 
                 //Se imprime el proyecto en pantalla
@@ -198,20 +211,20 @@ export const storeAudios = async () => {
 
                 //Se cargan los audios
                 for (const recording of project.recordings) {
-                    fetch(`loadsound/${recording._filename}`)
+                    fetch(`loadsound/${recording.filename}`)
                         .then(response => response.arrayBuffer())
                         .then(arrayBuffer => {
                             audioCtx.decodeAudioData(arrayBuffer, audioBuffer => {
                                 const track = grid.tracks[recording.tracknumber];
                                 const newrecording = track.addRecord(
-                                    recording._id,
+                                    recording.id,
                                     recording.timeToStart,
                                     audioBuffer,
                                     recording.offset,
                                     recording.duration,
                                     false
                                 );
-                                newrecording.filename = recording._filename;
+                                newrecording.filename = recording.filename;
                             });
                         });
                 }
@@ -219,35 +232,35 @@ export const storeAudios = async () => {
                 //Se cargan los nombres de pista
                 for (const [i, track] of grid.tracks.entries()) {
                     track.name = project.trackNames[i];
-                    if (track.name) Names[i].innerHTML = track.name;
+                    if (track.name) (names[i] as HTMLElement).innerHTML = track.name;
                 }
                 //Se cargan los volúmenes de los faders
                 for (const [i, track] of grid.tracks.entries()) {
                     let fader = track.fader;
-                    track.gainNode.gainValue = project.tracksGainValues[i];
-                    fader.Y = project.tracksY[i];
-                    fader.querySelector('a').style.top = `${project.tracksY[i]}px`;
-                    track.gainNode.gain.setValueAtTime(track.gainNode.gainValue, audioCtx.currentTime);
+                    track.gainValue = project.tracksGainValues[i];
+                    track.Y = project.tracksY[i];
+                    (fader.querySelector('a') as HTMLElement).style.top = `${project.tracksY[i]}px`;
+                    track.gainNode.gain.setValueAtTime(track.gainValue, audioCtx.currentTime);
                 }
                 //Se carga el panorama
                 for (const [i, track] of grid.tracks.entries()) {
-                    track.pannerNode.pannerValue = project.trackspanValues[i];
-                    panButtons[i].innerHTML = track.pannerNode.pannerValue;
-                    let trackPanValue = track.pannerNode.pannerValue, ctxValue;
+                    track.pannerValue = project.trackspanValues[i];
+                    panButtons[i].innerHTML = track.pannerValue;
+                    let trackPanValue = track.pannerValue, ctxValue;
                     trackPanValue.toString().startsWith('L')
                         && (ctxValue = - + trackPanValue.slice(1) / 100);
-                    trackPanValue == 0 || trackPanValue.toString() == 'C'
+                    trackPanValue == '0' || trackPanValue.toString() == 'C'
                         && (ctxValue = 0);
                     trackPanValue.toString().startsWith('R')
-                        && (ctxValue = trackPanValue.slice(1) / 100);
+                        && (ctxValue = parseInt(trackPanValue.slice(1)) / 100);
 
-                    track.pannerNode.pan.setValueAtTime(ctxValue, audioCtx.currentTime);
+                    track.pannerNode.pan.setValueAtTime((ctxValue as number), audioCtx.currentTime);
                 }
                 //Se carga el volumen master
                 grid.gainValue = project.masterGainValue;
                 grid.gainNode.gain.setValueAtTime(grid.gainValue, audioCtx.currentTime);
                 grid.faderY = project.masterY;
-                document.querySelector('#master_fader > a').style.top = `${grid.faderY}px`;
+                (document.querySelector('#master_fader > a') as HTMLElement).style.top = `${grid.faderY}px`;
 
             }).catch(error => console.error(error));
         });
@@ -258,12 +271,12 @@ export const storeAudios = async () => {
 (() => {
     for (let project of projects) {
 
-        const dltConfirmation = document.getElementsByClassName('delete_confirmation')[0],
-            delete_cancel = document.getElementById('delete_cancel'),
-            delete_confirm = document.getElementById('delete_confirm');
+        const dltConfirmation = document.getElementsByClassName('delete_confirmation')[0] as HTMLElement,
+            delete_cancel = document.getElementById('delete_cancel')  as HTMLElement,
+            delete_confirm = document.getElementById('delete_confirm')  as HTMLElement;
 
-        project.childNodes[1].addEventListener('click', function dlt(e) {
-            const projectName = this.parentNode.id;
+        (project.childNodes[1] as HTMLElement).addEventListener('click', function dlt(e) {
+            const projectName = (this.parentNode as HTMLElement).id;
             dltConfirmation.classList.toggle('visible');
             delete_cancel.addEventListener('click', () => dltConfirmation.classList.remove('visible'));
             delete_confirm.addEventListener('click', () => {
@@ -277,7 +290,7 @@ export const storeAudios = async () => {
                     if (!response.ok) throw new Error('There has been an error!');
                     console.log('Project deleted successfully');
                     dltConfirmation.classList.remove('visible');
-                    document.getElementById(projectName).remove();
+                    (document.getElementById(projectName)as HTMLElement).remove();
                 }).catch(error => console.error(error));
             });
         });

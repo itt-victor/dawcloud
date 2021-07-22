@@ -16,7 +16,7 @@ export default class Recording {
         this._tracknumber = value;
     }
 
-    private _filename: string | undefined;
+    private _filename!: string;
     public get filename() {
         return this._filename;
     }

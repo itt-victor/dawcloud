@@ -1,10 +1,8 @@
 import Recording from './recording';
-import { ui_draw } from '../ui/ui_draw';
 import { grid, audioCtx } from '../app_core';
 import { editRecording } from '../actions/editRecordings';
 import { copyPaste } from '../actions/copyPaste';
-import { removeRecording } from '../actions/actions.js';
-import { timeSpace } from '../timeSpace';
+import { removeRecording } from '../actions/actions';
 import { cutRecording } from '../actions/cutRecordings';
 
 export default class Track {
@@ -40,11 +38,11 @@ export default class Track {
         this._gainValue = value;
     }
 
-    private _name: string | undefined;
-    get name(): string | undefined {
+    private _name!: string;
+    get name(): string {
         return this._name;
     }
-    set name(value: string | undefined) {
+    set name(value: string) {
         this._name = value;
     }
 
@@ -58,9 +56,9 @@ export default class Track {
         this._pannerValue = 'C';
         this._gainValue = 1;
         this.parent = this;
-        this.soloButton = document.getElementById('solo_' + this.tracknumber) as HTMLButtonElement;
-        this.muteButton = document.getElementById('mute_' + this.tracknumber) as HTMLButtonElement;
-        this.fader = document.getElementById('fader_' + this.tracknumber) as HTMLInputElement;
+        this.soloButton = document.getElementById(`solo_${this.tracknumber}`) as HTMLButtonElement;
+        this.muteButton = document.getElementById(`mute_${this.tracknumber}`) as HTMLButtonElement;
+        this.fader = document.getElementById(`fader_${this.tracknumber}`) as HTMLInputElement;
         this.Y = 20;
     }
     addRecord(recordingId: string, timeToStart: number, audioBuffer: AudioBuffer, offset: number, duration: number, copy: boolean) {

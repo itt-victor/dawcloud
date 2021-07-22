@@ -14,17 +14,28 @@ export const timeSpace = {
     startMark: 0,
     endMark: 0,
 
-    get getStartMark(){
+    get getStartMark() {
         return this.startMark * this.zoom;
     },
-    set setStartMark(input: number){
+    set setStartMark(input: number) {
         this.startMark = input / this.zoom;
     },
 
-    get getEndMark(){
+    get getEndMark() {
         return this.endMark * this.zoom;
     },
-    set setEndMark(input: number){
+    set setEndMark(input: number) {
         this.endMark = input / this.zoom;
     }
 };
+
+export interface TimeSpace {
+    space: number;
+    time: () => number;
+    zoom: number;
+    bpm: number;
+    compas: number;
+    snap: number;
+    startMark: number;
+    endMark: number;
+}

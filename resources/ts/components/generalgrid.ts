@@ -31,7 +31,7 @@ export class Grid {
     canvas = <HTMLCanvasElement>document.getElementById('canvas-grid');
     gainNode = audioCtx.createGain();
     tracks : Track[] = [];
-    recordings : Recording[] = [];
+    recordings : Array<Recording> = [];
 
     constructor() {
 

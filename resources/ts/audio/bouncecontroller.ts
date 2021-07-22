@@ -4,7 +4,7 @@ import { grid } from '../app_core';
 
 const exportSong = () => {
 
-    const projectTitle = document.getElementById('project-n');
+    const projectTitle = document.getElementById('project-n') as HTMLElement;
 
     if (grid.recordings.length > 0) {
         let maxLength = 0, pannerValue, ctxValue;
@@ -27,17 +27,17 @@ const exportSong = () => {
             const panner = offlineCtx.createStereoPanner();
             pannerNodes.push(panner);
             const gain = offlineCtx.createGain();
-            pannerValue = track.pannerNode.pannerValue;
+            pannerValue = track.pannerValue;
 
             pannerValue.startsWith('L')
                 && (ctxValue = - + pannerValue.slice(1) / 100);
-            pannerValue == 0 || pannerValue == 'C'
+            pannerValue == '0' || pannerValue == 'C'
                 && (ctxValue = 0);
             pannerValue.startsWith('R')
-                && (ctxValue = pannerValue.slice(1) / 100);
+                && (ctxValue = parseInt(pannerValue.slice(1)) / 100);
 
-			panner.pan.setValueAtTime(ctxValue, 0);
-            gain.gain.setValueAtTime(track.gainNode.gainValue, 0);
+			panner.pan.setValueAtTime(ctxValue as number, 0);
+            gain.gain.setValueAtTime(track.gainValue, 0);
             panner.connect(gain);
             gain.connect(mastergain);
         }

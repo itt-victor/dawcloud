@@ -4,7 +4,7 @@ import { soundcontroller, is } from '../app_core';
 import { snap } from '../ui/ui_snapToGrid';
 
 //Interacción con el layout de tiempo
-const timeLayout = document.querySelector('#layout');
+const timeLayout = document.querySelector('#layout') as HTMLCanvasElement;
 let click = false;
 
 timeLayout.addEventListener('mousedown', e => {
@@ -18,7 +18,7 @@ timeLayout.addEventListener('mousemove', pointTime);
 
 window.addEventListener('mouseup', () => click = false);
 
-function pointTime(event) {
+function pointTime(event: MouseEvent) {
     if (click) {
         timeSpace.space = (snap.toggle)
             ? snap.setup * Math.round(event.offsetX / snap.setup)
@@ -27,7 +27,7 @@ function pointTime(event) {
         cursor.moveAtClick();
         if (is.playing) {
             soundcontroller.stopSound();
-            setTimeout(soundcontroller.playSound(), 10);
+            soundcontroller.playSound();
         }
     }
 }

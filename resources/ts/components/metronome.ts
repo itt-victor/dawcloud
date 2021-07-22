@@ -1,5 +1,5 @@
 
-const button = document.querySelector('#metronome-button');
+const button = document.querySelector('#metronome-button') as HTMLElement;
 export let metronome = false;
 
 button.addEventListener('click', function () {
