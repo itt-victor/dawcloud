@@ -8,6 +8,7 @@ import drawGrid from './ui/ui_grid';
 import { cursor } from './components/cursor';
 import { numbers } from './utils';
 import Recording from './components/recording';
+import { RecordArgs } from './components/track';
 
 class Project {
 
@@ -217,14 +218,15 @@ export const storeAudios = async () => {
                         .then(arrayBuffer => {
                             audioCtx.decodeAudioData(arrayBuffer, audioBuffer => {
                                 const track = grid.tracks[recording._tracknumber];
-                                const newrecording = track.addRecord(
-                                    recording._id,
-                                    recording.timeToStart,
+                                const args : RecordArgs  = {
+                                    recordingId: recording._id,
+                                    timeToStart: recording.timeToStart,
                                     audioBuffer,
-                                    recording.offset,
-                                    recording.duration,
-                                    false
-                                );
+                                    offset: recording.offset,
+                                    duration: recording.duration,
+                                    copy: false
+                                };
+                                const newrecording = track.addRecord(args);
                                 newrecording.filename = recording._filename;
                             });
                         });

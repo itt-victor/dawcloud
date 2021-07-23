@@ -3,6 +3,7 @@ import { cursor } from '../components/cursor';
 import { timeSpace } from '../timeSpace';
 import { soundcontroller, audioCtx, grid, play, record, stop, is } from '../app_core';
 import { generateRecordingId } from '../utils';
+import { RecordArgs } from '../components/track';
 
 export default function recordController() {
     if (navigator.mediaDevices.getUserMedia) {
@@ -55,8 +56,15 @@ export default function recordController() {
                     audioCtx.decodeAudioData(arrayBuffer, audioBuffer => {
                         const track = parseInt((document.querySelector('[data-selected]') as HTMLElement).id.charAt(6));
                         const latency = 0.150; //LATENCIA, HAY QUE MIRAR ESTO BIEN
-                        grid.tracks[track].addRecord(generateRecordingId(), startTime - latency,
-                            audioBuffer, 0, audioBuffer.duration, false);
+                        const args: RecordArgs = {
+                            recordingId: generateRecordingId(),
+                            timeToStart: startTime - latency,
+                            audioBuffer,
+                            offset: 0,
+                            duration: audioBuffer.duration,
+                            copy: false
+                        };
+                        grid.tracks[track].addRecord(args);
                     })
                 );
             }

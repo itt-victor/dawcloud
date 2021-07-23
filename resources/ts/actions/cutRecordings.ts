@@ -25,7 +25,8 @@ export const cutRecording = (recording: Recording) => {
                 duration = mousePos.x,
                 width = Math.ceil(duration - offset);
             recording.duration = duration / timeSpace.zoom;
-            ui_draw.printRecording(width, recording, offCanvas, offset, duration);
+            const args = {width, recording, offCanvas, offset, duration};
+            ui_draw.printRecording(args);
 
             //Se genera info para el nuevo recording y se crea
             let timeToStart = (parseFloat(this.style.left) + mousePos.x) / timeSpace.zoom; //esto es raro
@@ -48,7 +49,8 @@ export const cutRecording = (recording: Recording) => {
             grid.tracks[newRecording.tracknumber].trackDOMElement.appendChild(newRecording.canvas);
             newRecording.canvas.classList.add("recording");
             newRecording.canvas.id = newRecording.id;
-            ui_draw.printCutRecording(width, newRecording, offCanvas, offset, duration);
+            const cutArgs = {width, recording: newRecording, offCanvas, offset, duration};
+            ui_draw.printCutRecording(cutArgs);
             //newRecording.canvas.style.left = (newRecording.timeToStart * timeSpace.zoom) + 'px';
             editRecording(newRecording);
             cutRecording(newRecording);

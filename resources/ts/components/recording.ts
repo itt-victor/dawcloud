@@ -1,6 +1,7 @@
 import { grid } from "../app_core";
 import { timeSpace } from "../timeSpace";
 import { ui_draw } from "../ui/ui_draw";
+import { RecordArgs } from "./track";
 
 export default class Recording {
 
@@ -48,6 +49,7 @@ export default class Recording {
     }
 
     drawwaveforms() {
+        const recording = this;
         const zoomArray = []; let zoom = 5;
         const offset = this.offset * timeSpace.zoom;
         const duration = this.duration * timeSpace.zoom;
@@ -60,14 +62,11 @@ export default class Recording {
             this.offCanvas[zoom] = ui_draw.drawRecording(this, zoom, false);
             this.offSelectedCanvas[zoom] = ui_draw.drawRecording(this, zoom, true);
         }
+        const width = this.offCanvas[timeSpace.zoom].width;
+        const offCanvas = this.offCanvas[timeSpace.zoom];
 
-        ui_draw.printRecording(
-            this.offCanvas[timeSpace.zoom].width,
-            this,
-            this.offCanvas[timeSpace.zoom],
-            offset,
-            duration
-        );
+        const args = {width, recording, offCanvas, offset, duration};
+        ui_draw.printRecording(args);
     }
 
     deleteRecording() {

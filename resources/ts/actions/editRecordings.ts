@@ -92,18 +92,19 @@ export const editRecording = (recording: Recording) => {
             ? recording.offSelectedCanvas[timeSpace.zoom]
             : recording.offCanvas[timeSpace.zoom];
 
+            width = offCanvas.width;
+            const args = {width, recording, offCanvas, offset, duration};
+
         if (mousePos.x < 0 + 3 && mousePos.x > 0 - 2) {
 
-            width = offCanvas.width;
-            ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
+            ui_draw.printRecordingCrop(args);
             recording.canvas.style.left = `${recording.timeToStart * timeSpace.zoom}px`;
             crop_left = true;
             drag = false;
 
         } else if (mousePos.x < this.width + 3 && mousePos.x > this.width - 3) {
 
-            width = offCanvas.width;
-            ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
+            ui_draw.printRecordingCrop(args);
             recording.canvas.style.left = `${recording.timeToStart * timeSpace.zoom}px`;
             crop_right = true;
             drag = false;
@@ -130,7 +131,8 @@ export const editRecording = (recording: Recording) => {
                 snap.setup * Math.round(mousePos.x / snap.setup) :
                 Math.max(mousePos.x, 0);
             width = offCanvas.width;
-            ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
+            const args = {width, recording, offCanvas, offset, duration};
+            ui_draw.printRecordingCrop(args);
             this.style.cursor = 'w-resize';
             recording.offset = offset / timeSpace.zoom;
 
@@ -142,7 +144,8 @@ export const editRecording = (recording: Recording) => {
                 snap.setup * Math.round(mousePos.x / snap.setup) :
                 Math.max(mousePos.x, 0);
             width = offCanvas.width;
-            ui_draw.printRecordingCrop(width, recording, offCanvas, offset, duration);
+            const args = {width, recording, offCanvas, offset, duration};
+            ui_draw.printRecordingCrop(args);
             this.style.cursor = 'w-resize';
             recording.duration = duration / timeSpace.zoom;
 
@@ -160,8 +163,8 @@ export const editRecording = (recording: Recording) => {
             recording.duration = duration / timeSpace.zoom;
             width = Math.ceil(duration - offset);
             if (width > offCanvas.width) width = offCanvas.width;
-
-            ui_draw.printRecording(width, recording, offCanvas, offset, duration);
+            const args = {width, recording, offCanvas, offset, duration};
+            ui_draw.printRecording(args);
             crop_left = crop_right = false;
         }
     }, false);

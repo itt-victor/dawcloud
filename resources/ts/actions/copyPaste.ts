@@ -4,6 +4,7 @@ import { generateRecordingId } from '../utils';
 import { timeSpace } from '../timeSpace';
 import { ui_draw } from '../ui/ui_draw';
 import recording from '../components/recording';
+import { RecordArgs } from '../components/track';
 
 export const copyPaste = (recording: recording) => {
 
@@ -26,24 +27,25 @@ export const copyPaste = (recording: recording) => {
                     if (keysPressed.Control && keysPressed.v) {
                         const trck = document.querySelector('[data-selected]') as HTMLElement;
                         const nr = parseInt(trck.id.charAt(6));
-                        const newRecording = grid.tracks[nr].addRecord(
-                            generateRecordingId(),
-                            timeSpace.time(),
-                            recording.audioBuffer,
-                            recording.offset,
-                            recording.duration,
-                            true
-                        );
+                        const recordArgs: RecordArgs = {
+                            recordingId: generateRecordingId(),
+                            timeToStart: timeSpace.time(),
+                            audioBuffer: recording.audioBuffer,
+                            offset: recording.offset,
+                            duration: recording.duration,
+                            copy: true };
+                        const newRecording = grid.tracks[nr].addRecord(recordArgs);
                         newRecording.filename = recording.filename;
                         newRecording.offCanvas = recording.offCanvas;
                         newRecording.offSelectedCanvas = recording.offSelectedCanvas;
-                        ui_draw.printRecording(
-                            newRecording.offCanvas[timeSpace.zoom].width,
-                            newRecording,
-                            newRecording.offCanvas[timeSpace.zoom],
-                            newRecording.offset * timeSpace.zoom,
-                            newRecording.duration * timeSpace.zoom
-                        );
+                        const printArgs = {
+                            width: newRecording.offCanvas[timeSpace.zoom].width,
+                            recording: newRecording,
+                            offCanvas: newRecording.offCanvas[timeSpace.zoom],
+                            offset: newRecording.offset * timeSpace.zoom,
+                            duration: newRecording.duration * timeSpace.zoom
+                        };
+                        ui_draw.printRecording(printArgs);
 
                         delete keysPressed.Ctrl; delete keysPressed.c; delete keysPressed.v;
                         recording.copy = false;

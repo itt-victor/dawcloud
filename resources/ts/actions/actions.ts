@@ -7,6 +7,7 @@ import { cursor } from '../components/cursor';
 import { gridSelector } from '../components/gridselector';
 import { generateRecordingId } from '../utils';
 import Recording from '../components/recording';
+import { RecordArgs } from '../components/track';
 
 //Animación de tiempo de carga
 export const loading = () => {
@@ -83,7 +84,7 @@ export const loading = () => {
                     name.style.display = 'block';
                     input.style.display = 'none';
                 }
-            })
+            });
         });
     }
 })();
@@ -96,15 +97,17 @@ export const loading = () => {
             loading(); eStop();
             const reader = new FileReader();
             reader.onload = e => {
-                let trcknr = parseInt((document.querySelector('[data-selected]') as HTMLElement).id.charAt(6));
-                audioCtx.decodeAudioData((e.target as FileReader).result as ArrayBuffer).then(buffer => {
-                    grid.tracks[trcknr].addRecord(
-                        generateRecordingId(),
-                        timeSpace.time(),
-                        buffer, 0,
-                        buffer.duration,
-                        false
-                    );
+                const trcknr = parseInt((document.querySelector('[data-selected]') as HTMLElement).id.charAt(6));
+                audioCtx.decodeAudioData((e.target as FileReader).result as ArrayBuffer).then(audioBuffer => {
+                    const args: RecordArgs = {
+                        recordingId: generateRecordingId(),
+                        timeToStart: timeSpace.time(),
+                        audioBuffer,
+                        offset: 0,
+                        duration: audioBuffer.duration,
+                        copy: false
+                    };
+                    grid.tracks[trcknr].addRecord(args);
                 });
             }
             if (((a.target as HTMLInputElement & EventTarget).files as FileList).length > 0)
@@ -131,7 +134,8 @@ export const loading = () => {
                     ? recording.offSelectedCanvas[timeSpace.zoom]
                     : recording.offCanvas[timeSpace.zoom],
                 width = Math.ceil(duration - offset) + 1;
-            ui_draw.printRecording(width, recording, offCanvas, offset, duration);
+            const args = {width, recording, offCanvas, offset, duration};
+            ui_draw.printRecording(args);
         });
         drawGrid(); drawLayout();
         cursor.moveAtZoom(oldZoom);
@@ -221,7 +225,6 @@ export const loading = () => {
 //MUTE
 (() => {
     const muteButtons = document.getElementsByClassName('track_mute') as HTMLCollectionOf<HTMLButtonElement>;
-    //soloButtons = document.getElementsByClassName('track_solo') as HTMLCollectionOf<HTMLButtonElement>;
 
     for (const muteButton of muteButtons) {
         muteButton.addEventListener('click', function () {
@@ -234,9 +237,9 @@ export const loading = () => {
                 soundcontroller.solo(trck);
                 trck.muteToggle = false;
             }
-            for (const track of grid.tracks)
-                if (track.soloToggle)
-                    soundcontroller.mute(trck.gainNode);
+            for (const track of grid.tracks) {
+                if (track.soloToggle) soundcontroller.mute(trck.gainNode);
+            }
         });
     }
 })();
@@ -281,26 +284,18 @@ export const removeRecording = (recording: Recording) => {
                 const offset = recording.offset * timeSpace.zoom,
                     duration = recording.duration * timeSpace.zoom,
                     width = Math.ceil(duration - offset) + 1;
-                ui_draw.printRecording(
-                    width,
-                    recording,
-                    recording.offCanvas[timeSpace.zoom],
-                    offset,
-                    duration
-                );
+                const offCanvas = recording.offCanvas[timeSpace.zoom];
+                const args = {width, recording, offCanvas, offset, duration};
+                ui_draw.printRecording(args);
             });
 
             recording.selected = true;
             const offset = recording.offset * timeSpace.zoom,
                 duration = recording.duration * timeSpace.zoom,
                 width = Math.ceil(duration - offset) + 1;
-            ui_draw.printRecording(
-                width,
-                recording,
-                recording.offSelectedCanvas[timeSpace.zoom],
-                offset,
-                duration
-            );
+            const offCanvas = recording.offSelectedCanvas[timeSpace.zoom];
+            const args = {width, recording, offCanvas, offset, duration};
+            ui_draw.printRecording(args);
         }
     });
     window.addEventListener('keyup', a => {

@@ -106,7 +106,7 @@ export const ui_draw = {
         return offCanvas;
     },
 
-    printRecording(width: number, recording: Recording, offCanvas: HTMLCanvasElement, offset: number, duration: number) {
+    printRecording({width, recording, offCanvas, offset, duration}: Print) {
         const height = 58, x = (recording.timeToStart * timeSpace.zoom) + offset;
         recording.canvas.width = width;
         recording.canvas.height = height;
@@ -115,7 +115,7 @@ export const ui_draw = {
         recording.canvas.style.left = `${x}px`;
     },
 
-    printRecordingCrop(width: number, recording: Recording, offCanvas: HTMLCanvasElement, offset: number, duration: number) {
+    printRecordingCrop({width, recording, offCanvas, offset, duration}: Print) {
         const height = 58;
         recording.canvas.width = width + 2;
         recording.canvas.height = height;
@@ -125,7 +125,7 @@ export const ui_draw = {
         recording.canvasCtx.clearRect(duration, 0, width - duration, height);
     },
 
-    printCutRecording(width: number, recording: Recording, offCanvas: HTMLCanvasElement, offset: number, duration: number) {
+    printCutRecording({width, recording, offCanvas, offset, duration}: Print) {
         const height = 58, x = (recording.timeToStart * timeSpace.zoom);
         recording.canvas.width = width;
         recording.canvas.height = height;
@@ -133,4 +133,12 @@ export const ui_draw = {
         recording.canvasCtx.drawImage(offCanvas, offset, 0, duration, height, 0, 0, duration, height);
         recording.canvas.style.left = `${x}px`;
     }
+}
+
+interface Print {
+    width: number,
+    recording: Recording,
+    offCanvas: HTMLCanvasElement,
+    offset: number,
+    duration: number
 }

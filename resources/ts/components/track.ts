@@ -61,7 +61,7 @@ export default class Track {
         this.fader = document.getElementById(`fader_${this.tracknumber}`) as HTMLInputElement;
         this.Y = 20;
     }
-    addRecord(recordingId: string, timeToStart: number, audioBuffer: AudioBuffer, offset: number, duration: number, copy: boolean) {
+    addRecord({recordingId, timeToStart, audioBuffer, offset, duration, copy}: RecordArgs) {
         let recording = new Recording(recordingId, timeToStart, audioBuffer, this.tracknumber, offset, duration);
         grid.recordings.push(recording);
         this.trackDOMElement.appendChild(recording.canvas);
@@ -76,3 +76,14 @@ export default class Track {
         return recording;
     };
 }
+
+export interface RecordArgs{
+    recordingId: string,
+    timeToStart: number,
+    audioBuffer: AudioBuffer,
+    offset: number,
+    duration: number,
+    copy: boolean
+}
+
+
