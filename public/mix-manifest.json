@@ -2,5 +2,6 @@
     "/js/home.js": "/js/home.js",
     "/js/user_profile.js": "/js/user_profile.js",
     "/js/app_core.js": "/js/app_core.js",
+    "/js/workers/metronome_worker.js": "/js/workers/metronome_worker.js",
     "/css/app.css": "/css/app.css"
 }

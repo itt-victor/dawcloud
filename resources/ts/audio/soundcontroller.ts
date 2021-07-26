@@ -2,14 +2,15 @@ import { timeSpace } from '../timeSpace';
 import { grid, audioCtx } from '../app_core';
 import Recording from '../components/recording';
 import Track from '../components/track';
-//import { metronome } from '../components/metronome';
+import { metronome } from '../components/metronome';
+import { numbers } from '../utils';
 
 export default class SoundController {
 
     audioBufferSources: AudioBufferSourceNode[] = [];
 
-    playSound() {
-        for (const recording of grid.recordings) {
+    async playSound() {
+        const play = async (recording: Recording) => {
             const source = audioCtx.createBufferSource();
             source.buffer = recording.audioBuffer;
             source.connect(grid.tracks[recording.tracknumber].pannerNode);
@@ -28,6 +29,7 @@ export default class SoundController {
             this.audioBufferSources.push(source);
             recording.audioBufferSource = source;
         }
+        for await (const recording of grid.recordings) play(recording);
     }
 
     stopSound() {
@@ -68,22 +70,26 @@ export default class SoundController {
     solo(track: Track) {
         track.gainNode.gain.setValueAtTime(track.gainValue, audioCtx.currentTime);
     }
-/*
+
     metronome() {
+        let interval;
         if (metronome) {
-            let increment = timeSpace.bpm / 2;
-            while (metronome) {
+            let increment = 1000 / ((120 / timeSpace.bpm) / 60);
+            let barType = (timeSpace.compas === 2) ? 4 : 3;
+            let beatNumber = 1;
+
+            const measure = () => {
                 const oscillator = audioCtx.createOscillator();
-
                 oscillator.type = 'sine';
-                oscillator.frequency.value = (beatNumber % 4 == 0) ? 1000 : 800;
                 oscillator.connect(audioCtx.destination);
-
-                oscillator.start();
-                oscillator.stop(audioCtx.currentTime + 0.1);
-
-                increment *= 2;
+                oscillator.frequency.value = (beatNumber % barType == 0) ? 1000 : 800;
+                oscillator.start(audioCtx.currentTime);
+                oscillator.stop(1);
+                beatNumber++;
             }
-        }
-    }*/
+
+            interval = setInterval(measure, increment);
+
+        } else clearInterval(interval);
+    }
 }

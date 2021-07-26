@@ -72,7 +72,7 @@ const appStart = () => {
 function ePlay() {
     cursor.play();
     soundcontroller.playSound();
-    //soundcontroller.metronome();
+    soundcontroller.metronome();
     stop.disabled = false;
     play.disabled = true;
     is.playing = true;

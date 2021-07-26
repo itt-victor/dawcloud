@@ -6,7 +6,7 @@ let interval: number;
 export const cursor = {
     canvas: document.getElementById("cursor") as HTMLCanvasElement,
 
-    draw: function () {
+    draw () {
         this.canvas.width = 5;
         this.canvas.height = 60 * grid.howMany + 30;
         this.canvas.style.left = '0';
@@ -17,11 +17,11 @@ export const cursor = {
         ctx.globalAlpha = 0.8;
         ctx.fillRect(0, 0, 5, this.canvas.height);
     },
-    play: function () {
+    play () {
         let start = performance.now(), canvas = this.canvas,
          	increase = 0, progress,	fps;
 
-        function step(now: number) {
+        const step = (now: number) => {
             progress = now - start;
             fps = Math.round(1000 / (progress / ++increase) * 100) / 100;
             timeSpace.space += timeSpace.zoom * 1/fps;
@@ -31,16 +31,16 @@ export const cursor = {
         interval = requestAnimationFrame(step);
     },
 
-    stop: function () {
+    stop () {
         window.cancelAnimationFrame(interval);
     },
 
-    moveAtZoom: function (oldZoom: number) {
+    moveAtZoom (oldZoom: number) {
         timeSpace.space *=  (timeSpace.zoom / oldZoom);
         this.canvas.style.left = `${timeSpace.space}px`;
     },
 
-    moveAtClick: function () {
+    moveAtClick () {
         this.canvas.style.left = `${timeSpace.space}px`;
     }
 }

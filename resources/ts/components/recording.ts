@@ -1,3 +1,7 @@
+import { removeRecording } from "../actions/actions";
+import { copyPaste } from "../actions/copyPaste";
+import { cutRecording } from "../actions/cutRecordings";
+import { editRecording } from "../actions/editRecordings";
 import { grid } from "../app_core";
 import { timeSpace } from "../timeSpace";
 import { ui_draw } from "../ui/ui_draw";
@@ -46,6 +50,14 @@ export default class Recording {
         this.offset = offset;
         this.duration = duration;
         this.audioBuffer = audioBuffer;
+
+        this.canvas.classList.add("recording");
+        this.canvas.id = this.id.toString();
+        if (!this.copy) this.drawwaveforms();
+        editRecording(this);
+        cutRecording(this);
+        copyPaste(this);
+        removeRecording(this);
     }
 
     drawwaveforms() {

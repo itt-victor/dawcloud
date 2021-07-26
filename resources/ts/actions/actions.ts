@@ -129,11 +129,11 @@ export const loading = () => {
     const zDraw = () => {
         grid.recordings.forEach(recording => {
             const offset = recording.offset * timeSpace.zoom,
-                duration = recording.duration * timeSpace.zoom,
-                offCanvas = (recording.selected)
-                    ? recording.offSelectedCanvas[timeSpace.zoom]
-                    : recording.offCanvas[timeSpace.zoom],
-                width = Math.ceil(duration - offset) + 1;
+                  duration = recording.duration * timeSpace.zoom,
+                  offCanvas = recording.selected
+                        ? recording.offSelectedCanvas[timeSpace.zoom]
+                        : recording.offCanvas[timeSpace.zoom],
+                  width = Math.ceil(duration - offset) + 1;
             const args = {width, recording, offCanvas, offset, duration};
             ui_draw.printRecording(args);
         });
@@ -222,58 +222,6 @@ export const loading = () => {
     });
 })();
 
-//MUTE
-(() => {
-    const muteButtons = document.getElementsByClassName('track_mute') as HTMLCollectionOf<HTMLButtonElement>;
-
-    for (const muteButton of muteButtons) {
-        muteButton.addEventListener('click', function () {
-            const trck = grid.tracks[parseInt(this.id.charAt(5))];
-            this.classList.toggle('track_mute_on');
-            if (!trck.muteToggle) {
-                soundcontroller.mute(trck.gainNode);
-                trck.muteToggle = true;
-            } else if (trck.muteToggle) {
-                soundcontroller.solo(trck);
-                trck.muteToggle = false;
-            }
-            for (const track of grid.tracks) {
-                if (track.soloToggle) soundcontroller.mute(trck.gainNode);
-            }
-        });
-    }
-})();
-
-//SOLO
-(() => {
-    const parentTrack = (element: HTMLElement) => grid.tracks[parseInt(element.id.charAt(5))];
-    const soloButtons = document.getElementsByClassName('track_solo') as HTMLCollectionOf<HTMLButtonElement>;
-    for (const soloButton of soloButtons) {
-        soloButton.addEventListener('click', function () {
-
-            this.classList.toggle('track_solo_on');
-            parentTrack(this).soloToggle = (parentTrack(this).soloToggle) ? false : true;
-
-            for (const btn of soloButtons) {
-                if (parentTrack(btn).soloToggle) {
-                    grid.solo = true;
-                    break;
-                }
-                else grid.solo = false;
-            }
-            for (const btn of soloButtons) {
-                if (grid.solo) {
-                    (parentTrack(btn).soloToggle) ?
-                        soundcontroller.solo(parentTrack(btn)) :
-                        soundcontroller.mute(parentTrack(btn).gainNode);
-                }
-                else if (parentTrack(btn).muteToggle) return;
-                else    soundcontroller.solo(parentTrack(btn));
-            }
-        });
-    }
-})();
-
 //elimina la grabación
 export const removeRecording = (recording: Recording) => {
     recording.canvas.addEventListener('mousedown', e => {
@@ -287,6 +235,7 @@ export const removeRecording = (recording: Recording) => {
                 const offCanvas = recording.offCanvas[timeSpace.zoom];
                 const args = {width, recording, offCanvas, offset, duration};
                 ui_draw.printRecording(args);
+                recording.canvas.style.zIndex = (5).toString();
             });
 
             recording.selected = true;
@@ -296,6 +245,7 @@ export const removeRecording = (recording: Recording) => {
             const offCanvas = recording.offSelectedCanvas[timeSpace.zoom];
             const args = {width, recording, offCanvas, offset, duration};
             ui_draw.printRecording(args);
+            recording.canvas.style.zIndex = (6).toString();
         }
     });
     window.addEventListener('keyup', a => {

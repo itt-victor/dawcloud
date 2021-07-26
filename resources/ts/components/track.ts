@@ -1,9 +1,5 @@
 import Recording from './recording';
-import { grid, audioCtx } from '../app_core';
-import { editRecording } from '../actions/editRecordings';
-import { copyPaste } from '../actions/copyPaste';
-import { removeRecording } from '../actions/actions';
-import { cutRecording } from '../actions/cutRecordings';
+import { grid, audioCtx, soundcontroller } from '../app_core';
 
 export default class Track {
 
@@ -60,19 +56,54 @@ export default class Track {
         this.muteButton = document.getElementById(`mute_${this.tracknumber}`) as HTMLButtonElement;
         this.fader = document.getElementById(`fader_${this.tracknumber}`) as HTMLInputElement;
         this.Y = 20;
+
+        //MUTE
+        this.muteButton.addEventListener('click', function () {
+            const trck = grid.tracks[parseInt(this.id.charAt(5))];
+            this.classList.toggle('track_mute_on');
+            if (!trck.muteToggle) {
+                soundcontroller.mute(trck.gainNode);
+                trck.muteToggle = true;
+            } else if (trck.muteToggle) {
+                soundcontroller.solo(trck);
+                trck.muteToggle = false;
+            }
+            for (const track of grid.tracks) {
+                if (track.soloToggle) soundcontroller.mute(trck.gainNode);
+            }
+        });
+
+        //SOLO
+        const soloButtons = document.getElementsByClassName('track_solo') as HTMLCollectionOf<HTMLButtonElement>;
+        const parentTrack = (element: HTMLElement) => grid.tracks[parseInt(element.id.charAt(5))];
+        this.soloButton.addEventListener('click',  () =>{
+
+            this.soloButton.classList.toggle('track_solo_on');
+            this.soloToggle = this.soloToggle ? false : true;
+
+            for (const btn of soloButtons) {
+                if (parentTrack(btn).soloToggle) {
+                    grid.solo = true;
+                    break;
+                }
+                else grid.solo = false;
+            }
+            for (const btn of soloButtons) {
+                if (grid.solo) {
+                    (parentTrack(btn).soloToggle) ?
+                        soundcontroller.solo(parentTrack(btn)) :
+                        soundcontroller.mute(parentTrack(btn).gainNode);
+                }
+                else if (parentTrack(btn).muteToggle) return;
+                else    soundcontroller.solo(parentTrack(btn));
+            }
+        });
     }
+
     addRecord({recordingId, timeToStart, audioBuffer, offset, duration, copy}: RecordArgs) {
         let recording = new Recording(recordingId, timeToStart, audioBuffer, this.tracknumber, offset, duration);
         grid.recordings.push(recording);
         this.trackDOMElement.appendChild(recording.canvas);
-        recording.canvas.classList.add("recording");
-        recording.canvas.id = recording.id.toString();
-        if (!copy) recording.drawwaveforms();
-        editRecording(recording);
-        cutRecording(recording);
-        copyPaste(recording);
-        removeRecording(recording);
-
         return recording;
     };
 }
