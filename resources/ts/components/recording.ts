@@ -71,13 +71,22 @@ export default class Recording {
             zoom = Math.round(zoom * 1.25);
         }
         for (const zoom of zoomArray) {
+
+            /*const worker = new Worker('js/workers/draw_worker.js');
+            let arrayBuffers = [];
+            if (recording.audioBuffer.numberOfChannels === 1) arrayBuffers.push(this.audioBuffer.getChannelData(0));
+            else arrayBuffers.push(this.audioBuffer.getChannelData(0), this.audioBuffer.getChannelData(1));
+
+            worker.postMessage([arrayBuffers, zoom, false]);
+            onmessage = e => this.offCanvas[zoom] = e.data; */
+
             this.offCanvas[zoom] = ui_draw.drawRecording(this, zoom, false);
             this.offSelectedCanvas[zoom] = ui_draw.drawRecording(this, zoom, true);
         }
         const width = this.offCanvas[timeSpace.zoom].width;
         const offCanvas = this.offCanvas[timeSpace.zoom];
 
-        const args = {width, recording, offCanvas, offset, duration};
+        const args = { width, recording, offCanvas, offset, duration };
         ui_draw.printRecording(args);
     }
 

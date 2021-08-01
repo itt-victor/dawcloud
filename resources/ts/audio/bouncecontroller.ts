@@ -2,7 +2,7 @@ const toWav = require('audiobuffer-to-wav');
 import { grid } from '../app_core';
 
 
-const exportSong = () => {
+const exportSong = async () => {
 
     const projectTitle = document.getElementById('project-n') as HTMLElement;
 
@@ -36,7 +36,7 @@ const exportSong = () => {
             pannerValue.startsWith('R')
                 && (ctxValue = parseInt(pannerValue.slice(1)) / 100);
 
-			panner.pan.setValueAtTime(ctxValue as number, 0);
+            panner.pan.setValueAtTime(ctxValue as number, 0);
             gain.gain.setValueAtTime(track.gainValue, 0);
             panner.connect(gain);
             gain.connect(mastergain);
@@ -47,24 +47,24 @@ const exportSong = () => {
             source.buffer = recording.audioBuffer;
             source.connect(pannerNodes[recording.tracknumber]);
             const start = Math.max(recording.timeToStart + recording.offset, 0),
-			 	offset = Math.max(recording.offset, 0),                   //ESTO FALTA DE MIRARLO BIEN
-			 	duration = recording.duration - recording.offset;
+                offset = Math.max(recording.offset, 0),                   //ESTO FALTA DE MIRARLO BIEN
+                duration = recording.duration - recording.offset;
             source.start(start, offset, duration);
         }
 
-        offlineCtx.startRendering().then(renderedBuffer => {
-            let filename;
-            if (projectTitle.innerHTML != '') filename = `${projectTitle.innerHTML}.wav`;
-            else filename = 'project.wav';
-            const a = document.createElement('a');
-            const blob = new window.Blob([new DataView(toWav(renderedBuffer))], {
-                type: 'audio/wav'
-            });
-            a.href = URL.createObjectURL(blob);
-            a.download = filename;
-            a.click();
-            URL.revokeObjectURL(a.href);
+        let filename;
+        if (projectTitle.innerHTML != '') filename = `${projectTitle.innerHTML}.wav`;
+        else filename = 'project.wav';
+
+        const renderedBuffer = await offlineCtx.startRendering()
+        const a = document.createElement('a');
+        const blob = new window.Blob([new DataView(toWav(renderedBuffer))], {
+            type: 'audio/wav'
         });
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(a.href);
     }
 }
 const export_sound = document.querySelector('#export_sound');

@@ -109,9 +109,9 @@ export const gridSelector = {
                     X.start = barCount * snap.setup;
                 }
 
-                X.start >= X.end - 15 && (X.start = X.end);
-                X.start <= 0 && (X.start = 0);
-                X.start >= X.end && (X.start = X.end);
+                if (X.start >= X.end - 15) X.start = X.end;
+                if (X.start <= 0) X.start = 0;
+                if (X.start >= X.end) X.start = X.end;
                 timeSpace.setStartMark = X.start;
                 this.startMark.style.left = `${X.start}px`;
                 this.drawGridSelector(X.start, timeSpace.getEndMark);

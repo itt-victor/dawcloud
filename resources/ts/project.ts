@@ -22,10 +22,10 @@ class Project {
     masterGainValue: number;
     masterY: number;
 
-    fill?: ()=> void;
+    fill?: () => void;
 
     constructor({ timeSpace, recordings, recordingId, trackNames, tracksGainValues,
-                trackspanValues, tracksY, masterGainValue, masterY }: Project) {
+        trackspanValues, tracksY, masterGainValue, masterY }: Project) {
         this.timeSpace = timeSpace;
         this.recordings = recordings;
         this.recordingId = recordingId;
@@ -49,9 +49,9 @@ const loadbtn = document.getElementById('load_project') as HTMLElement,
     saveWindow = document.getElementById('save_dialogue') as HTMLElement,
     loadWindow = document.getElementById('load_dialogue') as HTMLElement,
     panButtons = document.getElementsByClassName('panner') as HTMLCollection,
-    projects = document.getElementsByClassName('projects')  as HTMLCollection,
-    projectNameNode = document.getElementById('project_name')  as HTMLElement,
-    projectTitle = document.getElementById('project-n')  as HTMLElement,
+    projects = document.getElementsByClassName('projects') as HTMLCollection,
+    projectNameNode = document.getElementById('project_name') as HTMLElement,
+    projectTitle = document.getElementById('project-n') as HTMLElement,
     token = { 'X-CSRF-TOKEN': (document.head.querySelector('[name="csrf-token"]') as HTMLMetaElement).content };
 
 let project: Project;
@@ -76,34 +76,21 @@ export const storeAudios = async () => {
         formData.append('recording_id', recording.id);
         formData.append('filename', recording.filename);
         if (projectName) formData.append('project_name', projectName);
-        await fetch('savesound', {
+        const response = await fetch('savesound', {
             method: 'POST',
             headers: token,
             body: formData
-        }).then(response => response.text()).then(data => {
-            if (!recording.filename) recording.filename = data;
         });
+        const data = await response.text();
+        if (!recording.filename) recording.filename = data;
     }
 };
 
 //SAVE PROJECT
 (() => {
     if (saveWindow && projectNameNode && savebtn) {
-        projectNameNode.addEventListener('keypress', save);
-        savebtn.addEventListener('click', (e) => {
 
-            if (projectTitle.innerHTML != '') projectName = projectTitle.innerHTML;
-
-            if (!projectName) {
-                saveWindow.style.display = 'block';
-                projectNameNode.focus();
-            } else {
-                (document.querySelector('.dropdown-menu') as HTMLElement).classList.remove('show');
-                save(e);
-            }
-        });
-
-        async function save(e: MouseEvent | KeyboardEvent) {
+        const save = async (e: MouseEvent | KeyboardEvent) => {
             if ((e as KeyboardEvent).key === 'Enter' || e.type == 'click') {
                 e.stopImmediatePropagation();
                 e.preventDefault();
@@ -144,129 +131,142 @@ export const storeAudios = async () => {
                 const projectForm = new FormData();
                 projectForm.append('project-name', projectName);
                 projectForm.append('project', JSON.stringify(project));
-                fetch('saveproject', {
-                    method: 'POST',
-                    headers: token,
-                    body: projectForm
-                }).then(response => {
+                try {
+                    const response = await fetch('saveproject', {
+                        method: 'POST',
+                        headers: token,
+                        body: projectForm
+                    });
                     if (!response.ok) throw new Error('There has been an error!');
                     return console.log('Project saved successfully');
-                }).catch(error => console.error(error));
+                } catch (error) {
+                    console.error(error)
+                }
 
                 //Se imprime el proyecto en pantalla
                 projectTitle.innerHTML = projectName;
             }
         };
+
+        projectNameNode.addEventListener('keypress', save);
+        savebtn.addEventListener('click', (e) => {
+
+            if (projectTitle.innerHTML != '') projectName = projectTitle.innerHTML;
+
+            if (!projectName) {
+                saveWindow.style.display = 'block';
+                projectNameNode.focus();
+            } else {
+                (document.querySelector('.dropdown-menu') as HTMLElement).classList.remove('show');
+                save(e);
+            }
+        });
     }
 })();
 
 
 //LOAD PROJECT
-(() => {
+(async () => {
+    const load = async (e: Event) => {
+
+        e.stopPropagation;
+        projectName = (e.target as HTMLElement).id;
+        loadWindow.style.display = 'none';
+        eStop();
+
+        try {
+            const response = await fetch(`loadproject/${projectName}`);
+
+            if (!response.ok) throw new Error('There has been an error!');
+            console.log('Project loaded successfully');
+
+            const data = await response.json();
+            project = data;
+
+            timeSpace.space = project.timeSpace.space;
+            timeSpace.zoom = project.timeSpace.zoom;
+            timeSpace.bpm = project.timeSpace.bpm;
+            timeSpace.compas = project.timeSpace.compas;
+
+            bpmButton.innerHTML = `${120 / timeSpace.bpm}  bpm`;
+            metricButton.innerHTML = (timeSpace.compas == 2) ? '4/4' : '3/4';
+            cursor.canvas.style.left = `${timeSpace.space}px`;
+            numbers.recordingId = project.recordingId;
+
+            drawLayout(); drawGrid(); loading();
+
+            //se eliminan las pistas existentes si hubiesen
+            grid.recordings.forEach((recording) => {
+                recording.canvasCtx.clearRect(0, 0, 4000, 70);
+                recording.deleteRecording();
+                //delete recording.audioBuffer;   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            });
+            grid.recordings = [];
+
+            //Se vacían los nombres de pista
+            grid.tracks.forEach(track => {
+                //delete track.name;               !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            });
+
+            //Se imprime el proyecto en pantalla
+            projectTitle.innerHTML = projectName;
+
+            //Se cargan los audios
+            for (const recording of data.recordings) {
+
+                const response = await fetch(`loadsound/${recording._filename}`);
+                const arrayBuffer = await response.arrayBuffer();
+                const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+                const track = grid.tracks[recording._tracknumber];
+                const args: RecordArgs = {
+                    recordingId: recording._id,
+                    timeToStart: recording.timeToStart,
+                    audioBuffer,
+                    offset: recording.offset,
+                    duration: recording.duration,
+                    copy: false
+                };
+                const newrecording = track.addRecord(args);
+                newrecording.filename = recording._filename;
+            }
+
+            //Se cargan los nombres de pista
+            for (const [i, track] of grid.tracks.entries()) {
+                track.name = project.trackNames[i];
+                if (track.name) (names[i] as HTMLElement).innerHTML = track.name;
+            }
+            //Se cargan los volúmenes de los faders
+            for (const [i, track] of grid.tracks.entries()) {
+                let fader = track.fader;
+                track.gainValue = project.tracksGainValues[i];
+                track.Y = project.tracksY[i];
+                (fader.querySelector('a') as HTMLElement).style.top = `${project.tracksY[i]}px`;
+                track.gainNode.gain.setValueAtTime(track.gainValue, audioCtx.currentTime);
+            }
+            //Se carga el panorama
+            for (const [i, track] of grid.tracks.entries()) {
+                track.pannerValue = project.trackspanValues[i];
+                panButtons[i].innerHTML = track.pannerValue;
+                let trackPanValue = track.pannerValue, ctxValue;
+                trackPanValue.toString().startsWith('L')
+                    && (ctxValue = - + trackPanValue.slice(1) / 100);
+                trackPanValue == '0' || trackPanValue.toString() == 'C'
+                    && (ctxValue = 0);
+                trackPanValue.toString().startsWith('R')
+                    && (ctxValue = parseInt(trackPanValue.slice(1)) / 100);
+
+                track.pannerNode.pan.setValueAtTime((ctxValue as number), audioCtx.currentTime);
+            }
+            //Se carga el volumen master
+            grid.gainValue = project.masterGainValue;
+            grid.gainNode.gain.setValueAtTime(grid.gainValue, audioCtx.currentTime);
+            grid.faderY = project.masterY;
+            (document.querySelector('#master_fader > a') as HTMLElement).style.top = `${grid.faderY}px`;
+
+        } catch (error) { console.error(error); }
+    }
     for (const projectBtn of projects) {
-        (projectBtn as HTMLButtonElement).addEventListener('dblclick', function ld(e) {
-            e.stopPropagation;
-            projectName = this.id;
-            loadWindow.style.display = 'none';
-
-            eStop();
-
-            fetch(`loadproject/${projectName}`).then(response => {
-
-                if (!response.ok) throw new Error('There has been an error!');
-
-                console.log('Project loaded successfully');
-                return response.json();
-
-            }).then(response => {
-                project = response;
-                console.log(project);
-
-                timeSpace.space = project.timeSpace.space;
-                timeSpace.zoom = project.timeSpace.zoom;
-                timeSpace.bpm = project.timeSpace.bpm;
-                timeSpace.compas = project.timeSpace.compas;
-
-                bpmButton.innerHTML = `${120 / timeSpace.bpm}  bpm`;
-                metricButton.innerHTML = (timeSpace.compas == 2) ? '4/4' : '3/4';
-                cursor.canvas.style.left = `${timeSpace.space}px`;
-                numbers.recordingId = project.recordingId;
-
-                drawLayout(); drawGrid(); loading();
-
-                //se eliminan las pistas existentes si hubiesen
-                grid.recordings.forEach((recording) => {
-                    recording.canvasCtx.clearRect(0, 0, 4000, 70);
-                    recording.deleteRecording();
-                    //delete recording.audioBuffer;   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                });
-                grid.recordings = [];
-
-                //Se vacían los nombres de pista
-                grid.tracks.forEach(track => {
-                    //delete track.name;               !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                });
-
-                //Se imprime el proyecto en pantalla
-                projectTitle.innerHTML = projectName;
-
-                //Se cargan los audios
-                for (const recording of response.recordings) {
-
-                    fetch(`loadsound/${recording._filename}`)
-                        .then(response => response.arrayBuffer())
-                        .then(arrayBuffer => {
-                            audioCtx.decodeAudioData(arrayBuffer, audioBuffer => {
-                                const track = grid.tracks[recording._tracknumber];
-                                const args : RecordArgs  = {
-                                    recordingId: recording._id,
-                                    timeToStart: recording.timeToStart,
-                                    audioBuffer,
-                                    offset: recording.offset,
-                                    duration: recording.duration,
-                                    copy: false
-                                };
-                                const newrecording = track.addRecord(args);
-                                newrecording.filename = recording._filename;
-                            });
-                        });
-                }
-
-                //Se cargan los nombres de pista
-                for (const [i, track] of grid.tracks.entries()) {
-                    track.name = project.trackNames[i];
-                    if (track.name) (names[i] as HTMLElement).innerHTML = track.name;
-                }
-                //Se cargan los volúmenes de los faders
-                for (const [i, track] of grid.tracks.entries()) {
-                    let fader = track.fader;
-                    track.gainValue = project.tracksGainValues[i];
-                    track.Y = project.tracksY[i];
-                    (fader.querySelector('a') as HTMLElement).style.top = `${project.tracksY[i]}px`;
-                    track.gainNode.gain.setValueAtTime(track.gainValue, audioCtx.currentTime);
-                }
-                //Se carga el panorama
-                for (const [i, track] of grid.tracks.entries()) {
-                    track.pannerValue = project.trackspanValues[i];
-                    panButtons[i].innerHTML = track.pannerValue;
-                    let trackPanValue = track.pannerValue, ctxValue;
-                    trackPanValue.toString().startsWith('L')
-                        && (ctxValue = - + trackPanValue.slice(1) / 100);
-                    trackPanValue == '0' || trackPanValue.toString() == 'C'
-                        && (ctxValue = 0);
-                    trackPanValue.toString().startsWith('R')
-                        && (ctxValue = parseInt(trackPanValue.slice(1)) / 100);
-
-                    track.pannerNode.pan.setValueAtTime((ctxValue as number), audioCtx.currentTime);
-                }
-                //Se carga el volumen master
-                grid.gainValue = project.masterGainValue;
-                grid.gainNode.gain.setValueAtTime(grid.gainValue, audioCtx.currentTime);
-                grid.faderY = project.masterY;
-                (document.querySelector('#master_fader > a') as HTMLElement).style.top = `${grid.faderY}px`;
-
-            }).catch(error => console.error(error));
-        });
+        (projectBtn as HTMLButtonElement).addEventListener('dblclick', load);
     }
 })();
 
@@ -275,8 +275,8 @@ export const storeAudios = async () => {
     for (let project of projects) {
 
         const dltConfirmation = document.getElementsByClassName('delete_confirmation')[0] as HTMLElement,
-            delete_cancel = document.getElementById('delete_cancel')  as HTMLElement,
-            delete_confirm = document.getElementById('delete_confirm')  as HTMLElement;
+            delete_cancel = document.getElementById('delete_cancel') as HTMLElement,
+            delete_confirm = document.getElementById('delete_confirm') as HTMLElement;
 
         (project.childNodes[1] as HTMLElement).addEventListener('click', function dlt(e) {
             const projectName = (this.parentNode as HTMLElement).id;
@@ -293,7 +293,7 @@ export const storeAudios = async () => {
                     if (!response.ok) throw new Error('There has been an error!');
                     console.log('Project deleted successfully');
                     dltConfirmation.classList.remove('visible');
-                    (document.getElementById(projectName)as HTMLElement).remove();
+                    (document.getElementById(projectName) as HTMLElement).remove();
                 }).catch(error => console.error(error));
             });
         });
