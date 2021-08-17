@@ -10,7 +10,7 @@ export default function recordController() {
         const constraints = { audio: true };
         let chunks: any[] = [], startTime: number;
 
-        let onSuccess = (stream: any) => {
+        const onSuccess = (stream: any) => {
             const mediaRecorder = new MediaRecorder(stream);
 
             record.onclick = () => {
@@ -22,6 +22,8 @@ export default function recordController() {
                     soundcontroller.playSound();
                     is.playing = true;
                 }
+                console.log(chunks);
+
                 ui_draw.drawTrackWhileRecording();  ///ESTO
                 console.log(mediaRecorder.state);
                 record.style.background = 'red';
@@ -69,7 +71,7 @@ export default function recordController() {
                 );
             }
         }
-        let onError = (err: string) => {
+        const onError = (err: string) => {
             console.log('The following error occured: ' + err);
         }
         navigator.mediaDevices.getUserMedia(constraints).then(onSuccess, onError);
